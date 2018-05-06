@@ -1,0 +1,28 @@
+{
+  "name": "storage",
+  "version": "1.0.0",
+  "description": "A simple storage solution app",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Michaelpalacce/storage.git"
+  },
+  "keywords": [
+    "storage"
+  ],
+  "author": "Stefan Genov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Michaelpalacce/storage/issues"
+  },
+  "homepage": "https://github.com/Michaelpalacce/storage#readme",
+  "dependencies": {
+    "mongoose": "^5.0.17"
+  }
+}
