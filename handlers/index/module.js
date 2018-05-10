@@ -6,6 +6,16 @@ const path		= require( 'path' );
 
 let model	= {};
 
+/**
+ * @brief	Handles the GET on /
+ *
+ * @details	The callback will be called in case of an error or when the required data has been performed
+ *
+ * @param	RequestEvent event
+ * @param	Function callback
+ *
+ * @return	void
+ */
 model.get	= ( event, callback ) => {
 	let startDir	= '/';
 	fs.readdir( startDir, {}, ( error,  data ) => {
