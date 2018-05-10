@@ -5,6 +5,12 @@
 	<title>Index</title>
 </head>
 <body>
-	HELLO!
+<div></div>
+	<% if ( this.data ){ %>
+		<% for( let index = 0; index < this.data.length; ++ index ) { %>
+			<a href="/browse=<%encodeURI(this.data[index])%>"><% this.data[index] %></a>
+			<br>
+		<% } %>
+	<% } %>
 </body>
 </html>
