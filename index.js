@@ -12,6 +12,12 @@ server.start( env_config.port );
 
 server.addStaticPath( env_config.staticPath );
 
+//Authentication middleware
+//@TODO FIX THIS
+server.add( ( event ) => {
+		event.next();
+});
+
 // Handlers
 server.add( index );
 server.add( browse );
