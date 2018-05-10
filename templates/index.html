@@ -3,14 +3,37 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Index</title>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
 </head>
 <body>
-<div></div>
-	<% if ( this.data ){ %>
-		<% for( let index = 0; index < this.data.length; ++ index ) { %>
-			<a href="/browse=<%encodeURI(this.data[index])%>"><% this.data[index] %></a>
-			<br>
+	<div class="container pt-5">
+		<% if ( this.data ){ %>
+		<div class="row">
+			<% for( let index = 0; index < this.data.length; ++ index ) { %>
+				<div class="col-md-4 card flex-md-row mb-4 box-shadow h-md-250">
+					<% if ( this.data[index].isDir ) { %>
+						<a class="folder card-body" href="/browse?dir=<% this.data[index].encodedURI %>"><% this.data[index].name %></a>
+					<% } %>
+					<% if ( this.data[index].isDir === false){ %>
+						<div class="card-body d-flex flex-column align-items-start">
+							<% this.data[index].name %>
+							<div><% Math.round( this.data[index].size / 1024 / 1024, 2 ) %> MB</div>
+						</div>
+						<button type="button" class="btn download-button" data-download_metadata="<% this.data[index].encodedURI %>">Download</button>
+					<% } %>
+				</div>
+			<% } %>
+		</div>
 		<% } %>
-	<% } %>
+	</div>
 </body>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.js"></script>
+<script type="text/javascript">
+	$( document ).on( 'click', '.download-button', function ()
+		{
+			window.location.href	= '/download?file=' + $( this ).attr( 'data-download_metadata' );
+		}
+	);
+</script>
 </html>

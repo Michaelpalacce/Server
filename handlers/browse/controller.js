@@ -7,17 +7,27 @@ const path		= require( './../main/path' );
 let router		= new Router();
 
 /**
- * @brief	Adds a '/' route with method GET
+ * @brief	Adds a '/browse' route with method GET
  *
- * @details	Required Parameters: NONE
+ * @details	Required Parameters: dir
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
-router.add( '/', 'GET', ( event ) => {
+router.add( '/browse', 'GET', ( event ) => {
 	// Call the Model get to retrieve data
-	let startDir	= '/';
-	path.getItems( startDir, ( err, items ) => {
+	let dir	= typeof event.queryStringObject.dir === 'string'
+			&& event.queryStringObject.dir.length > 0
+			? event.queryStringObject.dir
+			: false;
+
+	if ( ! dir )
+	{
+		event.next();
+		return;
+	}
+
+	path.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
 			event.render( 'index', { data: items }, ( err ) => {

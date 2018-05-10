@@ -4,12 +4,18 @@
 const server		= require( './lib/www' );
 const env_config	= require( './lib/config/env' );
 const index			= require( './handlers/index/controller' );
+const browse		= require( './handlers/browse/controller' );
+const download		= require( './handlers/download/controller' );
 
 // Start the server
 server.start( env_config.port );
 
+server.addStaticPath( env_config.staticPath );
+
 // Handlers
 server.add( index );
+server.add( browse );
+server.add( download );
 
 // Add a 404 NOT FOUND middleware
 server.add( ( event ) => {
