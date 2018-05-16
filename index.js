@@ -6,6 +6,7 @@ const env_config	= require( './lib/config/env' );
 const index			= require( './handlers/index/controller' );
 const browse		= require( './handlers/browse/controller' );
 const download		= require( './handlers/download/controller' );
+const login			= require( './handlers/login/controller' );
 
 // Start the server
 server.start( env_config.port );
@@ -22,6 +23,7 @@ server.add( ( event ) => {
 server.add( index );
 server.add( browse );
 server.add( download );
+server.add( login );
 
 // Add a 404 NOT FOUND middleware
 server.add( ( event ) => {

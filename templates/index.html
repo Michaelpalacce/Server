@@ -19,7 +19,7 @@
 							<% this.data[index].name %>
 							<div><% Math.round( this.data[index].size / 1024, 2 ) %> KB</div>
 						</div>
-						<button type="button" class="btn download-button" data-download_metadata="<% this.data[index].encodedURI %>">Download</button>
+						<a class="btn btn-outline-primary" href="<% '/download?file=' + this.data[index].encodedURI %>">Download</a>
 					<% } %>
 				</div>
 			<% } %>
@@ -29,11 +29,4 @@
 </body>
 <script type="text/javascript" src="/public/js/jquery.js"></script>
 <script type="text/javascript" src="/public/js/bootstrap.js"></script>
-<script type="text/javascript">
-	$( document ).on( 'click', '.download-button', function ()
-		{
-			window.location.href	= '/download?file=' + $( this ).attr( 'data-download_metadata' );
-		}
-	);
-</script>
 </html>
