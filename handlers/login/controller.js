@@ -17,6 +17,7 @@ router.add( '/login', 'GET', ( event ) => {
 	event.render( 'login', {}, ( err ) => {
 		if ( err )
 		{
+			event.setError( err );
 			event.next();
 		}
 	});
@@ -33,7 +34,7 @@ router.add( '/login', 'POST', ( event ) => {
 
 	let credentials	= decodeURIComponent( event.body );
 	credentials		= credentials.split( '&' );
-	console.log( credentials );
+	// console.log( credentials );
 	event.redirect( '/login' );
 });
 

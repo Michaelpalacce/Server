@@ -23,12 +23,14 @@ router.add( '/', 'GET', ( event ) => {
 			event.render( 'index', { data: items }, ( err ) => {
 				if ( err )
 				{
+					event.setError( err );
 					event.next();
 				}
 			});
 		}
 		else
 		{
+			event.setError( err );
 			event.next();
 		}
 	});

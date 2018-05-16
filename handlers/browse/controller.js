@@ -23,6 +23,7 @@ router.add( '/browse', 'GET', ( event ) => {
 
 	if ( ! dir )
 	{
+		event.setError( 'Dir is incorrect' );
 		event.next();
 		return;
 	}

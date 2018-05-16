@@ -18,6 +18,7 @@ let downloadFailedCallback	= ( event ) => {
 	event.response.setHeader( 'Content-disposition', 'attachment; filename=error.txt' );
 	event.response.setHeader( 'Content-type', '.txt' );
 	event.response.end( 'The file specified does not exist' );
+	event.setError( 'The file specified does not exist' );
 	event.next();
 };
 

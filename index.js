@@ -13,9 +13,21 @@ server.start( env_config.port );
 
 server.addStaticPath( env_config.staticPath );
 
+server.use( 'formParser' );
+server.use( 'parseCookies' );
+
 //Authentication middleware
 //@TODO FIX THIS
 server.add( ( event ) => {
+		if ( typeof event.cookies.sid !== 'string' )
+		{
+			event.response.setHeader( 'Set-Cookie', 'sid=TEST' );
+		}
+		else
+		{
+			// Check if the user has an active session here
+			event.extra.authenticated	= true;
+		}
 		event.next();
 });
 
