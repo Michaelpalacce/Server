@@ -7,6 +7,7 @@ const index			= require( './handlers/index/controller' );
 const browse		= require( './handlers/browse/controller' );
 const download		= require( './handlers/download/controller' );
 const login			= require( './handlers/login/controller' );
+const security		= require( './handlers/main/security/security' );
 
 // Start the server
 server.start( env_config.port );
@@ -17,19 +18,7 @@ server.use( 'formParser' );
 server.use( 'parseCookies' );
 
 //Authentication middleware
-//@TODO FIX THIS
-server.add( ( event ) => {
-		if ( typeof event.cookies.sid !== 'string' )
-		{
-			event.response.setHeader( 'Set-Cookie', 'sid=TEST' );
-		}
-		else
-		{
-			// Check if the user has an active session here
-			event.extra.authenticated	= true;
-		}
-		event.next();
-});
+server.add( security );
 
 // Handlers
 server.add( index );
