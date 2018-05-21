@@ -2,53 +2,57 @@
 
 
 // Dependencies
-const Router		= require( './../../../lib/server/router' );
-const stringHelper	= require( './../utils/string_helper' );
-const dataStore		= require( './../data_store/filesystem_data_store' );
+const Router				= require( './../../../lib/server/router' );
+const stringHelper			= require( './../utils/string_helper' );
+const dataStore				= require( './../data_store/filesystem_data_store' );
+const authenticationManger	= require( './managers/authentication_manager' );
+const loginManager			= require( './managers/login_manager' );
 
-let router		= new Router();
+let router					= new Router();
+const securityConfiguration	= [
+	// Global authentication manager that denies all requests if you are not logged in fi
+	{
+		path	: '^(?!\/login).*$',
+		methods	: [],
+		manager	: authenticationManger
+	},
+	{
+		path	: '/login',
+		methods	: ['POST'],
+		manager	: loginManager
+	}
+];
 
 router.add( ( event ) => {
-		if ( typeof event.cookies.sid === 'string' )
+	let config		= securityConfiguration.slice( 0 );
+
+	let terminate	= () =>{
+		event.next();
+	};
+
+	let next		= () =>
+	{
+		if ( config.length === 0 )
 		{
-			dataStore.read( 'tokens', event.cookies.sid, ( err, data ) => {
-				if ( ! err && data )
-				{
-					if ( data.expires > Date.now() && data.auth === true )
-					{
-						data.expires	= Date.now() + 3600 * 1000;
-						dataStore.update( 'tokens', event.cookies.sid, data, ( err ) =>{
-							event.next();
-						});
-					}
-					else {
-						event.redirect( '/login' );
-						event.next();
-					}
-				}
-				else {
-					event.redirect( '/login' );
-					event.next();
-				}
-			});
+			terminate();
 		}
 		else {
-			let sid				= stringHelper.makeId();
-			let createCookie	=  {
-										id: sid,
-										auth: false,
-										expires: Date.now() +  3600 * 1000
-									};
-			event.response.setHeader( 'Set-Cookie', 'sid=' + sid );
-			dataStore.create( 'tokens', sid, createCookie, ( err ) =>{
-				if ( err )
-				{
-					event.setError( err );
-				}
-				event.redirect( '/login' );
-				event.next();
-			});
+			let managerConfig	= config.shift();
+
+			let regExp			= new RegExp( managerConfig.path );
+			if (
+				 regExp.exec( event.path )
+				&& ( managerConfig.methods.indexOf( event.method ) !== -1 || managerConfig.methods.length === 0 )
+			) {
+				managerConfig.manager.handle( event, next, terminate );
+			}
+			else {
+				next();
+			}
 		}
+	};
+
+	next();
 });
 
 module.exports	= router;

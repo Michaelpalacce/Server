@@ -12,7 +12,7 @@ const path		= require( 'path' );
 let lib		= {};
 
 // Base directory of the data folder
-lib.baseDir	= path.join( __dirname, '/../../../data/' );
+lib.baseDir	= path.join( __dirname, '/../../../.data/' );
 
 /**
  * @brief	Write data to a file
