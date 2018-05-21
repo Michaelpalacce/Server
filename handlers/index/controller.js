@@ -24,14 +24,12 @@ router.add( '/', 'GET', ( event ) => {
 				if ( err )
 				{
 					event.setError( err );
-					event.next();
 				}
 			});
 		}
 		else
 		{
 			event.setError( err );
-			event.next();
 		}
 	});
 });

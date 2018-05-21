@@ -24,7 +24,6 @@ router.add( '/browse', 'GET', ( event ) => {
 	if ( ! dir )
 	{
 		event.setError( 'Dir is incorrect' );
-		event.next();
 		return;
 	}
 
@@ -34,13 +33,13 @@ router.add( '/browse', 'GET', ( event ) => {
 			event.render( 'index', { data: items }, ( err ) => {
 				if ( err )
 				{
-					event.next();
+					event.setError( err );
 				}
 			});
 		}
 		else
 		{
-			event.next();
+			event.setError( err );
 		}
 	});
 });

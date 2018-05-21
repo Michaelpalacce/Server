@@ -19,7 +19,6 @@ let downloadFailedCallback	= ( event ) => {
 	event.response.setHeader( 'Content-type', '.txt' );
 	event.response.end( 'The file specified does not exist' );
 	event.setError( 'The file specified does not exist' );
-	event.next();
 };
 
 /**
@@ -39,6 +38,7 @@ router.add( '/download', 'GET', ( event ) => {
 	if ( ! file )
 	{
 		downloadFailedCallback( event );
+		return;
 	}
 
 	if ( ! fs.existsSync( event.queryStringObject.file ) )

@@ -18,14 +18,13 @@ router.add( '/login', 'GET', ( event ) => {
 		if ( err )
 		{
 			event.setError( err );
-			event.next();
 		}
 	});
 });
 /**
- * @brief	Adds a '/browse' route with method GET
+ * @brief	Adds a '/login' route with method POST
  *
- * @details	Required Parameters: dir
+ * @details	Required Parameters: NONE
  * 			Optional Parameters: NONE
  *
  * @return	void

@@ -18,11 +18,18 @@ const securityConfiguration	= [
 	},
 	{
 		path	: '/login',
-		methods	: ['POST'],
+		methods	: ['GET', 'POST'],
 		manager	: loginManager
 	}
 ];
 
+/**
+ * @brief	Middleware responsible for security and authentication
+ *
+ * @param	RequestEvent event
+ *
+ * @return	void
+ */
 router.add( ( event ) => {
 	let config		= securityConfiguration.slice( 0 );
 

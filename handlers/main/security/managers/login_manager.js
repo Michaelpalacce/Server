@@ -6,7 +6,45 @@ const stringHelper	= require( './../../../main/utils/string_helper' );
 
 let loginManager	= {};
 
+/**
+ * @brief	Sets an authenticated token if the provided username and password are correct
+ *
+ * @param	RequestEvent event
+ * @param	Function next
+ * @param	Function terminate
+ *
+ * @return	void
+ */
 loginManager.handle	= ( event, next, terminate ) => {
+	if  ( event.method === 'GET' )
+	{
+		if ( typeof event.cookies.sid === 'string' )
+		{
+			data.read( 'tokens', event.cookies.sid, ( err, sidData ) =>{
+				if ( ! err && sidData )
+				{
+					if ( typeof sidData.expires === 'number' && sidData.expires > Date.now() )
+					{
+						event.redirect( '/' );
+						terminate();
+					}
+					else {
+						data.delete( 'tokens', event.cookies.sid, ( err ) =>{
+							event.setHeader( 'Set-Cookie', ['sid='] );
+							event.next()
+						});
+					}
+				}
+				else {
+					data.delete( 'tokens', event.cookies.sid, ( err ) =>{
+						event.setHeader( 'Set-Cookie', ['sid='] );
+						event.next();
+					});
+				}
+			});
+			return ;
+		}
+	}
 	let username	= typeof event.body.username === 'string' ? event.body.username : false;
 	let password	= typeof event.body.password === 'string' ? event.body.password : false;
 
@@ -25,12 +63,13 @@ loginManager.handle	= ( event, next, terminate ) => {
 			}
 			else {
 				event.setError( err );
-				next();
+				terminate();
 			}
 		});
 	}
 	else {
-		next();
+		event.redirect( '/login' );
+		terminate();
 	}
 };
 
