@@ -1,10 +1,13 @@
 'use strict';
 
-const data			= require( './../../../main/data_store/filesystem_data_store' );
-const conf			= require( './../../../../lib/config/env' );
-const stringHelper	= require( './../../../main/utils/string_helper' );
+// Dependencies
+const tokenManager			= require( './token_manager' );
 
+// Continer
 let authenticationManger	= {};
+
+// Constants
+const LOGIN_ROUTE			= '/login';
 
 /**
  * @brief	Handles the authentication by refreshing the authenticated token
@@ -21,45 +24,25 @@ authenticationManger.handle	= ( event, next, terminate ) =>{
 
 	if ( sidCookie )
 	{
-		data.read( 'tokens', sidCookie, ( err, sidData ) => {
-			if ( ! err && sidData )
+		tokenManager.isExpired( sidCookie, ( err ) =>{
+			if ( err )
 			{
-				if ( sidData.expires > Date.now() )
-				{
-					sidData.expires	= Date.now() + 3600 * 1000;
-					data.update( 'tokens', sidCookie, sidData, ( err ) => {
-						if ( err )
-						{
-							event.setError( err );
-							terminate();
-						}
-						else {
-							next();
-						}
-					});
-				}
-				else {
-					data.delete( 'tokens', sidCookie, ( err ) => {
-						if ( err )
-						{
-							event.setError( err );
-							terminate();
-						}
-						else {
-							event.redirect( '/login' );
-							terminate();
-						}
-					});
-				}
+				event.redirect( LOGIN_ROUTE );
+				terminate();
 			}
 			else {
-				event.redirect( '/login' );
-				terminate();
+				tokenManager.updateToken( sidCookie, ( err ) =>{
+					if ( err )
+					{
+						event.serverError( err );
+					}
+					terminate();
+				});
 			}
 		});
 	}
 	else {
-		event.redirect( '/login' );
+		event.redirect( LOGIN_ROUTE );
 		terminate();
 	}
 };

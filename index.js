@@ -38,3 +38,8 @@ server.add( ( event ) => {
 		});
 	}
 });
+
+//@TODO MAKE THIS CLEAN UP .data/tokens every one day
+setInterval( () => {
+
+});

@@ -2,6 +2,7 @@
 
 // Dependencies
 const tokenManager	= require( './token_manager' );
+const conf			= require( './../../../../lib/config/env' );
 
 // Container
 let loginManager	= {};
@@ -16,22 +17,24 @@ let loginManager	= {};
  * @return	void
  */
 loginManager.handle	= ( event, next, terminate ) => {
-	let sidCookie	= typeof event.cookies.sid === 'string' ? event.cookies.sid : false;
+	let username	= typeof event.body.username === 'string' ? event.body.username : false;
+	let password	= typeof event.body.password === 'string' ? event.body.password : false;
 
-	if ( sidCookie )
+	if ( username === conf.username && password === conf.password )
 	{
-		tokenManager.isExpired( sidCookie, ( err ) =>{
+		tokenManager.createCookie( event, ( err ) =>{
 			if ( err )
 			{
+				event.setError( 'Could not create token or cookie' );
 				terminate();
 			}
 			else {
-				event.redirect( '/' );
+				next();
 			}
 		});
 	}
 	else {
-		terminate();
+		event.setError( 'Invalid username or password' );
 	}
 };
 

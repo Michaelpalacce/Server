@@ -2,14 +2,15 @@
 
 
 // Dependencies
-const Router				= require( './../../../lib/server/router' );
-const stringHelper			= require( './../utils/string_helper' );
-const dataStore				= require( './../data_store/filesystem_data_store' );
-const authenticationManger	= require( './managers/authentication_manager' );
-const loginManager			= require( './managers/login_manager' );
+const Router						= require( './../../../lib/server/router' );
+const stringHelper					= require( './../utils/string_helper' );
+const dataStore						= require( './../data_store/filesystem_data_store' );
+const authenticationManger			= require( './managers/authentication_manager' );
+const loginManager					= require( './managers/login_manager' );
+const sessionAuthenticationManager	= require( './managers/session_authentication_manager' );
 
-let router					= new Router();
-const securityConfiguration	= [
+let router							= new Router();
+const securityConfiguration			= [
 	// Global authentication manager that denies all requests if you are not logged in fi
 	{
 		path	: '^(?!\/login).*$',
@@ -19,6 +20,11 @@ const securityConfiguration	= [
 	{
 		path	: '/login',
 		methods	: ['POST'],
+		manager	: sessionAuthenticationManager
+	},
+	{
+		path	: '/login',
+		methods	: ['GET'],
 		manager	: loginManager
 	}
 ];
