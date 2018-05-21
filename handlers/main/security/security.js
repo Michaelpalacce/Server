@@ -18,7 +18,7 @@ const securityConfiguration	= [
 	},
 	{
 		path	: '/login',
-		methods	: ['GET', 'POST'],
+		methods	: ['POST'],
 		manager	: loginManager
 	}
 ];

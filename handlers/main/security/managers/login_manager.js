@@ -16,35 +16,40 @@ let loginManager	= {};
  * @return	void
  */
 loginManager.handle	= ( event, next, terminate ) => {
-	if  ( event.method === 'GET' )
-	{
-		if ( typeof event.cookies.sid === 'string' )
-		{
-			data.read( 'tokens', event.cookies.sid, ( err, sidData ) =>{
-				if ( ! err && sidData )
-				{
-					if ( typeof sidData.expires === 'number' && sidData.expires > Date.now() )
-					{
-						event.redirect( '/' );
-						terminate();
-					}
-					else {
-						data.delete( 'tokens', event.cookies.sid, ( err ) =>{
-							event.setHeader( 'Set-Cookie', ['sid='] );
-							event.next()
-						});
-					}
-				}
-				else {
-					data.delete( 'tokens', event.cookies.sid, ( err ) =>{
-						event.setHeader( 'Set-Cookie', ['sid='] );
-						event.next();
-					});
-				}
-			});
-			return ;
-		}
-	}
+
+	// if  ( event.method === 'GET' )
+	// {
+	// 	if ( typeof event.cookies.sid === 'string' )
+	// 	{
+	// 		data.read( 'tokens', event.cookies.sid, ( err, sidData ) =>{
+	// 			if ( ! err && sidData )
+	// 			{
+	// 				if ( typeof sidData.expires === 'number' && sidData.expires > Date.now() )
+	// 				{
+	// 					event.redirect( '/' );
+	// 					terminate();
+	// 				}
+	// 				else {
+	// 					data.delete( 'tokens', event.cookies.sid, ( err ) =>{
+	// 						event.setHeader( 'Set-Cookie', ['sid='] );
+	// 						event.next()
+	// 					});
+	// 				}
+	// 			}
+	// 			else {
+	// 				data.delete( 'tokens', event.cookies.sid, ( err ) =>{
+	// 					event.setHeader( 'Set-Cookie', ['sid='] );
+	// 					event.next();
+	// 				});
+	// 			}
+	// 		});
+	// 		terminate();
+	// 	}
+	// 	else {
+	// 		terminate();
+	// 	}
+	// }
+
 	let username	= typeof event.body.username === 'string' ? event.body.username : false;
 	let password	= typeof event.body.password === 'string' ? event.body.password : false;
 
