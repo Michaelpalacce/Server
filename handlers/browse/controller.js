@@ -30,7 +30,7 @@ router.add( '/browse', 'GET', ( event ) => {
 	path.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
-			event.render( 'index', { data: items }, ( err ) => {
+			event.render( 'browse', { data: items }, ( err ) => {
 				if ( err )
 				{
 					event.setError( err );

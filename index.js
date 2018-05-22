@@ -7,6 +7,7 @@ const index			= require( './handlers/index/controller' );
 const browse		= require( './handlers/browse/controller' );
 const download		= require( './handlers/download/controller' );
 const login			= require( './handlers/login/controller' );
+const upload		= require( './handlers/upload/controller' );
 const security		= require( './handlers/main/security/security' );
 
 // Start the server
@@ -27,6 +28,7 @@ server.add( index );
 server.add( browse );
 server.add( download );
 server.add( login );
+server.add( upload );
 
 // Add a 404 NOT FOUND middleware
 server.add( ( event ) => {
