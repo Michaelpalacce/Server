@@ -18,6 +18,7 @@ server.addStaticPath( 'favicon.ico' );
 
 server.logger( 1 );
 server.use( 'formParser' );
+server.use( 'multipartParser' );
 server.use( 'parseCookies' );
 
 //Authentication middleware

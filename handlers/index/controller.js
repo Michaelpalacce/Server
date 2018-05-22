@@ -2,7 +2,6 @@
 
 // Dependencies
 const Router	= require( './../../lib/server/router' );
-const path		= require( './../main/path' );
 
 let router		= new Router();
 
@@ -15,23 +14,7 @@ let router		= new Router();
  * @return	void
  */
 router.add( '/', 'GET', ( event ) => {
-	// Call the Model get to retrieve data
-	let startDir	= '/';
-	path.getItems( startDir, ( err, items ) => {
-		if ( ! err && items && items.length > 0 )
-		{
-			event.render( 'browse', { data: items }, ( err ) => {
-				if ( err )
-				{
-					event.setError( err );
-				}
-			});
-		}
-		else
-		{
-			event.setError( err );
-		}
-	});
+	event.redirect( '/browse' );
 });
 
 module.exports	= router;

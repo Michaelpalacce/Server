@@ -30,7 +30,7 @@ router.add( '/login', 'GET', ( event ) => {
  * @return	void
  */
 router.add( '/login', 'POST', ( event ) => {
-	event.redirect( '/' );
+	event.redirect( '/browse' );
 	event.next();
 });
 

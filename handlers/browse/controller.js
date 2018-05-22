@@ -19,7 +19,7 @@ router.add( '/browse', 'GET', ( event ) => {
 	let dir	= typeof event.queryStringObject.dir === 'string'
 			&& event.queryStringObject.dir.length > 0
 			? event.queryStringObject.dir
-			: false;
+			: '/';
 
 	if ( ! dir )
 	{
@@ -30,7 +30,7 @@ router.add( '/browse', 'GET', ( event ) => {
 	path.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
-			event.render( 'browse', { data: items }, ( err ) => {
+			event.render( 'browse', { data: items, dir: dir }, ( err ) => {
 				if ( err )
 				{
 					event.setError( err );

@@ -26,7 +26,7 @@ loginManager.handle	= ( event, next, terminate ) => {
 				terminate();
 			}
 			else {
-				event.redirect( '/' );
+				event.redirect( '/browse' );
 			}
 		});
 	}
