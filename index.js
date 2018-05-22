@@ -13,7 +13,9 @@ const security		= require( './handlers/main/security/security' );
 server.start( env_config.port );
 
 server.addStaticPath( env_config.staticPath );
+server.addStaticPath( 'favicon.ico' );
 
+server.logger( 1 );
 server.use( 'formParser' );
 server.use( 'parseCookies' );
 
@@ -32,7 +34,7 @@ server.add( ( event ) => {
 	{
 		event.response.setHeader( 'Content-Type', 'text/html' );
 		event.response.statusCode	= 404;
-		event.render( 'not_found', { message:'404 NOT FOUND' }, ( err )=>{
+		event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
 			if ( err )
 				event.serverError( err );
 		});
