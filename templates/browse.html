@@ -26,6 +26,7 @@
 		</div>
 		<% } %>
 	</div>
+
     <div class="container pt-5">
         <form action="upload" method="post" enctype="multipart/form-data">
             <input type="file" name="file"><br>
@@ -33,6 +34,8 @@
             <input type="submit">
         </form>
     </div>
+	Note: If the file sucessfully gets processed, a redirect will happen and the
+	file will get saved in the background, so it may take a second for it to appear on the file system
 </body>
 <script type="text/javascript" src="/public/js/jquery.js"></script>
 <script type="text/javascript" src="/public/js/bootstrap.js"></script>

@@ -9,7 +9,7 @@ let router		= new Router();
 /**
  * @brief	Adds a '/upload' route with method POST
  *
- * @TODO    Implement this! Do some extra research!
+ * @details	Saves the file async
  *
  * @details	Required Parameters: file
  * 			Optional Parameters: NONE
@@ -17,8 +17,27 @@ let router		= new Router();
  * @return	void
  */
 router.add( '/upload', 'POST', ( event ) => {
-	// event.redirect( '/' );
-	event.next();
+	if ( typeof event.extra.files !== 'object' )
+	{
+		event.setError( 'No files were processed' );
+	}
+
+	let files	= event.extra.files;
+
+	for ( let index in files )
+	{
+		let file	= files[index];
+		fs.writeFile( 'Uploads/' + file.filename, file.fileBuffer , 'binary', ( err ) => {
+			if ( err )
+			{
+				console.log( err );
+			}
+
+			console.log( 'file written' );
+		});
+	}
+
+	event.redirect( '/' );
 });
 
 // Export the module
