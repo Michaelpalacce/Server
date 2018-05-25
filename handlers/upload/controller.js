@@ -17,7 +17,7 @@ let router		= new Router();
  * @return	void
  */
 router.add( '/upload', 'POST', ( event ) => {
-	event.redirect( '/' );
+	// event.redirect( '/' );
 	event.next();
 });
 

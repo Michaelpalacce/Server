@@ -18,7 +18,7 @@ server.addStaticPath( 'favicon.ico' );
 
 server.logger( 1 );
 server.use( 'formParser' );
-server.use( 'multipartParser', { uploadDir : 'Uploads' } );
+server.use( 'multipartParser', { uploadDirectory : 'Uploads/', BufferSize : 1024 } );
 server.use( 'parseCookies' );
 
 //Authentication middleware
