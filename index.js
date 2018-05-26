@@ -12,7 +12,7 @@ server.use( 'addStaticPath', { path : 'favicon.ico' } );
 server.use( 'logger', { level : 1 } );
 server.use( 'formParser' );
 server.use( 'parseCookies' );
-server.use( 'multipartParser', { uploadDirectory : 'Uploads/', BufferSize : 1024 } );
+server.use( 'multipartParser', { uploadDirectory : 'Uploads/', BufferSize : 100 } );
 
 //Authentication middleware
 server.add( security );
