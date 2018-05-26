@@ -9,13 +9,15 @@ const security		= require( './handlers/main/security/security' );
 server.use( 'addStaticPath', { path : env_config.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
 
+server.use( 'timeout', { timeout : 60 } );
 server.use( 'logger', { level : 1 } );
 server.use( 'formParser' );
 server.use( 'parseCookies' );
-server.use( 'multipartParser', { BufferSize : 5242880 } );
 
 //Authentication middleware
 server.add( security );
+
+server.use( 'multipartParser', { BufferSize : 5242880 } );
 
 // Handlers
 server.add( handlers );

@@ -28,7 +28,6 @@ authenticationManger.handle	= ( event, next, terminate ) =>{
 			if ( err )
 			{
 				event.redirect( LOGIN_ROUTE );
-				terminate();
 			}
 			else {
 				tokenManager.updateToken( sidCookie, ( err ) =>{
@@ -36,14 +35,17 @@ authenticationManger.handle	= ( event, next, terminate ) =>{
 					{
 						event.serverError( err );
 					}
-					terminate();
+					else
+					{
+						terminate();
+					}
 				});
 			}
 		});
 	}
-	else {
+	else
+	{
 		event.redirect( LOGIN_ROUTE );
-		terminate();
 	}
 };
 
