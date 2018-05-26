@@ -25,17 +25,17 @@
 			<% } %>
 		</div>
 		<% } %>
-	</div>
 
-    <div class="container pt-5">
-        <form action="upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file"><br>
-			<!-- <input type="hidden" name="directory" value="<% this.dir %>"> -->
-            <input type="submit">
-        </form>
-    </div>
-	Note: If the file sucessfully gets processed, a redirect will happen and the
-	file will get saved in the background, so it may take a second for it to appear on the file system
+		<form class="was-validated" action="upload" method="post" enctype="multipart/form-data">
+			Note: If the file sucessfully gets processed, a redirect will happen and the
+			file will get saved in the background, so it may take a second for it to appear on the file system
+			<div class="custom-file">
+				<input type="file" name="file" class="custom-file-input" required>
+				<label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
 </body>
 <script type="text/javascript" src="/public/js/jquery.js"></script>
 <script type="text/javascript" src="/public/js/bootstrap.js"></script>
