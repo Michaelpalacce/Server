@@ -30,7 +30,7 @@ server.add( ( event ) => {
 		event.response.statusCode	= 404;
 		event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
 			if ( err )
-				event.serverError( err );
+				event.serverError( 'Could not render template' );
 		});
 	}
 });

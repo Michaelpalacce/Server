@@ -1,8 +1,8 @@
 'use strict';
 
 // Dependencies
-const Router	= require( './../../lib/server/router' );
-const path		= require( './../main/path' );
+const Router		= require( './../../lib/server/router' );
+const PathHelper	= require( './../main/path' );
 
 let router		= new Router();
 
@@ -19,19 +19,21 @@ let browseCallback	= ( event ) => {
 		return;
 	}
 
-	path.getItems( dir, ( err, items ) => {
+	let pathHelper	= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
+
+	pathHelper.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
 			event.render( 'browse', { data: items, dir: dir }, ( err ) => {
 				if ( err )
 				{
-					event.setError( err );
+					event.setError( 'Could not render template' );
 				}
 			});
 		}
 		else
 		{
-			event.setError( err );
+			event.setError( 'Could not get items' );
 		}
 	});
 };

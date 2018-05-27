@@ -3,6 +3,7 @@
 // Dependencies
 const Router	= require( './../../lib/server/router' );
 const fs		= require( 'fs' );
+const path		= require( 'path' );
 
 let router		= new Router();
 
@@ -20,49 +21,39 @@ router.add( '/preview', 'GET', ( event ) => {
 				? event.queryStringObject.file
 				: false;
 
-	if ( ! file )
-	{
-		event.setError( 'File does not exist' );
-		return;
-	}
-
-	if ( ! fs.existsSync( file ) )
+	if ( ! file || ! fs.existsSync( file ) )
 	{
 		event.setError( 'File does not exist' );
 	}
 	else
 	{
-		event.render( 'preview', { src: '/video?file=' + file }, ( err )=>{
+		let fileStats	= path.parse( file );
+		event.render( 'preview', { type: fileStats.ext, src: '/data?file=' + file }, ( err )=>{
 			if ( err )
 			{
-				event.setError( err );
+				event.setError( 'Could not render template' );
 			}
 		});
 	}
 });
 
 /**
- * @brief	Adds a '/video' route with method GET
+ * @brief	Adds a '/data' route with method GET
  *
  * @details	Required Parameters: file
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
-router.add( '/video', 'GET', ( event ) =>{
+router.add( '/data', 'GET', ( event ) =>{
 	let file	= typeof event.queryStringObject.file === 'string'
-	&& event.queryStringObject.file.length > 0
-		? event.queryStringObject.file
-		: false;
+				&& event.queryStringObject.file.length > 0
+				? event.queryStringObject.file
+				: false;
 
-	if ( ! file )
+	if ( ! file || ! fs.existsSync( file ) )
 	{
-		event.setError( 'File does not exist' );
-		return;
-	}
-
-	if ( ! fs.existsSync( file ) )
-	{
+		console.log( file );
 		event.setError( 'File does not exist' );
 	}
 	else

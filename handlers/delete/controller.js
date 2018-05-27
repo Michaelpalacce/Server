@@ -21,13 +21,7 @@ router.add( '/delete', 'DELETE', ( event ) => {
 				? event.queryStringObject.file
 				: false;
 
-	if ( ! file )
-	{
-		event.setError( 'File does not exist' );
-		return;
-	}
-
-	if ( ! fs.existsSync( file ) )
+	if ( ! file || ! fs.existsSync( file ) )
 	{
 		event.setError( 'File does not exist' );
 	}

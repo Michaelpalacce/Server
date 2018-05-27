@@ -5,8 +5,31 @@
 	<title>Preview</title>
 </head>
 <body>
-	<video controls class="embed-responsive-item" style="width: 1080px; height: auto;">
-		<source src="<% this.src %>" type="video/mp4">
-	</video>
+	<% if ( this.type === '.mp4' ){ %>
+		<video controls class="embed-responsive-item" style="width: 1080px; height: auto;">
+			<source src="<% this.src %>" type="video/mp4">
+		</video>
+	<% }else { %>
+		<p class="data-field" data-src="<% this.src %>"></p>
+	<% } %>
 </body>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<!-- BETTER THIS -->
+<script type="text/javascript">
+	let file	= $( '.data-field' );
+
+	if ( file.length === 1 )
+	{
+		let successCallback	= function ( result )
+		{
+			file.html( result.split( '\\r\\n' ).join( '<br>' ));
+		};
+
+		$.ajax({
+			url		: file.attr( 'data-src' ),
+			method	: 'GET',
+			success	: successCallback
+		});
+	}
+</script>
 </html>

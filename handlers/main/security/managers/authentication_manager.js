@@ -33,7 +33,7 @@ authenticationManger.handle	= ( event, next, terminate ) =>{
 				tokenManager.updateToken( sidCookie, ( err ) =>{
 					if ( err )
 					{
-						event.serverError( err );
+						event.serverError( 'Could not update token.' );
 					}
 					else
 					{

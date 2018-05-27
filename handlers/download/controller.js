@@ -31,30 +31,24 @@ let downloadFailedCallback	= ( event ) => {
 router.add( '/download', 'GET', ( event ) => {
 	let file	= typeof event.queryStringObject.file === 'string'
 				&& event.queryStringObject.file.length > 0
-				? path.parse( event.queryStringObject.file )
+				? event.queryStringObject.file
 				: false;
 
-	if ( ! file )
-	{
-		downloadFailedCallback( event );
-		return;
-	}
-	let filename	= event.queryStringObject.file;
-
-	if ( ! fs.existsSync( filename ) )
+	if ( ! file || ! fs.existsSync( file ) )
 	{
 		downloadFailedCallback( event );
 	}
 	else
 	{
-		event.response.setHeader( 'Content-disposition', 'attachment; filename=' + file.base );
-		event.response.setHeader( 'Content-type', file.ext );
-		event.response.setHeader( 'Content-Length', fs.statSync( filename ).size );
+		let fileStats	= path.parse( file );
+		event.response.setHeader( 'Content-disposition', 'attachment; filename=' + fileStats.base );
+		event.response.setHeader( 'Content-type', fileStats.ext );
+		event.response.setHeader( 'Content-Length', fileStats.size );
 		event.clearTimeout();
 
 		try
 		{
-			let fStream		= fs.createReadStream( filename );
+			let fStream	= fs.createReadStream( file );
 
 			fStream.pipe( event.response );
 		}
