@@ -39,8 +39,9 @@ router.add( '/download', 'GET', ( event ) => {
 		downloadFailedCallback( event );
 		return;
 	}
+	let filename	= event.queryStringObject.file;
 
-	if ( ! fs.existsSync( event.queryStringObject.file ) )
+	if ( ! fs.existsSync( filename ) )
 	{
 		downloadFailedCallback( event );
 	}
@@ -48,11 +49,13 @@ router.add( '/download', 'GET', ( event ) => {
 	{
 		event.response.setHeader( 'Content-disposition', 'attachment; filename=' + file.base );
 		event.response.setHeader( 'Content-type', file.ext );
+		event.response.setHeader( 'Content-Length', fs.statSync( filename ).size );
 		event.clearTimeout();
 
 		try
 		{
-			let fStream	= fs.createReadStream( event.queryStringObject.file );
+			let fStream		= fs.createReadStream( filename );
+
 			fStream.pipe( event.response );
 		}
 		catch ( e )

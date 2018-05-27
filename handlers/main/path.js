@@ -68,6 +68,7 @@ pathHelper.getItems	= ( dir, callback ) => {
 		}
 	});
 };
+
 /**
  * @brief	Formats the item
  *
@@ -80,11 +81,26 @@ pathHelper.formatItem	= ( name, stats, goBack ) => {
 	let uri			= encodeURIComponent( goBack ? name.dir : path.join( name.dir, name.base ) );
 
 	return {
-		name		: itemName,
-		encodedURI	: uri,
-		size		: stats.size,
-		isDir		: stats.isDirectory()
+		name				: itemName,
+		encodedURI			: uri,
+		size				: stats.size,
+		isDir				: stats.isDirectory(),
+		previewAvailable	: pathHelper.supportedExtensions( name.ext )
 	}
+};
+
+/**
+ * @brief	States whether the extension given can be previewed
+ *
+ * @param	String extension
+ *
+ * @return	Boolean
+ */
+pathHelper.supportedExtensions	= ( extension ) =>
+{
+	let supportedExtensions	= ['.mp4'];
+
+	return supportedExtensions.indexOf( extension ) !== -1;
 };
 
 module.exports	= pathHelper;

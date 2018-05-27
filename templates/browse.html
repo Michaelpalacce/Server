@@ -19,9 +19,12 @@
 					<div class="card-body">
 						<h5 class="card-title"><% this.data[index].name %></h5>
 						<p class="card-text"><% Math.round( this.data[index].size / 1024, 2 ) %> KB</p>
-						<div class="card-body">
-							<a href="<% '/download?file=' + this.data[index].encodedURI %>" class="card-link">Download</a>
-							<a href="#"data-file="<% this.data[index].encodedURI %>" class="delete-file card-link">Delete</a>
+						<div class="row ">
+							<a href="<% '/download?file=' + this.data[index].encodedURI %>" class="col-sm">Download</a>
+							<a href="#" data-file="<% this.data[index].encodedURI %>" class="delete-file col-sm">Delete</a>
+							<% if ( this.data[index].previewAvailable ) { %>
+								<a href="<% '/preview?file=' + this.data[index].encodedURI + '&backDir=' + this.dir %>" class="col-sm">Preview</a>
+							<% } %>
 						</div>
 					</div>
 					<% } %>
@@ -54,8 +57,8 @@
 			method	: 'DELETE',
 			success	: function( result )
 			{
-        		window.location.reload();
-    		}
+				window.location.reload();
+			}
 		});
 	});
 </script>
