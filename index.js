@@ -11,7 +11,7 @@ server.use( 'addStaticPath', { path : 'favicon.ico' } );
 
 server.use( 'timeout', { timeout : 60 } );
 server.use( 'logger', { level : 1 } );
-server.use( 'formParser' );
+server.use( 'formParser', { maxPayloadLength : 1048576 } );
 server.use( 'parseCookies' );
 
 //Authentication middleware
