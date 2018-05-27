@@ -6,15 +6,7 @@ const path		= require( './../main/path' );
 
 let router		= new Router();
 
-/**
- * @brief	Adds a '/browse' route with method GET
- *
- * @details	Required Parameters: dir
- * 			Optional Parameters: NONE
- *
- * @return	void
- */
-router.add( '/browse', 'GET', ( event ) => {
+let browseCallback	= ( event ) => {
 	// Call the Model get to retrieve data
 	let dir	= typeof event.queryStringObject.dir === 'string'
 			&& event.queryStringObject.dir.length > 0
@@ -42,6 +34,26 @@ router.add( '/browse', 'GET', ( event ) => {
 			event.setError( err );
 		}
 	});
-});
+};
+
+/**
+ * @brief	Adds a '/' route with method GET
+ *
+ * @details	Required Parameters: NONE
+ * 			Optional Parameters: directory
+ *
+ * @return	void
+ */
+router.add( '/', 'GET', browseCallback );
+
+/**
+ * @brief	Adds a '/browse' route with method GET
+ *
+ * @details	Required Parameters: NONE
+ * 			Optional Parameters: directory
+ *
+ * @return	void
+ */
+router.add( '/browse', 'GET', browseCallback );
 
 module.exports	= router;

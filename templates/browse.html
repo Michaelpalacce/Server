@@ -10,16 +10,20 @@
 		<% if ( this.data ){ %>
 		<div class="row">
 			<% for( let index = 0; index < this.data.length; ++ index ) { %>
-				<div class="col-md-4 card mb-4 box-shadow h-md-250">
+				<div class="card" style="width: 18rem;">
+					<!-- <img class="card-img-top" src="" alt="Card image cap"> -->
 					<% if ( this.data[index].isDir ) { %>
 						<a class="folder card-body" href="/browse?dir=<% this.data[index].encodedURI %>"><% this.data[index].name %></a>
 					<% } %>
 					<% if ( this.data[index].isDir === false){ %>
-						<div class="card-body d-flex flex-column align-items-start">
-							<% this.data[index].name %>
-							<div><% Math.round( this.data[index].size / 1024, 2 ) %> KB</div>
+					<div class="card-body">
+						<h5 class="card-title"><% this.data[index].name %></h5>
+						<p class="card-text"><% Math.round( this.data[index].size / 1024, 2 ) %> KB</p>
+						<div class="card-body">
+							<a href="<% '/download?file=' + this.data[index].encodedURI %>" class="card-link">Download</a>
+							<a href="#"data-file="<% this.data[index].encodedURI %>" class="delete-file card-link">Delete</a>
 						</div>
-						<a class="btn btn-outline-primary" href="<% '/download?file=' + this.data[index].encodedURI %>">Download</a>
+					</div>
 					<% } %>
 				</div>
 			<% } %>
@@ -31,7 +35,7 @@
 			file will get saved in the background, so it may take a second for it to appear on the file system
 			<div class="custom-file">
 				<input type="file" name="file" class="custom-file-input" required>
-				<label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+				<label class="custom-file-label">Choose file...</label>
 			</div>
 			<input type="hidden" name="directory" value="<% this.dir %>">
 			<button type="submit" class="btn btn-primary">Submit</button>
@@ -40,4 +44,19 @@
 </body>
 <script type="text/javascript" src="/public/js/jquery.js"></script>
 <script type="text/javascript" src="/public/js/bootstrap.js"></script>
+<script type="text/javascript">
+	$( '.delete-file' ).on( 'click', ( event ) => {
+		let element			= $( event.target );
+		let fileToDelete	= element.attr( 'data-file' );
+		fileToDelete		= decodeURIComponent( fileToDelete );
+		$.ajax({
+			url		: '/delete?file=' + fileToDelete,
+			method	: 'DELETE',
+			success	: function( result )
+			{
+        		window.location.reload();
+    		}
+		});
+	});
+</script>
 </html>
