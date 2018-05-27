@@ -26,14 +26,15 @@ loginManager.handle	= ( event, next, terminate ) => {
 			if ( err )
 			{
 				event.setError( 'Could not create token or cookie' );
-				terminate();
 			}
-			else {
+			else
+			{
 				next();
 			}
 		});
 	}
-	else {
+	else
+	{
 		event.setError( 'Invalid username or password' );
 	}
 };

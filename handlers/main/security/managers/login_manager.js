@@ -7,7 +7,7 @@ const tokenManager	= require( './token_manager' );
 let loginManager	= {};
 
 /**
- * @brief	Sets an authenticated token if the provided username and password are correct
+ * @brief	Allows access to /login if cookie is expired
  *
  * @param	RequestEvent event
  * @param	Function next
@@ -25,12 +25,14 @@ loginManager.handle	= ( event, next, terminate ) => {
 			{
 				terminate();
 			}
-			else {
+			else
+			{
 				event.redirect( '/browse' );
 			}
 		});
 	}
-	else {
+	else
+	{
 		terminate();
 	}
 };
