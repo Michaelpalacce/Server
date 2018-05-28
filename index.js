@@ -6,11 +6,12 @@ const env_config	= require( './lib/config/env' );
 const handlers		= require( './handlers/handlers' );
 const security		= require( './handlers/main/security/security' );
 
+server.use( 'timeout', { timeout : 60 } );
+
 server.use( 'addStaticPath', { path : env_config.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
 
 server.use( 'parseCookies' );
-server.use( 'timeout', { timeout : 60 } );
 server.use( 'formParser', { maxPayloadLength : 1048576 } );
 
 //Authentication middleware
