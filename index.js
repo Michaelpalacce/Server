@@ -27,8 +27,6 @@ server.add( '/test/:Profile:/:id:', 'GET', ( event ) =>{
 });
 
 server.add( '/test/:ProfileTwo:/:idTwo:', 'GET', ( event ) =>{
-	console.log( 'matched' );
-	console.log( event.params );
 	event.next();
 });
 
