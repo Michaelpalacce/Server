@@ -7,7 +7,7 @@ const handlers		= require( './handlers/handlers' );
 const security		= require( './handlers/main/security/security' );
 const fs			= require( 'fs' );
 
-server.use( 'timeout', { timeout : 60 } );
+server.use( 'timeout', { timeout : 5 } );
 server.use( 'addStaticPath', { path : env_config.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
 server.use( 'parseCookies' );
@@ -22,8 +22,13 @@ server.use( 'logger', { level : 1 } );
 // Handlers
 server.add( handlers );
 
-server.add( '/test/:testParam:/:testParamTwo:', 'GET', ( event ) =>{
+server.add( '/test/:Profile:/:id:', 'GET', ( event ) =>{
+	event.next();
+});
+
+server.add( '/test/:ProfileTwo:/:idTwo:', 'GET', ( event ) =>{
 	console.log( 'matched' );
+	console.log( event.params );
 	event.next();
 });
 
@@ -45,7 +50,6 @@ server.start( env_config.port );
 
 // Clean up tokens
 setInterval( () => {
-
 	let directory	= './.data/tokens';
 	fs.readdir( directory, {}, ( err, data ) =>{
 		if ( ! err )

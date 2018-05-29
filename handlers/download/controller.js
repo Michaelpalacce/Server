@@ -43,9 +43,8 @@ router.add( '/download', 'GET', ( event ) => {
 		let fileStats	= path.parse( file );
 		event.response.setHeader( 'Content-disposition', 'attachment; filename=' + fileStats.base );
 		event.response.setHeader( 'Content-type', fileStats.ext );
-		event.response.setHeader( 'Content-Length', fileStats.size );
+		event.response.setHeader( 'Content-Length', fs.statSync( file ).size );
 		event.clearTimeout();
-
 		try
 		{
 			let fStream	= fs.createReadStream( file );
