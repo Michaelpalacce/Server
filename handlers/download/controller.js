@@ -17,7 +17,7 @@ let router		= new Router();
 let downloadFailedCallback	= ( event ) => {
 	event.response.setHeader( 'Content-disposition', 'attachment; filename=error.txt' );
 	event.response.setHeader( 'Content-type', '.txt' );
-	event.setResponse( 'The file specified does not exist' );
+	event.send( 'The file specified does not exist' );
 };
 
 /**

@@ -30,7 +30,7 @@ router.add( '/delete', 'DELETE', ( event ) => {
 		fs.unlink( file, ( err ) => {
 			if ( ! err )
 			{
-				event.setResponse( [ 'ok' ] );
+				event.send( [ 'ok' ] );
 			}
 			else
 			{

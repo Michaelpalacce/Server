@@ -2,13 +2,13 @@
 
 // Dependencies
 const server		= require( './lib/www' );
-const env_config	= require( './lib/config/env' );
+const envConfig 	= require( './lib/config/env' );
 const handlers		= require( './handlers/handlers' );
 const security		= require( './handlers/main/security/security' );
 const fs			= require( 'fs' );
 
-server.use( 'timeout', { timeout : 5 } );
-server.use( 'addStaticPath', { path : env_config.staticPath } );
+server.use( 'timeout', { timeout : envConfig.requestTimeout } );
+server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
 server.use( 'parseCookies' );
 server.use( 'formParser', { maxPayloadLength : 1048576 } );
@@ -46,7 +46,7 @@ server.add( ( event ) => {
 });
 
 // Start the server
-server.start( env_config.port );
+server.start( envConfig.port );
 
 // Clean up tokens
 setInterval( () => {
@@ -80,4 +80,4 @@ setInterval( () => {
 			}
 		}
 	});
-}, env_config.tokenGarbageCollector );
+}, envConfig.tokenGarbageCollector );
