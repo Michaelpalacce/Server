@@ -56,6 +56,10 @@ setInterval( () => {
 			{
 				let file		= data[index];
 				let filename	= directory + '/' + file;
+				if ( filename.match( /Readme.md/ ) !== null )
+				{
+					continue;
+				}
 				fs.readFile( filename, {}, ( err, data ) => {
 					try
 					{
