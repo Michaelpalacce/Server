@@ -48,7 +48,7 @@ router.add( '/upload', 'POST', ( event ) => {
 		});
 	}
 
-	event.redirect( '/browse?dir=' + directory );
+	event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
 });
 
 // Export the module
