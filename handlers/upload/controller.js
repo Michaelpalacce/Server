@@ -43,10 +43,8 @@ router.add( '/upload', 'POST', ( event ) => {
 		fs.writeFile( fileLocation, file.chunk , 'binary', ( err ) => {
 			if ( err )
 			{
-				console.log( err );
+				event.setError( err );
 			}
-
-			console.log( 'file written' );
 		});
 	}
 

@@ -1,23 +1,20 @@
 'use strict';
 
 // Dependencies
-const server		= require( './lib/www' );
-const envConfig 	= require( './lib/config/env' );
-const handlers		= require( './handlers/handlers' );
-const security		= require( './handlers/main/security/security' );
-const fs			= require( 'fs' );
+const server	= require( './lib/www' );
+const envConfig	= require( './lib/config/env' );
+const handlers	= require( './handlers/handlers' );
+const security	= require( './handlers/main/security/security' );
+const fs		= require( 'fs' );
 
-server.use( 'timeout', { timeout : envConfig.requestTimeout } );
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
-server.use( 'parseCookies' );
-server.use( 'formParser', { maxPayloadLength : 1048576 } );
-
-//Authentication middleware
-server.add( security );
-
-server.use( 'multipartParser', { BufferSize : 5242880 } );
 server.use( 'logger', { level : 1 } );
+server.use( 'timeout', { timeout : envConfig.requestTimeout } );
+server.use( 'parseCookies' );
+server.use( 'bodyParser', { FormBodyParser: { maxPayloadLength : 1048576 } } );
+server.add( security );
+server.use( 'bodyParser', { MultipartFormParser: { BufferSize : 5242880 } } );
 
 // Handlers
 server.add( handlers );
