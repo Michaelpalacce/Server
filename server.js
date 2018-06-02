@@ -9,7 +9,7 @@ const server	= new Server.Server();
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
-server.use( 'logger', { level : 0 } );
+server.use( 'logger', { level : 1 } );
 server.use( 'timeout', { timeout : envConfig.requestTimeout } );
 server.use( 'setFileStream' );
 server.use( 'templatingEngine',
