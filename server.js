@@ -3,6 +3,7 @@
 const envConfig	= require( './config/env' );
 const handlers	= require( './handlers/handlers' );
 const Server	= require( 'event_request' );
+const path		= require( 'path' );
 
 const server	= new Server.Server();
 
@@ -11,6 +12,12 @@ server.use( 'addStaticPath', { path : 'favicon.ico' } );
 server.use( 'logger', { level : 1 } );
 server.use( 'timeout', { timeout : envConfig.requestTimeout } );
 server.use( 'parseCookies' );
+server.use( 'templatingEngine',
+	{
+		engine	: Server.BaseTemplatingEngine,
+		options	: { templateDir : path.join( __dirname, './templates' ) }
+	}
+);
 server.use( 'bodyParser', { FormBodyParser: { maxPayloadLength : 1048576 } } );
 server.use( 'bodyParser', { MultipartFormParser: { BufferSize : 5242880 } } );
 server.use( 'session',
@@ -31,14 +38,6 @@ server.use( 'session',
 
 // Handlers
 server.add( handlers );
-
-server.add( '/test/:Profile:/:id:', 'GET', ( event ) =>{
-	event.next();
-});
-
-server.add( '/test/:ProfileTwo:/:idTwo:', 'GET', ( event ) =>{
-	event.next();
-});
 
 // Add a 404 NOT FOUND middleware
 server.add( ( event ) => {
