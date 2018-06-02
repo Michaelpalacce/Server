@@ -3,6 +3,7 @@
 const fs	= require( 'fs' );
 
 // Clean up tokens
+// @TODO please no look at me i am lazy and awful
 setInterval( () => {
 	let directory	= '.data/tokens';
 

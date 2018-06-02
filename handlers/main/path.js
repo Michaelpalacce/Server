@@ -19,7 +19,6 @@ class PathHelper
 		this.supportedTypes	= supportedTypes
 	}
 
-
 	/**
 	 * @brief	Gets all the item for the given directory
 	 *

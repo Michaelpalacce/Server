@@ -31,7 +31,6 @@ router.add( '/login', 'GET', ( event ) => {
  */
 router.add( '/login', 'POST', ( event ) => {
 	event.redirect( '/browse' );
-	event.next();
 });
 
 module.exports	= router;
