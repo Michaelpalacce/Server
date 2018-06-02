@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const Server			= require( './../event_request/www' );
+const Server			= require( '../node_modules/event_request/www' );
 
 const browseHandler		= require( './browse/controller' );
 const downloadHandler	= require( './download/controller' );

@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const Server	= require( './../../event_request/www' );
+const Server	= require( '../../node_modules/event_request/www' );
 const fs		= require( 'fs' );
 
 let router		= new Server.Router();
