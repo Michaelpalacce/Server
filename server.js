@@ -17,6 +17,7 @@ server.use( 'session',
 	{
 		managers				: ['default'],
 		indexRoute				: '/browse',
+		tokenExpiration			: envConfig.tokenExpiration,
 		loginRoute				: '/login',
 		sessionName				: 'sid',
 		authenticationCallback	: ( event ) =>{
