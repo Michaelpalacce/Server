@@ -53,7 +53,6 @@ router.add( '/data', 'GET', ( event ) =>{
 
 	if ( ! file || ! fs.existsSync( file ) )
 	{
-		console.log( file );
 		event.setError( 'File does not exist' );
 	}
 	else

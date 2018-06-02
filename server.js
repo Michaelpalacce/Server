@@ -9,20 +9,19 @@ const server	= new Server.Server();
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
-server.use( 'logger', { level : 1 } );
+server.use( 'logger', { level : 0 } );
 server.use( 'timeout', { timeout : envConfig.requestTimeout } );
-server.use( 'parseCookies' );
+server.use( 'setFileStream' );
 server.use( 'templatingEngine',
 	{
 		engine	: Server.BaseTemplatingEngine,
 		options	: { templateDir : path.join( __dirname, './templates' ) }
 	}
 );
+server.use( 'parseCookies' );
 server.use( 'bodyParser', { FormBodyParser: { maxPayloadLength : 1048576 } } );
-server.use( 'bodyParser', { MultipartFormParser: { BufferSize : 5242880 } } );
 server.use( 'session',
 	{
-		managers				: ['default'],
 		indexRoute				: '/browse',
 		tokenExpiration			: envConfig.tokenExpiration,
 		loginRoute				: '/login',
@@ -35,6 +34,7 @@ server.use( 'session',
 		}
 	}
 );
+server.use( 'bodyParser', { MultipartFormParser: { BufferSize : 5242880 } } );
 
 // Handlers
 server.add( handlers );
