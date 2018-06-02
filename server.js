@@ -7,31 +7,33 @@ const path		= require( 'path' );
 
 const server	= new Server.Server();
 
+// Authentication callback that will authenticated the request if the user has permissions
+// this can be changed to anything you want but must return a boolean at the end
+let authenticationCallback	= ( event )=>{
+	let username	= typeof event.body.username === 'string' ? event.body.username : false;
+	let password	= typeof event.body.password === 'string' ? event.body.password : false;
+
+	return username === envConfig.username && password === envConfig.password;
+};
+
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
 server.use( 'logger', { level : 1 } );
 server.use( 'timeout', { timeout : envConfig.requestTimeout } );
 server.use( 'setFileStream' );
-server.use( 'templatingEngine',
-	{
+server.use( 'templatingEngine', {
 		engine	: Server.BaseTemplatingEngine,
 		options	: { templateDir : path.join( __dirname, './templates' ) }
 	}
 );
 server.use( 'parseCookies' );
 server.use( 'bodyParser', { FormBodyParser: { maxPayloadLength : 1048576 } } );
-server.use( 'session',
-	{
+server.use( 'session', {
 		indexRoute				: '/browse',
 		tokenExpiration			: envConfig.tokenExpiration,
 		loginRoute				: '/login',
 		sessionName				: 'sid',
-		authenticationCallback	: ( event ) =>{
-			let username	= typeof event.body.username === 'string' ? event.body.username : false;
-			let password	= typeof event.body.password === 'string' ? event.body.password : false;
-
-			return username === envConfig.username && password === envConfig.password;
-		}
+		authenticationCallback	: authenticationCallback
 	}
 );
 server.use( 'bodyParser', { MultipartFormParser: { BufferSize : 5242880 } } );
