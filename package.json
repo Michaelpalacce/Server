@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "A simple storage solution app",
   "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "directories": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,13 +15,14 @@
     "storage"
   ],
   "author": "Stefan Genov",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Michaelpalacce/storage/issues"
   },
   "homepage": "https://github.com/Michaelpalacce/storage#readme",
   "dependencies": {
     "mongoose": "^5.0.17",
-    "npm": "^6.1.0"
+    "npm": "^6.1.0",
+    "event_request" : "*"
   }
 }

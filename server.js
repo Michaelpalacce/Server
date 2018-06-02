@@ -1,8 +1,8 @@
 'use strict';
 
-const envConfig	= require( './node_modules/event_request/config/env' );
+const envConfig	= require( './config/env' );
 const handlers	= require( './handlers/handlers' );
-const Server	= require( './node_modules/event_request/www' );
+const Server	= require( 'event_request' );
 
 const server	= new Server.Server();
 

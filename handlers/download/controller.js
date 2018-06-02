@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const Server	= require( '../../node_modules/event_request/www' );
+const Server	= require( 'event_request' );
 const path		= require( 'path' );
 const fs		= require( 'fs' );
 
