@@ -10,7 +10,7 @@
 		<% if ( this.data ){ %>
 		<div class="row">
 			<% for( let index = 0; index < this.data.length; ++ index ) { %>
-				<div class="card" style="width: 18rem;">
+				<div class="card col-md-3">
 					<!-- <img class="card-img-top" src="" alt="Card image cap"> -->
 					<% if ( this.data[index].isDir ) { %>
 						<a class="folder card-body" href="/browse?dir=<% this.data[index].encodedURI %>"><% this.data[index].name %></a>
@@ -33,8 +33,8 @@
 		</div>
 		<% } %>
 
-        <br>
-        <br>
+		<br>
+		<br>
 		<form class="was-validated" action="upload" method="post" enctype="multipart/form-data">
 			<div class="custom-file">
 				<input type="file" name="file" class="custom-file-input" required>
