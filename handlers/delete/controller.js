@@ -1,11 +1,10 @@
 'use strict';
 
 // Dependencies
-const Router	= require( './../../lib/server/router' );
-const path		= require( 'path' );
+const Server	= require( './../../lib/www' );
 const fs		= require( 'fs' );
 
-let router		= new Router();
+let router		= new Server.Router();
 
 /**
  * @brief	Adds a '/download' route with method GET

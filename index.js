@@ -1,82 +1,10 @@
 'use strict';
 
 // Dependencies
-const server	= require( './lib/www' );
-const envConfig	= require( './lib/config/env' );
-const handlers	= require( './handlers/handlers' );
-const security	= require( './handlers/main/security/security' );
-const fs		= require( 'fs' );
-
-server.use( 'addStaticPath', { path : envConfig.staticPath } );
-server.use( 'addStaticPath', { path : 'favicon.ico' } );
-server.use( 'logger', { level : 1 } );
-server.use( 'timeout', { timeout : envConfig.requestTimeout } );
-server.use( 'parseCookies' );
-server.use( 'bodyParser', { FormBodyParser: { maxPayloadLength : 1048576 } } );
-server.add( security );
-server.use( 'bodyParser', { MultipartFormParser: { BufferSize : 5242880 } } );
-
-// Handlers
-server.add( handlers );
-
-server.add( '/test/:Profile:/:id:', 'GET', ( event ) =>{
-	event.next();
-});
-
-server.add( '/test/:ProfileTwo:/:idTwo:', 'GET', ( event ) =>{
-	event.next();
-});
-
-// Add a 404 NOT FOUND middleware
-server.add( ( event ) => {
-	if ( ! event.isFinished() )
-	{
-		event.response.setHeader( 'Content-Type', 'text/html' );
-		event.response.statusCode	= 404;
-		event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
-			if ( err )
-				event.serverError( 'Could not render template' );
-		});
-	}
-});
+const envConfig		= require( './lib/config/env' );
+const server		= require( './server' );
+const tokenCleaner	= require( './handlers/main/token_cleaner' );
 
 // Start the server
 server.start( envConfig.port );
 
-// Clean up tokens
-setInterval( () => {
-	let directory	= './.data/tokens';
-	fs.readdir( directory, {}, ( err, data ) =>{
-		if ( ! err )
-		{
-			for ( let index in data )
-			{
-				let file		= data[index];
-				let filename	= directory + '/' + file;
-				if ( filename.match( /Readme.md/ ) !== null )
-				{
-					continue;
-				}
-				fs.readFile( filename, {}, ( err, data ) => {
-					try
-					{
-						let fileData	= JSON.parse( data.toString( 'ascii' ) );
-						if ( fileData.expires <= Date.now() )
-						{
-							fs.unlink( filename, ( err ) =>{
-								if ( err )
-								{
-									console.log( err );
-								}
-							});
-						}
-					}
-					catch ( e )
-					{
-						console.log( 'Could not parse file' );
-					}
-				});
-			}
-		}
-	});
-}, envConfig.tokenGarbageCollector );

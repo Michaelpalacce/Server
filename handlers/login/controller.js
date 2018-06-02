@@ -1,9 +1,9 @@
 'use strict';
 
 // Dependencies
-const Router		= require( './../../lib/server/router' );
+const Server	= require( './../../lib/www' );
 
-let router		= new Router();
+let router		= new Server.Router();
 
 /**
  * @brief	Adds a '/login' route with method GET

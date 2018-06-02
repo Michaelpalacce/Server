@@ -1,11 +1,11 @@
 'use strict';
 
 // Dependencies
-const Router	= require( './../../lib/server/router' );
+const Server	= require( './../../lib/www' );
 const path		= require( 'path' );
 const fs		= require( 'fs' );
 
-let router		= new Router();
+let router		= new Server.Router();
 
 /**
  * @brief	Callback called when downloading a file fails

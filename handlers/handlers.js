@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const Router			= require( './../lib/server/router' );
+const Server			= require( './../lib/www' );
 
 const browseHandler		= require( './browse/controller' );
 const downloadHandler	= require( './download/controller' );
@@ -10,7 +10,7 @@ const uploadHandler		= require( './upload/controller' );
 const deleteHandler		= require( './delete/controller' );
 const previewHandler	= require( './preview/controller' );
 
-let router				= new Router();
+let router				= new Server.Router();
 
 router.add( browseHandler );
 router.add( downloadHandler );
