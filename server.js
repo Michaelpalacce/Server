@@ -1,8 +1,8 @@
 'use strict';
 
-const envConfig	= require( './lib/config/env' );
+const envConfig	= require( './event_request/config/env' );
 const handlers	= require( './handlers/handlers' );
-const Server	= require( './lib/www' );
+const Server	= require( './event_request/www' );
 
 const server	= new Server.Server();
 

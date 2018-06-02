@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const Server		= require( './../../lib/www' );
+const Server		= require( './../../event_request/www' );
 const PathHelper	= require( './../main/path' );
 
 let router			= new Server.Router();
