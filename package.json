@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/Michaelpalacce/storage#readme",
   "dependencies": {
+    "event_request": "github:MichaelPalacce/EventRequest#master",
     "mongoose": "^5.0.17",
-    "npm": "^6.1.0",
-    "event_request" : "*"
+    "npm": "^6.1.0"
   }
 }
