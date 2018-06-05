@@ -14,28 +14,32 @@ let router		= new Server.Router();
  *
  * @return	void
  */
-router.add( '/delete', 'DELETE', ( event ) => {
-	let file	= typeof event.queryStringObject.file === 'string'
-				&& event.queryStringObject.file.length > 0
-				? event.queryStringObject.file
-				: false;
+router.add({
+	route	: '/delete',
+	method	: 'DELETE',
+	handler	: ( event ) => {
+		let file	= typeof event.queryStringObject.file === 'string'
+		&& event.queryStringObject.file.length > 0
+			? event.queryStringObject.file
+			: false;
 
-	if ( ! file || ! fs.existsSync( file ) )
-	{
-		event.setError( 'File does not exist' );
-	}
-	else
-	{
-		fs.unlink( file, ( err ) => {
-			if ( ! err )
-			{
-				event.send( [ 'ok' ] );
-			}
-			else
-			{
-				event.setError( 'Could not delete file' );
-			}
-		});
+		if ( ! file || ! fs.existsSync( file ) )
+		{
+			event.setError( 'File does not exist' );
+		}
+		else
+		{
+			fs.unlink( file, ( err ) => {
+				if ( ! err )
+				{
+					event.send( [ 'ok' ] );
+				}
+				else
+				{
+					event.setError( 'Could not delete file' );
+				}
+			});
+		}
 	}
 });
 

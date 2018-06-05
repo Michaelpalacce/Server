@@ -17,38 +17,42 @@ let router		= new Server.Router();
  *
  * @return	void
  */
-router.add( '/upload', 'POST', ( event ) => {
-	if ( typeof event.extra.files !== 'object' )
-	{
-		event.setError( 'No files were processed' );
+router.add({
+	route	: '/upload',
+	method	: 'POST',
+	handler	: ( event ) => {
+		if ( typeof event.extra.files !== 'object' )
+		{
+			event.setError( 'No files were processed' );
+		}
+
+		let directory	= typeof event.body.directory === 'string'
+			? event.body.directory
+			: false;
+
+		if ( directory === false )
+		{
+			event.setError( 'directory not supplied' );
+			return ;
+		}
+
+		let files	= event.extra.files;
+
+		for ( let index in files )
+		{
+			let file			= files[index];
+			let fileLocation	= path.join( directory, file.filename );
+
+			fs.writeFile( fileLocation, file.chunk , 'binary', ( err ) => {
+				if ( err )
+				{
+					event.setError( err );
+				}
+			});
+		}
+
+		event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
 	}
-
-	let directory	= typeof event.body.directory === 'string'
-					? event.body.directory
-					: false;
-
-	if ( directory === false )
-	{
-		event.setError( 'directory not supplied' );
-		return ;
-	}
-
-	let files	= event.extra.files;
-
-	for ( let index in files )
-	{
-		let file			= files[index];
-		let fileLocation	= path.join( directory, file.filename );
-
-		fs.writeFile( fileLocation, file.chunk , 'binary', ( err ) => {
-			if ( err )
-			{
-				event.setError( err );
-			}
-		});
-	}
-
-	event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
 });
 
 // Export the module

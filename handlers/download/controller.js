@@ -28,32 +28,36 @@ let downloadFailedCallback	= ( event ) => {
  *
  * @return	void
  */
-router.add( '/download', 'GET', ( event ) => {
-	let file	= typeof event.queryStringObject.file === 'string'
-				&& event.queryStringObject.file.length > 0
-				? event.queryStringObject.file
-				: false;
+router.add({
+	route	: '/download',
+	method	: 'GET',
+	handler	: ( event ) => {
+		let file	= typeof event.queryStringObject.file === 'string'
+		&& event.queryStringObject.file.length > 0
+			? event.queryStringObject.file
+			: false;
 
-	if ( ! file || ! fs.existsSync( file ) )
-	{
-		downloadFailedCallback( event );
-	}
-	else
-	{
-		let fileStats	= path.parse( file );
-		event.response.setHeader( 'Content-disposition', 'attachment; filename=' + fileStats.base );
-		event.response.setHeader( 'Content-type', fileStats.ext );
-		event.response.setHeader( 'Content-Length', fs.statSync( file ).size );
-		event.clearTimeout();
-		try
-		{
-			let fStream	= fs.createReadStream( file );
-
-			fStream.pipe( event.response );
-		}
-		catch ( e )
+		if ( ! file || ! fs.existsSync( file ) )
 		{
 			downloadFailedCallback( event );
+		}
+		else
+		{
+			let fileStats	= path.parse( file );
+			event.response.setHeader( 'Content-disposition', 'attachment; filename=' + fileStats.base );
+			event.response.setHeader( 'Content-type', fileStats.ext );
+			event.response.setHeader( 'Content-Length', fs.statSync( file ).size );
+			event.clearTimeout();
+			try
+			{
+				let fStream	= fs.createReadStream( file );
+
+				fStream.pipe( event.response );
+			}
+			catch ( e )
+			{
+				downloadFailedCallback( event );
+			}
 		}
 	}
 });

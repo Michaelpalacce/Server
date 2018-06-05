@@ -46,7 +46,12 @@ let browseCallback	= ( event ) => {
  *
  * @return	void
  */
-router.add( '/', 'GET', browseCallback );
+router.add({
+	route	: '/',
+	method	: 'GET',
+	handler	: browseCallback
+});
+
 
 /**
  * @brief	Adds a '/browse' route with method GET
@@ -56,6 +61,10 @@ router.add( '/', 'GET', browseCallback );
  *
  * @return	void
  */
-router.add( '/browse', 'GET', browseCallback );
+router.add({
+	route	: '/browse',
+	method	: 'GET',
+	handler	: browseCallback
+});
 
 module.exports	= router;

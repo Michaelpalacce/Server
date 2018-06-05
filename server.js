@@ -41,16 +41,18 @@ server.use( 'bodyParser', { parsers: [ { instance : MultipartFormParser } ] } );
 server.add( handlers );
 
 // Add a 404 NOT FOUND middleware
-server.add( ( event ) => {
-	if ( ! event.isFinished() )
-	{
-		event.response.setHeader( 'Content-Type', 'text/html' );
-		event.response.statusCode	= 404;
-		event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
-			if ( err )
-				event.serverError( 'Could not render template' );
-		});
+server.add( {
+	handler	: ( event ) => {
+		if ( ! event.isFinished() )
+		{
+			event.response.setHeader( 'Content-Type', 'text/html' );
+			event.response.statusCode	= 404;
+			event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
+				if ( err )
+					event.serverError( 'Could not render template' );
+			});
+		}
 	}
-});
+} );
 
 module.exports	= server;

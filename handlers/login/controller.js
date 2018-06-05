@@ -13,14 +13,20 @@ let router		= new Server.Router();
  *
  * @return	void
  */
-router.add( '/login', 'GET', ( event ) => {
-	event.render( 'login', {}, ( err ) => {
-		if ( err )
-		{
-			event.setError( err );
-		}
-	});
+router.add({
+	route	: '/login',
+	method	: 'GET',
+	handler	: ( event ) => {
+
+		event.render( 'login', {}, ( err ) => {
+			if ( err )
+			{
+				event.setError( err );
+			}
+		});
+	}
 });
+
 /**
  * @brief	Adds a '/login' route with method POST
  *
@@ -29,8 +35,12 @@ router.add( '/login', 'GET', ( event ) => {
  *
  * @return	void
  */
-router.add( '/login', 'POST', ( event ) => {
-	event.redirect( '/browse' );
+router.add({
+	route	: '/login',
+	method	: 'POST',
+	handler	: ( event ) => {
+		event.redirect( '/browse' );
+	},
 });
 
 module.exports	= router;
