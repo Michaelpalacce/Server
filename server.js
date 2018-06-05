@@ -7,8 +7,8 @@ const Server				= require( 'event_request' );
 const path					= require( 'path' );
 
 const server				= new Server.Server();
-const FormBodyParser		= Server.BodyParser.FormBodyParser;
-const MultipartFormParser	= Server.BodyParser.MultipartFormParser;
+const FormBodyParser		= Server.BodyParserHandler.FormBodyParser;
+const MultipartFormParser	= Server.BodyParserHandler.MultipartFormParser;
 
 // Authentication callback that will authenticated the request if the user has permissions
 // this can be changed to anything you want but must return a boolean at the end
