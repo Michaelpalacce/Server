@@ -19,14 +19,14 @@ router.add({
 	route	: '/preview',
 	method	: 'GET',
 	handler	: ( event ) => {
-		let file	= typeof event.queryStringObject.file === 'string'
-		&& event.queryStringObject.file.length > 0
-			? event.queryStringObject.file
-			: false;
+		let file	= typeof event.queryString.file === 'string'
+					&& event.queryString.file.length > 0
+					? event.queryString.file
+					: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
-			event.setError( 'File does not exist' );
+			event.sendError( 'File does not exist' );
 		}
 		else
 		{
@@ -34,7 +34,7 @@ router.add({
 			event.render( 'preview', { type: fileStats.ext, src: '/data?file=' + file }, ( err )=>{
 				if ( err )
 				{
-					event.setError( 'Could not render template' );
+					event.sendError( 'Could not render template' );
 				}
 			});
 		}
@@ -53,14 +53,14 @@ router.add({
 	route	: '/data',
 	method	: 'GET',
 	handler	: ( event ) =>{
-		let file	= typeof event.queryStringObject.file === 'string'
-		&& event.queryStringObject.file.length > 0
-			? event.queryStringObject.file
-			: false;
+		let file	= typeof event.queryString.file === 'string'
+					&& event.queryString.file.length > 0
+					? event.queryString.file
+					: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
-			event.setError( 'File does not exist' );
+			event.sendError( 'File does not exist' );
 		}
 		else
 		{

@@ -8,14 +8,14 @@ let router			= new Server.Router();
 
 let browseCallback	= ( event ) => {
 	// Call the Model get to retrieve data
-	let dir	= typeof event.queryStringObject.dir === 'string'
-			&& event.queryStringObject.dir.length > 0
-			? event.queryStringObject.dir
+	let dir	= typeof event.queryString.dir === 'string'
+			&& event.queryString.dir.length > 0
+			? event.queryString.dir
 			: '/';
 
 	if ( ! dir )
 	{
-		event.setError( 'Dir is incorrect' );
+		event.sendError( 'Dir is incorrect' );
 		return;
 	}
 
@@ -27,13 +27,13 @@ let browseCallback	= ( event ) => {
 			event.render( 'browse', { data: items, dir: dir }, ( err ) => {
 				if ( err )
 				{
-					event.setError( 'Could not render template' );
+					event.sendError( 'Could not render template' );
 				}
 			});
 		}
 		else
 		{
-			event.setError( 'Could not get items' );
+			event.sendError( 'Could not get items' );
 		}
 	});
 };

@@ -32,10 +32,10 @@ router.add({
 	route	: '/download',
 	method	: 'GET',
 	handler	: ( event ) => {
-		let file	= typeof event.queryStringObject.file === 'string'
-		&& event.queryStringObject.file.length > 0
-			? event.queryStringObject.file
-			: false;
+		let file	= typeof event.queryString.file === 'string'
+					&& event.queryString.file.length > 0
+					? event.queryString.file
+					: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{

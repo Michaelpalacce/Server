@@ -49,7 +49,7 @@ server.add( {
 			event.response.statusCode	= 404;
 			event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
 				if ( err )
-					event.serverError( 'Could not render template' );
+					event.sendError( 'Could not render template' );
 			});
 		}
 	}

@@ -21,7 +21,7 @@ router.add({
 		event.render( 'login', {}, ( err ) => {
 			if ( err )
 			{
-				event.setError( err );
+				event.sendError( err );
 			}
 		});
 	}

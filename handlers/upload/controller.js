@@ -23,7 +23,7 @@ router.add({
 	handler	: ( event ) => {
 		if ( typeof event.extra.files !== 'object' )
 		{
-			event.setError( 'No files were processed' );
+			event.sendError( 'No files were processed' );
 		}
 
 		let directory	= typeof event.body.directory === 'string'
@@ -32,7 +32,7 @@ router.add({
 
 		if ( directory === false )
 		{
-			event.setError( 'directory not supplied' );
+			event.sendError( 'directory not supplied' );
 			return ;
 		}
 
@@ -46,7 +46,7 @@ router.add({
 			fs.writeFile( fileLocation, file.chunk , 'binary', ( err ) => {
 				if ( err )
 				{
-					event.setError( err );
+					event.sendError( err );
 				}
 			});
 		}
