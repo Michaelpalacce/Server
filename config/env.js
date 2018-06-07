@@ -23,7 +23,7 @@ config.dev.username					= 'root';
 config.dev.password					= 'toor';
 config.dev.staticPath				= 'public';
 config.dev.tokenExpiration			= 3600 * 1000;
-config.dev.requestTimeout			= 20 * 1000;
+config.dev.requestTimeout			= 2 * 1000;
 config.dev.tokenGarbageCollector	= 5 * 1000;
 config.prod							= {};
 

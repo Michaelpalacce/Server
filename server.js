@@ -36,7 +36,17 @@ server.use( 'session', {
 		authenticationCallback	: authenticationCallback
 	}
 );
-server.use( 'bodyParser', { parsers: [ { instance : MultipartFormParser } ] } );
+server.use( 'bodyParser',
+	{
+		parsers:
+			[
+				{
+					instance	: MultipartFormParser,
+					options		: { tempDir : path.join( __dirname, '/Uploads' ) }
+				}
+			]
+	}
+);
 
 // Handlers
 server.add( handlers );
