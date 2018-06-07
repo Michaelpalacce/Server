@@ -9,6 +9,7 @@ const path					= require( 'path' );
 const server				= new Server.Server();
 const FormBodyParser		= Server.BodyParserHandler.FormBodyParser;
 const MultipartFormParser	= Server.BodyParserHandler.MultipartFormParser;
+const JsonBodyParser		= Server.BodyParserHandler.JsonBodyParser;
 
 // Authentication callback that will authenticated the request if the user has permissions
 // this can be changed to anything you want but must return a boolean at the end
@@ -26,7 +27,7 @@ server.use( 'timeout', { timeout : envConfig.requestTimeout } );
 server.use( 'setFileStream' );
 server.use( 'templatingEngine', { options : { templateDir : path.join( __dirname, './templates' ) } } );
 server.use( 'parseCookies' );
-server.use( 'bodyParser', { parsers: [ { instance : FormBodyParser } ] } );
+server.use( 'bodyParser', { parsers: [ { instance : FormBodyParser }, { instance : JsonBodyParser } ] } );
 server.use( 'session', {
 		indexRoute				: '/browse',
 		tokenExpiration			: envConfig.tokenExpiration,
