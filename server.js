@@ -23,7 +23,7 @@ let authenticationCallback	= ( event )=>{
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
 server.use( 'logger', { level : 1 } );
-server.use( 'timeout', { timeout : 1000 * 1000 } );
+server.use( 'timeout', { timeout : 1000 } );
 server.use( 'setFileStream' );
 server.use( 'templatingEngine', { options : { templateDir : path.join( __dirname, './templates' ) } } );
 server.use( 'parseCookies' );
