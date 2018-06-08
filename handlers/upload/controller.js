@@ -21,35 +21,24 @@ router.add({
 	route	: '/upload',
 	method	: 'POST',
 	handler	: ( event ) => {
-		let directory	= '/';
-		let found		= false;
+		let directory	= typeof event.body.directory === 'string'
+						? event.body.directory
+						: '/';
 
-		for ( let index in event.body )
-		{
-			let part	= event.body[index];
 
-			if ( part.type === 'parameter' && part.name === 'directory' )
-			{
-				directory	= part.data.toString();
-				break;
-			}
-		}
+		event.body.files	= typeof event.body.files === 'object'
+							? event.body.files
+							: [];
 
-		for ( let index in event.body )
-		{
-			let part	= event.body[index];
-			if ( part.type === 'file' )
-			{
-				let oldPath	= part.filePath;
-				let newPath	= path.join( directory, part.name );
-				fs.rename( oldPath, newPath, () =>{
-					event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
-				});
-				found	= true;
-			}
-		}
+		event.body.files.forEach( ( file ) =>{
+			let oldPath	= file.path;
+			let newPath	= path.join( directory, file.name );
+			fs.rename( oldPath, newPath, () =>{
+				event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
+			});
+		});
 
-		if ( ! found )
+		if ( ! event.body.files.length > 0 )
 		{
 			event.sendError( 'Could not upload file', 500 );
 		}
