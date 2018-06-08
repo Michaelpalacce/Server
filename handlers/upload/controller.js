@@ -21,39 +21,38 @@ router.add({
 	route	: '/upload',
 	method	: 'POST',
 	handler	: ( event ) => {
-		// if ( typeof event.extra.files !== 'object' )
-		// {
-		// 	event.sendError( 'No files were processed' );
-		// }
-		//
-		// let directory	= typeof event.body.directory === 'string'
-		// 	? event.body.directory
-		// 	: false;
-		//
-		// if ( directory === false )
-		// {
-		// 	event.sendError( 'directory not supplied' );
-		// 	return ;
-		// }
-		//
-		// let files	= event.extra.files;
-		//
-		// for ( let index in files )
-		// {
-		// 	let file			= files[index];
-		// 	let fileLocation	= path.join( directory, file.filename );
-		//
-		// 	fs.writeFile( fileLocation, file.chunk , 'binary', ( err ) => {
-		// 		if ( err )
-		// 		{
-		// 			event.sendError( err );
-		// 		}
-		// 	});
-		// }
+		let directory	= '/';
+		let found		= false;
 
-		// event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
+		for ( let index in event.body )
+		{
+			let part	= event.body[index];
 
-		event.next();
+			if ( part.type === 'parameter' && part.name === 'directory' )
+			{
+				directory	= part.data.toString();
+				break;
+			}
+		}
+
+		for ( let index in event.body )
+		{
+			let part	= event.body[index];
+			if ( part.type === 'file' )
+			{
+				let oldPath	= part.filePath;
+				let newPath	= path.join( directory, part.name );
+				fs.rename( oldPath, newPath, () =>{
+					event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
+				});
+				found	= true;
+			}
+		}
+
+		if ( ! found )
+		{
+			event.sendError( 'Could not upload file', 500 );
+		}
 	}
 });
 
