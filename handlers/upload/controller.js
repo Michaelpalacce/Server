@@ -21,37 +21,39 @@ router.add({
 	route	: '/upload',
 	method	: 'POST',
 	handler	: ( event ) => {
-		if ( typeof event.extra.files !== 'object' )
-		{
-			event.sendError( 'No files were processed' );
-		}
+		// if ( typeof event.extra.files !== 'object' )
+		// {
+		// 	event.sendError( 'No files were processed' );
+		// }
+		//
+		// let directory	= typeof event.body.directory === 'string'
+		// 	? event.body.directory
+		// 	: false;
+		//
+		// if ( directory === false )
+		// {
+		// 	event.sendError( 'directory not supplied' );
+		// 	return ;
+		// }
+		//
+		// let files	= event.extra.files;
+		//
+		// for ( let index in files )
+		// {
+		// 	let file			= files[index];
+		// 	let fileLocation	= path.join( directory, file.filename );
+		//
+		// 	fs.writeFile( fileLocation, file.chunk , 'binary', ( err ) => {
+		// 		if ( err )
+		// 		{
+		// 			event.sendError( err );
+		// 		}
+		// 	});
+		// }
 
-		let directory	= typeof event.body.directory === 'string'
-			? event.body.directory
-			: false;
+		// event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
 
-		if ( directory === false )
-		{
-			event.sendError( 'directory not supplied' );
-			return ;
-		}
-
-		let files	= event.extra.files;
-
-		for ( let index in files )
-		{
-			let file			= files[index];
-			let fileLocation	= path.join( directory, file.filename );
-
-			fs.writeFile( fileLocation, file.chunk , 'binary', ( err ) => {
-				if ( err )
-				{
-					event.sendError( err );
-				}
-			});
-		}
-
-		event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
+		event.next();
 	}
 });
 

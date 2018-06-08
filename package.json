@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Michaelpalacce/storage#readme",
   "dependencies": {
-    "event_request": "github:Michaelpalacce/EventRequest#master",
+    "event_request": "github:Michaelpalacce/EventRequest##8-Multi-part-Body-parser",
     "mongoose": "^5.1.4",
     "npm": "^6.1.0"
   }
