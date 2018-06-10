@@ -5,8 +5,8 @@ const envConfig				= require( './config/env' );
 const handlers				= require( './handlers/handlers' );
 const Server				= require( 'event_request' );
 const path					= require( 'path' );
+const fs					= require( 'fs' );
 
-const server				= new Server.Server();
 const FormBodyParser		= Server.BodyParserHandler.FormBodyParser;
 const MultipartFormParser	= Server.BodyParserHandler.MultipartFormParser;
 const JsonBodyParser		= Server.BodyParserHandler.JsonBodyParser;
@@ -19,6 +19,13 @@ let authenticationCallback	= ( event )=>{
 
 	return username === envConfig.username && password === envConfig.password;
 };
+/**
+ * @brief	Instantiate the server
+ */
+const server				= new Server.Server({
+	port			: 80,
+	protocol		: 'http',
+});
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
