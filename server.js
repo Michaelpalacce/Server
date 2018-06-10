@@ -25,6 +25,7 @@ let authenticationCallback	= ( event )=>{
 const server				= new Server.Server({
 	port			: 80,
 	protocol		: 'http',
+	cluster			: 1
 });
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
@@ -59,7 +60,7 @@ server.use( 'bodyParser',
 server.add( handlers );
 
 // Add a 404 NOT FOUND middleware
-server.add( {
+server.add({
 	handler	: ( event ) => {
 		if ( ! event.isFinished() )
 		{
@@ -71,6 +72,6 @@ server.add( {
 			});
 		}
 	}
-} );
+});
 
 module.exports	= server;
