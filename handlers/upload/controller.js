@@ -21,10 +21,9 @@ router.add({
 	route	: '/upload',
 	method	: 'POST',
 	handler	: ( event ) => {
-		let directory	= typeof event.body.directory === 'string'
-						? event.body.directory
-						: '/';
-
+		let directory		= typeof event.body.directory === 'string'
+							? event.body.directory
+							: '/';
 
 		event.body.files	= typeof event.body.files === 'object'
 							? event.body.files
