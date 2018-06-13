@@ -1,10 +1,10 @@
 'use strict';
 
 // Dependencies
-const Server	= require( 'event_request' );
-const fs		= require( 'fs' );
+const { Router }	= require( 'event_request' );
+const fs			= require( 'fs' );
 
-let router		= new Server.Router();
+let router		= new Router();
 
 /**
  * @brief	Adds a '/download' route with method GET
