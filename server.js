@@ -23,7 +23,7 @@ let authenticationCallback	= ( event )=>{
  * @brief	Instantiate the server
  */
 const server				= new Server.Server({
-	port			: 80,
+	port			: 3000,
 	protocol		: 'http',
 	clusters		: 2
 });
