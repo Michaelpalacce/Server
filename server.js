@@ -1,15 +1,15 @@
 'use strict';
 
 // Dependencies
-const envConfig				= require( './config/env' );
-const handlers				= require( './handlers/handlers' );
-const Server				= require( 'event_request' );
-const path					= require( 'path' );
-const fs					= require( 'fs' );
+const envConfig					= require( './config/env' );
+const handlers					= require( './handlers/handlers' );
+const Server					= require( 'event_request' );
+const path						= require( 'path' );
 
-const FormBodyParser		= Server.BodyParserHandler.FormBodyParser;
-const MultipartFormParser	= Server.BodyParserHandler.MultipartFormParser;
-const JsonBodyParser		= Server.BodyParserHandler.JsonBodyParser;
+const { BodyParserHandler }		= Server;
+const { FormBodyParser }		= BodyParserHandler;
+const { MultipartFormParser }	= BodyParserHandler;
+const { JsonBodyParser }		= BodyParserHandler;
 
 // Authentication callback that will authenticated the request if the user has permissions
 // this can be changed to anything you want but must return a boolean at the end
