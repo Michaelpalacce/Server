@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Michaelpalacce/storage#readme",
   "dependencies": {
     "event_request": "github:Michaelpalacce/EventRequest#master",
-    "mongoose": "^5.1.4",
+    "mongoose": "^5.1.5",
     "npm": "^6.1.0"
   }
 }

@@ -25,7 +25,7 @@ let authenticationCallback	= ( event )=>{
 const server				= new Server.Server({
 	port			: 80,
 	protocol		: 'http',
-	cluster			: 1
+	clusters		: 2
 });
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
