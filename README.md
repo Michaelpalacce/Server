@@ -1,3 +1,5 @@
+<p align="center"><img src="/serverlogo.png" alt="Server" height="220px"></p>
+
 # Server
 A simple storage solution app to be run on localhost
 To run:
