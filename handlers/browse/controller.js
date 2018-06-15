@@ -1,10 +1,10 @@
 'use strict';
 
 // Dependencies
-const Server		= require( 'event_request' );
+const { Router }	= require( 'event_request' );
 const PathHelper	= require( './../main/path' );
 
-let router			= new Server.Router();
+let router			= new Router();
 
 let browseCallback	= ( event ) => {
 	// Call the Model get to retrieve data

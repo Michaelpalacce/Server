@@ -1,9 +1,9 @@
 'use strict';
 
 // Dependencies
-const Server	= require( 'event_request' );
+const { Router }	= require( 'event_request' );
 
-let router		= new Server.Router();
+let router			= new Router();
 
 /**
  * @brief	Adds a '/login' route with method GET
