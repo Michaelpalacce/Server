@@ -23,9 +23,9 @@ let authenticationCallback	= ( event )=>{
 // Create a custom Logger
 let logger	= Loggur.createLogger({
 	serverName	: 'Storage',
-	logLevel	: LOG_LEVELS.debug,
+	logLevel	: LOG_LEVELS.info,
 	transports	: [
-		new Console({ logLevel : LOG_LEVELS.notice }),
+		new Console({ logLevel : LOG_LEVELS.debug }),
 		new File({ logLevel : LOG_LEVELS.info, filePath: '/logs/error_log.log' }),
 	]
 });
