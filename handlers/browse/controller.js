@@ -7,6 +7,7 @@ const PathHelper	= require( './../main/path' );
 let router			= new Router();
 
 let browseCallback	= ( event ) => {
+
 	// Call the Model get to retrieve data
 	let dir	= typeof event.queryString.dir === 'string'
 			&& event.queryString.dir.length > 0
