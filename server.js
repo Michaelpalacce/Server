@@ -25,8 +25,17 @@ let logger	= Loggur.createLogger({
 	serverName	: 'Storage',
 	logLevel	: LOG_LEVELS.info,
 	transports	: [
-		new Console({ logLevel : LOG_LEVELS.debug }),
-		new File({ logLevel : LOG_LEVELS.info, filePath: '/logs/error_log.log' }),
+		new Console( { logLevel : LOG_LEVELS.info } ),
+		new File( {
+			logLevel	: LOG_LEVELS.notice,
+			filePath	: '/logs/access.log',
+			logLevels	: { notice : LOG_LEVELS.notice }
+		}),
+		new File( {
+			logLevel	: LOG_LEVELS.warning,
+			filePath	: '/logs/error.log',
+			logLevels	: { error : LOG_LEVELS.error, warning : LOG_LEVELS.warning }
+		}),
 	]
 });
 
