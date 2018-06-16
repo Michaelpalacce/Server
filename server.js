@@ -66,7 +66,7 @@ server.add({
 			event.response.statusCode	= 404;
 			event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
 				if ( err )
-					event.sendError( 'Could not render template' );
+					event.next( 'Could not render template' );
 			});
 		}
 	}

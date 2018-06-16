@@ -25,7 +25,7 @@ router.add({
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
-			event.sendError( 'File does not exist' );
+			event.next( 'File does not exist' );
 		}
 		else
 		{
@@ -36,7 +36,7 @@ router.add({
 				}
 				else
 				{
-					event.sendError( 'Could not delete file' );
+					event.next( 'Could not delete file' );
 				}
 			});
 		}

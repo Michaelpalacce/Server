@@ -5,7 +5,7 @@ const { Router }	= require( 'event_request' );
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 
-let router		= new Router();
+let router	= new Router();
 
 /**
  * @brief	Callback called when downloading a file fails
@@ -15,9 +15,9 @@ let router		= new Router();
  * @return	void
  */
 let downloadFailedCallback	= ( event ) => {
-	event.response.setHeader( 'Content-disposition', 'attachment; filename=error.txt' );
-	event.response.setHeader( 'Content-type', '.txt' );
-	event.send( 'The file specified does not exist' );
+	event.setHeader( 'Content-disposition', 'attachment; filename=error.txt' );
+	event.setHeader( 'Content-type', '.txt' );
+	event.next( 'The file specified does not exist' );
 };
 
 /**

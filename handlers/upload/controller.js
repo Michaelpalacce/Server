@@ -31,7 +31,7 @@ router.add({
 
 		if ( ! files )
 		{
-			event.sendError( 'Could not upload file', 500 );
+			event.next( 'Could not upload file', 500 );
 		}
 
 		files.forEach( ( file ) =>{

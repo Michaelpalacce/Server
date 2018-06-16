@@ -15,7 +15,7 @@ let browseCallback	= ( event ) => {
 
 	if ( ! dir )
 	{
-		event.sendError( 'Dir is incorrect' );
+		event.next( 'Dir is incorrect' );
 		return;
 	}
 
@@ -24,16 +24,11 @@ let browseCallback	= ( event ) => {
 	pathHelper.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
-			event.render( 'browse', { data: items, dir: dir }, ( err ) => {
-				if ( err )
-				{
-					event.sendError( 'Could not render template' );
-				}
-			});
+			event.render( 'browse', { data: items, dir: dir }, event.next.bind( event ) );
 		}
 		else
 		{
-			event.sendError( 'Could not get items' );
+			event.next( 'Could not get items' );
 		}
 	});
 };

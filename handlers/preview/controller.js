@@ -26,17 +26,12 @@ router.add({
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
-			event.sendError( 'File does not exist' );
+			event.next( 'File does not exist' );
 		}
 		else
 		{
 			let fileStats	= path.parse( file );
-			event.render( 'preview', { type: fileStats.ext, src: '/data?file=' + encodeURIComponent( file ) }, ( err )=>{
-				if ( err )
-				{
-					event.sendError( 'Could not render template' );
-				}
-			});
+			event.render( 'preview', { type: fileStats.ext, src: '/data?file=' + encodeURIComponent( file ) }, event.next.bind( event ) );
 		}
 	}
 });
@@ -60,7 +55,7 @@ router.add({
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
-			event.sendError( 'File does not exist' );
+			event.next( 'File does not exist' );
 		}
 		else
 		{

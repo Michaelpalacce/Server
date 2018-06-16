@@ -17,13 +17,7 @@ router.add({
 	route	: '/login',
 	method	: 'GET',
 	handler	: ( event ) => {
-
-		event.render( 'login', {}, ( err ) => {
-			if ( err )
-			{
-				event.sendError( err );
-			}
-		});
+		event.render( 'login', {}, event.next.bind( event ) );
 	}
 });
 
