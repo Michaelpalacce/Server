@@ -1,24 +1,15 @@
 'use strict';
 
 // Dependencies
-const envConfig									= require( './config/env' );
-const handlers									= require( './handlers/handlers' );
 const { Server, BodyParserHandler, Logging }	= require( 'event_request' );
 const path										= require( 'path' );
+const envConfig									= require( './config/env' );
+const handlers									= require( './handlers/handlers' );
+const security									= require( './handlers/main/security' );
 
 const { Logger, Loggur, LOG_LEVELS }			= Logging;
 const { Console, File }							= Logger;
-
-const { FormBodyParser, MultipartFormParser, JsonBodyParser }	= BodyParserHandler;
-
-// Authentication callback that will authenticated the request if the user has permissions
-// this can be changed to anything you want but must return a boolean at the end
-let authenticationCallback	= ( event )=>{
-	let username	= typeof event.body.username === 'string' ? event.body.username : false;
-	let password	= typeof event.body.password === 'string' ? event.body.password : false;
-
-	return username === envConfig.username && password === envConfig.password;
-};
+const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
 
 // Create a custom Logger
 let logger	= Loggur.createLogger({
@@ -58,14 +49,7 @@ server.use( 'setFileStream' );
 server.use( 'templatingEngine', { options : { templateDir : path.join( __dirname, './templates' ) } } );
 server.use( 'parseCookies' );
 server.use( 'bodyParser', { parsers: [ { instance : FormBodyParser } ] } );
-server.use( 'session', {
-		indexRoute				: '/browse',
-		tokenExpiration			: envConfig.tokenExpiration,
-		loginRoute				: '/login',
-		sessionName				: 'sid',
-		authenticationCallback	: authenticationCallback
-	}
-);
+security.attachSecurity( server );
 server.use( 'bodyParser', {
 	parsers: [{ instance : MultipartFormParser, options : { tempDir : path.join( __dirname, '/Uploads' ) } }]
 });
