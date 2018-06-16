@@ -28,6 +28,6 @@ Loggur.addLogger( 'storage', logger );
 
 module.exports	= {
 	attachLogger	: ( server ) => {
-		server.use( 'logger', logger );
+		server.use( 'logger', { logger : logger } );
 	}
 };
