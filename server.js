@@ -1,22 +1,23 @@
 'use strict';
 
 // Dependencies
-const { Server, BodyParserHandler }	= require( 'event_request' );
-const path							= require( 'path' );
-const envConfig						= require( './config/env' );
-const handlers						= require( './handlers/handlers' );
-const security						= require( './handlers/main/security' );
-const logger						= require( './handlers/main/logger' );
+const { Server, BodyParserHandler, ErrorHandler }	= require( 'event_request' );
+const path											= require( 'path' );
+const envConfig										= require( './config/env' );
+const handlers										= require( './handlers/handlers' );
+const security										= require( './handlers/main/security' );
+const logger										= require( './handlers/main/logger' );
 
 const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
 
 /**
  * @brief	Instantiate the server
  */
-const server				= new Server({
+const server	= new Server({
 	port			: 3000,
 	protocol		: 'http',
-	clusters		: 1
+	clusters		: 1,
+	errorHandler	: new ErrorHandler()
 });
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
