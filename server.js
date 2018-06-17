@@ -1,12 +1,12 @@
 'use strict';
 
 // Dependencies
-const { Server, BodyParserHandler, ErrorHandler }	= require( 'event_request' );
-const path											= require( 'path' );
-const envConfig										= require( './config/env' );
-const handlers										= require( './handlers/handlers' );
-const security										= require( './handlers/main/security' );
-const logger										= require( './handlers/main/logger' );
+const { Server, BodyParserHandler }	= require( 'event_request' );
+const path							= require( 'path' );
+const envConfig						= require( './config/env' );
+const handlers						= require( './handlers/handlers' );
+const security						= require( './handlers/main/security' );
+const logger						= require( './handlers/main/logger' );
 
 const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
 
