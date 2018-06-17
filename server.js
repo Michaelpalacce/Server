@@ -13,12 +13,7 @@ const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
 /**
  * @brief	Instantiate the server
  */
-const server	= new Server({
-	port			: 3000,
-	protocol		: 'http',
-	clusters		: 1,
-	errorHandler	: new ErrorHandler()
-});
+const server	= new Server( { clusters : 2 } );
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
@@ -41,7 +36,7 @@ server.add({
 	handler	: ( event ) => {
 		if ( ! event.isFinished() )
 		{
-			event.response.setHeader( 'Content-Type', 'text/html' );
+			event.setHeader( 'Content-Type', 'text/html' );
 			event.response.statusCode	= 404;
 			event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
 				if ( err )
