@@ -3,6 +3,8 @@
 // Dependencies
 const envConfig				= require( './../../config/env' );
 const AuthenticationManager	= require( './authentication_manager' );
+const { SessionHandler }	= require( 'event_request' );
+const { TokenManager }		= SessionHandler;
 
 // Authentication callback that will authenticated the request if the user has permissions
 // this can be changed to anything you want but must return a boolean at the end
@@ -19,6 +21,7 @@ module.exports	= {
 				tokenExpiration			: envConfig.tokenExpiration,
 				authenticationRoute		: '/login',
 				authenticationCallback	: authenticationCallback,
+				tokenManager			: TokenManager,
 				managers				: [
 					'default',
 					{
