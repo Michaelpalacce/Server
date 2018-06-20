@@ -35,8 +35,10 @@ router.add({
 		}
 
 		files.forEach( ( file ) =>{
-			let oldPath	= file.path;
-			let newPath	= path.join( directory, file.name );
+			let oldPath		= file.path;
+			let fileName	= path.parse( file.name );
+			fileName		= fileName.name + fileName.ext;
+			let newPath		= path.join( directory, fileName );
 			fs.rename( oldPath, newPath, () =>{
 				event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
 			});
