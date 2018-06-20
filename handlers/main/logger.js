@@ -18,8 +18,12 @@ let logger	= Loggur.createLogger({
 		}),
 		new File( {
 			logLevel	: LOG_LEVELS.warning,
-			filePath	: '/logs/error.log',
-			logLevels	: { error : LOG_LEVELS.error, warning : LOG_LEVELS.warning }
+			filePath	: '/logs/error_log.log',
+			logLevels	: { error : LOG_LEVELS.error }
+		}),
+		new File( {
+			logLevel	: LOG_LEVELS.debug,
+			filePath	: '/logs/debug_log.log'
 		}),
 	]
 });
