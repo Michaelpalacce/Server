@@ -11,17 +11,16 @@ let logger	= Loggur.createLogger({
 	logLevel	: LOG_LEVELS.debug,
 	transports	: [
 		new Console( { logLevel : LOG_LEVELS.notice } ),
-		new File( {
+		new File({
 			logLevel	: LOG_LEVELS.notice,
 			filePath	: '/logs/access.log',
 			logLevels	: { notice : LOG_LEVELS.notice }
 		}),
-		new File( {
-			logLevel	: LOG_LEVELS.warning,
+		new File({
+			logLevel	: LOG_LEVELS.error,
 			filePath	: '/logs/error_log.log',
-			logLevels	: { error : LOG_LEVELS.error }
 		}),
-		new File( {
+		new File({
 			logLevel	: LOG_LEVELS.debug,
 			filePath	: '/logs/debug_log.log'
 		}),
@@ -32,6 +31,6 @@ Loggur.addLogger( 'storage', logger );
 
 module.exports	= {
 	attachLogger	: ( server ) => {
-		server.use( 'logger', { logger : logger } );
+		server.use( 'logger', { logger } );
 	}
 };

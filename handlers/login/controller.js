@@ -33,7 +33,7 @@ router.add({
 	route	: '/login',
 	method	: 'POST',
 	handler	: ( event ) => {
-		event.redirect( '/browse' );
+		event.redirect( event.session.authenticated ? '/browse' : '/login' );
 	},
 });
 

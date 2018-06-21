@@ -1,19 +1,18 @@
 'use strict';
 
 // Dependencies
-const { Server, BodyParserHandler }	= require( 'event_request' );
-const path							= require( 'path' );
-const envConfig						= require( './config/env' );
-const handlers						= require( './handlers/handlers' );
-const security						= require( './handlers/main/security' );
-const logger						= require( './handlers/main/logger' );
-
+const { Server, BodyParserHandler }				= require( 'event_request' );
+const path										= require( 'path' );
+const envConfig									= require( './config/env' );
+const handlers									= require( './handlers/handlers' );
+const security									= require( './handlers/main/security' );
+const logger									= require( './handlers/main/logger' );
 const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
 
 /**
  * @brief	Instantiate the server
  */
-const server	= new Server( { clusters : 4 } );
+const server	= new Server( { clusters : 1 } );
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
@@ -30,7 +29,7 @@ server.use( 'bodyParser', {
 
 // Handlers
 server.add( handlers );
-
+//
 // Add a 404 NOT FOUND middleware
 server.add({
 	handler	: ( event ) => {
@@ -38,10 +37,7 @@ server.add({
 		{
 			event.setHeader( 'Content-Type', 'text/html' );
 			event.response.statusCode	= 404;
-			event.render( 'not_found', { message: '404 NOT FOUND' }, ( err )=>{
-				if ( err )
-					event.next( 'Could not render template' );
-			});
+			event.sendError( 'NOT FOUND' );
 		}
 	}
 });

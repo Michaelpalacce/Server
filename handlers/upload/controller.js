@@ -25,13 +25,14 @@ router.add({
 						? event.body.directory
 						: '/';
 
-		let files		= typeof event.body.files === 'object'
+		let files		= typeof event.body.files === 'object' && Object.keys( event.body.files ).length > 0
 						? event.body.files
 						: false;
 
 		if ( ! files )
 		{
 			event.next( 'Could not upload file', 500 );
+			return;
 		}
 
 		files.forEach( ( file ) =>{
