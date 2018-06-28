@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/Michaelpalacce/storage#readme",
   "dependencies": {
-    "event_request": "^1.4.0"
+    "event_request": "^1.5.8"
   }
 }

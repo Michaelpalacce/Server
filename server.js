@@ -29,7 +29,7 @@ server.use( 'bodyParser', {
 
 // Handlers
 server.add( handlers );
-//
+
 // Add a 404 NOT FOUND middleware
 server.add({
 	handler	: ( event ) => {
