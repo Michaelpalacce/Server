@@ -10,19 +10,19 @@ let logger	= Loggur.createLogger({
 	logLevel	: LOG_LEVELS.debug,
 	transports	: [
 		new Console( { logLevel : LOG_LEVELS.notice } ),
-		new File({
-			logLevel	: LOG_LEVELS.notice,
-			filePath	: '/logs/access.log',
-			logLevels	: { notice : LOG_LEVELS.notice }
-		}),
-		new File({
-			logLevel	: LOG_LEVELS.error,
-			filePath	: '/logs/error_log.log',
-		}),
-		new File({
-			logLevel	: LOG_LEVELS.debug,
-			filePath	: '/logs/debug_log.log'
-		}),
+// 		new File({
+// 			logLevel	: LOG_LEVELS.notice,
+// 			filePath	: '/logs/access.log',
+// 			logLevels	: { notice : LOG_LEVELS.notice }
+// 		}),
+// 		new File({
+// 			logLevel	: LOG_LEVELS.error,
+// 			filePath	: '/logs/error_log.log',
+// 		}),
+// 		new File({
+// 			logLevel	: LOG_LEVELS.debug,
+// 			filePath	: '/logs/debug_log.log'
+// 		}),
 	]
 });
 
