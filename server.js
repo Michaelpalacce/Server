@@ -12,7 +12,7 @@ const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
 /**
  * @brief	Instantiate the server
  */
-const server	= new Server( { clusters : 1 } );
+const server	= new Server();
 
 server.use( 'addStaticPath', { path : envConfig.staticPath } );
 server.use( 'addStaticPath', { path : 'favicon.ico' } );
