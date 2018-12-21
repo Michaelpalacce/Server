@@ -20,12 +20,10 @@ server.use( 'addStaticPath', { path : 'favicon.ico' } );
 logger.attachLogger( server );
 server.use( 'timeout', { timeout : envConfig.requestTimeout } );
 server.use( 'setFileStream' );
-server.use( 'templatingEngine', { options :
-	{
-		 templateDir	: path.join( __dirname, './templates' ),
-		 engine			: ejs
- 	}
- } );
+server.use( 'templatingEngine', {
+	 templateDir	: path.join( __dirname, './templates' ),
+	 engine			: ejs
+} );
 server.use( 'parseCookies' );
 server.use( 'bodyParser', { parsers: [ { instance : FormBodyParser } ] } );
 security.attachSecurity( server );
