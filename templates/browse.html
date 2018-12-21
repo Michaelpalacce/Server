@@ -7,23 +7,23 @@
 </head>
 <body>
 	<div class="container pt-5">
-		<% if ( this.data ){ %>
+		<% if ( data ){ %>
 		<div class="row">
-			<% for( let index = 0; index < this.data.length; ++ index ) { %>
+			<% for( let index = 0; index < data.length; ++ index ) { %>
 				<div class="card col-md-3">
 					<!-- <img class="card-img-top" src="" alt="Card image cap"> -->
-					<% if ( this.data[index].isDir ) { %>
-						<a class="folder card-body" href="/browse?dir=<% this.data[index].encodedURI %>"><% this.data[index].name %></a>
+					<% if ( data[index].isDir ) { %>
+						<a class="folder card-body" href="/browse?dir=<%= data[index].encodedURI %>"><%= data[index].name %></a>
 					<% } %>
-					<% if ( this.data[index].isDir === false){ %>
+					<% if ( data[index].isDir === false){ %>
 					<div class="card-body">
-						<h5 class="card-title"><% this.data[index].name %></h5>
-						<p class="card-text"><% Math.round( this.data[index].size / 1024, 2 ) %> KB</p>
+						<h5 class="card-title"><%= data[index].name %></h5>
+						<p class="card-text"><%= Math.round( data[index].size / 1024, 2 ) %> KB</p>
 						<div class="row ">
-							<a href="<% '/download?file=' + this.data[index].encodedURI %>" class="col-sm">Download</a>
-							<a href="#" data-file="<% this.data[index].encodedURI %>" class="delete-file col-sm">Delete</a>
-							<% if ( this.data[index].previewAvailable ) { %>
-								<a href="<% '/preview?file=' + this.data[index].encodedURI + '&backDir=' + this.dir %>" class="col-sm">Preview</a>
+							<a href="<%= '/download?file=' + data[index].encodedURI %>" class="col-sm">Download</a>
+							<a href="#" data-file="<%= data[index].encodedURI %>" class="delete-file col-sm">Delete</a>
+							<% if ( data[index].previewAvailable ) { %>
+								<a href="<%= '/preview?file=' + data[index].encodedURI + '&backDir=' + dir %>" class="col-sm">Preview</a>
 							<% } %>
 						</div>
 					</div>

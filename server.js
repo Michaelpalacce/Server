@@ -3,6 +3,7 @@
 // Dependencies
 const { Server, BodyParserHandler }				= require( 'event_request' );
 const path										= require( 'path' );
+const ejs										= require( 'ejs' );
 const envConfig									= require( './config/env' );
 const handlers									= require( './handlers/handlers' );
 const security									= require( './handlers/main/security' );
@@ -19,7 +20,12 @@ server.use( 'addStaticPath', { path : 'favicon.ico' } );
 logger.attachLogger( server );
 server.use( 'timeout', { timeout : envConfig.requestTimeout } );
 server.use( 'setFileStream' );
-server.use( 'templatingEngine', { options : { templateDir : path.join( __dirname, './templates' ) } } );
+server.use( 'templatingEngine', { options :
+	{
+		 templateDir	: path.join( __dirname, './templates' ),
+		 engine			: ejs
+ 	}
+ } );
 server.use( 'parseCookies' );
 server.use( 'bodyParser', { parsers: [ { instance : FormBodyParser } ] } );
 security.attachSecurity( server );

@@ -5,12 +5,12 @@
 	<title>Preview</title>
 </head>
 <body>
-	<% if ( this.type === '.mp4' ){ %>
+	<% if ( type === '.mp4' ){ %>
 		<video controls class="embed-responsive-item" style="width: 1080px; height: auto;">
-			<source src="<% this.src %>" type="video/mp4">
+			<source src="<% src %>" type="video/mp4">
 		</video>
 	<% }else { %>
-		<p class="data-field" data-src="<% this.src %>"></p>
+		<p class="data-field" data-src="<% src %>"></p>
 	<% } %>
 </body>
 <script type="text/javascript" src="/public/js/jquery.js"></script>
