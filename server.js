@@ -14,7 +14,7 @@ const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
 const server	= new Server();
 
 logger.attachLogger( server );
-bootstrapPlugins( server );
+bootstrapPlugins();
 
 server.apply( 'cache_server' );
 server.apply( 'event_request_static_resources' );
