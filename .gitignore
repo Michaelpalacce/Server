@@ -2,3 +2,7 @@ node_modules
 .data
 .idea
 Uploads
+/logs/access.log
+/logs/debug_log.log
+/logs/error_log.log
+/package-lock.json
