@@ -1,9 +1,10 @@
 'use strict';
 
 // Dependencies
-const server	= require( './server' );
+const server		= require( './server' );
+const { Loggur }	= require( 'event_request' );
 
 // Start the server
 server.start( ()=>{
-	console.log( 'Server Started' );
+	Loggur.log( 'Server started' );
 });

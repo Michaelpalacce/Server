@@ -1,8 +1,8 @@
 'use strict';
 
 // Dependencies
-const { Logging }							= require( 'event_request' );
-const { LOG_LEVELS, Console, File, Loggur }	= Logging;
+const { Logging, Loggur, LOG_LEVELS }	= require( 'event_request' );
+const { Console, File }					= Logging;
 
 // Create a custom Logger
 let logger	= Loggur.createLogger({
