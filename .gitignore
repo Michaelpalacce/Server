@@ -6,3 +6,4 @@ Uploads
 /logs/debug_log.log
 /logs/error_log.log
 /package-lock.json
+/logs/*.log

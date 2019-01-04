@@ -1,33 +1,28 @@
 'use strict';
 
 // Dependencies
-const { Server, BodyParserHandler }				= require( 'event_request' );
-const path										= require( 'path' );
-const handlers									= require( './handlers/handlers' );
-const logger									= require( './handlers/main/logger' );
-const bootstrapPlugins							= require( './handlers/main/bootstrap_plugins' );
-const { FormBodyParser, MultipartFormParser }	= BodyParserHandler;
+const { Server }		= require( 'event_request' );
+const path				= require( 'path' );
+const handlers			= require( './handlers/handlers' );
+const bootstrapPlugins	= require( './handlers/main/bootstrap_plugins' );
 
 /**
  * @brief	Instantiate the server
  */
 const server	= new Server();
 
-logger.attachLogger( server );
 bootstrapPlugins();
 
+server.apply( 'event_request_logger' );
 server.apply( 'cache_server' );
 server.apply( 'event_request_static_resources' );
 server.apply( 'event_request_timeout' );
 server.apply( 'event_request_file_stream' );
 server.apply( 'event_request_templating_engine' );
 
-server.use( 'parseCookies' );
-server.use( 'bodyParser', { parsers: [ { instance : FormBodyParser } ] } );
+server.apply( 'event_request_body_parser_form' );
 server.apply( 'event_request_session' );
-server.use( 'bodyParser', {
-	parsers: [{ instance : MultipartFormParser, options : { tempDir : path.join( __dirname, '/Uploads' ) } }]
-});
+server.apply( 'event_request_body_parser_multipart' );
 
 // Handlers
 server.add( handlers );
