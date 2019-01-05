@@ -10,7 +10,7 @@ require( './handlers/main/bootstrap_plugins' );
 /**
  * @brief	Instantiate the server
  */
-const server	= new Server();
+const server	= Server();
 
 server.apply( 'event_request_logger' );
 server.apply( 'cache_server' );
