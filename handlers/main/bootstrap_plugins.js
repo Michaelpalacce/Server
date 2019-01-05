@@ -18,61 +18,59 @@ const authenticationCallback	= ( event )=>{
 	return username === envConfig.username && password === envConfig.password;
 };
 
-module.exports		= ()=>{
-	let staticResourcesPlugin		= PluginManager.getPlugin( 'event_request_static_resources' );
-	let timeoutPlugin				= PluginManager.getPlugin( 'event_request_timeout' );
-	let templatingEnginePlugin		= PluginManager.getPlugin( 'event_request_templating_engine' );
-	let cacheServerPlugin			= PluginManager.getPlugin( 'cache_server' );
-	let sessionPlugin				= PluginManager.getPlugin( 'event_request_session' );
-	let multipartBodyParserPlugin	= PluginManager.getPlugin( 'event_request_body_parser_multipart' );
-	let loggerPlugin				= PluginManager.getPlugin( 'event_request_logger' );
+let logger	= Loggur.createLogger({
+	serverName	: 'Storage',
+	logLevel	: LOG_LEVELS.debug,
+	capture		: false,
+	transports	: [
+		new Console( { logLevel : LOG_LEVELS.notice } ),
+		new File({
+			logLevel	: LOG_LEVELS.notice,
+			filePath	: '/logs/access.log',
+			logLevels	: { notice : LOG_LEVELS.notice }
+		}),
+		new File({
+			logLevel	: LOG_LEVELS.error,
+			filePath	: '/logs/error_log.log',
+		}),
+		new File({
+			logLevel	: LOG_LEVELS.debug,
+			filePath	: '/logs/debug_log.log'
+		})
+	]
+});
 
-	cacheServerPlugin.startServer( ()=>{
-		Loggur.log( 'Caching server started' );
-	});
+let staticResourcesPlugin		= PluginManager.getPlugin( 'event_request_static_resources' );
+let timeoutPlugin				= PluginManager.getPlugin( 'event_request_timeout' );
+let templatingEnginePlugin		= PluginManager.getPlugin( 'event_request_templating_engine' );
+let cacheServerPlugin			= PluginManager.getPlugin( 'cache_server' );
+let sessionPlugin				= PluginManager.getPlugin( 'event_request_session' );
+let multipartBodyParserPlugin	= PluginManager.getPlugin( 'event_request_body_parser_multipart' );
+let loggerPlugin				= PluginManager.getPlugin( 'event_request_logger' );
 
-	staticResourcesPlugin.setOptions( { paths : [envConfig.staticPath, 'favicon.ico'] } );
-	timeoutPlugin.setOptions( { timeout : envConfig.requestTimeout } );
-	templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, './templates' ), engine : ejs } );
+cacheServerPlugin.startServer( ()=>{
+	Loggur.log( 'Caching server started' );
+});
 
-	let logger	= Loggur.createLogger({
-		serverName	: 'Storage',
-		logLevel	: LOG_LEVELS.debug,
-		capture		: false,
-		transports	: [
-			new Console( { logLevel : LOG_LEVELS.notice } ),
-			new File({
-				logLevel	: LOG_LEVELS.notice,
-				filePath	: '/logs/access.log',
-				logLevels	: { notice : LOG_LEVELS.notice }
-			}),
-			new File({
-				logLevel	: LOG_LEVELS.error,
-				filePath	: '/logs/error_log.log',
-			}),
-			new File({
-				logLevel	: LOG_LEVELS.debug,
-				filePath	: '/logs/debug_log.log'
-			})
-		]
-	});
+staticResourcesPlugin.setOptions( { paths : [envConfig.staticPath, 'favicon.ico'] } );
+timeoutPlugin.setOptions( { timeout : envConfig.requestTimeout } );
+templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, './templates' ), engine : ejs } );
+loggerPlugin.setOptions({ logger });
+multipartBodyParserPlugin.setOptions({
+	parsers: [{ instance : MultipartFormParser, options : { tempDir : path.join( PROJECT_ROOT, '/Uploads' ) } }]
+});
 
-	Loggur.addLogger( logger );
+Loggur.addLogger( logger );
 
-	loggerPlugin.setOptions({ logger });
-	sessionPlugin.setOptions({
-		tokenExpiration			: envConfig.tokenExpiration,
-		authenticationRoute		: '/login',
-		authenticationCallback	: authenticationCallback,
-		managers				: [
-			'default',
-			{
-				instance	: AuthenticationManager,
-				options		: { indexRoute : '/browse' }
-			}
-		]
-	});
-	multipartBodyParserPlugin.setOptions({
-		parsers: [{ instance : MultipartFormParser, options : { tempDir : path.join( PROJECT_ROOT, '/Uploads' ) } }]
-	});
-};
+sessionPlugin.setOptions({
+	tokenExpiration			: envConfig.tokenExpiration,
+	authenticationRoute		: '/login',
+	authenticationCallback	: authenticationCallback,
+	managers				: [
+		'default',
+		{
+			instance	: AuthenticationManager,
+			options		: { indexRoute : '/browse' }
+		}
+	]
+});

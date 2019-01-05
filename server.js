@@ -1,17 +1,16 @@
 'use strict';
 
 // Dependencies
-const { Server }		= require( 'event_request' );
-const path				= require( 'path' );
-const handlers			= require( './handlers/handlers' );
-const bootstrapPlugins	= require( './handlers/main/bootstrap_plugins' );
+const { Server }	= require( 'event_request' );
+const handlers		= require( './handlers/handlers' );
+
+// Configure the plugins
+require( './handlers/main/bootstrap_plugins' );
 
 /**
  * @brief	Instantiate the server
  */
 const server	= new Server();
-
-bootstrapPlugins();
 
 server.apply( 'event_request_logger' );
 server.apply( 'cache_server' );
