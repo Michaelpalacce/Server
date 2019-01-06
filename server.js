@@ -26,16 +26,4 @@ server.apply( 'event_request_body_parser_multipart' );
 // Handlers
 server.add( handlers );
 
-// Add a 404 NOT FOUND middleware
-server.add({
-	handler	: ( event ) => {
-		if ( ! event.isFinished() )
-		{
-			event.setHeader( 'Content-Type', 'text/html' );
-			event.response.statusCode	= 404;
-			event.sendError( 'NOT FOUND' );
-		}
-	}
-});
-
 module.exports	= server;

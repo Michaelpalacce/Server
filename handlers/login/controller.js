@@ -17,7 +17,7 @@ router.add({
 	route	: '/login',
 	method	: 'GET',
 	handler	: ( event ) => {
-		event.render( 'login', {}, event.next.bind( event ) );
+		event.render( 'login', {}, event.next );
 	}
 });
 

@@ -31,7 +31,7 @@ router.add({
 		else
 		{
 			let fileStats	= path.parse( file );
-			event.render( 'preview', { type: fileStats.ext, src: '/data?file=' + encodeURIComponent( file ) }, event.next.bind( event ) );
+			event.render( 'preview', { type: fileStats.ext, src: '/data?file=' + encodeURIComponent( file ) }, event.next );
 		}
 	}
 });

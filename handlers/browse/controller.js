@@ -24,7 +24,7 @@ let browseCallback	= ( event ) => {
 	pathHelper.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
-			event.render( 'browse', { data: items, dir: dir }, event.next.bind( event ) );
+			event.render( 'browse', { data: items, dir: dir }, event.next );
 		}
 		else
 		{
