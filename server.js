@@ -12,16 +12,13 @@ require( './handlers/main/bootstrap_plugins' );
  */
 const server	= Server();
 
-server.apply( 'event_request_logger' );
-server.apply( 'cache_server' );
-server.apply( 'event_request_static_resources' );
-server.apply( 'event_request_timeout' );
-server.apply( 'event_request_file_stream' );
-server.apply( 'event_request_templating_engine' );
+server.apply( 'er_logger' );
+server.apply( 'er_cache_server' );
+server.apply( 'er_file_stream' );
+server.apply( 'er_templating_engine' );
 
-server.apply( 'event_request_body_parser_form' );
-server.apply( 'event_request_session' );
-server.apply( 'event_request_body_parser_multipart' );
+server.apply( 'er_session' );
+server.apply( 'er_body_parser_multipart' );
 
 // Handlers
 server.add( handlers );

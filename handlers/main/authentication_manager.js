@@ -57,7 +57,7 @@ class AuthenticationManager extends SecurityManager
 	handle( event, next, terminate )
 	{
 		let session	= event.session;
-		let isLogin	= Router.matchRoute( this.authenticationRoute, event.path ).matched;
+		let isLogin	= Router.matchRoute( this.authenticationRoute, event.path );
 
 		// Authenticated and not login continue
 		if ( session.authenticated && ! isLogin )
