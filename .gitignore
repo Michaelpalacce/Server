@@ -1,5 +1,6 @@
 node_modules
 .data
+.vagrant
 .idea
 Uploads
 /logs/access.log
