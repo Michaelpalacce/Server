@@ -7,24 +7,18 @@ const PathHelper	= require( './../main/path' );
 let router			= new Router();
 
 let browseCallback	= ( event ) => {
-	// Call the Model get to retrieve data
-	let dir	= typeof event.queryString.dir === 'string'
-			&& event.queryString.dir.length > 0
-			? event.queryString.dir
-			: '/';
-
-	if ( ! dir )
-	{
-		event.next( 'Dir is incorrect' );
-		return;
-	}
+	let result		= event.validationHandler.validate( event.queryString, { dir : 'filled||string' } );
+	
+	let dir			= ! result.hasValidationFailed()
+					? event.queryString.dir
+					: '/';
 
 	let pathHelper	= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
 
 	pathHelper.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
-			event.render( 'browse', { data: items, dir: dir }, event.next );
+			event.render( 'browse', { data: items, dir: dir } );
 		}
 		else
 		{

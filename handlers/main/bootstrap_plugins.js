@@ -2,7 +2,6 @@
 
 const ejs															= require( 'ejs' );
 const path															= require( 'path' );
-const envConfig														= require( './../../config/env' );
 const { Loggur, BodyParserHandler, Logging, LOG_LEVELS, Server }	= require( 'event_request' );
 const { MultipartFormParser }										= BodyParserHandler;
 const PROJECT_ROOT													= path.parse( require.main.filename ).dir;
@@ -31,7 +30,6 @@ let logger	= Loggur.createLogger({
 });
 
 let PluginManager				= Server().getPluginManager();
-let timeoutPlugin				= PluginManager.getPlugin( 'er_timeout' );
 let templatingEnginePlugin		= PluginManager.getPlugin( 'er_templating_engine' );
 let cacheServerPlugin			= PluginManager.getPlugin( 'er_cache_server' );
 let multipartBodyParserPlugin	= PluginManager.getPlugin( 'er_body_parser_multipart' );
@@ -41,11 +39,10 @@ cacheServerPlugin.startServer( ()=>{
 	Loggur.log( 'Caching server started' );
 });
 
-timeoutPlugin.setOptions( { timeout : envConfig.requestTimeout } );
-templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, './templates' ), engine : ejs } );
+templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
 loggerPlugin.setOptions({ logger });
 multipartBodyParserPlugin.setOptions({
-	parsers: [{ instance : MultipartFormParser, options : { tempDir : path.join( PROJECT_ROOT, '/Uploads' ) } }]
+	parsers: [{ instance : MultipartFormParser, options : { tempDir : path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } }]
 });
 
 Loggur.addLogger( logger );

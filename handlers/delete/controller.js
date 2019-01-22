@@ -18,12 +18,13 @@ router.add({
 	route	: '/delete',
 	method	: 'DELETE',
 	handler	: ( event ) => {
-		let file	= typeof event.queryString.file === 'string'
-					&& event.queryString.file.length > 0
+		let result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
+
+		let file	= ! result.hasValidationFailed()
 					? event.queryString.file
 					: false;
 
-		if ( ! file || ! fs.existsSync( file ) )
+		if ( file === false || ! fs.existsSync( file ) )
 		{
 			event.next( 'File does not exist' );
 		}
