@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const { Router }		= require( 'event_request' );
+const { Server }		= require( 'event_request' );
 
 const browseHandler		= require( './browse/controller' );
 const downloadHandler	= require( './download/controller' );
@@ -9,7 +9,7 @@ const uploadHandler		= require( './upload/controller' );
 const deleteHandler		= require( './delete/controller' );
 const previewHandler	= require( './preview/controller' );
 
-let router				= new Router();
+let router				= Server().Router();
 
 router.add( browseHandler );
 router.add( downloadHandler );

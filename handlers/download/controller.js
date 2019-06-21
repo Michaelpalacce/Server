@@ -1,11 +1,11 @@
 'use strict';
 
 // Dependencies
-const { Router }	= require( 'event_request' );
+const { Server }	= require( 'event_request' );
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 
-let router	= new Router();
+let router	= Server().Router();
 
 /**
  * @brief	Callback called when downloading a file fails

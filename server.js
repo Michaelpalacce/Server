@@ -7,7 +7,7 @@ const handlers		= require( './handlers/handlers' );
 /**
  * @brief	Instantiate the server
  */
-const server	= Server();
+let server	= Server();
 
 server.apply( 'er_env' );
 

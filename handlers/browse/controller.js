@@ -1,10 +1,10 @@
 'use strict';
 
 // Dependencies
-const { Router }	= require( 'event_request' );
+const { Server }	= require( 'event_request' );
 const PathHelper	= require( './../main/path' );
 
-let router			= new Router();
+let router			= Server().Router();
 
 let browseCallback	= ( event ) => {
 	let result		= event.validationHandler.validate( event.queryString, { dir : 'filled||string' } );
@@ -22,7 +22,7 @@ let browseCallback	= ( event ) => {
 		}
 		else
 		{
-			event.next( 'Could not get items' );
+			event.redirect( event.headers.referer );
 		}
 	});
 };
@@ -38,7 +38,9 @@ let browseCallback	= ( event ) => {
 router.add({
 	route	: '/',
 	method	: 'GET',
-	handler	: browseCallback
+	handler	: ( event )=>{
+		event.redirect( '/browse' );
+	}
 });
 
 

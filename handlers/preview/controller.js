@@ -1,11 +1,11 @@
 'use strict';
 
 // Dependencies
-const { Router }	= require( 'event_request' );
+const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
 const path			= require( 'path' );
 
-let router			= new Router();
+let router			= Server().Router();
 
 /**
  * @brief	Adds a '/preview' route with method GET
