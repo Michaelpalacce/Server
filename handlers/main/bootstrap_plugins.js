@@ -43,8 +43,8 @@ cacheServerPlugin.startServer( ()=>{
 	const User			= dataServer.model( 'User' );
 
 	User.createNamespaceIfNotExists().then( ()=>{
-		User.make( 'TomorrowIsZero', { 'password' : 'zeroChanUwu' } );
-		User.make( 'STF', { 'password' : 'STF' } );
+		User.make( 'TomorrowIsZero', { 'password' : 'zeroChanUwu' }, { ttl: 0 } );
+		User.make( 'STF', { 'password' : 'STF' }, { ttl: 0 } );
 	}).catch( ()=>{
 		throw new Error( 'Error While Setting up namespace for users' );
 	});
