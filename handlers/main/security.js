@@ -1,3 +1,6 @@
+'use strict';
+
+// Dependencies
 const { Server }	= require( 'event_request' );
 
 const router		= Server().Router();
@@ -35,26 +38,32 @@ router.post( '/login', ( event )=>{
 		return;
 	}
 
-	result	= result.getValidationResult();
-	
-	if ( result.username === 'root' && result.password === 'toor' )
-	{
-		event.session.add( 'authenticated', true );
-		event.session.saveSession( ( err )=>{
-			if ( ! err )
-			{
-				event.redirect( '/' );
-			}
-			else
-			{
-				event.render( '/login' );
-			}
-		} );
-	}
-	else
-	{
-		event.render( '/login' );
-	}
+	result			= result.getValidationResult();
+	let cacheServer	= Server().getPlugin( 'er_cache_server' );
+	let dataServer	= cacheServer.getServer();
+
+	const User		= dataServer.model( 'User' );
+
+	User.find( result.username ).then( ( model )=>{
+		if ( model !== null && typeof model.recordData !== 'undefined' && model.recordData.password === result.password )
+		{
+			event.session.add( 'authenticated', true );
+			event.session.saveSession( ( err )=>{
+				if ( ! err )
+				{
+					event.redirect( '/' );
+				}
+				else
+				{
+					event.render( '/login' );
+				}
+			} );
+		}
+		else
+		{
+			event.render( '/login' );
+		}
+	}).catch( event.next );
 });
 
 module.exports	= router;

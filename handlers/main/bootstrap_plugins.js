@@ -38,6 +38,16 @@ let loggerPlugin				= PluginManager.getPlugin( 'er_logger' );
 
 cacheServerPlugin.startServer( ()=>{
 	Loggur.log( 'Caching server started' );
+
+	const dataServer	= cacheServerPlugin.getServer();
+	const User			= dataServer.model( 'User' );
+
+	User.createNamespaceIfNotExists().then( ()=>{
+		User.make( 'TomorrowIsZero', { 'password' : 'zeroChanUwu' } );
+		User.make( 'STF', { 'password' : 'STF' } );
+	}).catch( ()=>{
+		throw new Error( 'Error While Setting up namespace for users' );
+	});
 });
 
 templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
