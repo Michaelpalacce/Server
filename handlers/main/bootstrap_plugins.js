@@ -29,7 +29,8 @@ let logger	= Loggur.createLogger({
 	]
 });
 
-let PluginManager				= Server().getPluginManager();
+let server						= Server();
+let PluginManager				= server.getPluginManager();
 let templatingEnginePlugin		= PluginManager.getPlugin( 'er_templating_engine' );
 let cacheServerPlugin			= PluginManager.getPlugin( 'er_cache_server' );
 let multipartBodyParserPlugin	= PluginManager.getPlugin( 'er_body_parser_multipart' );
