@@ -12,7 +12,7 @@ let logger	= Loggur.createLogger({
 	logLevel	: LOG_LEVELS.debug,
 	capture		: false,
 	transports	: [
-		new Console( { logLevel : LOG_LEVELS.notice } ),
+		new Console( { logLevel : LOG_LEVELS.warning } ),
 		new File({
 			logLevel	: LOG_LEVELS.notice,
 			filePath	: '/logs/access.log',
@@ -43,8 +43,6 @@ cacheServerPlugin.startServer( ()=>{
 	const User			= dataServer.model( 'User' );
 
 	User.createNamespaceIfNotExists().then( ()=>{
-		User.make( 'TomorrowIsZero', { 'password' : 'zeroChanUwu' }, { ttl: 0 } );
-		User.make( 'STF', { 'password' : 'STF' }, { ttl: 0 } );
 	}).catch( ()=>{
 		throw new Error( 'Error While Setting up namespace for users' );
 	});

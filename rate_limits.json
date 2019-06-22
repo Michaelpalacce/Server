@@ -1,0 +1,1 @@
+{"rate_limit":100,"interval":60000,"message":"DDoS Protection","status_code":403,"rules":[{"path":"/login","method":["POST"],"rate_limit": 3,"interval":60000}]}
