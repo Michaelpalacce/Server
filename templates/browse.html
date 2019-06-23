@@ -43,6 +43,12 @@
 			<input type="hidden" name="directory" value="<%= dir %>">
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
+		<br>
+		<br>
+		<form action="/message" method="post" enctype="application/x-www-form-urlencoded">
+			<input type="text" name="message" placeholder="Post Message">
+			<button type="submit" class="btn btn-primary">Post</button>
+		</form>
 	</div>
 </body>
 <script type="text/javascript" src="/public/js/jquery.js"></script>

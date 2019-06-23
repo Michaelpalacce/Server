@@ -18,6 +18,9 @@ let browseCallback	= ( event ) => {
 	pathHelper.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
+			const Messages	= event.cachingServer.model( 'Messages' );
+
+			// @todo get all
 			event.render( 'browse', { data: items, dir: dir } );
 		}
 		else

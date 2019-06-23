@@ -49,6 +49,7 @@ router.post( '/login', ( event )=>{
 		{
 			const path	= typeof model.recordData.route !== 'undefined' ? model.recordData.route : '\\';
 
+			event.session.add( 'username', model.recordName );
 			event.session.add( 'authenticated', true );
 			event.session.add( 'path', path );
 

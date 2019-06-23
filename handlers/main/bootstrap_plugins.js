@@ -41,10 +41,15 @@ cacheServerPlugin.startServer( ()=>{
 
 	const dataServer	= cacheServerPlugin.getServer();
 	const User			= dataServer.model( 'User' );
+	const Messages		= dataServer.model( 'Messages' );
+
+	Messages.createNamespaceIfNotExists().then().catch(()=>{
+		throw new Error( 'Error while setting up namespace for messages' )
+	});
 
 	User.createNamespaceIfNotExists().then( ()=>{
 	}).catch( ()=>{
-		throw new Error( 'Error While Setting up namespace for users' );
+		throw new Error( 'Error while setting up namespace for users' );
 	});
 });
 
