@@ -11,7 +11,7 @@ let browseCallback	= ( event ) => {
 	let result		= event.validationHandler.validate( event.queryString, { dir : 'filled||string' } );
 
 	let dir			= ! result.hasValidationFailed() ? event.queryString.dir : route;
-	dir				= dir.includes( path ) ? dir : route;
+	dir				= dir.includes( route ) ? dir : route;
 
 	let pathHelper	= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
 
