@@ -47,11 +47,11 @@ router.post( '/login', ( event )=>{
 	User.find( result.username ).then( ( model )=>{
 		if ( model !== null && typeof model.recordData !== 'undefined' && model.recordData.password === result.password )
 		{
-			const path	= typeof model.recordData.route !== 'undefined' ? model.recordData.route : '\\';
+			const route	= typeof model.recordData.route !== 'undefined' ? model.recordData.route : '\\';
 
 			event.session.add( 'username', model.recordName );
 			event.session.add( 'authenticated', true );
-			event.session.add( 'path', path );
+			event.session.add( 'route', route );
 
 			event.session.saveSession( ( err )=>{
 				if ( ! err )

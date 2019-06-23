@@ -7,11 +7,11 @@ const PathHelper	= require( './../main/path' );
 let router			= Server().Router();
 
 let browseCallback	= ( event ) => {
-	let path		= event.session.get( 'path' );
+	let route		= event.session.get( 'route' );
 	let result		= event.validationHandler.validate( event.queryString, { dir : 'filled||string' } );
 
-	let dir			= ! result.hasValidationFailed() ? event.queryString.dir : path;
-	dir				= dir.includes( path ) ? dir : path;
+	let dir			= ! result.hasValidationFailed() ? event.queryString.dir : route;
+	dir				= dir.includes( path ) ? dir : route;
 
 	let pathHelper	= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
 

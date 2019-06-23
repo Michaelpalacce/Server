@@ -48,6 +48,7 @@ cacheServerPlugin.startServer( ()=>{
 	});
 
 	User.createNamespaceIfNotExists().then( ()=>{
+
 	}).catch( ()=>{
 		throw new Error( 'Error while setting up namespace for users' );
 	});
