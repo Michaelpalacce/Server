@@ -48,8 +48,6 @@ cacheServerPlugin.startServer( ()=>{
 	});
 
 	User.createNamespaceIfNotExists().then( ()=>{
-		User.make( 'TomorrowIsZero', { password : 'zeroChanUwu', route: '\\Users\\stefa\\Videos' }, { ttl: 0 } );
-		User.make( 'root', { password : 'STF', route: '\\' }, { ttl: 0 } );
 	}).catch( ()=>{
 		throw new Error( 'Error while setting up namespace for users' );
 	});
