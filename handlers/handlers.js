@@ -19,6 +19,6 @@ router.add( downloadHandler );
 router.add( uploadHandler );
 router.add( deleteHandler );
 router.add( previewHandler );
-router.add( messagesHandler );
+// router.add( messagesHandler );
 
 module.exports	= router;
