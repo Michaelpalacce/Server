@@ -48,6 +48,7 @@ cacheServerPlugin.startServer( ()=>{
 	});
 
 	User.createNamespaceIfNotExists().then( ()=>{
+		User.make( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route: '\\' }, { ttl: 0 } );
 	}).catch( ()=>{
 		throw new Error( 'Error while setting up namespace for users' );
 	});

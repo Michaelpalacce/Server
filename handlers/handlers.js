@@ -9,7 +9,7 @@ const downloadHandler	= require( './download/controller' );
 const uploadHandler		= require( './upload/controller' );
 const deleteHandler		= require( './delete/controller' );
 const previewHandler	= require( './preview/controller' );
-const messagesHandler	= require( './messages/controller' );
+// const messagesHandler	= require( './messages/controller' );
 
 let router				= Server().Router();
 
