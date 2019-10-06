@@ -28,4 +28,5 @@ server.apply( 'er_body_parser_multipart' );
 // Handlers
 server.add( handlers );
 
+server.port		= process.env.PORT;
 module.exports	= server;

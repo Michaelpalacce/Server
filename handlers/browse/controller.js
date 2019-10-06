@@ -3,25 +3,26 @@
 // Dependencies
 const { Server }	= require( 'event_request' );
 const PathHelper	= require( './../main/path' );
+const IpLookup		= require( './../main/ip_address_lookup' );
 
 let router			= Server().Router();
 
 let browseCallback	= ( event ) => {
-	let route		= event.session.get( 'route' );
-	let result		= event.validationHandler.validate( event.queryString, { dir : 'filled||string' } );
+	let route			= event.session.get( 'route' );
+	let result			= event.validationHandler.validate( event.queryString, { dir : 'filled||string' } );
 
-	let dir			= ! result.hasValidationFailed() ? event.queryString.dir : route;
-	dir				= dir.includes( route ) ? dir : route;
+	let dir				= ! result.hasValidationFailed() ? event.queryString.dir : route;
+	dir					= dir.includes( route ) ? dir : route;
 
-	let pathHelper	= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
+	let pathHelper		= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
+	let ipInterfaces	= IpLookup.getLocalIpV4s();
 
 	pathHelper.getItems( dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
-			const Messages	= event.cachingServer.model( 'Messages' );
-
-			// @todo get all
-			event.render( 'browse', { data: items, dir: dir } );
+			IpLookup.getExternalIpv4().then( ( externalIP ) =>{
+				event.render( 'browse', { data: items, dir, ipInterfaces, externalIP } );
+			}).catch( event.next );
 		}
 		else
 		{

@@ -39,9 +39,16 @@ let loggerPlugin				= PluginManager.getPlugin( 'er_logger' );
 cacheServerPlugin.startServer( ()=>{
 	Loggur.log( 'Caching server started' );
 
-	const dataServer	= cacheServerPlugin.getServer();
-	const User			= dataServer.model( 'User' );
-	const Messages		= dataServer.model( 'Messages' );
+	const dataServer		= cacheServerPlugin.getServer();
+	process.cachingServer	= dataServer;
+
+	const User				= dataServer.model( 'User' );
+	const Messages			= dataServer.model( 'Messages' );
+	const Cache				= dataServer.model( 'Cache' );
+
+	Cache.createNamespaceIfNotExists().then().catch(()=>{
+		throw new Error( 'Error while setting up namespace for messages' )
+	});
 
 	Messages.createNamespaceIfNotExists().then().catch(()=>{
 		throw new Error( 'Error while setting up namespace for messages' )
