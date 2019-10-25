@@ -1,11 +1,11 @@
 'use strict';
 
-const os						= require( 'os' );
-const http						= require( 'http' );
-const { Loggur, LOG_LEVELS }	= require( 'event_request' );
+const os				= require( 'os' );
+const http				= require( 'http' );
 
 const IpLookup			= {};
 const PUBLIC_IP_STRING	= 'PUBLIC_IP';
+const BOT_ADDRESS		= 'http://ipv4bot.whatismyipaddress.com';
 
 let localIpv4s			= null;
 
@@ -16,34 +16,36 @@ let localIpv4s			= null;
  */
 IpLookup.getExternalIpv4	= function()
 {
-	const Cache	= process.cachingServer.model( 'Cache' );
 
 	return new Promise(( resolve, reject )=>{
-		Cache.find( PUBLIC_IP_STRING ).then(( PublicIpRecord )=>{
-			if ( PublicIpRecord != null && typeof PublicIpRecord.recordData !== 'undefined' )
+		const Cache	= process.cachingServer;
+
+		if ( typeof Cache === 'undefined' )
+		{
+			resolve( 'localhost' );
+		}
+
+		const dataSet	= Cache.get( PUBLIC_IP_STRING );
+
+		if ( dataSet != null )
+		{
+			resolve( dataSet.value )
+		}
+		else
+		{
+			http.get( BOT_ADDRESS, function( res )
 			{
-				resolve( PublicIpRecord.recordData )
-			}
-			else
-			{
-				http.get( 'http://ipv4bot.whatismyipaddress.com', function( res )
+				res.setEncoding( 'utf8' );
+				res.on( 'data', function( chunk )
 				{
-					res.setEncoding( 'utf8' );
-					res.on( 'data', function( chunk )
-					{
-						Cache.make( PUBLIC_IP_STRING, chunk, { ttl: 0 } ).catch(()=>{
-							Loggur.log( 'Could not save Public IP', LOG_LEVELS.info );
-						});
-
-						resolve( chunk );
-					});
-
-					res.on( 'error', ()=>{
-						reject( 'Could not get external ipv4' );
-					} );
+					resolve( Cache.set( PUBLIC_IP_STRING, chunk, 0 ).value );
 				});
-			}
-		}).catch( reject );
+
+				res.on( 'error', ()=>{
+					reject( 'Could not get external ipv4' );
+				} );
+			});
+		}
 	});
 };
 

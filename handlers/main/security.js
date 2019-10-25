@@ -26,6 +26,10 @@ router.add({
 });
 
 router.get( '/login', ( event )=>{
+	event.cacheCurrentRequest();
+});
+
+router.get( '/login', ( event )=>{
 	event.render( 'login' );
 });
 
@@ -42,33 +46,29 @@ router.post( '/login', ( event )=>{
 	let cacheServer	= Server().getPlugin( 'er_cache_server' );
 	let dataServer	= cacheServer.getServer();
 
-	const User		= dataServer.model( 'User' );
+	const dataSet	= dataServer.get( result.username );
 
-	User.find( result.username ).then( ( model )=>{
-		if ( model !== null && typeof model.recordData !== 'undefined' && model.recordData.password === result.password )
-		{
-			const route	= typeof model.recordData.route !== 'undefined' ? model.recordData.route : '\\';
+	if ( dataSet !== null && typeof dataSet.value.password === 'string' && dataSet.value.password === result.password )
+	{
+		const route	= typeof dataSet.value.route !== 'undefined' ? dataSet.value.route : '\\';
 
-			event.session.add( 'username', model.recordName );
-			event.session.add( 'authenticated', true );
-			event.session.add( 'route', route );
+		event.session.add( 'username', dataSet.key );
+		event.session.add( 'authenticated', true );
+		event.session.add( 'route', route );
 
-			event.session.saveSession( ( err )=>{
-				if ( ! err )
-				{
-					event.redirect( '/' );
-				}
-				else
-				{
-					event.render( '/login' );
-				}
-			} );
-		}
-		else
+		if ( ! event.session.saveSession() )
 		{
 			event.render( '/login' );
 		}
-	}).catch( event.next );
+		else
+		{
+			event.redirect( '/' );
+		}
+	}
+	else
+	{
+		event.render( '/login' );
+	}
 });
 
 module.exports	= router;

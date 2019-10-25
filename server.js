@@ -18,6 +18,7 @@ server.apply( 'er_static_resources', { paths : [process.env.STATIC_PATH, 'favico
 server.apply( 'er_timeout', { timeout : process.env.REUQEST_TIMEOUT } );
 server.apply( 'er_logger' );
 server.apply( 'er_cache_server' );
+server.apply( 'er_response_cache' );
 server.apply( 'er_file_stream' );
 server.apply( 'er_templating_engine' );
 server.apply( 'er_rate_limits' );

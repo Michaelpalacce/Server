@@ -36,30 +36,10 @@ let cacheServerPlugin			= PluginManager.getPlugin( 'er_cache_server' );
 let multipartBodyParserPlugin	= PluginManager.getPlugin( 'er_body_parser_multipart' );
 let loggerPlugin				= PluginManager.getPlugin( 'er_logger' );
 
-cacheServerPlugin.startServer( ()=>{
-	Loggur.log( 'Caching server started' );
+const dataServer				= cacheServerPlugin.getServer();
+process.cachingServer			= dataServer;
 
-	const dataServer		= cacheServerPlugin.getServer();
-	process.cachingServer	= dataServer;
-
-	const User				= dataServer.model( 'User' );
-	const Messages			= dataServer.model( 'Messages' );
-	const Cache				= dataServer.model( 'Cache' );
-
-	Cache.createNamespaceIfNotExists().then().catch(()=>{
-		throw new Error( 'Error while setting up namespace for messages' )
-	});
-
-	Messages.createNamespaceIfNotExists().then().catch(()=>{
-		throw new Error( 'Error while setting up namespace for messages' )
-	});
-
-	User.createNamespaceIfNotExists().then( ()=>{
-		User.make( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route: '\\' }, { ttl: 0 } );
-	}).catch( ()=>{
-		throw new Error( 'Error while setting up namespace for users' );
-	});
-});
+dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route: '\\' }, -1 );
 
 templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
 loggerPlugin.setOptions({ logger });
