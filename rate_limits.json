@@ -1,5 +1,15 @@
 [
   {
+    "path": "/login",
+    "methods": ["POST"],
+    "maxAmount": 5,
+    "refillTime": 10,
+    "refillAmount": 1,
+    "policy": "strict",
+    "stopPropagation": true,
+    "ipLimit": true
+  },
+  {
     "path": "",
     "methods": [],
     "maxAmount": 10000,
