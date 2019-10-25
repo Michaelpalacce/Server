@@ -7,26 +7,35 @@ const { MultipartFormParser }										= BodyParserHandler;
 const PROJECT_ROOT													= path.parse( require.main.filename ).dir;
 const { Console, File }												= Logging;
 
-let logger	= Loggur.createLogger({
-	serverName	: 'Storage',
-	logLevel	: LOG_LEVELS.debug,
-	capture		: false,
-	transports	: [
+let transports	= [
+	new File({
+		logLevel	: LOG_LEVELS.notice,
+		filePath	: '/logs/access.log',
+		logLevels	: { notice : LOG_LEVELS.notice }
+	}),
+	new File({
+		logLevel	: LOG_LEVELS.error,
+		filePath	: '/logs/error_log.log',
+	})
+];
+
+if ( typeof process.env !== 'undefined' && process.env.DEBUG == 1 )
+{
+	transports.push(
 		new Console( { logLevel : LOG_LEVELS.notice } ),
-		new File({
-			logLevel	: LOG_LEVELS.notice,
-			filePath	: '/logs/access.log',
-			logLevels	: { notice : LOG_LEVELS.notice }
-		}),
-		new File({
-			logLevel	: LOG_LEVELS.error,
-			filePath	: '/logs/error_log.log',
-		}),
 		new File({
 			logLevel	: LOG_LEVELS.debug,
 			filePath	: '/logs/debug_log.log'
 		})
-	]
+	);
+}
+
+
+let logger	= Loggur.createLogger({
+	serverName	: 'Storage',
+	logLevel	: LOG_LEVELS.debug,
+	capture		: false,
+	transports	: transports
 });
 
 let server						= Server();

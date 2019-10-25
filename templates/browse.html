@@ -4,43 +4,35 @@
 	<meta charset="UTF-8">
 	<title>Index</title>
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/public/css/dropzone.css">
 </head>
 <body>
-	<div class="container pt-5">
-		<% if ( data ){ %>
-		<div class="row">
-			<% for( let index = 0; index < data.length; ++ index ) { %>
-				<div class="card col-md-3">
-					<!-- <img class="card-img-top" src="" alt="Card image cap"> -->
-					<% if ( data[index].isDir ) { %>
-						<a class="folder card-body" href="/browse?dir=<%= data[index].encodedURI %>"><%= data[index].name %></a>
-					<% } %>
-					<% if ( data[index].isDir === false){ %>
-					<div class="card-body">
-						<h5 class="card-title"><%= data[index].name %></h5>
-						<p class="card-text"><%= Math.round( data[index].size / 1024, 2 ) %> KB</p>
-						<div class="row ">
-							<a href="<%= '/download?file=' + data[index].encodedURI %>" class="col-sm">Download</a>
-							<a href="#" data-file="<%= data[index].encodedURI %>" class="delete-file col-sm">Delete</a>
-							<% if ( data[index].previewAvailable ) { %>
-								<a href="<%= '/preview?file=' + data[index].encodedURI + '&backDir=' + dir %>" class="col-sm">Preview</a>
-							<% } %>
-						</div>
-					</div>
-					<% } %>
+	<div id="template-card" class="card col-md-3" style="display:none;">
+		<a class="folder card-body folder-name" href="#"></a>
+
+		<div class="file">
+			<div class="card-body">
+				<h5 class="card-title file-name"></h5>
+				<p class="card-text file-size"></p>
+				<div class="row ">
+					<a href="#" class="col-sm file-download">Download</a>
+					<a href="#" data-file="" class="file-delete col-sm">Delete</a>
+					<a href="#" class="col-sm file-preview" style="display:none;">Preview</a>
 				</div>
-			<% } %>
-		</div>
-		<% } %>
-		<br>
-		<br>
-		<form class="was-validated col-lg-7"  style="text-align: center; margin: auto;" action="upload" method="post" enctype="multipart/form-data">
-			<div class="custom-file">
-				<input type="file" name="file" class="custom-file-input" required>
-				<label class="custom-file-label">Choose file to upload...</label>
 			</div>
-			<input type="hidden" name="directory" value="<%= dir %>">
-			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+
+	</div>
+
+
+	<div class="container pt-5" >
+		<div class="row" id="directoryStructure"></div>
+
+		<br>
+		<br>
+
+		<form action="/upload" class="dropzone">
+			<input type="hidden" name="directory" id="upload-directory" value="<%= dir %>">
 		</form>
 
 		<hr>
@@ -69,22 +61,10 @@
 		</span>
 		</div>
 	</div>
+
 </body>
-<script type="text/javascript" src="/public/js/jquery.js"></script>
-<script type="text/javascript" src="/public/js/bootstrap.js"></script>
-<script type="text/javascript">
-	$( '.delete-file' ).on( 'click', ( event ) => {
-		let element			= $( event.target );
-		let fileToDelete	= element.attr( 'data-file' );
-		fileToDelete		= decodeURIComponent( fileToDelete );
-		$.ajax({
-			url		: '/delete?file=' + fileToDelete,
-			method	: 'DELETE',
-			success	: function()
-			{
-				window.location.reload();
-			}
-		});
-	});
-</script>
+<script type="text/javascript" src="/public/js/library/jquery.js"></script>
+<script type="text/javascript" src="/public/js/library/bootstrap.js"></script>
+<script src="/public/js/library/dropzone.js"></script>
+<script src="/public/js/main.js"></script>
 </html>

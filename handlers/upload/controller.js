@@ -21,19 +21,17 @@ router.add({
 	route	: '/upload',
 	method	: 'POST',
 	handler	: ( event ) => {
-		let directory	= typeof event.body.directory === 'string'
-						? event.body.directory
-						: '/';
+		let result	= event.validationHandler.validate( event.body, { directory : 'filled||string', files : 'filled' } );
 
-		let files		= typeof event.body.files === 'object' && Object.keys( event.body.files ).length > 0
-						? event.body.files
-						: false;
-
-		if ( ! files )
+		if ( ! ! result.hasValidationFailed() )
 		{
-			event.next( 'Could not upload file', 500 );
+			event.next( 'Could not upload one or more files', 400 );
 			return;
 		}
+		result			= result.getValidationResult();
+
+		let directory	= decodeURIComponent( result.directory );
+		let files		= result.files;
 
 		files.forEach( ( file ) =>{
 			let oldPath		= file.path;
@@ -41,7 +39,7 @@ router.add({
 			fileName		= fileName.name + fileName.ext;
 			let newPath		= path.join( directory, fileName );
 			fs.rename( oldPath, newPath, () =>{
-				event.redirect( '/browse?dir=' + encodeURIComponent( directory ) );
+				event.send( 'ok' );
 			});
 		});
 	}
