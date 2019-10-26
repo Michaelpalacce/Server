@@ -1,6 +1,13 @@
-window.Dropzone.autoDiscover = false;
-const myDropzone	= new Dropzone( ".dropzone", { url: "/upload", maxFilesize: 20000 } );
-let canBrowse		= true;
+window.Dropzone.autoDiscover	= false;
+let canBrowse					= true;
+const myDropzone				= new Dropzone(
+	".dropzone",
+	{
+		url: "/upload",
+		parallelUploads: 3,
+		maxFilesize: 20000
+	}
+);
 
 myDropzone.on( 'addedfile', () => { canBrowse = false; } );
 myDropzone.on( 'queuecomplete', () => { canBrowse = true; } );
@@ -82,7 +89,8 @@ function browse( directory )
 		return;
 	}
 	currentDir  = directory;
-	$( '#upload-directory' ).val( directory );
+	$( '#upload-dir' ).val( directory );
+	$( '#upload-file' ).val( directory );
 
 	$.ajax({
 		url		: '/browse/getFiles?dir=' + directory,

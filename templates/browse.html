@@ -32,7 +32,14 @@
 		<br>
 
 		<form action="/upload" class="dropzone">
-			<input type="hidden" name="directory" id="upload-directory" value="<%= dir %>">
+			<input type="hidden" name="directory" id="upload-file" value="<%= dir %>">
+		</form>
+
+		<form action="/upload" method="POST" enctype="multipart/form-data">
+			Directory:<br>
+			<input name="file" type="file" webkitdirectory />
+			<input type="hidden" name="directory" id="upload-dir" value="<%= dir %>">
+			<input type="submit">
 		</form>
 
 		<hr>

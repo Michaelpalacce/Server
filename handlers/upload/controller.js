@@ -32,16 +32,37 @@ router.add({
 
 		let directory	= decodeURIComponent( result.directory );
 		let files		= result.files;
+		let filesDone	= 0;
 
 		files.forEach( ( file ) =>{
 			let oldPath		= file.path;
 			let fileName	= path.parse( file.name );
-			fileName		= fileName.name + fileName.ext;
-			let newPath		= path.join( directory, fileName );
-			fs.rename( oldPath, newPath, () =>{
-				event.send( 'ok' );
-			});
+			let newPath		= path.join( directory, fileName.dir, fileName.name + fileName.ext );
+			let fileStats	= path.parse( newPath );
+
+			fs.mkdirSync( fileStats.dir, { recursive: true } );
+			fs.rename( oldPath, newPath, ()=>{
+				++filesDone;
+			} );
 		});
+
+		let tries		= 0;
+		const interval	= setInterval( ()=>{
+			tries++;
+
+			if ( tries >= 10 )
+			{
+				clearInterval( interval );
+				event.sendError( 'ERROR WHILE UPLOADING FILES' );
+				return;
+			}
+
+			if ( files.length === filesDone )
+			{
+				clearInterval( interval );
+				event.redirect( '/browse?dir='+  encodeURIComponent( directory ) );
+			}
+		}, 1000 );
 	}
 });
 
