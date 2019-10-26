@@ -2,6 +2,7 @@
 
 const ejs															= require( 'ejs' );
 const path															= require( 'path' );
+const pathHelper													= require( './path' );
 const { Loggur, BodyParserHandler, Logging, LOG_LEVELS, Server }	= require( 'event_request' );
 const { MultipartFormParser }										= BodyParserHandler;
 const PROJECT_ROOT													= path.parse( require.main.filename ).dir;
@@ -48,7 +49,7 @@ let loggerPlugin				= PluginManager.getPlugin( 'er_logger' );
 const dataServer				= cacheServerPlugin.getServer();
 process.cachingServer			= dataServer;
 
-dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route: '\\' }, -1 );
+dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route : '\\' }, -1 );
 
 templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
 loggerPlugin.setOptions({ logger });

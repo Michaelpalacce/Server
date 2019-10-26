@@ -2,6 +2,7 @@
 
 // Dependencies
 const { Server }	= require( 'event_request' );
+const path			= require( './path' );
 
 const router		= Server().Router();
 
@@ -50,7 +51,7 @@ router.post( '/login', ( event )=>{
 
 	if ( dataSet !== null && typeof dataSet.value.password === 'string' && dataSet.value.password === result.password )
 	{
-		const route	= typeof dataSet.value.route !== 'undefined' ? dataSet.value.route : '\\';
+		const route	= typeof dataSet.value.route !== 'undefined' ? dataSet.value.route : path.getRootDir();
 
 		event.session.add( 'username', dataSet.key );
 		event.session.add( 'authenticated', true );

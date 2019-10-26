@@ -1,6 +1,5 @@
 window.Dropzone.autoDiscover = false;
 const myDropzone	= new Dropzone( ".dropzone", { url: "/upload", maxFilesize: 20000 } );
-let currentDir		= '<%= dir %>';
 let canBrowse		= true;
 
 myDropzone.on( 'addedfile', () => { canBrowse = false; } );

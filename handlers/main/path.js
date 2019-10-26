@@ -1,8 +1,10 @@
 'use strict';
 
 // Dependencies
-const path	= require( 'path' );
-const fs	= require( 'fs' );
+const path			= require( 'path' );
+const fs			= require( 'fs' );
+
+const getRootDir	= () => path.parse( process.cwd() ).root;
 
 /**
  * @brief	Path helper used to retrieve data about files and folders
@@ -115,6 +117,16 @@ class PathHelper
 	{
 		return this.supportedTypes.indexOf( extension ) !== -1;
 	};
+
+	/**
+	 * @brief	Gets the root dir
+	 *
+	 * @returns	String
+	 */
+	static getRootDir()
+	{
+		return getRootDir();
+	}
 }
 
 module.exports	= PathHelper;
