@@ -5,7 +5,9 @@ const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
 const path			= require( 'path' );
 
-let router			= Server().Router();
+const router			= Server().Router();
+const AJAX_HEADER		= 'x-requested-with';
+const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
 
 /**
  * @brief	Adds a '/upload' route with method POST
@@ -40,7 +42,11 @@ router.add({
 			let newPath		= path.join( directory, fileName.dir, fileName.name + fileName.ext );
 			let fileStats	= path.parse( newPath );
 
-			fs.mkdirSync( fileStats.dir, { recursive: true } );
+			if ( ! fs.existsSync( fileStats.dir ) )
+			{
+				fs.mkdirSync( fileStats.dir, { recursive: true } );
+			}
+
 			fs.rename( oldPath, newPath, ()=>{
 				++filesDone;
 			} );
@@ -60,6 +66,12 @@ router.add({
 			if ( files.length === filesDone )
 			{
 				clearInterval( interval );
+				if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
+				{
+					event.send( '' );
+					return;
+				}
+
 				event.redirect( '/browse?dir='+  encodeURIComponent( directory ) );
 			}
 		}, 1000 );

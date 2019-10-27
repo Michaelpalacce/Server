@@ -44,9 +44,17 @@ $( document ).on( 'click', '.file-delete', ( event ) => {
 	});
 });
 
+function bytesToSize(bytes)
+{
+	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	if (bytes === 0) return '0 Byte';
+	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
 function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 {
-	size			= Math.round( size / 1024, 2 );
+	size			= bytesToSize( size );
 	const element	= $( '#template-card' ).clone();
 
 	element.addClass( 'item' );
@@ -70,12 +78,16 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 	{
 		element.find( '.folder' ).remove();
 		element.find( '.file-name' ).text( name );
-		element.find( '.file-size' ).text( `${size} KB` );
+		element.find( '.file-size' ).text( size );
 		element.find( '.file-download' ).attr( 'href', '/download?file=' + encodedURI );
 		element.find( '.file-delete' ).attr( 'data-file', encodedURI );
 		if ( previewAvailable )
 		{
-			element.find( '.file-preview' ).show().attr( 'href', '/preview?file=' + encodedURI + '&backDir=' + directory );
+			element.find( '.file-preview' ).attr( 'href', '/preview?file=' + encodedURI + '&backDir=' + directory );
+		}
+		else
+		{
+			element.find( '.file-preview' ).addClass( 'no-preview' );
 		}
 	}
 

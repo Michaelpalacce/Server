@@ -5,6 +5,8 @@
 	<title>Index</title>
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/public/css/dropzone.css">
+	<link rel="stylesheet" href="/public/css/style.css">
+	<link rel="stylesheet" href="/public/css/download.css">
 </head>
 <body>
 	<div id="template-card" class="card col-md-3" style="display:none;">
@@ -12,13 +14,13 @@
 
 		<div class="file">
 			<div class="card-body">
-				<h5 class="card-title file-name"></h5>
-				<p class="card-text file-size"></p>
-				<div class="row ">
-					<a href="#" class="col-sm file-download">Download</a>
-					<a href="#" data-file="" class="file-delete col-sm">Delete</a>
-					<a href="#" class="col-sm file-preview" style="display:none;">Preview</a>
-				</div>
+				<a href="#" class="card-title file-name file-preview"></a>
+				<a class="face-button file-download" href="#">
+					<div class="face-primary"><span class="icon fa fa-cloud"></span></div>
+					<div class="face-secondary">
+						<span style="display: inline-block; margin-right: 5px" class="icon fa fa-hdd-o"></span> <p style="display: inline-block" class="file-size"></p>
+					</div>
+				</a>
 			</div>
 		</div>
 
@@ -35,11 +37,13 @@
 			<input type="hidden" name="directory" id="upload-file" value="<%= dir %>">
 		</form>
 
-		<form action="/upload" method="POST" enctype="multipart/form-data">
-			Directory:<br>
-			<input name="file" type="file" webkitdirectory />
-			<input type="hidden" name="directory" id="upload-dir" value="<%= dir %>">
-			<input type="submit">
+		<br>
+		<br>
+
+		<form action="/upload" method="POST" enctype="multipart/form-data" onchange="this.submit();" style="text-align: center">
+			<input type="file" name="file" id="file" class="inputfile" webkitdirectory mozdirectory />
+			<label for="file">Choose A Folder</label>
+			<input type="hidden" name="directory" id="upload-dir" value="<%= dir %>" >
 		</form>
 
 		<hr>

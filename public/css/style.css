@@ -1,7 +1,65 @@
 .folder
 {
-	text-decoration: none;color: deepskyblue; font-size: 30px
+	text-decoration: none;
+	color: deepskyblue;
 }
-.file{
-	font-size: 30px
+
+.no-preview
+{
+	color: black;
+	text-decoration: none;
+	cursor: default;
+	text-underline: none;
+	text-underline-color: black;
+}
+.no-preview:hover
+{
+	color: black;
+}
+
+a:hover
+{
+	text-decoration: none !important;
+}
+
+.card-body
+{
+	text-align: center;
+}
+
+.file-name
+{
+	text-decoration: none;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.inputfile + label {
+	border-radius: 10px;
+	font-size: 1.25em;
+	font-weight: 700;
+	color: white;
+	padding: 10px;
+	background-color: slategrey;
+	display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+	background-color: indianred;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+.inputfile:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
 }
