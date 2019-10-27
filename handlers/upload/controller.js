@@ -9,6 +9,44 @@ const router			= Server().Router();
 const AJAX_HEADER		= 'x-requested-with';
 const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
 
+
+/**
+ * @brief	Adds a '/create/folder' route with method POST
+ *
+ * @details	Creates a new folder
+ *
+ * @details	Required Parameters: directory
+ * 			Optional Parameters: NONE
+ *
+ * @return	void
+ */
+router.add({
+	route	: '/create/folder',
+	method	: 'POST',
+	handler	: ( event ) => {
+		let result	= event.validationHandler.validate( event.body, { folder : 'filled||string' } );
+
+		if ( ! ! result.hasValidationFailed() )
+		{
+			event.next( 'Invalid folder given', 400 );
+			return;
+		}
+		result			= result.getValidationResult();
+
+		const folder	= decodeURIComponent( result.folder );
+
+		if ( ! fs.existsSync( folder ) )
+		{
+			fs.mkdirSync( folder );
+			event.send( ['ok'] );
+		}
+		else
+		{
+			event.sendError( 'Directory already exists' );
+		}
+	}
+});
+
 /**
  * @brief	Adds a '/upload' route with method POST
  *
@@ -68,7 +106,7 @@ router.add({
 				clearInterval( interval );
 				if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
 				{
-					event.send( '' );
+					event.send( ['ok'] );
 					return;
 				}
 

@@ -2,6 +2,62 @@
 {
 	text-decoration: none;
 	color: deepskyblue;
+	cursor: pointer;
+}
+
+.add-folder
+{
+	border: 1px dashed rgba(0,0,0,.125) !important;
+}
+
+.file-size
+{
+	margin-left: 5px;
+}
+
+.file
+{
+	text-decoration: none;
+	color: deepskyblue;
+	cursor: pointer;
+}
+
+.folder-name
+{
+	font-size: 20px !important;
+	text-align: center;
+	color: gray;
+}
+
+.folder-icon
+{
+	color:darkgray;
+	text-align: center;
+	font-size: 20px !important;
+	margin-right: 5px;
+}
+
+.file-name-hr
+{
+	margin-bottom: 0;
+	margin-top: 3px;
+	border-top: 1px dashed lightgray;
+}
+
+.file-name-icon
+{
+	color: indianred;
+}
+
+.item
+{
+	user-select:none;
+}
+
+.item-row
+{
+	border-radius: 10px;
+	border: 1px solid rgba(0,0,0,.125);
 }
 
 .no-preview
@@ -12,6 +68,12 @@
 	text-underline: none;
 	text-underline-color: black;
 }
+
+.has-preview
+{
+	color: deepskyblue;
+}
+
 .no-preview:hover
 {
 	color: black;
@@ -29,6 +91,7 @@ a:hover
 
 .file-name
 {
+	margin-left: 10px;
 	text-decoration: none;
 }
 

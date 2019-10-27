@@ -20,11 +20,12 @@
 .face-button .face-primary, .face-button .face-secondary {
     display: block;
     line-height: 40px;
+    color: deepskyblue;
     transition: margin 0.4s;
 }
 .face-button .face-primary {
     background-color: white;
-    color: deepskyblue;
+    color: deepskyblue ;
 }
 .face-button:hover .face-primary {
     margin-top: -40px;

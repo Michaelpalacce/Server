@@ -98,7 +98,7 @@ class PathHelper
 		let uri			= encodeURIComponent( goBack ? name.dir : path.join( name.dir, name.base ) );
 
 		return {
-			name				: itemName,
+			name				: goBack ? 'BACK' : itemName,
 			encodedURI			: uri,
 			size				: stats.size,
 			isDir				: stats.isDirectory(),
