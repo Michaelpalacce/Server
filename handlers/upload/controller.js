@@ -5,10 +5,11 @@ const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
 const path			= require( 'path' );
 
-const router			= Server().Router();
-const AJAX_HEADER		= 'x-requested-with';
-const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
+const router				= Server().Router();
+const AJAX_HEADER			= 'x-requested-with';
+const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
 
+const FORBIDDEN_CHARACTERS	= [ '\\', '/', '<', '>', ':', '|', '?', '*' ];
 
 /**
  * @brief	Adds a '/create/folder' route with method POST
@@ -35,10 +36,27 @@ router.add({
 
 		const folder	= decodeURIComponent( result.folder );
 
-		if ( ! fs.existsSync( folder ) )
+		for ( const charIndex in FORBIDDEN_CHARACTERS )
 		{
-			fs.mkdirSync( folder );
-			event.send( ['ok'] );
+			const character	= FORBIDDEN_CHARACTERS[charIndex];
+			if ( folder.includes( character ) )
+			{
+				event.sendError( 'Folder name contains invalid characters' );
+				return;
+			}
+		}
+
+		if ( ! fs.existsSync( folder ) || folder === '/' )
+		{
+			try
+			{
+				fs.mkdirSync( folder );
+				event.send( ['ok'] );
+			}
+			catch ( e )
+			{
+				event.sendError( 'Could not create folder' );
+			}
 		}
 		else
 		{

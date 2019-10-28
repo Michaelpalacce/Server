@@ -154,6 +154,13 @@ function addAddFolderButton()
 
 	addFolderElement.on( 'click', ()=>{
 		const userFolder	= prompt( 'Please enter the name of the folder.', 'New Folder' );
+
+		if ( userFolder == null || userFolder === '' )
+		{
+			alert( 'Could not create folder' );
+			return;
+		}
+
 		const folderName	= userFolder;
 		const encodedUri	= currentDir + encodeURIComponent( '/' + userFolder );
 
@@ -162,12 +169,16 @@ function addAddFolderButton()
 			data	: {
 				folder: encodedUri
 			},
-			method	: 'POST',
+			method		: 'POST',
 			success	: function()
 			{
 				addFolderElement.remove();
 				addItem( folderName, encodedUri, 0, true, false, null );
 				addAddFolderButton();
+			},
+			error	: function ()
+			{
+				alert( 'Could not create folder' );
 			}
 		});
 	} );
