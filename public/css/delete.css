@@ -28,17 +28,8 @@
 }
 
 .deleteButton {
-    background: transparent;
-    border: 1px solid indianred;
     float: right;
-    border-radius: 2em;
     color: indianred;
     display: inline-block;
-    font-size: 12px;
-    height: 20px;
-    line-height: 2px;
-    margin: 0 0 8px;
-    padding: 0;
-    text-align: center;
-    width: 20px;
+    font-size: 20px;
 }

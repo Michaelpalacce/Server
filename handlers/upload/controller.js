@@ -9,7 +9,7 @@ const router				= Server().Router();
 const AJAX_HEADER			= 'x-requested-with';
 const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
 
-const FORBIDDEN_CHARACTERS	= [ '\\', '/', '<', '>', ':', '|', '?', '*' ];
+const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
 
 /**
  * @brief	Adds a '/create/folder' route with method POST
@@ -41,6 +41,7 @@ router.add({
 			const character	= FORBIDDEN_CHARACTERS[charIndex];
 			if ( folder.includes( character ) )
 			{
+				console.log(character)
 				event.sendError( 'Folder name contains invalid characters' );
 				return;
 			}

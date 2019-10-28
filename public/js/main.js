@@ -85,6 +85,32 @@ function bytesToSize(bytes)
 	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
+function setItemNameToFit( element, nameElementClass, compareElementClass, fullName, truncStart )
+{
+	const compareElement		= element.find( compareElementClass );
+	const nameElement			= element.find( nameElementClass );
+	const compareElementWidth	= compareElement.width();
+	const offset				= 45;
+
+	nameElement.text( fullName );
+
+	while ( true )
+	{
+		let nameElementWidth	= nameElement.width();
+
+		if ( compareElementWidth - offset < nameElementWidth )
+		{
+			let newName	= fullName.trunc( truncStart );
+			nameElement.text( fullName.trunc( truncStart ) );
+			truncStart	-= 2;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
 function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 {
 	const fullName	= name;
@@ -94,10 +120,9 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 	if ( isDir === true )
 	{
 		element			= $( '#template-folder-card' ).clone();
-		name			= name.length > 17 ? name.trunc( 17 ) : name;
 		element.addClass( 'item' );
 
-		element.find( '.folder-name' ).text( name ).attr( 'data-href', encodedURI ).attr( 'title', fullName );
+		element.find( '.folder-name' ).attr( 'data-href', encodedURI ).attr( 'title', fullName );
 
 		if ( fullName.toLowerCase() !== 'back' )
 		{
@@ -118,15 +143,16 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 			browse( encodedURI );
 		});
 		element.appendTo( '#directoryStructure' ).removeAttr( 'id' ).show();
+
+		setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20 );
 	}
 	else
 	{
 		element	= $( '#template-file-card' ).clone();
 		element.addClass( 'item' );
-		name			= name.length > 30 ? name.trunc( 30 ) : name;
 
 		element.find( '.folder' ).remove();
-		element.find( '.file-name' ).text( name ).attr( 'title', fullName );
+		element.find( '.file-name' ).attr( 'title', fullName );
 		element.find( '.file-size' ).text( size );
 		element.find( '.file-download' ).attr( 'href', '/download?file=' + encodedURI );
 		element.find( '.file-delete' ).attr( 'data-file', encodedURI );
@@ -140,6 +166,8 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 		}
 
 		element.appendTo( '#fileStructure' ).removeAttr( 'id' ).show();
+
+		setItemNameToFit( element, '.file-name', '.item-row', fullName, 30 );
 	}
 
 	return element;
