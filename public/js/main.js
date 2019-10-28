@@ -17,7 +17,7 @@ const myDropzone				= new Dropzone(
 	".dropzone",
 	{
 		url: "/upload",
-		parallelUploads: 3,
+		parallelUploads: 5,
 		maxFilesize: 20000
 	}
 );
@@ -45,7 +45,7 @@ myDropzone.on("complete", function(file) {
 
 $( document ).on( 'click', '.file-delete', ( event ) => {
 	let element			= $( event.target ).closest( '.file-delete' );
-	let fileToDelete	= element.attr( 'data-folder' );
+	let fileToDelete	= element.attr( 'data-file' );
 
 	$.ajax({
 		url		: '/delete?file=' + fileToDelete,
