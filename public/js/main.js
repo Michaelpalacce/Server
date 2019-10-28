@@ -108,12 +108,12 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 			element.find( '.folder-delete' ).remove();
 		}
 
-		element.on( 'dblclick', ( event )=>{
+		element.on( 'click', ( event )=>{
 			if ( ! canBrowse || event.target.closest( '.folder-delete' ) !== null  )
 			{
 				return;
 			}
-			element.off( 'dblclick' );
+			element.off( 'click' );
 			history.pushState( {}, document.getElementsByTagName("title")[0].innerHTML, '/browse?dir=' + encodedURI );
 			browse( encodedURI );
 		});
@@ -150,7 +150,7 @@ function addAddFolderButton()
 	const addFolderElement	= addItem( 'Add Folder', '', 0, true, false, null );
 	addFolderElement.find( '.folder-delete' ).remove();
 	addFolderElement.find( '.item-row' ).addClass( 'add-folder' );
-	addFolderElement.off( 'dblclick' );
+	addFolderElement.off( 'click' );
 
 	addFolderElement.on( 'click', ()=>{
 		const userFolder	= prompt( 'Please enter the name of the folder.', 'New Folder' );
