@@ -18,7 +18,8 @@ const myDropzone				= new Dropzone(
 	{
 		url: "/upload",
 		parallelUploads: 5,
-		maxFilesize: 20000
+		maxFilesize: 40000,
+		timeout:0
 	}
 );
 
