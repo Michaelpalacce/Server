@@ -74,11 +74,17 @@ router.get( '/browse/getFiles', ( event )=>{
  *
  * @return	void
  */
-router.add({
-	route	: '/',
-	method	: 'GET',
-	handler	: browseCallback
-});
+router.get( '/', browseCallback );
+
+/**
+ * @brief	Adds a '/browse' route with method GET
+ *
+ * @details	Required Parameters: NONE
+ * 			Optional Parameters: dir
+ *
+ * @return	void
+ */
+router.get( '/browse', browseCallback );
 
 /**
  * @brief	Adds a '/file/hasPreview' route with method GET
@@ -87,10 +93,7 @@ router.add({
  *
  * @return	void
  */
-router.add({
-	route	: '/file/getFileData',
-	method	: 'GET',
-	handler	: ( event )=>{
+router.get( '/file/getFileData', ( event )=>{
 		const result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
 
 		if ( result.hasValidationFailed() )
@@ -103,21 +106,6 @@ router.add({
 
 		event.send( PathHelper.formatItem( fileName, stats, false, event ) );
 	}
-});
-
-
-/**
- * @brief	Adds a '/browse' route with method GET
- *
- * @details	Required Parameters: NONE
- * 			Optional Parameters: dir
- *
- * @return	void
- */
-router.add({
-	route	: '/browse',
-	method	: 'GET',
-	handler	: browseCallback
-});
+);
 
 module.exports	= router;

@@ -1,10 +1,9 @@
 'use strict';
 
 // Dependencies
-const { Server, Development }	= require( 'event_request' );
-const fs						= require( 'fs' );
-const { FileStream }			= Development;
-const PathHelper				= require( './../main/path' );
+const { Server }	= require( 'event_request' );
+const fs			= require( 'fs' );
+const PathHelper	= require( './../main/path' );
 
 let router			= Server().Router();
 
@@ -16,10 +15,7 @@ let router			= Server().Router();
  *
  * @return	void
  */
-router.add({
-	route	: '/preview',
-	method	: 'GET',
-	handler	: ( event ) => {
+router.get( '/preview', ( event ) => {
 		let file			= typeof event.queryString.file === 'string'
 							&& event.queryString.file.length > 0
 							? event.queryString.file
@@ -36,7 +32,7 @@ router.add({
 			event.render( 'preview', { type: fileStream.getType(), src: '/data?file=' + encodeURIComponent( file ) }, event.next );
 		}
 	}
-});
+);
 
 /**
  * @brief	Adds a '/data' route with method GET
@@ -46,14 +42,11 @@ router.add({
  *
  * @return	void
  */
-router.add({
-	route	: '/data',
-	method	: 'GET',
-	handler	: ( event ) =>{
+router.get( '/data', ( event ) =>{
 		let file	= typeof event.queryString.file === 'string'
-					&& event.queryString.file.length > 0
-					? event.queryString.file
-					: false;
+		&& event.queryString.file.length > 0
+			? event.queryString.file
+			: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
@@ -64,6 +57,6 @@ router.add({
 			event.streamFile( file );
 		}
 	}
-});
+);
 
 module.exports	= router;

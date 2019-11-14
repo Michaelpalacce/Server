@@ -43,15 +43,12 @@ const deleteFolderRecursive = function( dir )
  *
  * @return	void
  */
-router.add({
-	route	: '/delete',
-	method	: 'DELETE',
-	handler	: ( event ) => {
+router.delete( '/delete', ( event ) => {
 		let result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
 
 		let file	= ! result.hasValidationFailed()
-					? event.queryString.file
-					: false;
+			? event.queryString.file
+			: false;
 
 		if ( file === false || ! fs.existsSync( file ) )
 		{
@@ -71,7 +68,7 @@ router.add({
 			});
 		}
 	}
-});
+);
 
 /**
  * @brief	Adds a '/download' route with method GET
@@ -81,15 +78,12 @@ router.add({
  *
  * @return	void
  */
-router.add({
-	route	: '/delete/folder',
-	method	: 'DELETE',
-	handler	: ( event ) => {
+router.delete( '/delete/folder', ( event ) => {
 		let result	= event.validationHandler.validate( event.queryString, { folder : 'filled||string' } );
 
 		let folder	= ! result.hasValidationFailed()
-					? result.getValidationResult().folder
-					: false;
+			? result.getValidationResult().folder
+			: false;
 
 		if ( folder === false || ! fs.existsSync( folder ) )
 		{
@@ -106,6 +100,6 @@ router.add({
 			event.send( ['ok'] );
 		}
 	}
-});
+);
 
 module.exports	= router;

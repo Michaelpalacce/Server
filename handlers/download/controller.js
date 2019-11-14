@@ -28,14 +28,11 @@ let downloadFailedCallback	= ( event ) => {
  *
  * @return	void
  */
-router.add({
-	route	: '/download',
-	method	: 'GET',
-	handler	: ( event ) => {
+router.get( '/download', ( event ) => {
 		let file	= typeof event.queryString.file === 'string'
-					&& event.queryString.file.length > 0
-					? event.queryString.file
-					: false;
+		&& event.queryString.file.length > 0
+			? event.queryString.file
+			: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
@@ -60,6 +57,6 @@ router.add({
 			}
 		}
 	}
-});
+);
 
 module.exports	= router;

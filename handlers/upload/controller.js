@@ -21,10 +21,7 @@ const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
  *
  * @return	void
  */
-router.add({
-	route	: '/create/folder',
-	method	: 'POST',
-	handler	: ( event ) => {
+router.post( '/create/folder', ( event ) => {
 		let result	= event.validationHandler.validate( event.body, { folder : 'filled||string' } );
 
 		if ( ! ! result.hasValidationFailed() )
@@ -64,7 +61,7 @@ router.add({
 			event.sendError( 'Directory already exists' );
 		}
 	}
-});
+);
 
 /**
  * @brief	Adds a '/upload' route with method POST
@@ -76,10 +73,7 @@ router.add({
  *
  * @return	void
  */
-router.add({
-	route	: '/upload',
-	method	: 'POST',
-	handler	: ( event ) => {
+router.post( '/upload', ( event ) => {
 		let result	= event.validationHandler.validate( event.body, { directory : 'filled||string', files : 'filled' } );
 
 		if ( ! ! result.hasValidationFailed() )
@@ -133,7 +127,7 @@ router.add({
 			}
 		}, 1000 );
 	}
-});
+);
 
 // Export the module
 module.exports	= router;

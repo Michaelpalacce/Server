@@ -16,7 +16,6 @@ let localIpv4s			= null;
  */
 IpLookup.getExternalIpv4	= function()
 {
-
 	return new Promise(( resolve, reject )=>{
 		const Cache	= process.cachingServer;
 
