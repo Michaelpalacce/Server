@@ -5,12 +5,18 @@
 	<title>Preview</title>
 </head>
 <body>
-	<% if ( type === '.mp4' ){ %>
+	<% if ( type === 'mp4' ){ %>
 		<video controls class="embed-responsive-item" style="width: 1080px; height: auto;">
 			<source src="<%= src %>" type="video/mp4">
 		</video>
-	<% }else { %>
+	<% } %>
+
+	<% if ( type === 'text' ){ %>
 		<p class="data-field" data-src="<%= src %>"></p>
+	<% } %>
+
+	<% if ( type === 'image' ){ %>
+		<img style="max-width: 1024px; height:auto" src="<%= src %>" alt="">
 	<% } %>
 </body>
 <script type="text/javascript" src="/public/js/library/jquery.js"></script>

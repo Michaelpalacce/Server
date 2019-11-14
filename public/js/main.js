@@ -30,12 +30,14 @@ myDropzone.on("complete", function(file) {
 	const encodedURI	= currentDir + encodeURIComponent( '\\' + file.name );
 
 	$.ajax({
-		url		: '/file/hasPreview?file=' + encodedURI,
+		url		: '/file/getFileData?file=' + encodedURI,
 		method	: 'GET',
 		success	: function( data )
 		{
-			const previewAvailable  = JSON.parse( data );
-			addItem( file.name, encodedURI, file.size, false, previewAvailable, currentDir );
+			const itemData														= JSON.parse( data );
+			const { name, encodedURI, size, isDir, fileType, previewAvailable }	= itemData;
+
+			addItem( name, encodedURI, size, isDir, previewAvailable, fileType, currentDir );
 		}
 	});
 
@@ -112,7 +114,7 @@ function setItemNameToFit( element, nameElementClass, compareElementClass, fullN
 	}
 }
 
-function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
+function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, directory )
 {
 	const fullName	= name;
 	size			= bytesToSize( size );
@@ -159,7 +161,22 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 		element.find( '.file-delete' ).attr( 'data-file', encodedURI );
 		if ( previewAvailable )
 		{
-			element.find( '.file-preview' ).addClass( 'has-preview' ).attr( 'href', '/preview?file=' + encodedURI + '&backDir=' + directory );
+			const filePreviewElement	= element.find( '.file-preview' );
+			if ( itemType === 'image' )
+			{
+				const filePreviewParent	= filePreviewElement.parent().parent();
+				filePreviewElement.parent().remove();
+
+				filePreviewParent.append( `
+					<a href="/preview?file=${encodedURI}">
+						<img style="max-height: 250px; max-width: 320px; padding-bottom: 7px" src="/data?file=${encodedURI}" alt="${name}">
+					<a/>
+				` );
+			}
+			else
+			{
+				filePreviewElement.addClass( 'has-preview' ).attr( 'href', '/preview?file=' + encodedURI + '&backDir=' + directory );
+			}
 		}
 		else
 		{
@@ -176,7 +193,7 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, directory )
 
 function addAddFolderButton()
 {
-	const addFolderElement	= addItem( 'Add Folder', '', 0, true, false, null );
+	const addFolderElement	= addItem( 'Add Folder', '', 0, true, false, 'directory', null );
 	addFolderElement.find( '.folder-delete' ).remove();
 	addFolderElement.find( '.item-row' ).addClass( 'add-folder' );
 	addFolderElement.off( 'click' );
@@ -202,7 +219,7 @@ function addAddFolderButton()
 			success	: function()
 			{
 				addFolderElement.remove();
-				addItem( folderName, encodedUri, 0, true, false, null );
+				addItem( folderName, encodedUri, 0, true, false, 'directory', null );
 				addAddFolderButton();
 			},
 			error	: function ()
@@ -235,8 +252,10 @@ function browse( directory )
 
 			for ( const index in items )
 			{
-				const row	= items[index];
-				addItem( row['name'], row['encodedURI'], row['size'], row['isDir'], row['previewAvailable'], data['dir'] );
+				const row															= items[index];
+				const { name, encodedURI, size, isDir, fileType, previewAvailable }	= row;
+
+				addItem( name, encodedURI, size, isDir, previewAvailable, fileType, data['dir'] );
 			}
 
 			addAddFolderButton();

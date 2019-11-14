@@ -1,9 +1,10 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const fs			= require( 'fs' );
-const path			= require( 'path' );
+const { Server, Development }	= require( 'event_request' );
+const fs						= require( 'fs' );
+const { FileStream }			= Development;
+const PathHelper				= require( './../main/path' );
 
 let router			= Server().Router();
 
@@ -19,19 +20,20 @@ router.add({
 	route	: '/preview',
 	method	: 'GET',
 	handler	: ( event ) => {
-		let file	= typeof event.queryString.file === 'string'
-					&& event.queryString.file.length > 0
-					? event.queryString.file
-					: false;
+		let file			= typeof event.queryString.file === 'string'
+							&& event.queryString.file.length > 0
+							? event.queryString.file
+							: false;
 
-		if ( ! file || ! fs.existsSync( file ) )
+		const fileStream	= PathHelper.getFileStreamerForFile( event, file );
+
+		if ( ! file || ! fs.existsSync( file ) || fileStream === null )
 		{
-			event.next( 'File does not exist' );
+			event.sendError( 'File does not exist', 400 );
 		}
 		else
 		{
-			let fileStats	= path.parse( file );
-			event.render( 'preview', { type: fileStats.ext, src: '/data?file=' + encodeURIComponent( file ) }, event.next );
+			event.render( 'preview', { type: fileStream.getType(), src: '/data?file=' + encodeURIComponent( file ) }, event.next );
 		}
 	}
 });

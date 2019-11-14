@@ -23,7 +23,7 @@ server.apply( 'er_response_cache' );
 server.apply( 'er_file_stream' );
 server.apply( 'er_templating_engine' );
 
-server.apply( 'er_session', { ttl: 60 * 60 } );
+server.apply( 'er_session' );
 server.apply( 'er_body_parser_multipart' );
 
 // Handlers

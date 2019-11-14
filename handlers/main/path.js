@@ -1,10 +1,13 @@
 'use strict';
 
 // Dependencies
-const path			= require( 'path' );
-const fs			= require( 'fs' );
+const { FileStream }	= require( 'event_request' ).Development;
+const path				= require( 'path' );
+const fs				= require( 'fs' );
 
-const getRootDir	= () => path.parse( process.cwd() ).root;
+const getRootDir			= () => path.parse( process.cwd() ).root;
+const BACK_ITEM_TEXT		= 'BACK';
+const DIRECTORY_ITEMS_TYPE	= 'directory';
 
 /**
  * @brief	Path helper used to retrieve data about files and folders
@@ -14,22 +17,48 @@ const getRootDir	= () => path.parse( process.cwd() ).root;
 class PathHelper
 {
 	/**
-	 * @param	Array supportedTypes
+	 * @brief	Accepts the abs file name as an argument
+	 *
+	 * @param	EventRequest event
+	 * @param	String file
+	 *
+	 * @return	FileStream|null
 	 */
-	constructor( supportedTypes )
+	static getFileStreamerForFile( event, absItemName )
 	{
-		this.supportedTypes	= supportedTypes
+		let fileStream	= event.getFileStreamHandler().getFileStreamerForType( absItemName );
+
+		if ( fileStream !== null && fileStream instanceof FileStream )
+		{
+			return fileStream;
+		}
+
+		return null;
 	}
+
+	/**
+	 * @brief	States whether the file extension given can be previewed
+	 *
+	 * @param	EventRequest event
+	 * @param	String absItemName
+	 *
+	 * @return	Boolean
+	 */
+	static supportedExtensions( event, absItemName )
+	{
+		return PathHelper.getFileStreamerForFile( event, absItemName ) !== null;
+	};
 
 	/**
 	 * @brief	Gets all the item for the given directory
 	 *
+	 * @param	EventRequest event
 	 * @param	String dir
 	 * @param	Function callback
 	 *
 	 * @return	void
 	 */
-	getItems( dir, callback )
+	getItems( event, dir, callback )
 	{
 		fs.readdir( dir, {}, ( error, data ) => {
 			if ( ! error && data )
@@ -52,7 +81,7 @@ class PathHelper
 					return;
 				}
 
-				items.directories.push( this.formatItem( backPath, stats, true ) );
+				items.directories.push( PathHelper.formatItem( backPath, stats, true, event ) );
 
 				for ( let i = 0; i < data.length; ++ i )
 				{
@@ -69,7 +98,7 @@ class PathHelper
 					}
 					name		= path.parse( name );
 
-					let item	= this.formatItem( name, stats, false );
+					let item	= PathHelper.formatItem( name, stats, false, event );
 
 					item.isDir	? items.directories.push( item ) : items.files.push( item );
 				}
@@ -89,33 +118,30 @@ class PathHelper
 	 * @brief	Formats the item
 	 *
 	 * @param	String name
+	 * @param	Object stats
+	 * @param	Boolean goBack
+	 * @param	EventRequest event
 	 *
 	 * @return	Object
 	 */
-	formatItem( name, stats, goBack )
+	static formatItem( name, stats, goBack, event )
 	{
-		let itemName	= goBack ? name.dir : name.base;
-		let uri			= encodeURIComponent( goBack ? name.dir : path.join( name.dir, name.base ) );
+		const itemName			= goBack ? name.dir : name.base;
+		const encodedURI		= encodeURIComponent( goBack ? name.dir : path.join( name.dir, name.base ) );
+		const fileStreamer		= PathHelper.getFileStreamerForFile( event, itemName );
+		const previewAvailable	= fileStreamer !== null;
+		const size				= stats.size;
+		const isDir				= stats.isDirectory();
+		const fileType			= previewAvailable ? fileStreamer.getType() : isDir ? DIRECTORY_ITEMS_TYPE : null;
 
 		return {
-			name				: goBack ? 'BACK' : itemName,
-			encodedURI			: uri,
-			size				: stats.size,
-			isDir				: stats.isDirectory(),
-			previewAvailable	: this.supportedExtensions( name.ext )
-		}
-	};
-
-	/**
-	 * @brief	States whether the extension given can be previewed
-	 *
-	 * @param	String extension
-	 *
-	 * @return	Boolean
-	 */
-	supportedExtensions( extension )
-	{
-		return this.supportedTypes.indexOf( extension ) !== -1;
+			name	: goBack ? BACK_ITEM_TEXT : itemName,
+			fileType,
+			isDir,
+			encodedURI,
+			size,
+			previewAvailable
+		};
 	};
 
 	/**

@@ -2,7 +2,6 @@
 
 const ejs															= require( 'ejs' );
 const path															= require( 'path' );
-const pathHelper													= require( './path' );
 const { Loggur, BodyParserHandler, Logging, LOG_LEVELS, Server }	= require( 'event_request' );
 const { MultipartFormParser }										= BodyParserHandler;
 const PROJECT_ROOT													= path.parse( require.main.filename ).dir;
@@ -30,7 +29,6 @@ if ( typeof process.env !== 'undefined' && process.env.DEBUG == 1 )
 		})
 	);
 }
-
 
 let logger	= Loggur.createLogger({
 	serverName	: 'Storage',

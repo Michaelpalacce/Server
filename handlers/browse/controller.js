@@ -4,9 +4,9 @@
 const { Server }	= require( 'event_request' );
 const PathHelper	= require( './../main/path' );
 const IpLookup		= require( './../main/ip_address_lookup' );
-const path			= require( 'path' );
+const fs			= require( 'fs' );
 
-let router			= Server().Router();
+let router						= Server().Router();
 
 /**
  * @brief	Extracts the dir from the request
@@ -50,9 +50,9 @@ let browseCallback	= ( event ) => {
  */
 router.get( '/browse/getFiles', ( event )=>{
 	const dir			= getDirFromRoute( event );
-	const pathHelper	= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
+	const pathHelper	= new PathHelper();
 
-	pathHelper.getItems( dir, ( err, items ) => {
+	pathHelper.getItems( event, dir, ( err, items ) => {
 		if ( ! err && items && items.length > 0 )
 		{
 			IpLookup.getExternalIpv4().then( ( externalIP ) =>{
@@ -88,21 +88,20 @@ router.add({
  * @return	void
  */
 router.add({
-	route	: '/file/hasPreview',
+	route	: '/file/getFileData',
 	method	: 'GET',
 	handler	: ( event )=>{
-		const result		= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
+		const result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
 
 		if ( result.hasValidationFailed() )
 		{
 			event.send( false );
 			return;
 		}
-		const file			= result.getValidationResult().file;
+		const fileName	= result.getValidationResult().file;
+		const stats		= fs.statSync( fileName );
 
-		const pathHelper	= new PathHelper( event.getFileStreamHandler().getSupportedTypes() );
-
-		event.send( pathHelper.supportedExtensions( path.parse( file ).ext ) );
+		event.send( PathHelper.formatItem( fileName, stats, false, event ) );
 	}
 });
 
