@@ -5,6 +5,7 @@ const { Server }	= require( 'event_request' );
 const PathHelper	= require( './../main/path' );
 const IpLookup		= require( './../main/ip_address_lookup' );
 const fs			= require( 'fs' );
+const path			= require( 'path' );
 
 let router						= Server().Router();
 
@@ -22,6 +23,20 @@ function getDirFromRoute( event )
 	const dir		= ! result.hasValidationFailed() ? event.queryString.dir : route;
 
 	return dir.includes( route ) ? dir : route
+}
+
+/**
+ * @brief	Extracts the position from the request
+ *
+ * @param	EventRequest event
+ *
+ * @returns	Number
+ */
+function getPositionFromRoute( event )
+{
+	const result	= event.validationHandler.validate( event.queryString, { position : 'filled||numeric' } );
+
+	return ! result.hasValidationFailed() ? parseInt( event.queryString.position ) : 0
 }
 
 /**
@@ -50,13 +65,16 @@ let browseCallback	= ( event ) => {
  */
 router.get( '/browse/getFiles', ( event )=>{
 	const dir			= getDirFromRoute( event );
+	const position		= getPositionFromRoute( event );
 	const pathHelper	= new PathHelper();
 
-	pathHelper.getItems( event, dir, ( err, items ) => {
-		if ( ! err && items && items.length > 0 )
+	pathHelper.getItems( event, dir, position, ( err, data ) => {
+		if ( ! err && data )
 		{
+			const { items, position, hasMore }	= data;
+
 			IpLookup.getExternalIpv4().then( ( externalIP ) =>{
-				event.send( { items, dir } );
+				event.send( { items, position, dir, hasMore, workingDir: dir } );
 			}).catch( event.next );
 		}
 		else
@@ -104,7 +122,7 @@ router.get( '/file/getFileData', ( event )=>{
 		const fileName	= result.getValidationResult().file;
 		const stats		= fs.statSync( fileName );
 
-		event.send( PathHelper.formatItem( fileName, stats, false, event ) );
+		event.send( PathHelper.formatItem( path.parse( fileName ), stats, false, event ) );
 	}
 );
 

@@ -8,6 +8,7 @@ const fs				= require( 'fs' );
 const getRootDir			= () => path.parse( process.cwd() ).root;
 const BACK_ITEM_TEXT		= 'BACK';
 const DIRECTORY_ITEMS_TYPE	= 'directory';
+const PAGE_SIZE				= 50;
 
 /**
  * @brief	Path helper used to retrieve data about files and folders
@@ -54,64 +55,80 @@ class PathHelper
 	 *
 	 * @param	EventRequest event
 	 * @param	String dir
+	 * @param	Number position
 	 * @param	Function callback
 	 *
 	 * @return	void
 	 */
-	getItems( event, dir, callback )
+	async getItems( event, dir, position, callback )
 	{
-		fs.readdir( dir, {}, ( error, data ) => {
-			if ( ! error && data )
+		const contents	= await fs.promises.opendir( dir, { bufferSize: PAGE_SIZE } );
+		let hasMore		= false;
+		let items		= {
+			directories	: [],
+			files		: []
+		};
+
+		let counter	= 0;
+
+		for await ( const dirent of contents )
+		{
+			let name	= path.join( dir, dirent.name );
+			let stats	= null;
+			try
 			{
-				let items	= {
-					directories	: [],
-					files		: []
-				};
-
-				// Add the go back folder
-				let backPath	= path.parse( dir );
-				let stats		= null;
-				try
-				{
-					stats	= fs.statSync( dir );
-				}
-				catch ( e )
-				{
-					callback( true );
-					return;
-				}
-
-				items.directories.push( PathHelper.formatItem( backPath, stats, true, event ) );
-
-				for ( let i = 0; i < data.length; ++ i )
-				{
-					// Add the current dir items
-					let name	= path.join( dir, data[i] );
-					let stats	= null;
-					try
-					{
-						stats	= fs.statSync( name );
-					}
-					catch ( e )
-					{
-						continue;
-					}
-					name		= path.parse( name );
-
-					let item	= PathHelper.formatItem( name, stats, false, event );
-
-					item.isDir	? items.directories.push( item ) : items.files.push( item );
-				}
-
-				items	= items.directories.concat( items.files );
-
-				callback( false, items );
+				stats	= fs.statSync( name );
 			}
-			else
+			catch ( e )
+			{
+				continue;
+			}
+
+			if ( counter < position )
+			{
+				++counter;
+
+				continue;
+			}
+
+			if ( position + PAGE_SIZE < counter )
+			{
+				hasMore	= true;
+				break;
+			}
+
+			name		= path.parse( name );
+
+			let item	= PathHelper.formatItem( name, stats, false, event );
+
+			item.isDir	? items.directories.push( item ) : items.files.push( item );
+			++counter;
+		}
+
+		items			= items.directories.concat( items.files );
+		const itemsRead	= parseInt( items.length );
+
+		if ( position === 0 )
+		{
+			// Add the go back folder
+			let backPath	= path.parse( dir );
+			let stats		= null;
+			try
+			{
+				stats	= fs.statSync( dir );
+			}
+			catch ( e )
 			{
 				callback( true );
+				return;
 			}
-		});
+
+			items	= [].concat( [PathHelper.formatItem( backPath, stats, true, event )], items )
+		}
+
+		position	+= itemsRead;
+
+		callback( false, { items, position, hasMore } );
 	};
 
 	/**

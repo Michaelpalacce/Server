@@ -38,7 +38,6 @@ router.post( '/create/folder', ( event ) => {
 			const character	= FORBIDDEN_CHARACTERS[charIndex];
 			if ( folder.includes( character ) )
 			{
-				console.log(character)
 				event.sendError( 'Folder name contains invalid characters' );
 				return;
 			}

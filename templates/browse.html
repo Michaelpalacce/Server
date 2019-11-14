@@ -48,16 +48,13 @@
 	</div>
 
 	<div class="container pt-5" >
+		<form action="/upload" class="dropzone mb-5">
+			<input type="hidden" name="directory" id="upload-file" value="<%= dir %>">
+		</form>
+
 		<div class="row my-1 mb-md-5" id="directoryStructure" ></div>
 
 		<div class="row" id="fileStructure"></div>
-
-		<br>
-		<br>
-
-		<form action="/upload" class="dropzone">
-			<input type="hidden" name="directory" id="upload-file" value="<%= dir %>">
-		</form>
 
 		<br>
 		<br>

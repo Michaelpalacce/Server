@@ -1,5 +1,6 @@
 window.Dropzone.autoDiscover	= false;
 let canBrowse					= true;
+let currentPosition				= 0;
 
 $( window ).on('popstate', () =>
 	{
@@ -169,7 +170,7 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 
 				filePreviewParent.append( `
 					<a href="/preview?file=${encodedURI}">
-						<img style="max-height: 250px; max-width: 320px; padding-bottom: 7px" src="/data?file=${encodedURI}" alt="${name}">
+						<img style="max-height: 250px; max-width: 250px; padding-bottom: 7px" src="/data?file=${encodedURI}" alt="${name}">
 					<a/>
 				` );
 			}
@@ -193,7 +194,10 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 
 function addAddFolderButton()
 {
+	$( '.addFolderElement' ).remove();
+
 	const addFolderElement	= addItem( 'Add Folder', '', 0, true, false, 'directory', null );
+	addFolderElement.addClass( 'addFolderElement' );
 	addFolderElement.find( '.folder-delete' ).remove();
 	addFolderElement.find( '.item-row' ).addClass( 'add-folder' );
 	addFolderElement.off( 'click' );
@@ -218,7 +222,6 @@ function addAddFolderButton()
 			method		: 'POST',
 			success	: function()
 			{
-				addFolderElement.remove();
 				addItem( folderName, encodedUri, 0, true, false, 'directory', null );
 				addAddFolderButton();
 			},
@@ -230,25 +233,42 @@ function addAddFolderButton()
 	} );
 }
 
-function browse( directory )
+function browse( directory, loadData = false )
 {
-	if ( ! canBrowse )
+	if ( ! canBrowse && ! loadData )
 	{
 		return;
 	}
-	currentDir  = directory;
+
+	if ( ! loadData )
+	{
+		console.log(`SETTING NEW DIRECTORY: ${directory}`)
+		currentPosition	= 0;
+		currentDir		= directory;
+	}
+
 	$( '#upload-dir' ).val( directory );
 	$( '#upload-file' ).val( directory );
 
 	$.ajax({
-		url		: '/browse/getFiles?dir=' + directory,
+		url		: `/browse/getFiles?dir=${directory}&position=${currentPosition}`,
 		method	: 'GET',
 		success	: function( data )
 		{
-			$( '.item' ).remove();
+			if ( ! loadData )
+			{
+				$( '.item' ).remove();
+			}
 
-			data		= JSON.parse( data );
-			const items	= data['items'];
+			data											= JSON.parse( data );
+			const { items, position, hasMore, workingDir }	= data;
+
+			if ( workingDir !== decodeURIComponent( currentDir ) )
+			{
+				return;
+			}
+
+			currentPosition									= position;
 
 			for ( const index in items )
 			{
@@ -259,6 +279,18 @@ function browse( directory )
 			}
 
 			addAddFolderButton();
+
+			if ( hasMore )
+			{
+				setTimeout( ()=>{
+					if ( workingDir !== decodeURIComponent( currentDir ) )
+					{
+						return;
+					}
+
+					browse( directory, true );
+				}, 2000 );
+			}
 		}
 	});
 }
