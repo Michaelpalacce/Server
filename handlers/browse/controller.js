@@ -73,9 +73,7 @@ router.get( '/browse/getFiles', ( event )=>{
 		{
 			const { items, position, hasMore }	= data;
 
-			IpLookup.getExternalIpv4().then( ( externalIP ) =>{
-				event.send( { items, position, dir, hasMore, workingDir: dir } );
-			}).catch( event.next );
+			event.send( { items, position, dir, hasMore, workingDir: dir } );
 		}
 		else
 		{

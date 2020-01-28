@@ -37,9 +37,15 @@ IpLookup.getExternalIpv4	= function()
 				res.setEncoding( 'utf8' );
 				res.on( 'data', function( chunk )
 				{
-					chunk	= `${chunk}:${process.env.port}`;
+					chunk				= `${chunk}:${process.env.port}`;
+					const savedChunk	= Cache.set( PUBLIC_IP_STRING, chunk );
 
-					resolve( Cache.set( PUBLIC_IP_STRING, chunk, 0 ).value, -1, false );
+					if ( savedChunk === null )
+					{
+						reject( 'Could not save external ipv4' )
+					}
+
+					resolve( savedChunk.value, -1, false );
 				});
 
 				res.on( 'error', ()=>{
