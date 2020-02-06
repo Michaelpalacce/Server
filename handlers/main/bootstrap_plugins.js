@@ -37,12 +37,12 @@ let logger	= Loggur.createLogger({
 	transports	: transports
 });
 
-let server						= Server();
-let PluginManager				= server.getPluginManager();
-let templatingEnginePlugin		= PluginManager.getPlugin( 'er_templating_engine' );
-let cacheServerPlugin			= PluginManager.getPlugin( 'er_cache_server' );
-let multipartBodyParserPlugin	= PluginManager.getPlugin( 'er_body_parser_multipart' );
-let loggerPlugin				= PluginManager.getPlugin( 'er_logger' );
+const server					= Server();
+const PluginManager				= server.getPluginManager();
+const templatingEnginePlugin	= PluginManager.getPlugin( 'er_templating_engine' );
+const cacheServerPlugin			= PluginManager.getPlugin( 'er_cache_server' );
+const multipartBodyParserPlugin	= PluginManager.getPlugin( 'er_body_parser_multipart' );
+const loggerPlugin				= PluginManager.getPlugin( 'er_logger' );
 
 const dataServer				= cacheServerPlugin.getServer();
 process.cachingServer			= dataServer;
@@ -50,9 +50,9 @@ process.cachingServer			= dataServer;
 dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route : '\\' }, -1 );
 
 templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
-loggerPlugin.setOptions({ logger });
 multipartBodyParserPlugin.setOptions({
 	parsers: [{ instance : MultipartFormParser, options : { tempDir : path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } }]
 });
 
+loggerPlugin.setOptions({ logger });
 Loggur.addLogger( logger );
