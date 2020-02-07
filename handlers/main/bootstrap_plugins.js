@@ -1,11 +1,11 @@
 'use strict';
 
-const ejs															= require( 'ejs' );
-const path															= require( 'path' );
-const { Loggur, BodyParserHandler, Logging, LOG_LEVELS, Server }	= require( 'event_request' );
-const { MultipartFormParser }										= BodyParserHandler;
-const PROJECT_ROOT													= path.parse( require.main.filename ).dir;
-const { Console, File }												= Logging;
+const ejs													= require( 'ejs' );
+const path													= require( 'path' );
+const { Loggur, LOG_LEVELS, Server, Development, Logging }	= require( 'event_request' );
+const { MultipartFormParser }								= Development.BodyParserHandler;
+const PROJECT_ROOT											= path.parse( require.main.filename ).dir;
+const { Console, File }										= Logging;
 
 let transports	= [
 	new File({

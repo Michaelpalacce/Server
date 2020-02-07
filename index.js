@@ -1,13 +1,10 @@
 'use strict';
 
 // Dependencies
-const server		= require( './server' );
-const { Loggur }	= require( 'event_request' );
+const { Server, Loggur }	= require( 'event_request' );
+require( './server' );
 
 // Start the server
-server.start( ( error )=>{
-	if ( error === false )
-	{
-		Loggur.log( 'Server started' );
-	}
+Server.start( process.env.PORT, '0.0.0.0', ( error )=>{
+	Loggur.log( 'Server started' );
 });
