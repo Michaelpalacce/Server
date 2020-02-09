@@ -94,18 +94,18 @@ function setItemNameToFit( element, nameElementClass, compareElementClass, fullN
 	const compareElement		= element.find( compareElementClass );
 	const nameElement			= element.find( nameElementClass );
 	const compareElementWidth	= compareElement.width();
-	const offset				= 45;
+	const offset				= 55;
 
 	nameElement.text( fullName );
 
 	while ( true )
 	{
-		let nameElementWidth	= nameElement.width();
+		const nameElementWidth	= nameElement.width();
 
 		if ( compareElementWidth - offset < nameElementWidth )
 		{
 			let newName	= fullName.trunc( truncStart );
-			nameElement.text( fullName.trunc( truncStart ) );
+			nameElement.text( newName );
 			truncStart	-= 2;
 		}
 		else

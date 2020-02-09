@@ -47,8 +47,8 @@ router.delete( '/delete', ( event ) => {
 		let result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
 
 		let file	= ! result.hasValidationFailed()
-			? event.queryString.file
-			: false;
+					? result.getValidationResult().file
+					: false;
 
 		if ( file === false || ! fs.existsSync( file ) )
 		{

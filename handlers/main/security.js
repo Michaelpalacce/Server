@@ -20,6 +20,7 @@ router.add({
 			&& ( ! event.session.has( 'authenticated' ) || event.session.get( 'authenticated' ) === false )
 		) {
 			event.redirect( '/login' );
+			return;
 		}
 
 		event.next();

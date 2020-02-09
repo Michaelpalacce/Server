@@ -16,9 +16,10 @@ let router			= Server().Router();
  * @return	void
  */
 router.get( '/preview', ( event ) => {
-		let file			= typeof event.queryString.file === 'string'
-							&& event.queryString.file.length > 0
-							? event.queryString.file
+		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
+
+		const file			= ! result.hasValidationFailed()
+							? result.getValidationResult().file
 							: false;
 
 		const fileStream	= PathHelper.getFileStreamerForFile( event, file );
@@ -43,10 +44,11 @@ router.get( '/preview', ( event ) => {
  * @return	void
  */
 router.get( '/data', ( event ) =>{
-		let file	= typeof event.queryString.file === 'string'
-		&& event.queryString.file.length > 0
-			? event.queryString.file
-			: false;
+		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
+
+		const file			= ! result.hasValidationFailed()
+							? result.getValidationResult().file
+							: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{

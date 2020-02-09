@@ -4,7 +4,7 @@
 const { Server }		= require( 'event_request' );
 
 const securityHandler	= require( './main/security' );
-const browseHandler		= require( './browse/controller' );
+const browseHandler		= require( './browse/controller/browse' );
 const downloadHandler	= require( './download/controller' );
 const uploadHandler		= require( './upload/controller' );
 const deleteHandler		= require( './delete/controller' );

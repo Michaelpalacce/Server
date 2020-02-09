@@ -29,10 +29,11 @@ let downloadFailedCallback	= ( event ) => {
  * @return	void
  */
 router.get( '/download', ( event ) => {
-		let file	= typeof event.queryString.file === 'string'
-		&& event.queryString.file.length > 0
-			? event.queryString.file
-			: false;
+		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
+
+		let file	= ! result.hasValidationFailed()
+					? result.getValidationResult().file
+					: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
