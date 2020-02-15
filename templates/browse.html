@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/public/css/delete.css">
 </head>
 <body>
-	<ul class="contextmenu">
+	<ul class="contextmenu" id="contextmenu">
 		<li>
 			<a href="#" id="context-download" >
 				<span class="icon fa fa-download"><span class="file-size"></span></span>
@@ -35,15 +35,21 @@
 				Cut
 			</a>
 		</li>
+		<li>
+			<a href="#" id="context-paste" style="display: none">
+				<i class="fa fa-paste"></i>
+				Paste
+			</a>
+		</li>
 	</ul>
 
 	<div id="template-folder-card" class="col-lg-3 folder" style="display:none;">
 		<div class="mb-3 item-row p-3">
 			<span class="folder-icon fa fa-folder">
-				<span class="folder-name"></span>
+				<span class="folder-name itemName"></span>
 			</span>
 
-			<span class="deleteButton icon fa fa-trash folder-delete" data-folder=""></span>
+			<span class="deleteButton icon fa fa-trash folder-delete itemDelete" data-item=""></span>
 		</div>
 	</div>
 
@@ -51,7 +57,7 @@
 		<div class="mb-4 item-row pr-3 pb-3 pl-3 pt-2">
 			<div class="text-center">
 				<span class="file-name-icon fa fa-file">
-					<a href="#" class="card-title file-name no-preview file-preview"></a>
+					<a href="#" class="card-title file-name no-preview file-preview itemName"></a>
 				</span>
 			</div>
 
@@ -65,7 +71,7 @@
 					<div class="face-secondary">DOWNLOAD</div>
 				</a>
 
-				<a class="col-md-5 face-button file-delete" data-file="" href="#">
+				<a class="col-md-5 face-button file-delete itemDelete" data-item="" href="#">
 					<div class="face-primary"><span class="icon fa fa-trash"></span></div>
 					<div class="face-secondary">DELETE</div>
 				</a>
@@ -127,5 +133,5 @@
 	let currentDir	= '<%= dir %>';
 </script>
 <script src="/public/js/main.js"></script>
-<script src="/public/js/dropdown.js"></script>
+<script src="/public/js/contextMenu.js"></script>
 </html>

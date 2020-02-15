@@ -10,8 +10,9 @@ $( window ).on('popstate', () =>
 );
 
 String.prototype.trunc = String.prototype.trunc ||
-	function(n){
-		return (this.length > n) ? this.substr(0, n-1) + '...' : this;
+	function( n )
+	{
+		return ( this.length > n) ? this.substr( 0, n - 1 ) + '...' : this;
 	};
 
 const myDropzone				= new Dropzone(
@@ -48,38 +49,46 @@ myDropzone.on("complete", function(file) {
 });
 
 $( document ).on( 'click', '.file-delete', ( event ) => {
-	let element			= $( event.target ).closest( '.file-delete' );
-	let fileToDelete	= element.attr( 'data-file' );
-
-	$.ajax({
-		url		: '/delete?file=' + fileToDelete,
-		method	: 'DELETE',
-		success	: function()
-		{
-			element.closest( '.item' ).remove();
-		}
-	});
+	deleteItem( $( event.target ).closest( '.file-delete' ) );
 });
 
 $( document ).on( 'click', '.folder-delete', ( event ) => {
-	let element			= $( event.target ).closest( '.folder-delete' );
-	let folderToDelete	= element.attr( 'data-folder' );
-	const confirmDelete	= confirm( `Are you sure you want to delete this folder?` );
+	deleteItem( $( event.target ).closest( '.folder-delete' ), true );
+});
 
-	if ( ! confirmDelete )
+/**
+ * @brief	Deletes an item
+ *
+ * @param	jQueryElement element
+ * @param	Boolean showConfirmDialog
+ *
+ * @return	void
+ */
+function deleteItem( element, showConfirmDialog = false )
+{
+	const itemToDelete	= element.attr( 'data-item' );
+	const url			= `/delete?item=${itemToDelete}`;
+	const method		= 'DELETE';
+
+	if ( showConfirmDialog )
 	{
-		return;
+		const confirmDelete		= confirm( `Are you sure you want to delete this item?` );
+
+		if ( ! confirmDelete )
+		{
+			return;
+		}
 	}
 
 	$.ajax({
-		url		: '/delete/folder?folder=' + folderToDelete,
-		method	: 'DELETE',
+		url,
+		method,
 		success	: function()
 		{
 			element.closest( '.item' ).remove();
 		}
 	});
-});
+}
 
 function bytesToSize(bytes)
 {
@@ -130,7 +139,7 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 
 		if ( fullName.toLowerCase() !== 'back' )
 		{
-			element.find( '.folder-delete' ).attr( 'data-folder', encodedURI );
+			element.find( '.folder-delete' ).attr( 'data-item', encodedURI );
 		}
 		else
 		{
@@ -144,7 +153,7 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 				return;
 			}
 			element.off( 'click' );
-			history.pushState( {}, document.getElementsByTagName("title")[0].innerHTML, '/browse?dir=' + encodedURI );
+			history.pushState( {}, document.getElementsByTagName( 'title' )[0].innerHTML, '/browse?dir=' + encodedURI );
 			browse( encodedURI );
 		});
 		element.appendTo( '#directoryStructure' ).removeAttr( 'id' ).show();
@@ -160,7 +169,7 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 		element.find( '.file-name' ).attr( 'title', fullName );
 		element.find( '.file-size' ).text( size );
 		element.find( '.file-download' ).attr( 'href', '/download?file=' + encodedURI );
-		element.find( '.file-delete' ).attr( 'data-file', encodedURI );
+		element.find( '.file-delete' ).attr( 'data-item', encodedURI );
 		if ( previewAvailable )
 		{
 			const filePreviewElement	= element.find( '.file-preview' );
@@ -243,7 +252,6 @@ function browse( directory, loadData = false )
 
 	if ( ! loadData )
 	{
-		console.log(`SETTING NEW DIRECTORY: ${directory}`)
 		currentPosition	= 0;
 		currentDir		= directory;
 	}

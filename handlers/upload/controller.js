@@ -3,7 +3,10 @@
 // Dependencies
 const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
+const util			= require( 'util' );
 const path			= require( 'path' );
+
+const rename		= util.promisify( fs.rename );
 
 const router				= Server().Router();
 const AJAX_HEADER			= 'x-requested-with';
@@ -84,47 +87,38 @@ router.post( '/upload', ( event ) => {
 
 		let directory	= decodeURIComponent( result.directory );
 		let files		= result.files;
-		let filesDone	= 0;
+
+		const promises	= [];
 
 		files.forEach( ( file ) =>{
-			let oldPath		= file.path;
-			let fileName	= path.parse( file.name );
-			let newPath		= path.join( directory, fileName.dir, fileName.name + fileName.ext );
-			let fileStats	= path.parse( newPath );
+			promises.push( new Promise( async ( resolve, reject )=>{
+				const oldPath	= file.path;
+				const fileName	= path.parse( file.name );
 
-			if ( ! fs.existsSync( fileStats.dir ) )
-			{
-				fs.mkdirSync( fileStats.dir, { recursive: true } );
-			}
+				let newPath		= path.join( directory, fileName.dir );
+				newPath			= path.join( newPath, fileName.name + fileName.ext );
 
-			fs.rename( oldPath, newPath, ()=>{
-				++filesDone;
-			} );
+				const fileStats	= path.parse( newPath );
+
+				if ( ! fs.existsSync( fileStats.dir ) )
+				{
+					fs.mkdirSync( fileStats.dir, { recursive: true } );
+				}
+
+				rename( oldPath, newPath ).then( resolve ).catch( reject );
+			} ).catch( event.next ) );
 		});
 
-		let tries		= 0;
-		const interval	= setInterval( ()=>{
-			tries++;
-
-			if ( tries >= 10 )
+		Promise.all( promises ).then( ()=>{
+			if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
 			{
-				clearInterval( interval );
-				event.sendError( 'ERROR WHILE UPLOADING FILES' );
+				event.send( ['ok'] );
 				return;
 			}
 
-			if ( files.length === filesDone )
-			{
-				clearInterval( interval );
-				if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
-				{
-					event.send( ['ok'] );
-					return;
-				}
+			event.redirect( '/browse?dir='+  encodeURIComponent( directory ) );
+		}).catch( event.next );
 
-				event.redirect( '/browse?dir='+  encodeURIComponent( directory ) );
-			}
-		}, 1000 );
 	}
 );
 

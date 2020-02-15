@@ -3,9 +3,12 @@
 // Dependencies
 const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
+const util			= require( 'util' );
 const path			= require('path');
 
-let router		= Server().Router();
+const unlink		= util.promisify( fs.unlink );
+
+const router		= Server().Router();
 
 /**
  * @brief	Removes a folder recursively
@@ -38,66 +41,44 @@ const deleteFolderRecursive = function( dir )
 /**
  * @brief	Adds a '/delete' route with method GET
  *
- * @details	Required Parameters: file
+ * @details	Required Parameters: file || folder
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
 router.delete( '/delete', ( event ) => {
-		let result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
+		const result	= event.validationHandler.validate( event.queryString, { item : 'optional||string' } );
 
-		let file	= ! result.hasValidationFailed()
-					? result.getValidationResult().file
-					: false;
-
-		if ( file === false || ! fs.existsSync( file ) )
+		if ( result.hasValidationFailed() )
 		{
-			event.next( 'File does not exist' );
+			event.next( 'Invalid item provided', 400 )
+		}
+
+		let { item }	= result.getValidationResult();
+
+		if ( ! fs.existsSync( item ) )
+		{
+			event.next( 'Item does not exist', 400 );
 		}
 		else
 		{
-			fs.unlink( file, ( err ) => {
-				if ( ! err )
-				{
-					event.send( [ 'ok' ] );
-				}
-				else
-				{
-					event.next( 'Could not delete file' );
-				}
-			});
-		}
-	}
-);
-
-/**
- * @brief	Adds a '/download' route with method GET
- *
- * @details	Required Parameters: file
- * 			Optional Parameters: NONE
- *
- * @return	void
- */
-router.delete( '/delete/folder', ( event ) => {
-		let result	= event.validationHandler.validate( event.queryString, { folder : 'filled||string' } );
-
-		let folder	= ! result.hasValidationFailed()
-			? result.getValidationResult().folder
-			: false;
-
-		if ( folder === false || ! fs.existsSync( folder ) )
-		{
-			event.next( 'Folder does not exist' );
-		}
-		else
-		{
-			if ( folder === '/' )
+			if ( fs.statSync( item ).isDirectory() )
 			{
-				event.next( 'CANNOT DELETE ROOT!' );
-				return;
+				if ( item === '/' )
+				{
+					event.next( 'CANNOT DELETE ROOT!', 400 );
+					return;
+				}
+
+				deleteFolderRecursive( item );
+				event.send( 'ok' );
 			}
-			deleteFolderRecursive( folder );
-			event.send( ['ok'] );
+			else
+			{
+				unlink( item ).then(()=>{
+					event.send( 'ok' );
+				}).catch( event.next );
+			}
 		}
 	}
 );

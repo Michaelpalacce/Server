@@ -160,13 +160,13 @@ a:hover
 }
 
 .contextmenu li #context-copy:hover {
-	background: #CE93D8;
-	border-left: 3px solid #9C27B0;
+	background: green;
+	border-left: 3px solid lawngreen;
 }
 
 .contextmenu li #context-cut:hover {
-	background: #CE93D8;
-	border-left: 3px solid #9C27B0;
+	background: green;
+	border-left: 3px solid lawngreen;
 }
 
 .contextmenu li #context-download:hover {
@@ -177,6 +177,11 @@ a:hover
 .contextmenu li #context-delete:hover {
 	background: indianred;
 	border-left: 3px solid #FF8377;
+}
+
+.contextmenu li #context-paste:hover {
+	background: green;
+	border-left: 3px solid lawngreen;
 }
 
 .contextmenu li:hover a {

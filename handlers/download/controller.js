@@ -5,7 +5,7 @@ const { Server }	= require( 'event_request' );
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 
-let router	= Server().Router();
+const router		= Server().Router();
 
 /**
  * @brief	Callback called when downloading a file fails
