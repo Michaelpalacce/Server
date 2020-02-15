@@ -135,6 +135,7 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 		else
 		{
 			element.find( '.folder-delete' ).remove();
+			element.addClass( 'backFolderElement' )
 		}
 
 		element.on( 'click', ( event )=>{

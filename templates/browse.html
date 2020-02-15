@@ -10,6 +10,32 @@
 	<link rel="stylesheet" href="/public/css/delete.css">
 </head>
 <body>
+	<ul class="contextmenu">
+		<li>
+			<a href="#" id="context-download" >
+				<span class="icon fa fa-download"><span class="file-size"></span></span>
+				Download
+			</a>
+		</li>
+		<li>
+			<a href="#" id="context-delete" >
+				<span class="icon fa fa-trash"></span>
+				Delete
+			</a>
+		</li>
+		<li>
+			<a href="#" id="context-copy" >
+				<i class="fa fa-files-o" aria-hidden="true"></i>
+				Copy
+			</a>
+		</li>
+		<li>
+			<a href="#" id="context-cut" >
+				<i class="fa fa-scissors" aria-hidden="true"></i>
+				Cut
+			</a>
+		</li>
+	</ul>
 
 	<div id="template-folder-card" class="col-lg-3 folder" style="display:none;">
 		<div class="mb-3 item-row p-3">
@@ -95,9 +121,11 @@
 </body>
 <script type="text/javascript" src="/public/js/library/jquery.js"></script>
 <script type="text/javascript" src="/public/js/library/bootstrap.js"></script>
-<script src="/public/js/library/dropzone.js"></script>
+<script type="text/javascript" src="/public/js/library/bootstrap.js"></script>
+<script type="text/javascript" src="/public/js/library/dropzone.js"></script>
 <script>
 	let currentDir	= '<%= dir %>';
 </script>
 <script src="/public/js/main.js"></script>
+<script src="/public/js/dropdown.js"></script>
 </html>
