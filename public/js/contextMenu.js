@@ -87,11 +87,31 @@ class ContextMenu
 		{
 			case target.hasClass( 'folder' ):
 				this.downloadElement.hide();
+				this.cutElement.hide();
+				this.copyElement.hide();
 				break;
 
 			case target.hasClass( 'file' ):
 				const targetDownloadLink	= target.find( '.file-download' ).attr( 'href' );
 				this.downloadElement.show().attr( 'href', targetDownloadLink );
+
+				this.cutElement.on( 'click', ()=>{
+					event.preventDefault();
+					event.stopPropagation();
+					event.stopImmediatePropagation();
+
+					this.action				= ACTION_CUT;
+					this.actionElementPath	= this.getElementPath( target );
+				} ).show();
+
+				this.copyElement.on( 'click', ()=>{
+					event.preventDefault();
+					event.stopPropagation();
+					event.stopImmediatePropagation();
+
+					this.action				= ACTION_COPY;
+					this.actionElementPath	= this.getElementPath( target );
+				} ).show();
 				break;
 
 			default:
@@ -129,8 +149,9 @@ class ContextMenu
 							newPath: currentDir,
 							oldPath: this.actionElementPath
 						},
-						success	: function()
+						success	: ( data )=>
 						{
+							fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
 						},
 						complete	: () =>
 						{
@@ -152,24 +173,6 @@ class ContextMenu
 			event.stopImmediatePropagation();
 
 			target.find( '.itemDelete ' ).click();
-		} ).show();
-
-		this.cutElement.on( 'click', ()=>{
-			event.preventDefault();
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-
-			this.action				= ACTION_CUT;
-			this.actionElementPath	= this.getElementPath( target );
-		} ).show();
-
-		this.copyElement.on( 'click', ()=>{
-			event.preventDefault();
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-
-			this.action				= ACTION_COPY;
-			this.actionElementPath	= this.getElementPath( target );
 		} ).show();
 	}
 

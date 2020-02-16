@@ -31,17 +31,7 @@ myDropzone.on( 'queuecomplete', () => { canBrowse = true; } );
 myDropzone.on("complete", function(file) {
 	const encodedURI	= currentDir + encodeURIComponent( '\\' + file.name );
 
-	$.ajax({
-		url		: '/file/getFileData?file=' + encodedURI,
-		method	: 'GET',
-		success	: function( data )
-		{
-			const itemData														= JSON.parse( data );
-			const { name, encodedURI, size, isDir, fileType, previewAvailable }	= itemData;
-
-			addItem( name, encodedURI, size, isDir, previewAvailable, fileType, currentDir );
-		}
-	});
+	fetchDataForFileAndAddItem( encodedURI );
 
 	setTimeout(()=>{
 		myDropzone.removeFile(file);
@@ -51,10 +41,33 @@ myDropzone.on("complete", function(file) {
 $( document ).on( 'click', '.file-delete', ( event ) => {
 	deleteItem( $( event.target ).closest( '.file-delete' ) );
 });
-
 $( document ).on( 'click', '.folder-delete', ( event ) => {
 	deleteItem( $( event.target ).closest( '.folder-delete' ), true );
 });
+
+/**
+ * @brief	Retrieves the FileData and adds an item
+ *
+ * @details	The filePath must be already URI encoded
+ *
+ * @param	String filePath
+ *
+ * @return	void
+ */
+function fetchDataForFileAndAddItem( filePath )
+{
+	$.ajax({
+		url		: '/file/getFileData?file=' + filePath,
+		method	: 'GET',
+		success	: function( data )
+		{
+			const itemData														= JSON.parse( data );
+			const { name, encodedURI, size, isDir, fileType, previewAvailable }	= itemData;
+
+			addItem( name, encodedURI, size, isDir, previewAvailable, fileType, currentDir );
+		}
+	});
+}
 
 /**
  * @brief	Deletes an item
@@ -90,14 +103,35 @@ function deleteItem( element, showConfirmDialog = false )
 	});
 }
 
-function bytesToSize(bytes)
+/**
+ * @brief	Converts bytes to KB,MB,GB,TB
+ *
+ * @param	Number bytes
+ *
+ * @returns	String
+ */
+function bytesToSize( bytes )
 {
-	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-	if (bytes === 0) return '0 Byte';
-	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+	const sizes	= ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	if ( bytes === 0 )
+		return '0 Byte';
+
+	const i	= parseInt( Math.floor( Math.log( bytes ) / Math.log( 1024 ) ) );
+
+	return Math.round( bytes / Math.pow( 1024, i ), 2 ) + ' ' + sizes[i];
 }
 
+/**
+ * @brief	Sets the Item name to fit the box
+ *
+ * @param	jQueryElement element
+ * @param	String nameElementClass
+ * @param	String compareElementClass
+ * @param	String fullName
+ * @param	Number truncStart
+ *
+ * @return	void
+ */
 function setItemNameToFit( element, nameElementClass, compareElementClass, fullName, truncStart )
 {
 	const compareElement		= element.find( compareElementClass );
@@ -124,6 +158,19 @@ function setItemNameToFit( element, nameElementClass, compareElementClass, fullN
 	}
 }
 
+/**
+ * @brief	Adds an item to the page
+ *
+ * @param	String name
+ * @param	String encodedURI
+ * @param	Number size
+ * @param	Boolean isDir
+ * @param	Boolean previewAvailable
+ * @param	String itemType
+ * @param	String directory
+ *
+ * @return	jQueryElement
+ */
 function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, directory )
 {
 	const fullName	= name;
@@ -202,6 +249,11 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 	return element;
 }
 
+/**
+ * @brief	Adds the 'Add Folder' Button
+ *
+ * @return	void
+ */
 function addAddFolderButton()
 {
 	$( '.addFolderElement' ).remove();
@@ -243,6 +295,14 @@ function addAddFolderButton()
 	} );
 }
 
+/**
+ * @brief	Change the currentDirectory and browse to that path
+ *
+ * @param	String directory
+ * @param	Boolean loadData
+ *
+ * @return	void
+ */
 function browse( directory, loadData = false )
 {
 	if ( ! canBrowse && ! loadData )
