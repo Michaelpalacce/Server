@@ -94,10 +94,14 @@ BrowseModel.getFilesData	= function( eventRequest ){
 		eventRequest.send( false );
 		return;
 	}
-	const fileName	= result.getValidationResult().file;
-	const stats		= fs.statSync( fileName );
 
-	eventRequest.send( PathHelper.formatItem( path.parse( fileName ), stats, false, eventRequest ) );
+	const fileName	= result.getValidationResult().file;
+	fs.stat( fileName, ( err, stats )=>{
+		if ( err )
+			eventRequest.sendError( 'File does not exist', 400 );
+
+		eventRequest.send( PathHelper.formatItem( path.parse( fileName ), stats, false, eventRequest ) );
+	} );
 };
 
 module.exports	= BrowseModel;

@@ -277,8 +277,9 @@ function addAddFolderButton()
 			return;
 		}
 
-		const folderName	= userFolder;
-		const encodedUri	= currentDir + encodeURIComponent( '/' + userFolder );
+		const folderName		= userFolder;
+		const encodedFolderName	= encodeURIComponent( '\\' + userFolder );
+		const encodedUri		= decodeURIComponent( currentDir ) === '\\' ? encodedFolderName : currentDir + encodedFolderName;
 
 		$.ajax({
 			url		: '/create/folder',

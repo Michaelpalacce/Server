@@ -18,6 +18,7 @@ class ContextMenu
 		this.cutElement			= this.element.find( '#context-cut' );
 		this.copyElement		= this.element.find( '#context-copy' );
 		this.pasteElement		= this.element.find( '#context-paste' );
+		this.renameElement		= this.element.find( '#context-rename' );
 
 		this.elementWidth		= this.element.width();
 		this.elementHeight		= this.element.height();
@@ -69,6 +70,13 @@ class ContextMenu
 		this.cutElement.off( 'click' );
 		this.copyElement.off( 'click' );
 		this.pasteElement.off( 'click' );
+		this.renameElement.off( 'click' );
+	}
+
+	flushActionElementData()
+	{
+		this.action				= ACTION_NONE;
+		this.actionElementPath	= '';
 	}
 
 	/**
@@ -89,6 +97,7 @@ class ContextMenu
 				this.downloadElement.hide();
 				this.cutElement.hide();
 				this.copyElement.hide();
+				this.renameElement.hide();
 				break;
 
 			case target.hasClass( 'file' ):
@@ -114,6 +123,31 @@ class ContextMenu
 					this.actionElementPath	= this.getElementPath( target );
 					this.element.hide();
 				} ).show();
+
+				this.renameElement.on( 'click', ( event )=>{
+					event.preventDefault();
+					event.stopPropagation();
+					event.stopImmediatePropagation();
+
+					const newName	= prompt( 'What is the new name of the file' );
+
+					$.ajax({
+						url		: '/rename',
+						method	:'POST',
+						data	: {
+							newPath: currentDir + encodeURIComponent( '/' + newName ),
+							oldPath: this.getElementPath( target )
+						},
+						success	: ( data )=>
+						{
+							target.remove();
+							fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
+							this.flushActionElementData();
+						}
+					});
+
+					this.element.hide();
+				} ).show();
 				break;
 
 			default:
@@ -121,6 +155,8 @@ class ContextMenu
 				this.deleteElement.hide();
 				this.cutElement.hide();
 				this.copyElement.hide();
+				this.renameElement.hide();
+
 				this.pasteElement.on( 'click', ( event )=>{
 					event.preventDefault();
 					event.stopPropagation();
@@ -157,8 +193,7 @@ class ContextMenu
 						},
 						complete	: () =>
 						{
-							this.action				= ACTION_NONE;
-							this.actionElementPath	= '';
+							this.flushActionElementData();
 							this.closeContextMenu();
 						}
 					});

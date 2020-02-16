@@ -1,3 +1,6 @@
+7.0.2
+- Added a lot of bugfixes and added renaming of files
+
 7.0.1
 - Fixed Context menu elements redirecting
 

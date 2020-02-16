@@ -77,7 +77,6 @@ Model.copy	= function( event )
 	newPath						= decodeURIComponent( newPath );
 	oldPath						= decodeURIComponent( oldPath );
 
-
 	const fileStats				= fs.statSync( oldPath );
 	const oldPathParsed			= path.parse( oldPath );
 
@@ -94,6 +93,41 @@ Model.copy	= function( event )
 	newPath	= path.join( newPath, oldPathParsed.base );
 
 	copy( oldPath, newPath ).then(()=>{
+		event.send( { newPath } );
+	}).catch( event.next );
+};
+
+/**
+ * @brief	Renames the given item
+ *
+ * @param	EventRequest event
+ *
+ * @returns	void
+ */
+Model.rename	= function( event )
+{
+	const result	= Model.validate( event );
+
+	if ( result.hasValidationFailed() )
+		return event.sendError( 'Invalid body parameters passed', 400 );
+
+	let { newPath, oldPath }	= result.getValidationResult();
+	newPath						= decodeURIComponent( newPath );
+	oldPath						= decodeURIComponent( oldPath );
+
+	const fileStats				= fs.statSync( oldPath );
+
+	if ( fileStats.isDirectory() )
+	{
+		return event.send( 'Cannot rename Folders yet', 400 );
+	}
+
+	if ( fs.existsSync( newPath ) )
+	{
+		return event.send( 'File already exists', 400 );
+	}
+
+	rename( oldPath, newPath ).then(()=>{
 		event.send( { newPath } );
 	}).catch( event.next );
 };

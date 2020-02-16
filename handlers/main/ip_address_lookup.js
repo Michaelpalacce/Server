@@ -37,7 +37,7 @@ IpLookup.getExternalIpv4	= function()
 				res.setEncoding( 'utf8' );
 				res.on( 'data', function( chunk )
 				{
-					chunk				= `${chunk}:${process.env.port}`;
+					chunk				= `${chunk}:${process.env.PORT}`;
 					const savedChunk	= Cache.set( PUBLIC_IP_STRING, chunk );
 
 					if ( savedChunk === null )
@@ -85,7 +85,7 @@ IpLookup.getLocalIpV4s = function()
 				interfaces[interfaceName]	= [];
 			}
 
-			interfaces[interfaceName].push( `${iface.address}:${process.env.port}` );
+			interfaces[interfaceName].push( `${iface.address}:${process.env.PORT}` );
 		});
 	}
 
