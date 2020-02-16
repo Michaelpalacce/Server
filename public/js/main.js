@@ -181,6 +181,8 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 	{
 		element			= $( '#template-folder-card' ).clone();
 		element.addClass( 'item' );
+		element.attr( 'data-item-name', fullName );
+		element.attr( 'data-item-encoded-uri', encodedURI );
 
 		element.find( '.folder-name' ).attr( 'data-href', encodedURI ).attr( 'title', fullName );
 
@@ -211,6 +213,8 @@ function addItem( name, encodedURI, size, isDir, previewAvailable, itemType, dir
 	{
 		element	= $( '#template-file-card' ).clone();
 		element.addClass( 'item' );
+		element.attr( 'data-item-name', fullName );
+		element.attr( 'data-item-encoded-uri', encodedURI );
 
 		element.find( '.folder' ).remove();
 		element.find( '.file-name' ).attr( 'title', fullName );

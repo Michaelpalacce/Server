@@ -77,6 +77,7 @@ Model.copy	= function( event )
 	newPath						= decodeURIComponent( newPath );
 	oldPath						= decodeURIComponent( oldPath );
 
+
 	const fileStats				= fs.statSync( oldPath );
 	const oldPathParsed			= path.parse( oldPath );
 

@@ -95,22 +95,24 @@ class ContextMenu
 				const targetDownloadLink	= target.find( '.file-download' ).attr( 'href' );
 				this.downloadElement.show().attr( 'href', targetDownloadLink );
 
-				this.cutElement.on( 'click', ()=>{
+				this.cutElement.on( 'click', ( event )=>{
 					event.preventDefault();
 					event.stopPropagation();
 					event.stopImmediatePropagation();
 
 					this.action				= ACTION_CUT;
 					this.actionElementPath	= this.getElementPath( target );
+					this.element.hide();
 				} ).show();
 
-				this.copyElement.on( 'click', ()=>{
+				this.copyElement.on( 'click', ( event )=>{
 					event.preventDefault();
 					event.stopPropagation();
 					event.stopImmediatePropagation();
 
 					this.action				= ACTION_COPY;
 					this.actionElementPath	= this.getElementPath( target );
+					this.element.hide();
 				} ).show();
 				break;
 
@@ -161,18 +163,20 @@ class ContextMenu
 						}
 					});
 
+					this.element.hide();
 				} ).show();
 				return;
 		}
 
 		this.pasteElement.hide();
 
-		this.deleteElement.on( 'click', ()=>{
+		this.deleteElement.on( 'click', ( event )=>{
 			event.preventDefault();
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 
 			target.find( '.itemDelete ' ).click();
+			this.element.hide();
 		} ).show();
 	}
 
@@ -185,7 +189,7 @@ class ContextMenu
 	 */
 	getElementPath( targetElement )
 	{
-		return currentDir + encodeURIComponent( '\\' + targetElement.find( '.itemName' ).text() ) ;
+		return targetElement.closest( '.item' ).attr( 'data-item-encoded-uri' );
 	}
 
 	/**

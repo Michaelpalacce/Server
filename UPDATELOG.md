@@ -1,3 +1,6 @@
+7.0.1
+- Fixed Context menu elements redirecting
+
 7.0.0
 - Added UPDATELOG.md
 - Added copy and cut functionality.
