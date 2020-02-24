@@ -1,3 +1,6 @@
+7.0.3
+- Works with latest event_request version
+
 7.0.2
 - Added a lot of bugfixes and added renaming of files
 

@@ -16,7 +16,7 @@ let localIpv4s			= null;
  */
 IpLookup.getExternalIpv4	= function()
 {
-	return new Promise(( resolve, reject )=>{
+	return new Promise( async ( resolve, reject )=>{
 		const Cache	= process.cachingServer;
 
 		if ( typeof Cache === 'undefined' )
@@ -24,7 +24,7 @@ IpLookup.getExternalIpv4	= function()
 			resolve( 'localhost' );
 		}
 
-		const dataSet	= Cache.get( PUBLIC_IP_STRING );
+		const dataSet	= await Cache.get( PUBLIC_IP_STRING );
 
 		if ( dataSet != null )
 		{
@@ -35,10 +35,10 @@ IpLookup.getExternalIpv4	= function()
 			http.get( BOT_ADDRESS, function( res )
 			{
 				res.setEncoding( 'utf8' );
-				res.on( 'data', function( chunk )
+				res.on( 'data', async function( chunk )
 				{
 					chunk				= `${chunk}:${process.env.PORT}`;
-					const savedChunk	= Cache.set( PUBLIC_IP_STRING, chunk );
+					const savedChunk	= await Cache.set( PUBLIC_IP_STRING, chunk );
 
 					if ( savedChunk === null )
 					{

@@ -35,7 +35,7 @@ router.get( '/login', ( event )=>{
 	event.render( 'login' );
 });
 
-router.post( '/login', ( event )=>{
+router.post( '/login', async ( event )=>{
 	let result	= event.validationHandler.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
 
 	if ( result.hasValidationFailed() )
@@ -48,7 +48,7 @@ router.post( '/login', ( event )=>{
 	let cacheServer	= Server().getPlugin( 'er_cache_server' );
 	let dataServer	= cacheServer.getServer();
 
-	const dataSet	= dataServer.get( result.username );
+	const dataSet	= await dataServer.get( result.username );
 
 	if ( dataSet !== null && typeof dataSet.value.password === 'string' && dataSet.value.password === result.password )
 	{
