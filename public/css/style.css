@@ -184,6 +184,11 @@ a:hover
 	border-left: 3px solid lawngreen;
 }
 
+.contextmenu li #context-rename:hover {
+	background: violet;
+	border-left: 3px solid darkorchid;
+}
+
 .contextmenu li:hover a {
 	color: #FFFFFF;
 }
