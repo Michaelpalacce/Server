@@ -1,12 +1,12 @@
 'use strict';
 
-const ejs										= require( 'ejs' );
-const path										= require( 'path' );
-const { Loggur, LOG_LEVELS, Server, Logging }	= require( 'event_request' );
-const PROJECT_ROOT								= path.parse( require.main.filename ).dir;
-const { Console, File }							= Logging;
+const ejs									= require( 'ejs' );
+const path									= require( 'path' );
+const { Server, Logging }					= require( 'event_request' );
+const PROJECT_ROOT							= path.parse( require.main.filename ).dir;
+const { Console, File, Loggur, LOG_LEVELS }	= Logging;
 
-let transports	= [
+const transports	= [
 	new File({
 		logLevel	: LOG_LEVELS.notice,
 		filePath	: '/logs/access.log',
@@ -29,7 +29,7 @@ if ( typeof process.env !== 'undefined' && process.env.DEBUG == 1 )
 	);
 }
 
-let logger	= Loggur.createLogger({
+const logger	= Loggur.createLogger({
 	serverName	: 'Storage',
 	logLevel	: LOG_LEVELS.debug,
 	capture		: false,

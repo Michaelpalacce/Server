@@ -56,7 +56,7 @@ router.get( '/data', ( event ) =>{
 		}
 		else
 		{
-			event.streamFile( file );
+			event.getFileStream( file ).pipe( event.response );
 		}
 	}
 );
