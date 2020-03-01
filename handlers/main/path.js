@@ -62,7 +62,7 @@ class PathHelper
 	 */
 	async getItems( event, dir, position, callback )
 	{
-		const contents	= await fs.promises.opendir( dir, { bufferSize: PAGE_SIZE } );
+		const contents	= await fs.promises.opendir( dir, { bufferSize: PAGE_SIZE } ).catch( event.next );
 		let hasMore		= false;
 		let items		= {
 			directories	: [],
