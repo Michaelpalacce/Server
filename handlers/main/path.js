@@ -27,7 +27,7 @@ class PathHelper
 	 */
 	static getFileStreamerForFile( event, absItemName )
 	{
-		let fileStream	= event.getFileStreamHandler().getFileStreamerForType( absItemName );
+		const fileStream	= event.fileStreamHandler.getFileStreamerForType( absItemName );
 
 		if ( fileStream !== null && fileStream instanceof FileStream )
 		{
