@@ -1,3 +1,6 @@
+7.1.0
+- Works with the newest version of the EventRequest
+
 7.0.3
 - Works with latest event_request version
 

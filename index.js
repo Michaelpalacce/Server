@@ -2,9 +2,9 @@
 
 // Dependencies
 const { Server, Loggur }	= require( 'event_request' );
-require( './server' );
+const app					= require( './server' );
 
 // Start the server
-Server.start( process.env.PORT || 80, '0.0.0.0', ( error )=>{
+app.listen( process.env.PORT || 80, '0.0.0.0', ( error )=>{
 	Loggur.log( 'Server started' );
 });

@@ -36,12 +36,12 @@ const logger	= Loggur.createLogger({
 	transports	: transports
 });
 
-const server					= Server();
-const PluginManager				= server.getPluginManager();
-const templatingEnginePlugin	= PluginManager.getPlugin( server.er_templating_engine );
-const cacheServerPlugin			= PluginManager.getPlugin( server.er_cache_server );
-const multipartBodyParserPlugin	= PluginManager.getPlugin( server.er_body_parser_multipart );
-const loggerPlugin				= PluginManager.getPlugin( server.er_logger );
+const app						= Server();
+const PluginManager				= app.getPluginManager();
+const templatingEnginePlugin	= PluginManager.getPlugin( app.er_templating_engine );
+const cacheServerPlugin			= PluginManager.getPlugin( app.er_cache_server );
+const multipartBodyParserPlugin	= PluginManager.getPlugin( app.er_body_parser_multipart );
+const loggerPlugin				= PluginManager.getPlugin( app.er_logger );
 
 const dataServer				= cacheServerPlugin.getServer();
 process.cachingServer			= dataServer;

@@ -7,27 +7,29 @@ const handlers		= require( './handlers/handlers' );
 /**
  * @brief	Instantiate the server
  */
-let server	= Server();
+const app	= Server();
 
-server.apply( 'er_env' );
+app.apply( 'er_env' );
 
 // Configure the plugins
 require( './handlers/main/bootstrap_plugins' );
 
-server.apply( server.er_static_resources, { paths : [process.env.STATIC_PATH, 'favicon.ico'] } );
-server.apply( server.er_body_parser_form );
-server.apply( server.er_body_parser_json );
-server.apply( server.er_body_parser_multipart );
-server.apply( server.er_timeout, { timeout : process.env.REUQEST_TIMEOUT } );
-server.apply( server.er_rate_limits );
-server.apply( server.er_logger );
-server.apply( server.er_cache_server );
-server.apply( server.er_response_cache );
-server.apply( server.er_file_stream );
-server.apply( server.er_templating_engine );
+app.apply( app.er_static_resources, { paths : [process.env.STATIC_PATH, 'favicon.ico'] } );
+app.apply( app.er_body_parser_form );
+app.apply( app.er_body_parser_json );
+app.apply( app.er_body_parser_multipart );
+app.apply( app.er_timeout, { timeout : process.env.REUQEST_TIMEOUT } );
+app.apply( app.er_rate_limits );
+app.apply( app.er_logger );
+app.apply( app.er_cache_server );
+app.apply( app.er_response_cache );
+app.apply( app.er_file_stream );
+app.apply( app.er_templating_engine );
 
-server.apply( server.er_session );
+app.apply( app.er_session );
 
 
 // Handlers
-server.add( handlers );
+app.add( handlers );
+
+module.exports	= app;
