@@ -36,17 +36,17 @@ const logger	= Loggur.createLogger({
 	transports	: transports
 });
 
-const server					= Server();
-const PluginManager				= server.getPluginManager();
-const templatingEnginePlugin	= PluginManager.getPlugin( server.er_templating_engine );
-const cacheServerPlugin			= PluginManager.getPlugin( server.er_cache_server );
-const multipartBodyParserPlugin	= PluginManager.getPlugin( server.er_body_parser_multipart );
-const loggerPlugin				= PluginManager.getPlugin( server.er_logger );
+const app						= Server();
+const PluginManager				= app.getPluginManager();
+const templatingEnginePlugin	= PluginManager.getPlugin( app.er_templating_engine );
+const cacheServerPlugin			= PluginManager.getPlugin( app.er_cache_server );
+const multipartBodyParserPlugin	= PluginManager.getPlugin( app.er_body_parser_multipart );
+const loggerPlugin				= PluginManager.getPlugin( app.er_logger );
 
 const dataServer				= cacheServerPlugin.getServer();
 process.cachingServer			= dataServer;
 
-dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route : '\\' }, -1 );
+dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route : '/' }, -1 );
 
 templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
 multipartBodyParserPlugin.setOptions( { tempDir : path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );

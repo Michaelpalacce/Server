@@ -1,16 +1,15 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const fs			= require( 'fs' );
-const util			= require( 'util' );
-const path			= require( 'path' );
+const { Server }		= require( 'event_request' );
+const fs				= require( 'fs' );
+const { promisify }		= require( 'util' );
+const path				= require( 'path' );
+const rename			= promisify( fs.rename );
 
-const rename		= util.promisify( fs.rename );
-
-const router				= Server().Router();
-const AJAX_HEADER			= 'x-requested-with';
-const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
+const router			= Server().Router();
+const AJAX_HEADER		= 'x-requested-with';
+const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
 
 const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
 
@@ -76,7 +75,7 @@ router.post( '/create/folder', ( event ) => {
  * @return	void
  */
 router.post( '/upload', ( event ) => {
-		let result	= event.validationHandler.validate( event.body, { directory : 'filled||string', files : 'filled' } );
+		let result	= event.validationHandler.validate( event.body, { directory : 'filled||string', $files : 'filled' } );
 
 		if ( ! ! result.hasValidationFailed() )
 		{
@@ -85,8 +84,8 @@ router.post( '/upload', ( event ) => {
 		}
 		result			= result.getValidationResult();
 
-		let directory	= decodeURIComponent( result.directory );
-		let files		= result.files;
+		const directory	= decodeURIComponent( result.directory );
+		const files		= result.$files;
 
 		const promises	= [];
 
@@ -104,16 +103,30 @@ router.post( '/upload', ( event ) => {
 				{
 					fs.mkdirSync( fileStats.dir, { recursive: true } );
 				}
+				event.clearTimeout();
 
-				rename( oldPath, newPath ).then( resolve ).catch( reject );
+				rename( oldPath, newPath ).then( resolve ).catch( ( error )=>{
+					// Attempt to stream file to new location in case of virtualization ( may fail )
+					if ( typeof error !== 'undefined' && typeof error.code !== 'undefined' && error.code === 'EXDEV' )
+					{
+						const readableStream	= fs.createReadStream( oldPath );
+						readableStream.pipe( fs.createWriteStream( newPath ) );
+
+						readableStream.on( 'end', resolve );
+						readableStream.on( 'error', reject );
+
+						return;
+					}
+
+					reject( error );
+				} );
 			} ).catch( event.next ) );
 		});
 
 		Promise.all( promises ).then( ()=>{
 			if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
 			{
-				event.send( ['ok'] );
-				return;
+				return event.send( ['ok'] );
 			}
 
 			event.redirect( '/browse?dir='+  encodeURIComponent( directory ) );

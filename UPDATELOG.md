@@ -1,3 +1,12 @@
+7.2.0
+- Works with the newest version of the EventRequest
+- Major Stability improvements
+- Now works On Linux
+- Works On Virtual Machines too
+
+7.1.0
+- Works with the newest version of the EventRequest
+
 7.0.3
 - Works with latest event_request version
 

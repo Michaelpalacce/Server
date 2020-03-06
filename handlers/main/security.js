@@ -7,24 +7,20 @@ const path			= require( './path' );
 const router		= Server().Router();
 
 // Initialize the session
-router.add({
-	handler	: ( event )=>{
-		event.initSession( event.next );
-	}
+router.add( async ( event )=>{
+	event.initSession( event.next ).catch( event.next );
 });
 
-router.add({
-	handler	: ( event )=>{
-		if (
-			event.path !== '/login'
-			&& ( ! event.session.has( 'authenticated' ) || event.session.get( 'authenticated' ) === false )
-		) {
-			event.redirect( '/login' );
-			return;
-		}
-
-		event.next();
+router.add(( event )=>{
+	if (
+		event.path !== '/login'
+		&& ( ! event.session.has( 'authenticated' ) || event.session.get( 'authenticated' ) === false )
+	) {
+		event.redirect( '/login' );
+		return;
 	}
+
+	event.next();
 });
 
 router.get( '/login', ( event )=>{
@@ -58,14 +54,7 @@ router.post( '/login', async ( event )=>{
 		event.session.add( 'authenticated', true );
 		event.session.add( 'route', route );
 
-		if ( ! event.session.saveSession() )
-		{
-			event.render( '/login' );
-		}
-		else
-		{
-			event.redirect( '/' );
-		}
+		event.redirect( '/' );
 	}
 	else
 	{

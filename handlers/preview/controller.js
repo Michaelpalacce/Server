@@ -16,7 +16,7 @@ let router			= Server().Router();
  * @return	void
  */
 router.get( '/preview', ( event ) => {
-		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
+		const result		= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
 
 		const file			= ! result.hasValidationFailed()
 							? result.getValidationResult().file
@@ -26,12 +26,10 @@ router.get( '/preview', ( event ) => {
 
 		if ( ! file || ! fs.existsSync( file ) || fileStream === null )
 		{
-			event.sendError( 'File does not exist', 400 );
+			return event.sendError( 'File does not exist', 400 );
 		}
-		else
-		{
-			event.render( 'preview', { type: fileStream.getType(), src: '/data?file=' + encodeURIComponent( file ) }, event.next );
-		}
+
+		event.render( 'preview', { type: fileStream.getType(), src: '/data?file=' + encodeURIComponent( file ) }, event.next );
 	}
 );
 
@@ -52,12 +50,10 @@ router.get( '/data', ( event ) =>{
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
-			event.next( 'File does not exist' );
+			return event.next( 'File does not exist' );
 		}
-		else
-		{
-			event.getFileStream( file ).pipe( event.response );
-		}
+
+		event.getFileStream( file ).pipe( event.response );
 	}
 );
 

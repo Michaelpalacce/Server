@@ -1,6 +1,6 @@
 {
   "name": "storage",
-  "version": "7.0.4",
+  "version": "7.2.0",
   "description": "A simple storage solution app",
   "main": "index.js",
   "directories": {},
@@ -22,6 +22,6 @@
   "homepage": "https://github.com/Michaelpalacce/storage#readme",
   "dependencies": {
     "ejs": "^2.7.4",
-    "event_request": "^12.4.1"
+    "event_request": "latest"
   }
 }
