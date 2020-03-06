@@ -18,7 +18,7 @@ app.apply( app.er_static_resources, { paths : [process.env.STATIC_PATH, 'favicon
 app.apply( app.er_body_parser_form );
 app.apply( app.er_body_parser_json );
 app.apply( app.er_body_parser_multipart );
-app.apply( app.er_timeout, { timeout : process.env.REUQEST_TIMEOUT } );
+app.apply( app.er_timeout, { timeout : process.env.REQUEST_TIMEOUT } );
 app.apply( app.er_rate_limits );
 app.apply( app.er_logger );
 app.apply( app.er_cache_server );
@@ -27,7 +27,6 @@ app.apply( app.er_file_stream );
 app.apply( app.er_templating_engine );
 
 app.apply( app.er_session );
-
 
 // Handlers
 app.add( handlers );

@@ -46,7 +46,7 @@ const loggerPlugin				= PluginManager.getPlugin( app.er_logger );
 const dataServer				= cacheServerPlugin.getServer();
 process.cachingServer			= dataServer;
 
-dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route : '\\' }, -1 );
+dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route : '/' }, -1 );
 
 templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
 multipartBodyParserPlugin.setOptions( { tempDir : path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );

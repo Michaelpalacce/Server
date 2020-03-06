@@ -29,7 +29,7 @@ myDropzone.on( 'addedfile', () => { canBrowse = false; } );
 myDropzone.on( 'queuecomplete', () => { canBrowse = true; } );
 
 myDropzone.on("complete", function(file) {
-	const encodedURI	= currentDir + encodeURIComponent( '\\' + file.name );
+	const encodedURI	= currentDir + encodeURIComponent( '/' + file.name );
 
 	fetchDataForFileAndAddItem( encodedURI );
 
@@ -278,8 +278,8 @@ function addAddFolderButton()
 		}
 
 		const folderName		= userFolder;
-		const encodedFolderName	= encodeURIComponent( '\\' + userFolder );
-		const encodedUri		= decodeURIComponent( currentDir ) === '\\' ? encodedFolderName : currentDir + encodedFolderName;
+		const encodedFolderName	= encodeURIComponent( '/' + userFolder );
+		const encodedUri		= decodeURIComponent( currentDir ) === '/' ? encodedFolderName : currentDir + encodedFolderName;
 
 		$.ajax({
 			url		: '/create/folder',

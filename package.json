@@ -1,6 +1,6 @@
 {
   "name": "storage",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "description": "A simple storage solution app",
   "main": "index.js",
   "directories": {},

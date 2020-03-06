@@ -63,13 +63,13 @@ class PathHelper
 	async getItems( event, dir, position, callback )
 	{
 		const contents	= await fs.promises.opendir( dir, { bufferSize: PAGE_SIZE } );
-		let hasMore		= false;
+
 		let items		= {
 			directories	: [],
 			files		: []
 		};
-
-		let counter	= 0;
+		let hasMore		= false;
+		let counter		= 0;
 
 		for await ( const dirent of contents )
 		{
@@ -111,7 +111,7 @@ class PathHelper
 		if ( position === 0 )
 		{
 			// Add the go back folder
-			let backPath	= path.parse( dir );
+			const backPath	= path.parse( dir );
 			let stats		= null;
 			try
 			{
@@ -144,7 +144,8 @@ class PathHelper
 	static formatItem( name, stats, goBack, event )
 	{
 		const itemName			= goBack ? name.dir : name.base;
-		const encodedURI		= encodeURIComponent( goBack ? name.dir : path.join( name.dir, name.base ) );
+		const uriToEncode		= ( goBack ? name.dir : path.join( name.dir, name.base ) ).replace( '\\', '/' );
+		const encodedURI		= encodeURIComponent( uriToEncode );
 		const fileStreamer		= PathHelper.getFileStreamerForFile( event, itemName );
 		const previewAvailable	= fileStreamer !== null;
 		const size				= stats.size;

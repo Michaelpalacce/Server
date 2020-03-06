@@ -4,6 +4,9 @@ const IpLookup		= require( '../../main/ip_address_lookup' );
 const PathHelper	= require( '../../main/path' );
 const fs			= require( 'fs' );
 const path			= require( 'path' );
+const { promisify }	= require( 'util' );
+
+const stat			= promisify( fs.stat );
 
 const BrowseModel	= {};
 
@@ -64,44 +67,38 @@ BrowseModel.getFilesAction			= function( eventRequest ) {
 	const dir			= getDirFromRoute( eventRequest );
 	const position		= getPositionFromRoute( eventRequest );
 	const pathHelper	= new PathHelper();
+	const getItems		= promisify( pathHelper.getItems );
 
-	pathHelper.getItems( eventRequest, dir, position, ( err, data ) => {
-		if ( ! err && data )
-		{
-			const { items, position, hasMore }	= data;
+	getItems( eventRequest, dir, position ).then(( data ) => {
+		const { items, position, hasMore }	= data;
 
-			eventRequest.send( { items, position, dir, hasMore, workingDir: dir } );
-		}
-		else
-		{
-			eventRequest.redirect( eventRequest.headers.referer );
-		}
+		eventRequest.send( { items, position, dir, hasMore, workingDir: dir } );
+	}).catch(()=>{
+		eventRequest.redirect( eventRequest.headers.referer );
 	});
 };
 
 /**
  * @brief	Gets info about the given file
  *
- * @param	EventRequest eventRequest
+ * @param	EventRequest event
  *
  * @return	void
  */
-BrowseModel.getFilesData	= function( eventRequest ){
-	const result	= eventRequest.validationHandler.validate( eventRequest.queryString, { file : 'filled||string' } );
+BrowseModel.getFilesData	= function( event ){
+	const result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
 
 	if ( result.hasValidationFailed() )
 	{
-		eventRequest.send( false );
-		return;
+		return event.send( false );
 	}
 
 	const fileName	= result.getValidationResult().file;
-	fs.stat( fileName, ( err, stats )=>{
-		if ( err )
-			eventRequest.sendError( 'File does not exist', 400 );
-
-		eventRequest.send( PathHelper.formatItem( path.parse( fileName ), stats, false, eventRequest ) );
-	} );
+	stat( fileName ).then(( stats )=>{
+		event.send( PathHelper.formatItem( path.parse( fileName ), stats, false, event ) );
+	}).catch(()=>{
+		event.sendError( 'File does not exist', 400 );
+	});
 };
 
 module.exports	= BrowseModel;
