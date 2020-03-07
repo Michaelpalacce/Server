@@ -1,6 +1,5 @@
 'use strict';
 
-const ejs									= require( 'ejs' );
 const path									= require( 'path' );
 const { Server, Logging }					= require( 'event_request' );
 const PROJECT_ROOT							= path.parse( require.main.filename ).dir;
@@ -36,20 +35,15 @@ const logger	= Loggur.createLogger({
 	transports	: transports
 });
 
-const app						= Server();
-const PluginManager				= app.getPluginManager();
-const templatingEnginePlugin	= PluginManager.getPlugin( app.er_templating_engine );
-const cacheServerPlugin			= PluginManager.getPlugin( app.er_cache_server );
-const multipartBodyParserPlugin	= PluginManager.getPlugin( app.er_body_parser_multipart );
-const loggerPlugin				= PluginManager.getPlugin( app.er_logger );
+const app				= Server();
+const PluginManager		= app.getPluginManager();
+const cacheServerPlugin	= PluginManager.getPlugin( app.er_cache_server );
+const loggerPlugin		= PluginManager.getPlugin( app.er_logger );
 
-const dataServer				= cacheServerPlugin.getServer();
-process.cachingServer			= dataServer;
+const dataServer		= cacheServerPlugin.getServer();
+process.cachingServer	= dataServer;
 
 dataServer.set( process.env.ADMIN_USERNAME, { password : process.env.ADMIN_PASSWORD, route : '/' }, -1 );
-
-templatingEnginePlugin.setOptions( { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
-multipartBodyParserPlugin.setOptions( { tempDir : path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );
 
 loggerPlugin.setOptions({ logger });
 Loggur.addLogger( logger );

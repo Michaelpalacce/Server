@@ -1,3 +1,10 @@
+8.0.0
+- Now works with a different ENV_VARIABLE for port ( APP_PORT )
+- Changed the name of the project to server-emulator
+- Fixed the ip's not showing the port
+- Added ability to disable the security
+- 
+
 7.2.0
 - Works with the newest version of the EventRequest
 - Major Stability improvements

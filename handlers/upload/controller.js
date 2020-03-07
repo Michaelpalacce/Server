@@ -24,16 +24,15 @@ const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
  * @return	void
  */
 router.post( '/create/folder', ( event ) => {
-		let result	= event.validationHandler.validate( event.body, { folder : 'filled||string' } );
+	const result	= event.validationHandler.validate( event.body, { folder : 'filled||string' } );
 
 		if ( ! ! result.hasValidationFailed() )
 		{
 			event.next( 'Invalid folder given', 400 );
 			return;
 		}
-		result			= result.getValidationResult();
 
-		const folder	= decodeURIComponent( result.folder );
+		const folder	= decodeURIComponent( result.getValidationResult().folder );
 
 		for ( const charIndex in FORBIDDEN_CHARACTERS )
 		{
@@ -106,7 +105,7 @@ router.post( '/upload', ( event ) => {
 				event.clearTimeout();
 
 				rename( oldPath, newPath ).then( resolve ).catch( ( error )=>{
-					// Attempt to stream file to new location in case of virtualization ( may fail )
+					// Attempt to stream file to new location in case of virtualization ( may fail and used as last resort )
 					if ( typeof error !== 'undefined' && typeof error.code !== 'undefined' && error.code === 'EXDEV' )
 					{
 						const readableStream	= fs.createReadStream( oldPath );

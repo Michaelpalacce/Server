@@ -5,8 +5,8 @@ $node = <<-SCRIPT
 SCRIPT
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/centos-7"
-  config.vm.synced_folder ".", "/vagrant"
-  config.vm.provision "shell", inline: $node
-  config.vm.network "private_network", ip: "10.0.0.200"
+	config.vm.box = "bento/centos-7"
+	config.vm.synced_folder ".", "/vagrant"
+	config.vm.provision "shell", inline: $node
+	config.vm.network "private_network", ip: "10.0.0.200"
 end
