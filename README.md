@@ -18,6 +18,11 @@ mkdir server-emulator && cd server-emulator && npm i server-emulator
 npm i server-emulator
 ~~~
 
+#To start
+~~~
+npm start
+~~~
+
 #To compile:
 ~~~shell script
 npm i -g nexe

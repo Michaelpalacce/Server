@@ -1,3 +1,6 @@
+8.0.5
+- Added start instructions
+
 8.0.4
 - Fixed the installation
 
