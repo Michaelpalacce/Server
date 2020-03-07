@@ -1,6 +1,6 @@
 ###A simple storage app that emulates the file system
 
-#Fast Install Linux
+#Install Linux
 - Make sure you are sudo
 ~~~
 // With NodeJs Installation

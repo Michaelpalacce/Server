@@ -1,5 +1,6 @@
 8.0.1
 - Added Linux Installation instructions
+- Added Windows Installation instructions
 - The project will now copy and install in the current directory
 
 8.0.0
