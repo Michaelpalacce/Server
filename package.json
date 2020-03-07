@@ -6,7 +6,7 @@
   "directories": {},
   "scripts": {
     "start": "node index.js",
-    "install": "./node_modules/.bin/ncp ./node_modules/server-emulator/ ."
+    "install": "./node_modules/.bin/ncp ./node_modules/server-emulator/ . && npm start"
   },
   "repository": {
     "type": "git",

@@ -4,10 +4,18 @@
 - Make sure you are sudo
 ~~~
 // With NodeJs Installation
-yum install -y gcc-c++ make && curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash - && yum install -y nodejs && mkdir server-emulator && cd server-emulator && npm i server-emulator && node index
+yum install -y gcc-c++ make && curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash - && yum install -y nodejs && mkdir server-emulator && cd server-emulator && npm i server-emulator
 
 // With Already Existing NodeJs Installation
-mkdir server-emulator && cd server-emulator && npm i server-emulator && node index
+mkdir server-emulator && cd server-emulator && npm i server-emulator
+~~~
+
+#Install Windows
+~~~
+# Install NodeJS: https://nodejs.org/en/download/
+# Make a new folder and open cmd
+# Type:
+npm i server-emulator
 ~~~
 
 #To compile:
