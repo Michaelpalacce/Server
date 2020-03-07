@@ -1,3 +1,6 @@
+8.0.1
+- Added Linux Installation instructions
+
 8.0.0
 - Now works with a different ENV_VARIABLE for port ( APP_PORT )
 - Changed the name of the project to server-emulator
