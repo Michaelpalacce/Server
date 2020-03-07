@@ -8,6 +8,9 @@ npm i -g nexe
 nexe --no-bundle
 ~~~
 
+#Github
+https://github.com/Michaelpalacce/Server/releases
+
 #Supported NodeJS
 - \>= 12.x 
 
