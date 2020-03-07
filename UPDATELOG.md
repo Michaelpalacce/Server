@@ -1,5 +1,6 @@
 8.0.1
 - Added Linux Installation instructions
+- The project will now copy and install in the current directory
 
 8.0.0
 - Now works with a different ENV_VARIABLE for port ( APP_PORT )
