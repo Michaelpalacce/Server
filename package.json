@@ -1,12 +1,12 @@
 {
   "name": "server-emulator",
-  "version": "8.0.1",
+  "version": "8.0.4",
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
   "directories": {},
   "scripts": {
     "start": "node index.js",
-    "install": "./node_modules/.bin/ncp ./node_modules/server-emulator/ . && npm start"
+    "postinstall": "./node_modules/.bin/ncp . ./../../."
   },
   "repository": {
     "type": "git",

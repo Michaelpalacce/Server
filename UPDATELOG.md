@@ -1,3 +1,6 @@
+8.0.4
+- Fixed the installation
+
 8.0.1
 - Added Linux Installation instructions
 - Added Windows Installation instructions
