@@ -60,74 +60,76 @@ class PathHelper
 	 *
 	 * @return	void
 	 */
-	async getItems( event, dir, position, callback )
+	static async getItems( event, dir, position )
 	{
-		const contents	= await fs.promises.opendir( dir, { bufferSize: PAGE_SIZE } ).catch( event.next );
-		let items		= {
-			directories	: [],
-			files		: []
-		};
-		let hasMore		= false;
-		let counter		= 0;
+		return new Promise( async ( resolve, reject )=>{
+			const contents	= await fs.promises.opendir( dir, { bufferSize: PAGE_SIZE } ).catch( event.next );
+			let items		= {
+				directories	: [],
+				files		: []
+			};
+			let hasMore		= false;
+			let counter		= 0;
 
-		for await ( const dirent of contents )
-		{
-			let name	= path.join( dir, dirent.name );
-			let stats	= null;
-			try
+			for await ( const dirent of contents )
 			{
-				stats	= fs.statSync( name );
-			}
-			catch ( e )
-			{
-				continue;
-			}
+				let name	= path.join( dir, dirent.name );
+				let stats	= null;
+				try
+				{
+					stats	= fs.statSync( name );
+				}
+				catch ( e )
+				{
+					continue;
+				}
 
-			if ( counter < position )
-			{
+				if ( counter < position )
+				{
+					++counter;
+
+					continue;
+				}
+
+				if ( position + PAGE_SIZE < counter )
+				{
+					hasMore	= true;
+					break;
+				}
+
+				name		= path.parse( name );
+
+				let item	= PathHelper.formatItem( name, stats, false, event );
+
+				item.isDir	? items.directories.push( item ) : items.files.push( item );
 				++counter;
-
-				continue;
 			}
 
-			if ( position + PAGE_SIZE < counter )
+			items			= items.directories.concat( items.files );
+			const itemsRead	= parseInt( items.length );
+
+			if ( position === 0 )
 			{
-				hasMore	= true;
-				break;
+				// Add the go back folder
+				const backPath	= path.parse( dir );
+				let stats		= null;
+				try
+				{
+					stats	= fs.statSync( dir );
+				}
+				catch ( e )
+				{
+					reject( e );
+					return;
+				}
+
+				items	= [].concat( [PathHelper.formatItem( backPath, stats, true, event )], items )
 			}
 
-			name		= path.parse( name );
+			position	+= itemsRead;
 
-			let item	= PathHelper.formatItem( name, stats, false, event );
-
-			item.isDir	? items.directories.push( item ) : items.files.push( item );
-			++counter;
-		}
-
-		items			= items.directories.concat( items.files );
-		const itemsRead	= parseInt( items.length );
-
-		if ( position === 0 )
-		{
-			// Add the go back folder
-			const backPath	= path.parse( dir );
-			let stats		= null;
-			try
-			{
-				stats	= fs.statSync( dir );
-			}
-			catch ( e )
-			{
-				callback( true );
-				return;
-			}
-
-			items	= [].concat( [PathHelper.formatItem( backPath, stats, true, event )], items )
-		}
-
-		position	+= itemsRead;
-
-		callback( false, { items, position, hasMore } );
+			resolve( { items, position, hasMore } );
+		})
 	};
 
 	/**

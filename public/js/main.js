@@ -334,10 +334,10 @@ function browse( directory, loadData = false )
 				$( '.item' ).remove();
 			}
 
-			data											= JSON.parse( data );
-			const { items, position, hasMore, workingDir }	= data;
+			data									= JSON.parse( data );
+			const { items, position, hasMore, dir }	= data;
 
-			if ( workingDir !== decodeURIComponent( currentDir ) )
+			if ( dir !== decodeURIComponent( currentDir ) )
 			{
 				return;
 			}
@@ -357,7 +357,7 @@ function browse( directory, loadData = false )
 			if ( hasMore )
 			{
 				setTimeout( ()=>{
-					if ( workingDir !== decodeURIComponent( currentDir ) )
+					if ( dir !== decodeURIComponent( currentDir ) )
 					{
 						return;
 					}
