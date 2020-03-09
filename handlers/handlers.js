@@ -5,6 +5,7 @@ const { Server }		= require( 'event_request' );
 
 const securityHandler	= require( './main/security' );
 
+const ipHandler			= require( './ip/controller/controller' );
 const moveHandler		= require( './move/controller/controller' );
 const browseHandler		= require( './browse/controller/browse' );
 const downloadHandler	= require( './download/controller' );
@@ -16,6 +17,7 @@ const router			= Server().Router();
 
 router.add( securityHandler );
 
+router.add( ipHandler );
 router.add( moveHandler );
 router.add( browseHandler );
 router.add( downloadHandler );

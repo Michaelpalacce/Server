@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/public/css/top-navbar.css">
+	<link rel="stylesheet" href="/public/css/style.css">
+
+	<meta charset="UTF-8">
+	<title><%= externalIP %></title>
+</head>
+<body>
+	<%- include("components/nav-bar", { active: "ip" }) %>
+
+	<div style="text-align: center" class="container pt-5">
+		<h3>Public IP:</h3>
+		<span>
+			 <b> <%= externalIP %> </b>
+		</span>
+
+		<h3>Local Interfaces:</h3>
+		<span>
+				<b>
+					<% for ( interface in ipInterfaces ) { %>
+						<div style="display: inline-block; margin-right: 25px;">
+							<div>Name: <%= interface %> </div>
+							<span>IPs: </span>
+
+							<% for ( ip of ipInterfaces[interface] ) { %>
+								<div style="margin-left: 5px;"><%= ip %></div>
+							<% } %>
+						</div>
+					<% } %>
+					<br>
+					<br>
+				</b>
+			</span>
+	</div>
+</body>
+</html>

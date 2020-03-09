@@ -334,7 +334,7 @@ function browse( directory, loadData = false )
 				$( '.item' ).remove();
 			}
 
-			data									= JSON.parse( data );
+			data	= JSON.parse( data );
 			const { items, position, hasMore, dir }	= data;
 
 			if ( dir !== decodeURIComponent( currentDir ) )
@@ -342,7 +342,7 @@ function browse( directory, loadData = false )
 				return;
 			}
 
-			currentPosition									= position;
+			currentPosition	= position;
 
 			for ( const index in items )
 			{

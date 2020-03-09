@@ -7,7 +7,6 @@ const util			= require( 'util' );
 const path			= require('path');
 
 const unlink		= util.promisify( fs.unlink );
-
 const router		= Server().Router();
 
 /**
@@ -17,7 +16,7 @@ const router		= Server().Router();
  *
  * @return	void
  */
-const deleteFolderRecursive = function( dir )
+const deleteFolderRecursive	= function( dir )
 {
 	if ( fs.existsSync( dir ) )
 	{
@@ -51,14 +50,14 @@ router.delete( '/delete', ( event ) => {
 
 		if ( result.hasValidationFailed() )
 		{
-			event.next( 'Invalid item provided', 400 )
+			return event.next( 'Invalid item provided', 400 );
 		}
 
 		let { item }	= result.getValidationResult();
 
 		if ( ! fs.existsSync( item ) )
 		{
-			event.next( 'Item does not exist', 400 );
+			return event.next( 'Item does not exist', 400 );
 		}
 		else
 		{
@@ -66,8 +65,7 @@ router.delete( '/delete', ( event ) => {
 			{
 				if ( item === '/' )
 				{
-					event.next( 'CANNOT DELETE ROOT!', 400 );
-					return;
+					return event.next( 'CANNOT DELETE ROOT!', 400 );
 				}
 
 				deleteFolderRecursive( item );

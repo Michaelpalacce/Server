@@ -8,7 +8,7 @@ class BrowseInput extends Input
 	/**
 	 * @brief	Returns the position of data load
 	 *
-	 * @returns	Number
+	 * @returns	mixed
 	 */
 	getPosition()
 	{
@@ -18,7 +18,7 @@ class BrowseInput extends Input
 	/**
 	 * @brief	Returns the directory
 	 *
-	 * @returns	String
+	 * @returns	mixed
 	 */
 	getDir()
 	{
@@ -47,8 +47,8 @@ class BrowseInput extends Input
 
 		const { dir, position }	= result.getValidationResult();
 
-		this.model.dir			= dir.includes( route ) ? dir : route;
-		this.model.position		= parseInt( position );
+		this.model[BrowseInput.DIR_KEY]			= dir.includes( route ) ? dir : route;
+		this.model[BrowseInput.POSITION_KEY]	= parseInt( position );
 
 		return true;
 	}

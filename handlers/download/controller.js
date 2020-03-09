@@ -14,7 +14,7 @@ const router		= Server().Router();
  *
  * @return	void
  */
-let downloadFailedCallback	= ( event ) => {
+const downloadFailedCallback	= ( event ) => {
 	event.setHeader( 'Content-disposition', 'attachment; filename=error.txt' );
 	event.setHeader( 'Content-type', '.txt' );
 	event.next( 'The file specified does not exist' );
@@ -41,16 +41,16 @@ router.get( '/download', ( event ) => {
 		}
 		else
 		{
-			let fileStats	= path.parse( file );
+			const fileStats	= path.parse( file );
 			event.response.setHeader( 'Content-disposition', 'attachment; filename=' + fileStats.base );
 			event.response.setHeader( 'Content-type', fileStats.ext );
 			event.response.setHeader( 'Content-Length', fs.statSync( file ).size );
-			event.clearTimeout();
+
 			try
 			{
-				let fStream	= fs.createReadStream( file );
+				event.clearTimeout();
 
-				fStream.pipe( event.response );
+				fs.createReadStream( file ).pipe( event.response );
 			}
 			catch ( e )
 			{

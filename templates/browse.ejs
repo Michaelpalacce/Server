@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Index</title>
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/public/css/dropzone.css">
 	<link rel="stylesheet" href="/public/css/style.css">
 	<link rel="stylesheet" href="/public/css/download.css">
 	<link rel="stylesheet" href="/public/css/delete.css">
 	<link rel="stylesheet" href="/public/css/top-navbar.css">
+
+	<meta charset="UTF-8">
+	<title>Server Emulator</title>
 </head>
 <body>
+	<%- include("components/nav-bar", { active: "browse" }) %>
+
 	<ul class="contextmenu" id="contextmenu">
 		<li>
 			<a href="#" id="context-download" >
@@ -84,11 +87,6 @@
 		</div>
 	</div>
 
-	<div class="topnav">
-		<a class="active" href="/">Home</a>
-		<a href="/ip">IP</a>
-	</div>
-
 	<div class="container pt-5" >
 		<form action="/upload" class="dropzone mb-5">
 			<input type="hidden" name="directory" id="upload-file" value="<%= dir %>">
@@ -106,32 +104,6 @@
 			<label for="file">Choose A Folder</label>
 			<input type="hidden" name="directory" id="upload-dir" value="<%= dir %>" >
 		</form>
-
-		<hr>
-		<div style="text-align: center" class="container pt-5">
-			<h3>Public IP:</h3>
-			<span>
-				<b> <%= externalIP %> </b>
-			</span>
-
-			<h3>Local Interfaces:</h3>
-			<span>
-			<b>
-				<% for ( interface in ipInterfaces ) { %>
-					<div style="display: inline-block; margin-right: 25px;">
-						<div>Name: <%= interface %> </div>
-						<span>IPs: </span>
-
-						<% for ( ip of ipInterfaces[interface] ) { %>
-							<div style="margin-left: 5px;"><%= ip %></div>
-						<% } %>
-					</div>
-				<% } %>
-				<br>
-				<br>
-			</b>
-		</span>
-		</div>
 	</div>
 
 </body>

@@ -26,8 +26,16 @@ app.apply( app.er_logger );
 app.apply( app.er_cache_server );
 app.apply( app.er_response_cache );
 app.apply( app.er_file_stream );
-app.apply( app.er_templating_engine, { templateDir : path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR ), engine : ejs } );
+app.add(( event )=>{
+	event.render	= ( templateName, variables )=>{
+		return ejs.renderFile( path.join( process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables )
+			.then( data =>{ event.send( data, 200, true ); } );
+	};
 
+	event.on( 'cleanUp', ()=>{ event.render	= undefined; });
+
+	event.next();
+});
 app.apply( app.er_session );
 
 // Handlers

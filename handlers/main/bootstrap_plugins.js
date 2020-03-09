@@ -1,8 +1,6 @@
 'use strict';
 
-const path									= require( 'path' );
 const { Server, Logging }					= require( 'event_request' );
-const PROJECT_ROOT							= path.parse( require.main.filename ).dir;
 const { Console, File, Loggur, LOG_LEVELS }	= Logging;
 
 const transports	= [

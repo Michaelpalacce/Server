@@ -1,3 +1,8 @@
+8.1.0
+- Added a nav bar
+- Some improvements to the backend
+- Moved out of the templating engine plugin cause of the way ejs works
+
 8.0.5
 - Added start instructions
 

@@ -4,8 +4,8 @@
 const { Server }	= require( 'event_request' );
 const router		= Server().Router();
 const PathHelper	= require( '../../main/path' );
-const BrowseInput	= require( '../input/input' );
-const IpLookup		= require( '../../main/ip_address_lookup' );
+const BrowseInput	= require( '../input/browse_input' );
+const FileDataInput	= require( '../input/file_data_input' );
 const { promisify }	= require( 'util' );
 const fs			= require( 'fs' );
 const path			= require( 'path' );
@@ -26,10 +26,7 @@ router.get( '/', async ( event )=>{
 	if ( ! input.isValid() )
 		throw new Error( 'Invalid params' );
 
-	const ipInterfaces	= IpLookup.getLocalIpV4s();
-	const externalIP	= await IpLookup.getExternalIpv4().catch( event.next );
-
-	event.render( 'browse', { dir: encodeURIComponent( input.getDir() ), ipInterfaces, externalIP } );
+	event.render( 'browse', { dir: encodeURIComponent( input.getDir() ) } );
 } );
 
 /**
@@ -46,10 +43,7 @@ router.get( '/browse', async ( event )=>{
 	if ( ! input.isValid() )
 		throw new Error( 'Invalid params' );
 
-	const ipInterfaces	= IpLookup.getLocalIpV4s();
-	const externalIP	= await IpLookup.getExternalIpv4().catch( event.next );
-
-	event.render( 'browse', { dir: encodeURIComponent( input.getDir() ), ipInterfaces, externalIP } );
+	event.render( 'browse', { dir: encodeURIComponent( input.getDir() ) } );
 } );
 
 /**
@@ -87,17 +81,17 @@ router.get( '/browse/getFiles', ( event )=>{
  * @return	void
  */
 router.get( '/file/getFileData', ( event )=>{
-	const result	= event.validationHandler.validate( event.queryString, { file : 'filled||string' } );
+	const input	= new FileDataInput( event );
 
-	if ( result.hasValidationFailed() )
+	if ( ! input.isValid() )
 	{
 		return event.send( false );
 	}
 
-	const fileName	= result.getValidationResult().file;
+	const file	= input.getFile();
 
-	stat( fileName ).then(( stats )=>{
-		event.send( PathHelper.formatItem( path.parse( fileName ), stats, false, event ) );
+	stat( file ).then(( stats )=>{
+		event.send( PathHelper.formatItem( path.parse( file ), stats, false, event ) );
 	}).catch(( e )=>{
 		event.sendError( 'File does not exist', 400 );
 	});
