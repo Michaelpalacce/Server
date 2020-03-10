@@ -1,3 +1,9 @@
+8.1.2
+- Updates to the front end JS to be in classes and better structured 
+
+8.1.1
+- Download for files containing a comma fix
+
 8.1.0
 - Added a nav bar
 - Some improvements to the backend

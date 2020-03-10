@@ -9,8 +9,9 @@ const ACTION_CUT	= 2;
  */
 class ContextMenu
 {
-	constructor()
+	constructor( view )
 	{
+		this.view				= view;
 		this.document			= $( document );
 		this.element			= $( '#contextmenu' );
 		this.deleteElement		= this.element.find( '#context-delete' );
@@ -135,13 +136,13 @@ class ContextMenu
 						url		: '/rename',
 						method	:'POST',
 						data	: {
-							newPath: currentDir + encodeURIComponent( '/' + newName ),
+							newPath: this.view.currentDir + encodeURIComponent( '/' + newName ),
 							oldPath: this.getElementPath( target )
 						},
 						success	: ( data )=>
 						{
 							target.remove();
-							fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
+							this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
 							this.flushActionElementData();
 						}
 					});
@@ -184,12 +185,12 @@ class ContextMenu
 						url,
 						method,
 						data	: {
-							newPath: currentDir,
+							newPath: this.view.currentDir,
 							oldPath: this.actionElementPath
 						},
 						success	: ( data )=>
 						{
-							fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
+							this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
 						},
 						complete	: () =>
 						{
@@ -311,5 +312,3 @@ class ContextMenu
 		return { left: posLeft + 'px', top: posTop + 'px' };
 	}
 }
-
-new ContextMenu();

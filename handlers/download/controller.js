@@ -15,9 +15,10 @@ const router		= Server().Router();
  * @return	void
  */
 const downloadFailedCallback	= ( event ) => {
-	event.setHeader( 'Content-disposition', 'attachment; filename=error.txt' );
-	event.setHeader( 'Content-type', '.txt' );
-	event.next( 'The file specified does not exist' );
+	event.setHeader( 'Content-disposition', 'attachment; filename="error.log"' );
+	event.setHeader( 'Content-type', '.log' );
+
+	event.send( 'The file specified does not exist' );
 };
 
 /**
@@ -30,10 +31,9 @@ const downloadFailedCallback	= ( event ) => {
  */
 router.get( '/download', ( event ) => {
 		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
-
-		let file	= ! result.hasValidationFailed()
-					? result.getValidationResult().file
-					: false;
+		const file		= ! result.hasValidationFailed()
+			? result.getValidationResult().file
+			: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
@@ -42,15 +42,14 @@ router.get( '/download', ( event ) => {
 		else
 		{
 			const fileStats	= path.parse( file );
-			event.response.setHeader( 'Content-disposition', 'attachment; filename=' + fileStats.base );
-			event.response.setHeader( 'Content-type', fileStats.ext );
-			event.response.setHeader( 'Content-Length', fs.statSync( file ).size );
+			event.setHeader( 'content-disposition', `attachment; filename="${fileStats.base}"`);
+			event.setHeader( 'Content-type', fileStats.ext );
+			event.setHeader( 'Content-Length', fs.statSync( file ).size );
 
 			try
 			{
 				event.clearTimeout();
-
-				fs.createReadStream( file ).pipe( event.response );
+				event.send( fs.createReadStream( file ) );
 			}
 			catch ( e )
 			{
