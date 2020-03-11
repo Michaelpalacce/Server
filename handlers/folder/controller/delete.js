@@ -7,7 +7,7 @@ const util			= require( 'util' );
 const path			= require('path');
 
 const unlink		= util.promisify( fs.unlink );
-const router		= Server().Router();
+const app			= Server();
 
 /**
  * @brief	Removes a folder recursively
@@ -45,7 +45,7 @@ const deleteFolderRecursive	= function( dir )
  *
  * @return	void
  */
-router.delete( '/delete', ( event ) => {
+app.delete( '/folder', ( event ) => {
 		const result	= event.validationHandler.validate( event.queryString, { item : 'optional||string' } );
 
 		if ( result.hasValidationFailed() )
@@ -73,12 +73,8 @@ router.delete( '/delete', ( event ) => {
 			}
 			else
 			{
-				unlink( item ).then(()=>{
-					event.send( 'ok' );
-				}).catch( event.next );
+				event.sendError( 'Trying to delete a file', 400 );
 			}
 		}
 	}
 );
-
-module.exports	= router;

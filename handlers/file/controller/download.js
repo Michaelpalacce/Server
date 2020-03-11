@@ -5,7 +5,7 @@ const { Server }	= require( 'event_request' );
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 
-const router		= Server().Router();
+const app			= Server();
 
 /**
  * @brief	Callback called when downloading a file fails
@@ -22,14 +22,14 @@ const downloadFailedCallback	= ( event ) => {
 };
 
 /**
- * @brief	Adds a '/download' route with method GET
+ * @brief	Adds a '/file' route with method GET
  *
  * @details	Required Parameters: file
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
-router.get( '/download', ( event ) => {
+app.get( '/file', ( event ) => {
 		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
 		const file		= ! result.hasValidationFailed()
 			? result.getValidationResult().file
@@ -58,5 +58,3 @@ router.get( '/download', ( event ) => {
 		}
 	}
 );
-
-module.exports	= router;

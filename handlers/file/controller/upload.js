@@ -1,70 +1,19 @@
 'use strict';
 
 // Dependencies
-const { Server }		= require( 'event_request' );
-const fs				= require( 'fs' );
-const { promisify }		= require( 'util' );
-const path				= require( 'path' );
-const rename			= promisify( fs.rename );
+const { Server }			= require( 'event_request' );
+const fs					= require( 'fs' );
+const { promisify }			= require( 'util' );
+const path					= require( 'path' );
+const rename				= promisify( fs.rename );
 
-const router			= Server().Router();
-const AJAX_HEADER		= 'x-requested-with';
-const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
+const app					= Server();
+const AJAX_HEADER			= 'x-requested-with';
+const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
 
-const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
-
-/**
- * @brief	Adds a '/create/folder' route with method POST
- *
- * @details	Creates a new folder
- *
- * @details	Required Parameters: directory
- * 			Optional Parameters: NONE
- *
- * @return	void
- */
-router.post( '/create/folder', ( event ) => {
-	const result	= event.validationHandler.validate( event.body, { folder : 'filled||string' } );
-
-		if ( ! ! result.hasValidationFailed() )
-		{
-			event.next( 'Invalid folder given', 400 );
-			return;
-		}
-
-		const folder	= decodeURIComponent( result.getValidationResult().folder );
-
-		for ( const charIndex in FORBIDDEN_CHARACTERS )
-		{
-			const character	= FORBIDDEN_CHARACTERS[charIndex];
-			if ( folder.includes( character ) )
-			{
-				event.sendError( 'Folder name contains invalid characters' );
-				return;
-			}
-		}
-
-		if ( ! fs.existsSync( folder ) || folder === '/' )
-		{
-			try
-			{
-				fs.mkdirSync( folder );
-				event.send( ['ok'] );
-			}
-			catch ( e )
-			{
-				event.sendError( 'Could not create folder' );
-			}
-		}
-		else
-		{
-			event.sendError( 'Directory already exists' );
-		}
-	}
-);
 
 /**
- * @brief	Adds a '/upload' route with method POST
+ * @brief	Adds a '/file' route with method POST
  *
  * @details	Saves the file async
  *
@@ -73,7 +22,7 @@ router.post( '/create/folder', ( event ) => {
  *
  * @return	void
  */
-router.post( '/upload', ( event ) => {
+app.post( '/file', ( event ) => {
 		let result	= event.validationHandler.validate( event.body, { directory : 'filled||string', $files : 'filled' } );
 
 		if ( ! ! result.hasValidationFailed() )
@@ -125,14 +74,10 @@ router.post( '/upload', ( event ) => {
 		Promise.all( promises ).then( ()=>{
 			if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
 			{
-				return event.send( ['ok'] );
+				return event.send( ['ok'], 201 );
 			}
 
 			event.redirect( '/browse?dir='+  encodeURIComponent( directory ) );
 		}).catch( event.next );
-
 	}
 );
-
-// Export the module
-module.exports	= router;

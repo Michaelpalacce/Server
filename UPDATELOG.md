@@ -1,3 +1,6 @@
+8.2.1
+- Reworked the routes
+
 8.2.0
 - Updates to the front end JS to be in classes and better structured 
 

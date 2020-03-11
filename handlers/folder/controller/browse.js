@@ -2,15 +2,10 @@
 
 // Dependencies
 const { Server }	= require( 'event_request' );
-const router		= Server().Router();
+const app			= Server();
+
 const PathHelper	= require( '../../main/path' );
 const BrowseInput	= require( '../input/browse_input' );
-const FileDataInput	= require( '../input/file_data_input' );
-const { promisify }	= require( 'util' );
-const fs			= require( 'fs' );
-const path			= require( 'path' );
-
-const stat			= promisify( fs.stat );
 
 /**
  * @brief	Adds a '/' route with method GET
@@ -20,7 +15,7 @@ const stat			= promisify( fs.stat );
  *
  * @return	void
  */
-router.get( '/', async ( event )=>{
+app.get( '/', async ( event )=>{
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
@@ -37,7 +32,7 @@ router.get( '/', async ( event )=>{
  *
  * @return	void
  */
-router.get( '/browse', async ( event )=>{
+app.get( '/browse', async ( event )=>{
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
@@ -54,7 +49,7 @@ router.get( '/browse', async ( event )=>{
  *
  * @return	void
  */
-router.get( '/browse/getFiles', ( event )=>{
+app.get( '/browse/getFiles', ( event )=>{
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
@@ -70,31 +65,3 @@ router.get( '/browse/getFiles', ( event )=>{
 		event.redirect( event.headers.referer );
 	});
 } );
-
-/**
- * @brief	Adds a '/file/hasPreview' route with method GET
- *
- * @param	event EventRequest
- *
- * @details	Required Parameters: file
- *
- * @return	void
- */
-router.get( '/file/getFileData', ( event )=>{
-	const input	= new FileDataInput( event );
-
-	if ( ! input.isValid() )
-	{
-		return event.send( false );
-	}
-
-	const file	= input.getFile();
-
-	stat( file ).then(( stats )=>{
-		event.send( PathHelper.formatItem( path.parse( file ), stats, false, event ) );
-	}).catch(( e )=>{
-		event.sendError( 'File does not exist', 400 );
-	});
-} );
-
-module.exports	= router;

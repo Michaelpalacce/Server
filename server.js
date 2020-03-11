@@ -38,7 +38,6 @@ app.add(( event )=>{
 });
 app.apply( app.er_session );
 
-// Handlers
-app.add( require( './handlers/handlers' ) );
+require( './handlers/controllers' );
 
 module.exports	= app;

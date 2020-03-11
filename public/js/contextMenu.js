@@ -133,7 +133,7 @@ class ContextMenu
 					const newName	= prompt( 'What is the new name of the file' );
 
 					$.ajax({
-						url		: '/rename',
+						url		: '/file/rename',
 						method	:'POST',
 						data	: {
 							newPath: this.view.currentDir + encodeURIComponent( '/' + newName ),
@@ -168,11 +168,11 @@ class ContextMenu
 					switch ( this.action )
 					{
 						case ACTION_COPY:
-							url	= `/copy`;
+							url	= `/file/copy`;
 							break;
 
 						case ACTION_CUT:
-							url	= `/cut`;
+							url	= `/file/cut`;
 							break;
 
 						case ACTION_NONE:

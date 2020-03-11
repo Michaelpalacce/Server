@@ -13,7 +13,8 @@ class View
 		this.dropzone			= new Dropzone(
 			".dropzone",
 			{
-				url: "/upload",
+				url: '/file',
+				method: 'post',
 				parallelUploads: 5,
 				maxFilesize: 40000,
 				timeout:0
@@ -55,10 +56,10 @@ class View
 		});
 
 		$( document ).on( 'click', '.file-delete', ( event ) => {
-			this.deleteItem( $( event.target ) );
+			this.deleteItem( $( event.target ), View.TYPE_FILE );
 		});
 		$( document ).on( 'click', '.folder-delete', ( event ) => {
-			this.deleteItem( $( event.target ), true );
+			this.deleteItem( $( event.target ), View.TYPE_FOLDER );
 		});
 	}
 
@@ -89,12 +90,12 @@ class View
 	/**
 	 * @brief	Deletes an item
 	 *
-	 * @param	jQueryElement element
-	 * @param	Boolean showConfirmDialog
+	 * @param	element jQueryElement
+	 * @param	type Boolean
 	 *
 	 * @return	void
 	 */
-	deleteItem( element, showConfirmDialog = false )
+	deleteItem( element, type = View.TYPE_FILE )
 	{
 		element				= element.closest( '.item' );
 		const itemToDelete	= element.attr( 'data-item-encoded-uri' );
@@ -104,7 +105,7 @@ class View
 			return;
 		}
 
-		if ( showConfirmDialog )
+		if ( type === View.TYPE_FOLDER )
 		{
 			const confirmDelete	= confirm( `Are you sure you want to delete this item?` );
 
@@ -115,13 +116,12 @@ class View
 		}
 
 		$.ajax({
-			url		: `/delete?item=${itemToDelete}`,
+			url		: `/${type}?item=${itemToDelete}`,
 			method	: 'DELETE',
 			success	: function()
 			{
 				element.remove();
-			},
-			error	: this.showError.bind( this )
+			}
 		});
 	}
 
@@ -307,7 +307,7 @@ class View
 			element.find( '.folder' ).remove();
 			element.find( '.file-name' ).attr( 'title', fullName );
 			element.find( '.file-size' ).text( size );
-			element.find( '.file-download' ).attr( 'href', '/download?file=' + encodedURI );
+			element.find( '.file-download' ).attr( 'href', '/file?file=' + encodedURI );
 			if ( previewAvailable )
 			{
 				const filePreviewElement	= element.find( '.file-preview' );
@@ -317,14 +317,14 @@ class View
 					filePreviewElement.parent().remove();
 
 					filePreviewParent.append( `
-					<a href="/preview?file=${encodedURI}">
-						<img style="max-height: 250px; max-width: 250px; padding-bottom: 7px" src="/data?file=${encodedURI}" alt="${name}">
+					<a href="/file/preview?file=${encodedURI}">
+						<img style="max-height: 250px; max-width: 250px; padding-bottom: 7px" src="/file/data?file=${encodedURI}" alt="${name}">
 					<a/>
 				` );
 				}
 				else
 				{
-					filePreviewElement.addClass( 'has-preview' ).attr( 'href', '/preview?file=' + encodedURI + '&backDir=' + directory );
+					filePreviewElement.addClass( 'has-preview' ).attr( 'href', '/file/preview?file=' + encodedURI + '&backDir=' + directory );
 				}
 			}
 			else
@@ -369,7 +369,7 @@ class View
 			const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
 
 			$.ajax({
-				url		: '/create/folder',
+				url		: '/folder',
 				data	: {
 					folder: encodedUri
 				},
@@ -396,6 +396,9 @@ class View
 		alert( jqXHR.responseText );
 	}
 }
+
+View.TYPE_FILE		= 'file';
+View.TYPE_FOLDER	= 'folder';
 
 const view	= new View();
 

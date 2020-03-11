@@ -3,19 +3,19 @@
 // Dependencies
 const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
-const PathHelper	= require( './../main/path' );
+const PathHelper	= require( '../../main/path' );
 
-let router			= Server().Router();
+const app			= Server();
 
 /**
- * @brief	Adds a '/preview' route with method GET
+ * @brief	Adds a '/file/preview' route with method GET
  *
  * @details	Required Parameters: file
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
-router.get( '/preview', ( event ) => {
+app.get( '/file/preview', ( event ) => {
 		const result		= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
 
 		const file			= ! result.hasValidationFailed()
@@ -29,19 +29,19 @@ router.get( '/preview', ( event ) => {
 			return event.sendError( 'File does not exist', 400 );
 		}
 
-		event.render( 'preview', { type: fileStream.getType(), src: '/data?file=' + encodeURIComponent( file ) }, event.next );
+		event.render( 'preview', { type: fileStream.getType(), src: '/file/data?file=' + encodeURIComponent( file ) }, event.next );
 	}
 );
 
 /**
- * @brief	Adds a '/data' route with method GET
+ * @brief	Adds a '/file/data' route with method GET
  *
  * @details	Required Parameters: file
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
-router.get( '/data', ( event ) =>{
+app.get( '/file/data', ( event ) =>{
 		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
 
 		const file		= ! result.hasValidationFailed()
@@ -56,5 +56,3 @@ router.get( '/data', ( event ) =>{
 		event.getFileStream( file ).pipe( event.response );
 	}
 );
-
-module.exports	= router;

@@ -4,16 +4,16 @@
 const { Server }	= require( 'event_request' );
 const path			= require( './path' );
 
-const router		= Server().Router();
+const app			= Server();
 
 // Initialize the session
-router.add( async ( event )=>{
+app.add( async ( event )=>{
 	event.initSession( event.next ).catch( event.next );
 });
 
 if ( process.env.SECURITY_ENABLED == true )
 {
-	router.add(( event )=>{
+	app.add(( event )=>{
 		if (
 			event.path !== '/login'
 			&& ( ! event.session.has( 'authenticated' ) || event.session.get( 'authenticated' ) === false )
@@ -25,15 +25,15 @@ if ( process.env.SECURITY_ENABLED == true )
 		event.next();
 	});
 
-	router.get( '/login', ( event )=>{
+	app.get( '/login', ( event )=>{
 		event.cacheCurrentRequest();
 	});
 
-	router.get( '/login', ( event )=>{
+	app.get( '/login', ( event )=>{
 		event.render( 'login' );
 	});
 
-	router.post( '/login', async ( event )=>{
+	app.post( '/login', async ( event )=>{
 		let result	= event.validationHandler.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
 
 		if ( result.hasValidationFailed() )
@@ -66,10 +66,8 @@ if ( process.env.SECURITY_ENABLED == true )
 }
 else
 {
-	router.add(( event )=>{
+	app.add(( event )=>{
 		event.session.add( 'route', '/' );
 		event.next();
 	})
 }
-
-module.exports	= router;

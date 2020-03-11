@@ -89,7 +89,7 @@
 	</div>
 
 	<div class="container pt-5" >
-		<form action="/upload" class="dropzone mb-5">
+		<form action="/file" class="dropzone mb-5" method="POST" >
 			<input type="hidden" name="directory" id="upload-file" value="<%= dir %>">
 		</form>
 
@@ -100,7 +100,7 @@
 		<br>
 		<br>
 
-		<form action="/upload" method="POST" enctype="multipart/form-data" onchange="this.submit();" style="text-align: center">
+		<form action="/file" method="POST" enctype="multipart/form-data" onchange="this.submit();" style="text-align: center">
 			<input type="file" name="file" id="file" class="inputfile" webkitdirectory mozdirectory />
 			<label for="file">Choose A Folder</label>
 			<input type="hidden" name="directory" id="upload-dir" value="<%= dir %>" >
