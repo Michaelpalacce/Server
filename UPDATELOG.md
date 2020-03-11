@@ -1,4 +1,4 @@
-8.1.2
+8.2.0
 - Updates to the front end JS to be in classes and better structured 
 
 8.1.1

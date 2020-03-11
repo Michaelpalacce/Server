@@ -10,6 +10,15 @@ class View
 		this.canBrowse			= true;
 		this.currentPosition	= 0;
 		this.contextMenu		= new ContextMenu( this );
+		this.dropzone			= new Dropzone(
+			".dropzone",
+			{
+				url: "/upload",
+				parallelUploads: 5,
+				maxFilesize: 40000,
+				timeout:0
+			}
+		);
 
 		String.prototype.trunc = String.prototype.trunc || function( n ) {
 			return ( this.length > n) ? this.substr( 0, n - 1 ) + '...' : this;
@@ -32,34 +41,24 @@ class View
 			}
 		);
 
-		const myDropzone				= new Dropzone(
-			".dropzone",
-			{
-				url: "/upload",
-				parallelUploads: 5,
-				maxFilesize: 40000,
-				timeout:0
-			}
-		);
+		this.dropzone.on( 'addedfile', () => { this.canBrowse	= false; } );
+		this.dropzone.on( 'queuecomplete', () => { this.canBrowse	= true; } );
 
-		myDropzone.on( 'addedfile', () => { this.canBrowse	= false; } );
-		myDropzone.on( 'queuecomplete', () => { this.canBrowse	= true; } );
-
-		myDropzone.on("complete", ( file ) => {
+		this.dropzone.on( 'complete', ( file ) => {
 			const encodedURI	= this.currentDir + encodeURIComponent( '/' + file.name );
 
 			this.fetchDataForFileAndAddItem( encodedURI );
 
 			setTimeout(()=>{
-				myDropzone.removeFile( file );
+				this.dropzone.removeFile( file );
 			}, 4000 );
 		});
 
 		$( document ).on( 'click', '.file-delete', ( event ) => {
-			this.deleteItem( $( event.target ).closest( '.file-delete' ) );
+			this.deleteItem( $( event.target ) );
 		});
 		$( document ).on( 'click', '.folder-delete', ( event ) => {
-			this.deleteItem( $( event.target ).closest( '.folder-delete' ), true );
+			this.deleteItem( $( event.target ), true );
 		});
 	}
 
@@ -82,7 +81,8 @@ class View
 				const { name, encodedURI, size, isDir, fileType, previewAvailable }	= itemData;
 
 				this.addItem( name, encodedURI, size, isDir, previewAvailable, fileType, this.currentDir );
-			}
+			},
+			error	: this.showError.bind( this )
 		});
 	}
 
@@ -96,13 +96,17 @@ class View
 	 */
 	deleteItem( element, showConfirmDialog = false )
 	{
-		const itemToDelete	= element.attr( 'data-item' );
-		const url			= `/delete?item=${itemToDelete}`;
-		const method		= 'DELETE';
+		element				= element.closest( '.item' );
+		const itemToDelete	= element.attr( 'data-item-encoded-uri' );
+
+		if ( ! itemToDelete )
+		{
+			return;
+		}
 
 		if ( showConfirmDialog )
 		{
-			const confirmDelete		= confirm( `Are you sure you want to delete this item?` );
+			const confirmDelete	= confirm( `Are you sure you want to delete this item?` );
 
 			if ( ! confirmDelete )
 			{
@@ -111,12 +115,13 @@ class View
 		}
 
 		$.ajax({
-			url,
-			method,
+			url		: `/delete?item=${itemToDelete}`,
+			method	: 'DELETE',
 			success	: function()
 			{
-				element.closest( '.item' ).remove();
-			}
+				element.remove();
+			},
+			error	: this.showError.bind( this )
 		});
 	}
 
@@ -164,8 +169,7 @@ class View
 
 			if ( compareElementWidth - offset < nameElementWidth )
 			{
-				let newName	= fullName.trunc( truncStart );
-				nameElement.text( newName );
+				nameElement.text( fullName.trunc( truncStart ) );
 				truncStart	-= 2;
 			}
 			else
@@ -209,14 +213,12 @@ class View
 					$( '.item' ).remove();
 				}
 
-				data	= JSON.parse( data );
-				const { items, position, hasMore, dir }	= data;
+				const { items, position, hasMore, dir }	= JSON.parse( data );
 
 				if ( dir !== decodeURIComponent( this.currentDir ) )
 				{
 					return;
 				}
-
 				this.currentPosition	= position;
 
 				for ( const index in items )
@@ -224,7 +226,7 @@ class View
 					const row															= items[index];
 					const { name, encodedURI, size, isDir, fileType, previewAvailable }	= row;
 
-					this.addItem( name, encodedURI, size, isDir, previewAvailable, fileType, data['dir'] );
+					this.addItem( name, encodedURI, size, isDir, previewAvailable, fileType, dir );
 				}
 
 				this.addAddFolderButton();
@@ -240,7 +242,8 @@ class View
 						this.browse( directory, true );
 					}, 2000 );
 				}
-			}
+			},
+			error	: this.showError.bind( this )
 		});
 	}
 
@@ -274,7 +277,6 @@ class View
 
 			if ( fullName.toLowerCase() !== 'back' )
 			{
-				element.find( '.folder-delete' ).attr( 'data-item', encodedURI );
 			}
 			else
 			{
@@ -306,7 +308,6 @@ class View
 			element.find( '.file-name' ).attr( 'title', fullName );
 			element.find( '.file-size' ).text( size );
 			element.find( '.file-download' ).attr( 'href', '/download?file=' + encodedURI );
-			element.find( '.file-delete' ).attr( 'data-item', encodedURI );
 			if ( previewAvailable )
 			{
 				const filePreviewElement	= element.find( '.file-preview' );
@@ -378,12 +379,21 @@ class View
 					this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
 					this.addAddFolderButton();
 				},
-				error	: function ()
-				{
-					alert( 'Could not create folder' );
-				}
+				error	: this.showError.bind( this )
 			});
 		} );
+	}
+
+	/**
+	 * @brief	Shows an error to the user
+	 *
+	 * @param	jqXHR jqXHR
+	 *
+	 * @return	void
+	 */
+	showError( jqXHR )
+	{
+		alert( jqXHR.responseText );
 	}
 }
 
