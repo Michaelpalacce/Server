@@ -19,7 +19,7 @@
 
 .inputfile:focus + label,
 .inputfile + label:hover {
-	background-color: indianred;
+	background-color: #c55454;
 }
 
 .inputfile + label {

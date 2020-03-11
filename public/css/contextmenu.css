@@ -4,7 +4,7 @@
 	width: 200px;
 	margin: 0;
 	padding: 0;
-	background: whitesmoke;
+	background: gray;
 	border-radius: 5px;
 	list-style: none;
 	box-shadow:
@@ -27,34 +27,9 @@
 	transition: ease .2s;
 }
 
-.contextmenu li #context-copy:hover {
-	background: green;
-	border-left: 3px solid lawngreen;
-}
-
-.contextmenu li #context-cut:hover {
-	background: green;
-	border-left: 3px solid lawngreen;
-}
-
-.contextmenu li #context-download:hover {
-	background: deepskyblue;
-	border-left: 3px solid cornflowerblue;
-}
-
 .contextmenu li #context-delete:hover {
-	background: indianred;
+	background: #c55454;
 	border-left: 3px solid #FF8377;
-}
-
-.contextmenu li #context-paste:hover {
-	background: green;
-	border-left: 3px solid lawngreen;
-}
-
-.contextmenu li #context-rename:hover {
-	background: violet;
-	border-left: 3px solid darkorchid;
 }
 
 .contextmenu li:hover a {

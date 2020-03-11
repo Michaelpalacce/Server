@@ -1,3 +1,10 @@
+8.2.4
+- Small fix
+
+8.2.3
+- Improved icons for the Back and Add folder buttons
+- Updated the style
+
 8.2.2
 - Added Error Handling to the contextMenu
 - No longer relying on CDNs

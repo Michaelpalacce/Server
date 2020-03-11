@@ -9,16 +9,15 @@
 	<title>Server Emulator</title>
 </head>
 <body>
-	<%- include("components/nav-bar", { active: "browse" }) %>
 	<%- include("components/contextmenu") %>
 	<%- include("components/browse-templates") %>
 	<%- include("components/modal") %>
+	<%- include("components/sidebar", { active: "browse" }) %>
 
-	<div class="container pt-5" >
+    <div class="pt-5 container">
 		<%- include("components/dropzone") %>
 
 		<div class="row my-1 mb-md-5" id="directoryStructure" ></div>
-
 		<div class="row" id="fileStructure"></div>
 
 		<br>

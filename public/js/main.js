@@ -134,9 +134,9 @@ class View
 	 */
 	bytesToSize( bytes )
 	{
-		const sizes	= ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+		const sizes	= ['B', 'KB', 'MB', 'GB', 'TB'];
 		if ( bytes === 0 )
-			return '0 Byte';
+			return '0 B';
 
 		const i	= parseInt( Math.floor( Math.log( bytes ) / Math.log( 1024 ) ) );
 
@@ -268,21 +268,26 @@ class View
 
 		if ( isDir === true )
 		{
-			element			= $( '#template-folder-card' ).clone();
+			switch ( fullName.toLowerCase() )
+			{
+				case 'back':
+					element	= $( '#template-folder-card-back' ).clone();
+					break;
+
+				case 'add folder':
+					element	= $( '#template-folder-card-add' ).clone();
+					break;
+
+				default:
+					element	= $( '#template-folder-card' ).clone();
+					break;
+			}
+
 			element.addClass( 'item' );
 			element.attr( 'data-item-name', fullName );
 			element.attr( 'data-item-encoded-uri', encodedURI );
 
 			element.find( '.folder-name' ).attr( 'data-href', encodedURI ).attr( 'title', fullName );
-
-			if ( fullName.toLowerCase() !== 'back' )
-			{
-			}
-			else
-			{
-				element.find( '.folder-delete' ).remove();
-				element.addClass( 'backFolderElement' )
-			}
 
 			element.on( 'click', ( event )=>{
 				if ( ! this.canBrowse || event.target.closest( '.folder-delete' ) !== null  )
@@ -324,7 +329,7 @@ class View
 				}
 				else
 				{
-					filePreviewElement.addClass( 'has-preview' ).attr( 'href', '/file/preview?file=' + encodedURI + '&backDir=' + directory );
+					filePreviewElement.addClass( 'has-preview' ).removeClass( 'no-preview' ).attr( 'href', '/file/preview?file=' + encodedURI + '&backDir=' + directory );
 				}
 			}
 			else
@@ -351,7 +356,7 @@ class View
 
 		const addFolderElement	= this.addItem( 'Add Folder', '', 0, true, false, 'directory', null );
 		addFolderElement.addClass( 'addFolderElement' );
-		addFolderElement.find( '.folder-delete' ).remove();
+
 		addFolderElement.find( '.item-row' ).addClass( 'add-folder' );
 		addFolderElement.off( 'click' );
 
