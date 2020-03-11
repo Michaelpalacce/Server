@@ -1,3 +1,10 @@
+8.2.2
+- Added Error Handling to the contextMenu
+- No longer relying on CDNs
+- Fixed IP route
+- Separated css files and separated EJS files
+- There is no longer an error when canceling creation of a file
+
 8.2.1
 - Reworked the routes
 

@@ -1,0 +1,158 @@
+.folder
+{
+	text-decoration: none;
+	color: deepskyblue;
+	cursor: pointer;
+}
+
+.add-folder
+{
+	border: 1px dashed rgba(0,0,0,.125) !important;
+}
+
+.file-size
+{
+	margin-left: 5px;
+}
+
+.file
+{
+	text-decoration: none;
+	color: deepskyblue;
+	cursor: pointer;
+}
+
+.folder-name
+{
+	font-size: 20px !important;
+	text-align: center;
+	white-space: nowrap;
+	color: gray;
+}
+
+.folder-icon
+{
+	color:darkgray;
+	text-align: center;
+	font-size: 20px !important;
+	margin-right: 5px;
+}
+
+.file-name-hr
+{
+	margin-bottom: 0;
+	margin-top: 3px;
+	border-top: 1px dashed lightgray;
+}
+
+.file-name-icon
+{
+	color: indianred;
+}
+
+.item
+{
+	user-select:none;
+}
+
+.item-row
+{
+	border-radius: 10px;
+	border: 1px solid rgba(0,0,0,.125);
+}
+
+.no-preview
+{
+	color: black;
+	text-decoration: none;
+	cursor: default;
+	text-underline: none;
+	text-underline-color: black;
+}
+
+.has-preview
+{
+	color: deepskyblue;
+}
+
+.no-preview:hover
+{
+	color: black;
+}
+
+.card-body
+{
+	text-align: center;
+}
+
+.file-name
+{
+	margin-left: 10px;
+	text-decoration: none;
+}
+
+.face-button {
+	margin: auto;
+	margin-top: 20px;
+	width: 120px;
+	border-radius: 25px;
+	height: 40px;
+	display: block;
+	border: 1.5px dashed deepskyblue;
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
+	text-decoration: none;
+	color: white;
+	overflow: hidden;
+}
+.face-button .face-primary, .face-button .face-secondary {
+	display: block;
+	line-height: 40px;
+	color: deepskyblue;
+	transition: margin 0.4s;
+}
+.face-button .face-primary {
+	background-color: white;
+	color: deepskyblue ;
+}
+.face-button:hover .face-primary {
+	margin-top: -40px;
+}
+
+.file-delete.face-button {
+	margin: auto;
+	margin-top: 20px;
+	width: 120px;
+	border-radius: 25px;
+	height: 40px;
+	display: block;
+	border: 1.5px dashed indianred;
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
+	text-decoration: none;
+	overflow: hidden;
+}
+.file-delete.face-button .face-primary, .file-delete.face-button .face-secondary {
+	display: block;
+	line-height: 40px;
+	color: indianred;
+	transition: margin 0.4s;
+}
+.file-delete.face-button .file-delete.face-primary {
+	background-color: white;
+	color: indianred;
+}
+.file-delete.face-button:hover .face-primary {
+	margin-top: -40px;
+}
+
+.deleteButton {
+	float: right;
+	color: indianred;
+	display: inline-block;
+	font-size: 20px;
+}

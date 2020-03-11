@@ -1,97 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/public/css/dropzone.css">
+	<%- include("components/partial/stylesheets") %>
 	<link rel="stylesheet" href="/public/css/style.css">
-	<link rel="stylesheet" href="/public/css/download.css">
-	<link rel="stylesheet" href="/public/css/delete.css">
-	<link rel="stylesheet" href="/public/css/top-navbar.css">
+	<link rel="stylesheet" href="/public/css/folder-upload.css">
 
 	<meta charset="UTF-8">
 	<title>Server Emulator</title>
 </head>
 <body>
 	<%- include("components/nav-bar", { active: "browse" }) %>
-
-	<ul class="contextmenu" id="contextmenu">
-		<li>
-			<a href="#" id="context-download" >
-				<span class="icon fa fa-download"><span class="file-size"></span></span>
-				Download
-			</a>
-		</li>
-		<li>
-			<a href="#" id="context-delete" >
-				<span class="icon fa fa-trash"></span>
-				Delete
-			</a>
-		</li>
-		<li>
-			<a href="#" id="context-copy" >
-				<i class="fa fa-files-o" aria-hidden="true"></i>
-				Copy
-			</a>
-		</li>
-		<li>
-			<a href="#" id="context-cut" >
-				<i class="fa fa-scissors" aria-hidden="true"></i>
-				Cut
-			</a>
-		</li>
-		<li>
-			<a href="#" id="context-rename" >
-				<i class="fa fa-pencil" aria-hidden="true"></i>
-				Rename
-			</a>
-		</li>
-		<li>
-			<a href="#" id="context-paste" style="display: none">
-				<i class="fa fa-paste"></i>
-				Paste
-			</a>
-		</li>
-	</ul>
-
-	<div id="template-folder-card" class="col-lg-3 folder" style="display:none;">
-		<div class="mb-3 item-row p-3">
-			<span class="folder-icon fa fa-folder">
-				<span class="folder-name"></span>
-			</span>
-
-			<span class="deleteButton icon fa fa-trash folder-delete itemDelete" data-item=""></span>
-		</div>
-	</div>
-	<div id="template-file-card" class="col-lg-4 file" style="display:none;">
-		<div class="mb-4 item-row pr-3 pb-3 pl-3 pt-2">
-			<div class="text-center">
-				<span class="file-name-icon fa fa-file">
-					<a href="#" class="card-title file-name no-preview file-preview"></a>
-				</span>
-			</div>
-
-			<hr class="file-name-hr">
-
-			<div class="row">
-				<a class="col-md-5 face-button file-download" href="#">
-					<div class="face-primary">
-						<span class="icon fa fa-download"><span class="file-size"></span></span>
-					</div>
-					<div class="face-secondary">DOWNLOAD</div>
-				</a>
-
-				<a class="col-md-5 face-button file-delete itemDelete" data-item="" href="#">
-					<div class="face-primary"><span class="icon fa fa-trash"></span></div>
-					<div class="face-secondary">DELETE</div>
-				</a>
-			</div>
-		</div>
-	</div>
+	<%- include("components/contextmenu") %>
+	<%- include("components/browse-templates") %>
+	<%- include("components/modal") %>
 
 	<div class="container pt-5" >
-		<form action="/file" class="dropzone mb-5" method="POST" >
-			<input type="hidden" name="directory" id="upload-file" value="<%= dir %>">
-		</form>
+		<%- include("components/dropzone") %>
 
 		<div class="row my-1 mb-md-5" id="directoryStructure" ></div>
 
@@ -108,9 +32,7 @@
 	</div>
 
 </body>
-<script type="text/javascript" src="/public/js/library/jquery.js"></script>
-<script type="text/javascript" src="/public/js/library/bootstrap.js"></script>
-<script type="text/javascript" src="/public/js/library/dropzone.js"></script>
+<%- include("components/partial/js-libs") %>
 <script>
 	let currentDir	= '<%= dir %>';
 </script>

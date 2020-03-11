@@ -144,7 +144,8 @@ class ContextMenu
 							target.remove();
 							this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
 							this.flushActionElementData();
-						}
+						},
+						error	: this.view.showError.bind( this.view )
 					});
 
 					this.element.hide();
@@ -196,7 +197,8 @@ class ContextMenu
 						{
 							this.flushActionElementData();
 							this.closeContextMenu();
-						}
+						},
+						error	: this.view.showError.bind( this.view )
 					});
 
 					this.element.hide();

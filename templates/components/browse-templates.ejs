@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/public/css/browse.css">
+
+<div id="template-folder-card" class="col-lg-3 folder" style="display:none;">
+    <div class="mb-3 item-row p-3">
+			<span class="folder-icon fa fa-folder">
+				<span class="folder-name"></span>
+			</span>
+
+        <span class="deleteButton icon fa fa-trash folder-delete itemDelete" data-item=""></span>
+    </div>
+</div>
+<div id="template-file-card" class="col-lg-4 file" style="display:none;">
+    <div class="mb-4 item-row pr-3 pb-3 pl-3 pt-2">
+        <div class="text-center">
+				<span class="file-name-icon fa fa-file">
+					<a href="#" class="card-title file-name no-preview file-preview"></a>
+				</span>
+        </div>
+
+        <hr class="file-name-hr">
+
+        <div class="row">
+            <a class="col-md-5 face-button file-download" href="#">
+                <div class="face-primary">
+                    <span class="icon fa fa-download"><span class="file-size"></span></span>
+                </div>
+                <div class="face-secondary">DOWNLOAD</div>
+            </a>
+
+            <a class="col-md-5 face-button file-delete itemDelete" data-item="" href="#">
+                <div class="face-primary"><span class="icon fa fa-trash"></span></div>
+                <div class="face-secondary">DELETE</div>
+            </a>
+        </div>
+    </div>
+</div>

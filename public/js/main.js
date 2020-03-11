@@ -360,7 +360,6 @@ class View
 
 			if ( userFolder == null || userFolder === '' )
 			{
-				alert( 'Could not create folder' );
 				return;
 			}
 
@@ -403,4 +402,3 @@ View.TYPE_FOLDER	= 'folder';
 const view	= new View();
 
 view.browse( currentDir );
-
