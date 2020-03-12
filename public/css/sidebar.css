@@ -63,3 +63,26 @@ body {
 		left: 100%;
 	}
 }
+
+.navbar{
+	background: #343a40!important;
+	border-bottom: 1px solid gray;
+}
+
+.nav-line
+{
+	margin-top: 50px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #c55454;
+}
+
+.navbar-action{
+	font-size: 1.25em;
+	font-weight: bold;
+	display: inline-block;
+	text-align: center;
+}
+
+.dropdown-item:hover{
+	background: transparent!important;
+}

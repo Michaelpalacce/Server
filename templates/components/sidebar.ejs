@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/public/css/sidebar.css">
 
-<nav class="navbar navbar-expand-md navbar-dark  fixed-left" >
+<nav class="navbar navbar-expand-md navbar-dark fixed-left" >
     <a class="navbar-brand" href="/">Server Emulator</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" >
         <span class="navbar-toggler-icon"></span>
@@ -15,16 +15,31 @@
                 <a class="nav-link" href="/ip">Ip Addresses</a>
             </li>
 <!--            <li class="nav-item dropdown">-->
-<!--                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>-->
-<!--                <div class="dropdown-menu">-->
-<!--                    <a class="dropdown-item">Action</a>-->
-<!--                    <a class="dropdown-item">Another action</a>-->
-<!--                    <a class="dropdown-item">Something else here</a>-->
-<!--                    <div class="dropdown-divider"></div>-->
-<!--                    <a class="dropdown-item">Separated link</a>-->
-<!--                    <a class="dropdown-item">One more separated link</a>-->
+<!--                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</a>-->
+<!--                <div class="dropdown-menu bg-dark">-->
+<!--                    <a class="dropdown-item">-->
+<!--                       ITEM-->
+<!--                    </a>-->
 <!--                </div>-->
 <!--            </li>-->
+
+            <% if ( active === 'browse' ) { %>
+                <br>
+                <br>
+                <br>
+                <div class="nav-line"></div>
+                <li class="nav-item navbar-action">
+                    <form action="/file" method="POST" enctype="multipart/form-data" onchange="this.submit();">
+                        <input type="file" name="file" id="file" class="inputfile" webkitdirectory mozdirectory />
+                        <label for="file">Upload Folder</label>
+                        <input type="hidden" name="directory" id="upload-dir" value="<%= dir %>" >
+                    </form>
+                </li>
+<!--                <li class="nav-item navbar-action">-->
+<!--                    <a class="nav-link" href="/ip">Something</a>-->
+<!--                </li>-->
+            <% } %>
+
         </ul>
     </div>
 </nav>

@@ -6,7 +6,8 @@
 	<link rel="stylesheet" href="/public/css/folder-upload.css">
 
 	<meta charset="UTF-8">
-	<title>Server Emulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Server Emulator</title>
 </head>
 <body>
 	<%- include("components/contextmenu") %>
@@ -14,27 +15,18 @@
 	<%- include("components/modal") %>
 	<%- include("components/sidebar", { active: "browse" }) %>
 
-    <div class="pt-5 container">
+	<div class="pt-5 container">
 		<%- include("components/dropzone") %>
 
 		<div class="row my-1 mb-md-5" id="directoryStructure" ></div>
 		<div class="row" id="fileStructure"></div>
-
-		<br>
-		<br>
-
-		<form action="/file" method="POST" enctype="multipart/form-data" onchange="this.submit();" style="text-align: center">
-			<input type="file" name="file" id="file" class="inputfile" webkitdirectory mozdirectory />
-			<label for="file">Choose A Folder</label>
-			<input type="hidden" name="directory" id="upload-dir" value="<%= dir %>" >
-		</form>
 	</div>
-
 </body>
 <%- include("components/partial/js-libs") %>
 <script>
 	let currentDir	= '<%= dir %>';
 </script>
 <script src="/public/js/contextMenu.js"></script>
+<script src="/public/js/modal.js"></script>
 <script src="/public/js/main.js"></script>
 </html>

@@ -129,26 +129,26 @@ class ContextMenu
 					event.preventDefault();
 					event.stopPropagation();
 					event.stopImmediatePropagation();
-
-					const newName	= prompt( 'What is the new name of the file' );
-
-					$.ajax({
-						url		: '/file/rename',
-						method	:'POST',
-						data	: {
-							newPath: this.view.currentDir + encodeURIComponent( '/' + newName ),
-							oldPath: this.getElementPath( target )
-						},
-						success	: ( data )=>
-						{
-							target.remove();
-							this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
-							this.flushActionElementData();
-						},
-						error	: this.view.showError.bind( this.view )
-					});
-
 					this.element.hide();
+
+					const oldName	= target.closest( '.item' ).attr( 'data-item-name' );
+					modal.askUserInput( 'What is the new name of the file', oldName ).then( ( newName )=>{
+						$.ajax({
+							url		: '/file/rename',
+							method	:'POST',
+							data	: {
+								newPath: this.view.currentDir + encodeURIComponent( '/' + newName ),
+								oldPath: this.getElementPath( target )
+							},
+							success	: ( data )=>
+							{
+								target.remove();
+								this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
+								this.flushActionElementData();
+							},
+							error	: this.view.showError.bind( this.view )
+						});
+					});
 				} ).show();
 				break;
 
@@ -163,6 +163,7 @@ class ContextMenu
 					event.preventDefault();
 					event.stopPropagation();
 					event.stopImmediatePropagation();
+					this.element.hide();
 
 					const method	= 'POST';
 					let url			= '';
@@ -178,7 +179,7 @@ class ContextMenu
 
 						case ACTION_NONE:
 						default:
-							alert( 'There is nothing to paste!' );
+							modal.show( 'There is nothing to paste!' );
 							return;
 					}
 
@@ -200,8 +201,6 @@ class ContextMenu
 						},
 						error	: this.view.showError.bind( this.view )
 					});
-
-					this.element.hide();
 				} ).show();
 				return;
 		}

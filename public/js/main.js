@@ -105,24 +105,32 @@ class View
 			return;
 		}
 
+		const deleteItemAjax	= ()=>{
+			$.ajax({
+				url		: `/${type}?item=${itemToDelete}`,
+				method	: 'DELETE',
+				success	: function()
+				{
+					element.remove();
+				}
+			});
+		};
+
 		if ( type === View.TYPE_FOLDER )
 		{
-			const confirmDelete	= confirm( `Are you sure you want to delete this item?` );
+			modal.askConfirmation( `Are you sure you want to delete this item?` ).then(( confirmDelete )=>{
+				if ( ! confirmDelete )
+				{
+					return;
+				}
 
-			if ( ! confirmDelete )
-			{
-				return;
-			}
+				deleteItemAjax();
+			});
+
+			return;
 		}
 
-		$.ajax({
-			url		: `/${type}?item=${itemToDelete}`,
-			method	: 'DELETE',
-			success	: function()
-			{
-				element.remove();
-			}
-		});
+		deleteItemAjax();
 	}
 
 	/**
@@ -361,31 +369,31 @@ class View
 		addFolderElement.off( 'click' );
 
 		addFolderElement.on( 'click', ()=>{
-			const userFolder	= prompt( 'Please enter the name of the folder.', 'New Folder' );
-
-			if ( userFolder == null || userFolder === '' )
-			{
-				return;
-			}
-
-			const folderName		= userFolder;
-			const encodedFolderName	= encodeURIComponent( '/' + userFolder );
-			const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
-
-			$.ajax({
-				url		: '/folder',
-				data	: {
-					folder: encodedUri
-				},
-				method		: 'POST',
-				success	: ()=>
+			modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder )=>{
+				if ( userFolder == null || userFolder === '' )
 				{
-					this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
-					this.addAddFolderButton();
-				},
-				error	: this.showError.bind( this )
+					return;
+				}
+
+				const folderName		= userFolder;
+				const encodedFolderName	= encodeURIComponent( '/' + userFolder );
+				const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
+
+				$.ajax({
+					url		: '/folder',
+					data	: {
+						folder: encodedUri
+					},
+					method		: 'POST',
+					success	: ()=>
+					{
+						this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
+						this.addAddFolderButton();
+					},
+					error	: this.showError.bind( this )
+				});
 			});
-		} );
+		});
 	}
 
 	/**
@@ -397,7 +405,7 @@ class View
 	 */
 	showError( jqXHR )
 	{
-		alert( jqXHR.responseText );
+		modal.show( jqXHR.responseText );
 	}
 }
 

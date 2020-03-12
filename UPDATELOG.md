@@ -1,3 +1,10 @@
+8.3.0
+- Added Modal logic
+- Added modals instead of prompts and alerts
+- Moved the Upload Folder button to the sidebar
+- The mobile design now works correctly
+- Updated the design a bit
+
 8.2.5
 - Small design fix
 

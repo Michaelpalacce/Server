@@ -1,8 +1,22 @@
 <link rel="stylesheet" href="/public/css/modal.css">
 
 <div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="document.getElementById( 'modal' ).style.display = 'none'">&times;</span>
-        <p id="modalText">Some text in the Modal..</p>
+    <div class="modal-content" style="background: #343a40; color: white">
+        <span class="close" onclick="modal.hide()">&times;</span>
+        <div class="container">
+            <h6><span id="modalText" class="pb-3">Some text in the Modal..</span></h6>
+            <div class="row" id="modalInputRow">
+                <div class="input-group mb-3 col-lg-9 text-center">
+                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="modalInput" style="height: 35px">
+                </div>
+
+                <button type="button" class="btn btn-outline-secondary col-lg-3 text-center" id="modalSubmit" style="height: 35px">OK</button>
+            </div>
+
+            <div class="row" id="modalChoiceRow" style="align-items: center; justify-content: center; display: flex;">
+                <button type="button" class="btn btn-outline-secondary col-lg-4 choice-button" id="modalchoiceYes" style="height: 35px">Yes</button>
+                <button type="button" class="btn col-lg-4 btn-outline-main-red choice-button" id="modalchoiceNo" style="height: 35px">No</button>
+            </div>
+        </div>
     </div>
 </div>
