@@ -1,13 +1,17 @@
 body {
 	padding-top: 90px;
-	background-image: linear-gradient( to left, #343a40, #343a40 );
+	background: #343a40;
 }
 
 @media (min-width: 768px) {
 	body {
 		padding-top: 0;
 		margin-left: 232px;
-		background-image: linear-gradient( to left, #343a40, #343a40, #343a40, #343a40, #343a40, #343a40, #343a40, #422626 );
+		background: #343a40;
+	}
+
+	.navbar.fixed-left {
+		border-right: 2px solid #c55454!important;
 	}
 }
 
@@ -17,6 +21,7 @@ body {
 	left: 0;
 	right: 0;
 	z-index: 1030;
+	border-right: 0;
 }
 
 @media (min-width: 768px) {

@@ -9,9 +9,9 @@
 	<title><%= externalIP %></title>
 </head>
 <body>
-	<%- include("components/sidebar", { active: "browse" }) %>
+	<%- include("components/sidebar", { active: "ip" }) %>
 
-	<div style="text-align: center" class="container pt-5">
+	<div style="text-align: center; color: lightgray" class="container pt-5">
 		<h3>Public IP:</h3>
 		<span>
 			 <b> <%= externalIP %> </b>

@@ -1,3 +1,6 @@
+8.2.5
+- Small design fix
+
 8.2.4
 - Small fix
 
