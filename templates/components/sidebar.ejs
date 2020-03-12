@@ -24,10 +24,7 @@
 <!--            </li>-->
 
             <% if ( active === 'browse' ) { %>
-                <br>
-                <br>
-                <br>
-                <div class="nav-line"></div>
+                <div class="nav-line pt-5"></div>
                 <li class="nav-item navbar-action">
                     <form action="/file" method="POST" enctype="multipart/form-data" onchange="this.submit();">
                         <input type="file" name="file" id="file" class="inputfile" webkitdirectory mozdirectory />
@@ -35,6 +32,10 @@
                         <input type="hidden" name="directory" id="upload-dir" value="<%= dir %>" >
                     </form>
                 </li>
+                <li id="addFolder" class="nav-item navbar-action" >
+                    <i class="fa fa-plus" aria-hidden="true" style=" font-size: 15px"></i>&nbsp;<span >Add Folder</span>
+                </li>
+
 <!--                <li class="nav-item navbar-action">-->
 <!--                    <a class="nav-link" href="/ip">Something</a>-->
 <!--                </li>-->

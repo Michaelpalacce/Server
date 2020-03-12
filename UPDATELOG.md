@@ -1,3 +1,13 @@
+8.4.0
+- Removed the preview page and moved it to the modal
+- Increased loading time
+- Fixed delete snapping to top bug
+- Preview of files is now shown correctly
+- Removed the unused logo
+- Moved the add folder button to the side
+- Modal elements will now focus when displayed 
+- Improved design and removed unused styles
+
 8.3.0
 - Added Modal logic
 - Added modals instead of prompts and alerts

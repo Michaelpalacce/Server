@@ -57,9 +57,44 @@ class View
 
 		$( document ).on( 'click', '.file-delete', ( event ) => {
 			this.deleteItem( $( event.target ), View.TYPE_FILE );
+			return false;
 		});
+
 		$( document ).on( 'click', '.folder-delete', ( event ) => {
 			this.deleteItem( $( event.target ), View.TYPE_FOLDER );
+			return false;
+		});
+
+		$( '#addFolder' ).on( 'click', ( event )=>{
+			event.preventDefault();
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+
+			modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder )=>{
+				if ( userFolder == null || userFolder === '' )
+				{
+					return;
+				}
+
+				const folderName		= userFolder;
+				const encodedFolderName	= encodeURIComponent( '/' + userFolder );
+				const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
+
+				$.ajax({
+					url		: '/folder',
+					data	: {
+						folder: encodedUri
+					},
+					method		: 'POST',
+					success	: ()=>
+					{
+						this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
+					},
+					error	: this.showError.bind( this )
+				});
+			});
+
+			return false;
 		});
 	}
 
@@ -162,12 +197,11 @@ class View
 	 *
 	 * @return	void
 	 */
-	setItemNameToFit( element, nameElementClass, compareElementClass, fullName, truncStart )
+	setItemNameToFit( element, nameElementClass, compareElementClass, fullName, truncStart, offset = 55 )
 	{
 		const compareElement		= element.find( compareElementClass );
 		const nameElement			= element.find( nameElementClass );
 		const compareElementWidth	= compareElement.width();
-		const offset				= 55;
 
 		nameElement.text( fullName );
 
@@ -237,8 +271,6 @@ class View
 					this.addItem( name, encodedURI, size, isDir, previewAvailable, fileType, dir );
 				}
 
-				this.addAddFolderButton();
-
 				if ( hasMore )
 				{
 					setTimeout( ()=>{
@@ -248,7 +280,7 @@ class View
 						}
 
 						this.browse( directory, true );
-					}, 2000 );
+					}, 500 );
 				}
 			},
 			error	: this.showError.bind( this )
@@ -282,10 +314,6 @@ class View
 					element	= $( '#template-folder-card-back' ).clone();
 					break;
 
-				case 'add folder':
-					element	= $( '#template-folder-card-add' ).clone();
-					break;
-
 				default:
 					element	= $( '#template-folder-card' ).clone();
 					break;
@@ -308,13 +336,14 @@ class View
 			});
 			element.appendTo( '#directoryStructure' ).removeAttr( 'id' ).show();
 
-			this.setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20 );
+			this.setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20, 55 );
 		}
 		else
 		{
 			element	= $( '#template-file-card' ).clone();
 			element.addClass( 'item' );
 			element.attr( 'data-item-name', fullName );
+			element.attr( 'data-item-type', itemType );
 			element.attr( 'data-item-encoded-uri', encodedURI );
 
 			element.find( '.folder' ).remove();
@@ -330,14 +359,19 @@ class View
 					filePreviewElement.parent().remove();
 
 					filePreviewParent.append( `
-					<a href="/file/preview?file=${encodedURI}">
-						<img style="max-height: 250px; max-width: 250px; padding-bottom: 7px" src="/file/data?file=${encodedURI}" alt="${name}">
-					<a/>
-				` );
+						<img style="padding-bottom: 7px; max-width: 250px; max-height: 250px" class="preview-item" src="/file/data?file=${encodedURI}" alt="${name}">
+					` );
+
+					filePreviewParent.on( 'click',()=>{
+						modal.showPreview( itemType, encodedURI );
+					});
 				}
 				else
 				{
-					filePreviewElement.addClass( 'has-preview' ).removeClass( 'no-preview' ).attr( 'href', '/file/preview?file=' + encodedURI + '&backDir=' + directory );
+					filePreviewElement.addClass( 'has-preview' ).removeClass( 'no-preview' );
+					filePreviewElement.on( 'click',()=>{
+						modal.showPreview( itemType, encodedURI );
+					});
 				}
 			}
 			else
@@ -347,53 +381,10 @@ class View
 
 			element.appendTo( '#fileStructure' ).removeAttr( 'id' ).show();
 
-			this.setItemNameToFit( element, '.file-name', '.item-row', fullName, 30 );
+			this.setItemNameToFit( element, '.file-name', '.item-row', fullName, 30, 90 );
 		}
 
 		return element;
-	}
-
-	/**
-	 * @brief	Adds the 'Add Folder' Button
-	 *
-	 * @return	void
-	 */
-	addAddFolderButton()
-	{
-		$( '.addFolderElement' ).remove();
-
-		const addFolderElement	= this.addItem( 'Add Folder', '', 0, true, false, 'directory', null );
-		addFolderElement.addClass( 'addFolderElement' );
-
-		addFolderElement.find( '.item-row' ).addClass( 'add-folder' );
-		addFolderElement.off( 'click' );
-
-		addFolderElement.on( 'click', ()=>{
-			modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder )=>{
-				if ( userFolder == null || userFolder === '' )
-				{
-					return;
-				}
-
-				const folderName		= userFolder;
-				const encodedFolderName	= encodeURIComponent( '/' + userFolder );
-				const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
-
-				$.ajax({
-					url		: '/folder',
-					data	: {
-						folder: encodedUri
-					},
-					method		: 'POST',
-					success	: ()=>
-					{
-						this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
-						this.addAddFolderButton();
-					},
-					error	: this.showError.bind( this )
-				});
-			});
-		});
 	}
 
 	/**

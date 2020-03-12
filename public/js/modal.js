@@ -5,22 +5,76 @@ class Modal
 {
 	constructor()
 	{
-		this._element			= $( '#modal' );
-		this._textElement		= this._element.find( '#modalText' );
+		this._element				= $( '#modal' );
+		this._contentElement		= $( '#modal-content' );
+		this._textElement			= this._element.find( '#modalText' );
 
-		this._choiceRowElement	= this._element.find( '#modalChoiceRow' ).hide();
-		this._choiceYesElement	= this._element.find( '#modalchoiceYes' ).hide();
-		this._choiceNoElement	= this._element.find( '#modalchoiceNo' ).hide();
+		this._choiceRowElement		= this._element.find( '#modalChoiceRow' ).hide();
+		this._choiceYesElement		= this._element.find( '#modalchoiceYes' ).hide();
+		this._choiceNoElement		= this._element.find( '#modalchoiceNo' ).hide();
 
-		this._inputRowElement	= this._element.find( '#modalInputRow' ).hide();
-		this._inputElement		= this._element.find( '#modalInput' ).hide();
-		this._submitElement		= this._element.find( '#modalSubmit' ).hide();
+		this._inputRowElement		= this._element.find( '#modalInputRow' ).hide();
+		this._inputElement			= this._element.find( '#modalInput' ).hide();
+		this._submitElement			= this._element.find( '#modalSubmit' ).hide();
+
+		this._previewElement		= this._element.find( '#modalPreview' ).hide();
+		this._previewVideoElement	= this._element.find( '#modalPreviewVideo' ).hide();
+		this._previewTextElement	= this._element.find( '#modalPreviewText' ).hide();
+		this._previewImageElement	= this._element.find( '#modalPreviewImage' ).hide();
+	}
+
+	/**
+	 * @brief	Show a preview of a file
+	 *
+	 * @param	type String
+	 * @param	encodedURI String
+	 *
+	 * @return	void
+	 */
+	showPreview( type, encodedURI )
+	{
+		const dataSrc	= `/file/data?file=${encodedURI}`;
+		this._contentElement.addClass( 'bigger-modal-content' );
+		switch ( type )
+		{
+			case 'mp4':
+				this._previewVideoElement.show();
+				this._previewVideoElement.attr( 'src', dataSrc );
+				break;
+			case 'text':
+				this._previewTextElement.show();
+				$.ajax({
+					url			: dataSrc,
+					method		: 'GET',
+					dataType	: 'text',
+					success		: ( result )=>{
+						result	= result.replace( / /g, '&nbsp;' );
+						result	= result.replace( /\t/g, '&emsp;' );
+						result	= result.replace( /\n/g, '<br>' );
+
+						this._previewTextElement.append( result );
+					}
+				});
+
+				break;
+			case 'image':
+				this._previewImageElement.show();
+				this._previewImageElement.attr( 'src', dataSrc );
+				break;
+			default:
+				this.show( `Invalid file type ${type}` );
+				return;
+		}
+
+		this._previewElement.show();
+		this.show( '' );
 	}
 
 	/**
 	 * @brief	Asks the user for input
 	 *
 	 * @param	text String
+	 * @param	defaultInput String
 	 *
 	 * @return	Promise
 	 */
@@ -61,6 +115,8 @@ class Modal
 					getDataCallback( e );
 				}
 			});
+
+			this._inputElement.focus();
 		})
 	}
 
@@ -105,6 +161,8 @@ class Modal
 			this._choiceNoElement.on( 'click', ( event )=>{
 				getChoiceCallback( event, false );
 			});
+
+			this._choiceYesElement.focus();
 		})
 	}
 
@@ -182,6 +240,12 @@ class Modal
 		this._choiceRowElement.hide();
 		this._choiceYesElement.hide();
 		this._choiceNoElement.hide();
+		this._previewElement.hide();
+		this._previewVideoElement.hide();
+		this._previewTextElement.hide();
+		this._previewImageElement.hide();
+		this._contentElement.removeClass( 'bigger-modal-content' );
+		this._previewVideoElement.trigger( 'pause' );
 
 		this._inputElement.val( '' );
 		this._textElement.text( '' );

@@ -12,6 +12,14 @@
 	background-color: rgba(0,0,0,0.4);
 }
 
+.modal-content {
+	width: 100%;
+	padding-bottom: 25px;
+}
+
+.bigger-modal-content{
+	width: 100%!important;
+}
 
 @media (min-width: 768px) {
 	.modal-content {
@@ -21,11 +29,10 @@
 		border: 1px solid #888;
 		width: 35% !important;
 	}
-}
 
-.modal-content {
-	width: 100%;
-	padding-bottom: 25px;
+	.bigger-modal-content{
+		width: 80% !important;
+	}
 }
 
 .close {
@@ -58,4 +65,13 @@
 .choice-button
 {
 	margin: 10px;
+}
+
+.data-field{
+	width: 100%;
+}
+
+.preview-item{
+	width: 100%;
+	height: auto;
 }

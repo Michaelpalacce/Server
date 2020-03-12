@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/public/css/modal.css">
 
 <div id="modal" class="modal">
-    <div class="modal-content" style="background: #343a40; color: white">
+    <div class="modal-content" style="background: #343a40; color: white" id="modal-content">
         <span class="close" onclick="modal.hide()">&times;</span>
         <div class="container">
             <h6><span id="modalText" class="pb-3">Some text in the Modal..</span></h6>
@@ -16,6 +16,16 @@
             <div class="row" id="modalChoiceRow" style="align-items: center; justify-content: center; display: flex;">
                 <button type="button" class="btn btn-outline-secondary col-lg-4 choice-button" id="modalchoiceYes" style="height: 35px">Yes</button>
                 <button type="button" class="btn col-lg-4 btn-outline-main-red choice-button" id="modalchoiceNo" style="height: 35px">No</button>
+            </div>
+
+            <div class="row" id="modalPreview" style="align-items: center; justify-content: center; display: flex;">
+                <video controls class="embed-responsive-item preview-item" id="modalPreviewVideo">
+                    <source src="" type="video/mp4">
+                </video>
+
+                <div class="data-field preview-item" data-src="" id="modalPreviewText"></div>
+
+                <img class="preview-item" src="" alt="" id="modalPreviewImage">
             </div>
         </div>
     </div>
