@@ -60,9 +60,5 @@ https://github.com/Michaelpalacce/Server/releases
 
 #Future Improvements:
 - A terminal emulator
-- More folder operations
-- Redesign
-- Black theme
 - User section
-- Improved File Streaming Page
 - Ability to connect to a different server to serve as a connection between your devices and a private instance of the Server Emulator

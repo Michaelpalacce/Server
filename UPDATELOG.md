@@ -1,3 +1,6 @@
+8.5.1
+- Updated the future improvements section
+
 8.5.0
 - Added Folder renaming
 - Added Folder Cutting
