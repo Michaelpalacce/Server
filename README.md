@@ -4,7 +4,7 @@
 - Make sure you are sudo
 ~~~
 // With NodeJs Installation
-yum install -y gcc-c++ make && curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash - && yum install -y nodejs && mkdir server-emulator && cd server-emulator && npm i server-emulator
+yum install -y gcc-c++ make && curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash - && yum install -y nodejs && mkdir server-emulator && cd server-emulator && sudo npm i server-emulator
 
 // With Already Existing NodeJs Installation
 mkdir server-emulator && cd server-emulator && npm i server-emulator
@@ -23,7 +23,7 @@ npm i server-emulator
 npm start
 ~~~
 
-#To compile:
+#To compile in windows:
 ~~~shell script
 npm i -g nexe
 

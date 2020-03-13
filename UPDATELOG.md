@@ -1,3 +1,6 @@
+8.7.1
+- Updated README
+
 8.7.0
 - Fixed Recursion bug when copying/pasting
 - Moved IPs to the sidebar
