@@ -1,3 +1,7 @@
+8.4.1
+- Small Quality of life changes
+- Moved the back button
+
 8.4.0
 - Removed the preview page and moved it to the modal
 - Increased loading time

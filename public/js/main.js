@@ -312,10 +312,12 @@ class View
 			{
 				case 'back':
 					element	= $( '#template-folder-card-back' ).clone();
+					element.appendTo( '#backButtonPlace' ).removeAttr( 'id' ).show();
 					break;
 
 				default:
 					element	= $( '#template-folder-card' ).clone();
+					element.appendTo( '#directoryStructure' ).removeAttr( 'id' ).show();
 					break;
 			}
 
@@ -334,7 +336,6 @@ class View
 				history.pushState( {}, document.getElementsByTagName( 'title' )[0].innerHTML, '/browse?dir=' + encodedURI );
 				this.browse( encodedURI );
 			});
-			element.appendTo( '#directoryStructure' ).removeAttr( 'id' ).show();
 
 			this.setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20, 55 );
 		}
@@ -352,7 +353,7 @@ class View
 			element.find( '.file-download' ).attr( 'href', '/file?file=' + encodedURI );
 			if ( previewAvailable )
 			{
-				const filePreviewElement	= element.find( '.file-preview' );
+				let filePreviewElement	= element.find( '.file-preview' );
 				if ( itemType === 'image' )
 				{
 					const filePreviewParent	= filePreviewElement.parent().parent();
@@ -362,17 +363,22 @@ class View
 						<img style="padding-bottom: 7px; max-width: 250px; max-height: 250px" class="preview-item" src="/file/data?file=${encodedURI}" alt="${name}">
 					` );
 
-					filePreviewParent.on( 'click',()=>{
-						modal.showPreview( itemType, encodedURI );
-					});
+					filePreviewElement	= filePreviewParent;
 				}
 				else
 				{
 					filePreviewElement.addClass( 'has-preview' ).removeClass( 'no-preview' );
-					filePreviewElement.on( 'click',()=>{
-						modal.showPreview( itemType, encodedURI );
-					});
 				}
+
+				filePreviewElement.on( 'click',( event )=>{
+					event.preventDefault();
+					event.stopPropagation();
+					event.stopImmediatePropagation();
+
+					modal.showPreview( itemType, encodedURI );
+
+					return false;
+				});
 			}
 			else
 			{
