@@ -8,12 +8,7 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav">
-            <li class="nav-item <% if ( active === 'browse' ) { %> active <% } %>">
-                <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item <% if ( active === 'ip' ) { %> active <% } %>">
-                <a class="nav-link" href="/ip">Ip Addresses</a>
-            </li>
+
 <!--            <li class="nav-item dropdown">-->
 <!--                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</a>-->
 <!--                <div class="dropdown-menu bg-dark">-->
@@ -34,6 +29,15 @@
                 </li>
                 <li id="addFolder" class="nav-item navbar-action" >
                     <i class="fa fa-plus" aria-hidden="true" style=" font-size: 15px"></i>&nbsp;<span >Add Folder</span>
+                </li>
+
+                <div class="nav-line pt-5"></div>
+
+                <li id="getPublicIp" class="nav-item navbar-action">
+                    <a class="nav-link" href="#">Get Public IP</a>
+                </li>
+                <li id="getPrivateIps" class="nav-item navbar-action">
+                    <a class="nav-link" href="#">Get Private IPs</a>
                 </li>
 
 <!--                <li class="nav-item navbar-action">-->

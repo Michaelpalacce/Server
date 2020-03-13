@@ -211,15 +211,24 @@ class Modal
 	 *
 	 * @details	The text provided will be shown in the modal
 	 * 			An Esc press event will be added for closing the modal
+	 * 			If asHtml is true, the text will be parsed
 	 *
 	 * @param	text String
+	 * @param	asHtml Boolean
 	 *
 	 * @return	void
 	 */
-	show( text = '' )
+	show( text = '', asHtml = false )
 	{
 		this._element.show();
-		this._textElement.text( text );
+		if ( asHtml )
+		{
+			this._textElement.html( text );
+		}
+		else
+		{
+			this._textElement.text( text );
+		}
 
 		this.attachEvents();
 	}

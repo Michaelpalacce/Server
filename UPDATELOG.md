@@ -1,3 +1,8 @@
+8.7.0
+- Fixed Recursion bug when copying/pasting
+- Moved IPs to the sidebar
+- Removed Home link
+
 8.6.1
 - Fixed Preview of text
 

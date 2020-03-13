@@ -54,6 +54,7 @@ Model.cut	= function( event )
 
 	newPath	= path.join( newPath, oldPathParsed.base );
 
+	event.clearTimeout();
 	rename( oldPath, newPath ).then(()=>{
 		event.send( { newPath } );
 	}).catch( event.next );
@@ -92,6 +93,7 @@ Model.copy	= function( event )
 
 	newPath	= path.join( newPath, oldPathParsed.base );
 
+	event.clearTimeout();
 	copy( oldPath, newPath ).then(()=>{
 		event.send( { newPath } );
 	}).catch( event.next );

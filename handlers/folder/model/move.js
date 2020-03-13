@@ -7,7 +7,6 @@ const path		= require( 'path' );
 const rename	= util.promisify( fs.rename );
 const ncp		= require('ncp').ncp;
 
-
 const Model		= {};
 
 /**
@@ -39,6 +38,11 @@ Model.cut	= function( event )
 	let { newPath, oldPath }	= result.getValidationResult();
 	newPath						= decodeURIComponent( newPath );
 	oldPath						= decodeURIComponent( oldPath );
+
+	if ( newPath.substring( 0, oldPath.length ) === oldPath )
+	{
+		return event.send( 'I just saved your HDD/SSD', 400 );
+	}
 
 	const fileStats				= fs.statSync( oldPath );
 	const oldPathParsed			= path.parse( oldPath );
@@ -78,6 +82,11 @@ Model.copy	= function( event )
 	newPath						= decodeURIComponent( newPath );
 	oldPath						= decodeURIComponent( oldPath );
 
+	if ( newPath.substring( 0, oldPath.length ) === oldPath )
+	{
+		return event.send( 'I just saved your HDD/SSD', 400 );
+	}
+
 	const fileStats				= fs.statSync( oldPath );
 	const oldPathParsed			= path.parse( oldPath );
 
@@ -93,6 +102,7 @@ Model.copy	= function( event )
 
 	newPath	= path.join( newPath, oldPathParsed.base );
 
+	event.clearTimeout();
 	ncp( oldPath, newPath, ( err )=>{
 		if ( err )
 		{

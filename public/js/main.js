@@ -35,7 +35,7 @@ class View
 	 */
 	attachEvents()
 	{
-		$( window ).on('popstate', () =>
+		$( window ).on( 'popstate', () =>
 			{
 				const url	= new URL( window.location.href );
 				this.browse( url.searchParams.get( 'dir' ) );
@@ -52,7 +52,7 @@ class View
 
 			setTimeout(()=>{
 				this.dropzone.removeFile( file );
-			}, 4000 );
+			}, 2000 );
 		});
 
 		$( document ).on( 'click', '.file-delete', ( event ) => {
@@ -66,6 +66,57 @@ class View
 		});
 
 		$( '#addFolder' ).on( 'click', this.createNewFolder.bind( this ) );
+
+		$( document ).on( 'click', '#getPublicIp', ( event )=>{
+			event.preventDefault();
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+
+			$.ajax({
+				url		: '/ip/public',
+				method	: 'GET',
+				success	:( ip )=>{
+					modal.show( `Your Public IP is: ${ip}` )
+				},
+				error	: this.showError.bind( this )
+			});
+
+			return false;
+		});
+		$( document ).on( 'click', '#getPrivateIps', ( event )=>{
+			event.preventDefault();
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+
+			$.ajax({
+				url		: '/ip/private',
+				method	: 'GET',
+				success	:( ips )=>{
+					let result	= '';
+					ips			= JSON.parse( ips );
+
+					for ( const networkInterface in ips )
+					{
+						result	+= `Network Interface: ${networkInterface}`;
+						result	+= '<br>';
+						result	+= 'Ips: &emsp;';
+
+						for ( const ip of ips[networkInterface] )
+						{
+							result	+= ip + '&emsp;';
+						}
+
+						result	+= '<br>';
+						result	+= '<br>';
+					}
+
+					modal.show( result, true )
+				},
+				error	: this.showError.bind( this )
+			});
+
+			return false;
+		});
 	}
 
 	/**

@@ -14,10 +14,18 @@ const app			= Server();
  *
  * @return	void
  */
-app.get( '/ip', async( event ) => {
+app.get( '/ip/private', async( event ) => {
 		const ipInterfaces	= IpLookup.getLocalIpV4s();
 		const externalIP	= await IpLookup.getExternalIpv4().catch( event.next );
 
-		event.render( 'ip', { ipInterfaces, externalIP } );
+		event.send( ipInterfaces );
 	}
 );
+
+app.get( '/ip/public', async( event ) => {
+		const ip	= await IpLookup.getExternalIpv4().catch( event.next );
+
+		event.send( ip );
+	}
+);
+

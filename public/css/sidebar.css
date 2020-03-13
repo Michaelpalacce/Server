@@ -86,6 +86,10 @@ body {
 	cursor: pointer; /* "hand" cursor */
 }
 
+.navbar-action:hover{
+	color: whitesmoke;
+}
+
 .dropdown-item:hover{
 	background: transparent!important;
 }
