@@ -191,8 +191,10 @@ class ContextMenu
 		switch ( true )
 		{
 			case target.hasClass( 'folder' ):
-				this.downloadElement.hide();
 				this.newFolderElement.hide();
+
+				const folderDownloadLink	= this.getElementPath( target );
+				this.downloadElement.show().attr( 'href', `/file?file=${folderDownloadLink}` );
 
 				this.renameElement.on( 'click', ( event )=>{ return this.renameCallback( event, target ); } ).show();
 				this.cutElement.on( 'click', ( event )=>{ return this.cutCallback( event, target ); } ).show();
@@ -202,8 +204,8 @@ class ContextMenu
 			case target.hasClass( 'file' ):
 				this.newFolderElement.hide();
 
-				const targetDownloadLink	= target.find( '.file-download' ).attr( 'href' );
-				this.downloadElement.show().attr( 'href', targetDownloadLink );
+				const fileDownloadLink	= target.find( '.file-download' ).attr( 'href' );
+				this.downloadElement.show().attr( 'href', fileDownloadLink );
 
 				this.cutElement.on( 'click', ( event )=>{ return this.cutCallback( event, target ); } ).show();
 				this.copyElement.on( 'click', ( event )=>{ return this.copyCallback( event, target ); } ).show();

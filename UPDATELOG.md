@@ -1,3 +1,9 @@
+8.6.1
+- Fixed Preview of text
+
+8.6.0
+- Added folder downloading
+
 8.5.1
 - Updated the future improvements section
 

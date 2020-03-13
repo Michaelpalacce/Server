@@ -247,8 +247,9 @@ class Modal
 		this._contentElement.removeClass( 'bigger-modal-content' );
 		this._previewVideoElement.trigger( 'pause' );
 
-		this._inputElement.val( '' );
+		this._previewTextElement.text( '' );
 		this._textElement.text( '' );
+		this._inputElement.val( '' );
 		this.detachEvents();
 	}
 }

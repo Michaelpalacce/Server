@@ -4,6 +4,7 @@
 const { Server }	= require( 'event_request' );
 const path			= require( 'path' );
 const fs			= require( 'fs' );
+const archiver		= require( 'archiver' );
 
 const app			= Server();
 
@@ -32,8 +33,8 @@ const downloadFailedCallback	= ( event ) => {
 app.get( '/file', ( event ) => {
 		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
 		const file		= ! result.hasValidationFailed()
-			? result.getValidationResult().file
-			: false;
+						? result.getValidationResult().file
+						: false;
 
 		if ( ! file || ! fs.existsSync( file ) )
 		{
@@ -42,18 +43,38 @@ app.get( '/file', ( event ) => {
 		else
 		{
 			const fileStats	= path.parse( file );
-			event.setHeader( 'content-disposition', `attachment; filename="${fileStats.base}"`);
-			event.setHeader( 'Content-type', fileStats.ext );
-			event.setHeader( 'Content-Length', fs.statSync( file ).size );
+			const fileName	= fileStats.base.replace( '/', '' );
 
-			try
+			if ( fs.lstatSync( file ).isDirectory() )
 			{
 				event.clearTimeout();
-				event.send( fs.createReadStream( file ) );
+				const archive	= archiver( 'zip', {
+					zlib: { level: 9 }
+				});
+
+				const output	= event.response;
+
+				archive.pipe( output );
+				event.setHeader( 'content-disposition', `attachment; filename="${fileName}.zip"` );
+				event.setHeader( 'Content-type', 'zip' );
+				archive.directory( file, false );
+				archive.finalize();
 			}
-			catch ( e )
+			else
 			{
-				downloadFailedCallback( event );
+				event.setHeader( 'content-disposition', `attachment; filename="${fileName}"` );
+				event.setHeader( 'Content-type', fileStats.ext );
+				event.setHeader( 'Content-Length', fs.statSync( file ).size );
+
+				try
+				{
+					event.clearTimeout();
+					event.send( fs.createReadStream( file ) );
+				}
+				catch ( e )
+				{
+					downloadFailedCallback( event );
+				}
 			}
 		}
 	}
