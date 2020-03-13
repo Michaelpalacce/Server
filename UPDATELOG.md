@@ -1,3 +1,9 @@
+8.5.0
+- Added Folder renaming
+- Added Folder Cutting
+- Added Folder Copying
+- Added Add Folder In the context Menu
+
 8.4.1
 - Small Quality of life changes
 - Moved the back button

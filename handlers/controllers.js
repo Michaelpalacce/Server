@@ -12,4 +12,4 @@ require( './file/controller/preview' );
 require( './folder/controller/browse' );
 require( './folder/controller/delete' );
 require( './folder/controller/upload' );
-
+require( './folder/controller/move' );

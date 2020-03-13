@@ -65,37 +65,47 @@ class View
 			return false;
 		});
 
-		$( '#addFolder' ).on( 'click', ( event )=>{
-			event.preventDefault();
-			event.stopPropagation();
-			event.stopImmediatePropagation();
+		$( '#addFolder' ).on( 'click', this.createNewFolder.bind( this ) );
+	}
 
-			modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder )=>{
-				if ( userFolder == null || userFolder === '' )
+	/**
+	 * @brief	Creates a new folder
+	 *
+	 * @param	event Event
+	 *
+	 * @return	boolean
+	 */
+	createNewFolder( event )
+	{
+		event.preventDefault();
+		event.stopPropagation();
+		event.stopImmediatePropagation();
+
+		modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder )=>{
+			if ( userFolder == null || userFolder === '' )
+			{
+				return;
+			}
+
+			const folderName		= userFolder;
+			const encodedFolderName	= encodeURIComponent( '/' + userFolder );
+			const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
+
+			$.ajax({
+				url		: '/folder',
+				data	: {
+					folder: encodedUri
+				},
+				method		: 'POST',
+				success	: ()=>
 				{
-					return;
-				}
-
-				const folderName		= userFolder;
-				const encodedFolderName	= encodeURIComponent( '/' + userFolder );
-				const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
-
-				$.ajax({
-					url		: '/folder',
-					data	: {
-						folder: encodedUri
-					},
-					method		: 'POST',
-					success	: ()=>
-					{
-						this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
-					},
-					error	: this.showError.bind( this )
-				});
+					this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
+				},
+				error	: this.showError.bind( this )
 			});
-
-			return false;
 		});
+
+		return false;
 	}
 
 	/**
@@ -324,6 +334,7 @@ class View
 			element.addClass( 'item' );
 			element.attr( 'data-item-name', fullName );
 			element.attr( 'data-item-encoded-uri', encodedURI );
+			element.attr( 'data-item-type', 'folder' );
 
 			element.find( '.folder-name' ).attr( 'data-href', encodedURI ).attr( 'title', fullName );
 

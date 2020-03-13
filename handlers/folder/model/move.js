@@ -5,7 +5,8 @@ const util		= require( 'util' );
 const path		= require( 'path' );
 
 const rename	= util.promisify( fs.rename );
-const copy		= util.promisify( fs.copyFile );
+const ncp		= require('ncp').ncp;
+
 
 const Model		= {};
 
@@ -42,9 +43,9 @@ Model.cut	= function( event )
 	const fileStats				= fs.statSync( oldPath );
 	const oldPathParsed			= path.parse( oldPath );
 
-	if ( fileStats.isDirectory() )
+	if ( fileStats.isFile() )
 	{
-		return event.send( 'Cannot cut Folders', 400 );
+		return event.send( 'Cannot cut files', 400 );
 	}
 
 	if ( ! fs.existsSync( newPath ) )
@@ -80,9 +81,9 @@ Model.copy	= function( event )
 	const fileStats				= fs.statSync( oldPath );
 	const oldPathParsed			= path.parse( oldPath );
 
-	if ( fileStats.isDirectory() )
+	if ( fileStats.isFile() )
 	{
-		return event.send( 'Cannot copy Folders', 400 );
+		return event.send( 'Cannot copy Files', 400 );
 	}
 
 	if ( ! fs.existsSync( newPath ) )
@@ -92,9 +93,14 @@ Model.copy	= function( event )
 
 	newPath	= path.join( newPath, oldPathParsed.base );
 
-	copy( oldPath, newPath ).then(()=>{
+	ncp( oldPath, newPath, ( err )=>{
+		if ( err )
+		{
+			return event.sendError( err );
+		}
+
 		event.send( { newPath } );
-	}).catch( event.next );
+	});
 };
 
 /**
@@ -117,14 +123,14 @@ Model.rename	= function( event )
 
 	const fileStats				= fs.statSync( oldPath );
 
-	if ( fileStats.isDirectory() )
+	if ( fileStats.isFile() )
 	{
-		return event.send( 'Cannot rename Folders', 400 );
+		return event.send( 'Cannot rename files', 400 );
 	}
 
 	if ( fs.existsSync( newPath ) )
 	{
-		return event.send( 'File already exists', 400 );
+		return event.send( 'Folder already exists', 400 );
 	}
 
 	rename( oldPath, newPath ).then(()=>{

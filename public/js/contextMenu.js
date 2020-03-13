@@ -1,8 +1,12 @@
 'use strict';
 
-const ACTION_NONE	= 0;
-const ACTION_COPY	= 1;
-const ACTION_CUT	= 2;
+const ACTION_NONE			= 0;
+const ACTION_COPY			= 1;
+const ACTION_CUT			= 2;
+
+const ACTION_TYPE_NONE		= '';
+const ACTION_TYPE_FOLDER	= 'folder';
+const ACTION_TYPE_FILE		= 'file';
 
 /**
  * @brief	Class responsible for showing the context menu dialog on right click
@@ -20,6 +24,7 @@ class ContextMenu
 		this.copyElement		= this.element.find( '#context-copy' );
 		this.pasteElement		= this.element.find( '#context-paste' );
 		this.renameElement		= this.element.find( '#context-rename' );
+		this.newFolderElement	= this.element.find( '#context-new-folder' );
 
 		this.elementWidth		= this.element.width();
 		this.elementHeight		= this.element.height();
@@ -27,6 +32,7 @@ class ContextMenu
 
 		this.action				= ACTION_NONE;
 		this.actionElementPath	= '';
+		this.actionElementType	= '';
 
 		this.attachEvents();
 	}
@@ -72,12 +78,102 @@ class ContextMenu
 		this.copyElement.off( 'click' );
 		this.pasteElement.off( 'click' );
 		this.renameElement.off( 'click' );
+		this.newFolderElement.off( 'click' );
 	}
 
+	/**
+	 * @brief	Flushes element data
+	 *
+	 * @return	void
+	 */
 	flushActionElementData()
 	{
 		this.action				= ACTION_NONE;
 		this.actionElementPath	= '';
+		this.actionElementType	= ACTION_TYPE_NONE;
+	}
+
+	/**
+	 * @brief	Renames the item
+	 *
+	 * @param	Event event
+	 * @param	Element target
+	 *
+	 * @return	Boolean
+	 */
+	renameCallback( event, target )
+	{
+		event.preventDefault();
+		event.stopPropagation();
+		event.stopImmediatePropagation();
+		this.element.hide();
+
+		const oldName	= target.closest( '.item' ).attr( 'data-item-name' );
+		const itemType	= this.getElementType( target );
+
+		modal.askUserInput( 'What is the new name of the item', oldName ).then( ( newName )=>{
+			$.ajax({
+				url		: `/${itemType}/rename`,
+				method	:'POST',
+				data	: {
+					newPath: this.view.currentDir + encodeURIComponent( '/' + newName ),
+					oldPath: this.getElementPath( target )
+				},
+				success	: ( data )=>
+				{
+					target.remove();
+					this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
+					this.flushActionElementData();
+				},
+				error	: this.view.showError.bind( this.view )
+			});
+		});
+
+		return false;
+	}
+
+	/**
+	 * @brief	Cut the items to a new place
+	 *
+	 * @param	event Event
+	 * @param	target Element
+	 *
+	 * @return	Boolean
+	 */
+	cutCallback( event, target )
+	{
+		event.preventDefault();
+		event.stopPropagation();
+		event.stopImmediatePropagation();
+
+		this.action				= ACTION_CUT;
+		this.actionElementPath	= this.getElementPath( target );
+		this.actionElementType	= this.getElementType( target );
+		this.element.hide();
+
+		return false;
+	}
+
+	/**
+	 * @brief	Copy the items to a new place
+	 *
+	 * @param	event Event
+	 * @param	target Element
+	 *
+	 * @return	Boolean
+	 */
+	copyCallback( event, target )
+	{
+		event.preventDefault();
+		event.stopPropagation();
+		event.stopImmediatePropagation();
+
+		this.action				= ACTION_COPY;
+		this.actionElementPath	= this.getElementPath( target );
+		this.actionElementType	= this.getElementType( target );
+		this.element.hide();
+
+		return false;
 	}
 
 	/**
@@ -96,60 +192,22 @@ class ContextMenu
 		{
 			case target.hasClass( 'folder' ):
 				this.downloadElement.hide();
-				this.cutElement.hide();
-				this.copyElement.hide();
-				this.renameElement.hide();
+				this.newFolderElement.hide();
+
+				this.renameElement.on( 'click', ( event )=>{ return this.renameCallback( event, target ); } ).show();
+				this.cutElement.on( 'click', ( event )=>{ return this.cutCallback( event, target ); } ).show();
+				this.copyElement.on( 'click', ( event )=>{ return this.copyCallback( event, target ); } ).show();
 				break;
 
 			case target.hasClass( 'file' ):
+				this.newFolderElement.hide();
+
 				const targetDownloadLink	= target.find( '.file-download' ).attr( 'href' );
 				this.downloadElement.show().attr( 'href', targetDownloadLink );
 
-				this.cutElement.on( 'click', ( event )=>{
-					event.preventDefault();
-					event.stopPropagation();
-					event.stopImmediatePropagation();
-
-					this.action				= ACTION_CUT;
-					this.actionElementPath	= this.getElementPath( target );
-					this.element.hide();
-				} ).show();
-
-				this.copyElement.on( 'click', ( event )=>{
-					event.preventDefault();
-					event.stopPropagation();
-					event.stopImmediatePropagation();
-
-					this.action				= ACTION_COPY;
-					this.actionElementPath	= this.getElementPath( target );
-					this.element.hide();
-				} ).show();
-
-				this.renameElement.on( 'click', ( event )=>{
-					event.preventDefault();
-					event.stopPropagation();
-					event.stopImmediatePropagation();
-					this.element.hide();
-
-					const oldName	= target.closest( '.item' ).attr( 'data-item-name' );
-					modal.askUserInput( 'What is the new name of the file', oldName ).then( ( newName )=>{
-						$.ajax({
-							url		: '/file/rename',
-							method	:'POST',
-							data	: {
-								newPath: this.view.currentDir + encodeURIComponent( '/' + newName ),
-								oldPath: this.getElementPath( target )
-							},
-							success	: ( data )=>
-							{
-								target.remove();
-								this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
-								this.flushActionElementData();
-							},
-							error	: this.view.showError.bind( this.view )
-						});
-					});
-				} ).show();
+				this.cutElement.on( 'click', ( event )=>{ return this.cutCallback( event, target ); } ).show();
+				this.copyElement.on( 'click', ( event )=>{ return this.copyCallback( event, target ); } ).show();
+				this.renameElement.on( 'click', ( event )=>{ return this.renameCallback( event, target ); } ).show();
 				break;
 
 			default:
@@ -158,6 +216,11 @@ class ContextMenu
 				this.cutElement.hide();
 				this.copyElement.hide();
 				this.renameElement.hide();
+
+				this.newFolderElement.on( 'click', ( event )=>{
+					this.element.hide();
+					view.createNewFolder( event );
+				} ).show();
 
 				this.pasteElement.on( 'click', ( event )=>{
 					event.preventDefault();
@@ -170,11 +233,11 @@ class ContextMenu
 					switch ( this.action )
 					{
 						case ACTION_COPY:
-							url	= `/file/copy`;
+							url	= `/${this.actionElementType}/copy`;
 							break;
 
 						case ACTION_CUT:
-							url	= `/file/cut`;
+							url	= `/${this.actionElementType}/cut`;
 							break;
 
 						case ACTION_NONE:
@@ -220,13 +283,27 @@ class ContextMenu
 	/**
 	 * @brief	Gets the current element path
 	 *
-	 * @param	jQueryElement targetElement
+	 * @param	targetElement jQueryElement
 	 *
 	 * @returns	String
 	 */
 	getElementPath( targetElement )
 	{
 		return targetElement.closest( '.item' ).attr( 'data-item-encoded-uri' );
+	}
+
+	/**
+	 * @brief	Gets the current element type
+	 *
+	 * @param	targetElement jQueryElement
+	 *
+	 * @returns	String
+	 */
+	getElementType( targetElement )
+	{
+		const itemType	= targetElement.closest( '.item' ).attr( 'data-item-type' );
+
+		return  itemType === ACTION_TYPE_FOLDER ? itemType : ACTION_TYPE_FILE;
 	}
 
 	/**

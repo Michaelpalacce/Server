@@ -12,7 +12,7 @@ const app			= Server();
 /**
  * @brief	Removes a folder recursively
  *
- * @param	String path
+ * @param	String dir
  *
  * @return	void
  */
