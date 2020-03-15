@@ -19,6 +19,7 @@ class Modal
 
 		this._previewElement		= this._element.find( '#modalPreview' ).hide();
 		this._previewVideoElement	= this._element.find( '#modalPreviewVideo' ).hide();
+		this._previewAudioElement	= this._element.find( '#modalPreviewAudio' ).hide();
 		this._previewTextElement	= this._element.find( '#modalPreviewText' ).hide();
 		this._previewImageElement	= this._element.find( '#modalPreviewImage' ).hide();
 	}
@@ -40,6 +41,10 @@ class Modal
 			case 'video':
 				this._previewVideoElement.show();
 				this._previewVideoElement.attr( 'src', dataSrc );
+				break;
+			case 'audio':
+				this._previewAudioElement.show();
+				this._previewAudioElement.attr( 'src', dataSrc );
 				break;
 			case 'text':
 				this._previewTextElement.show();
@@ -251,10 +256,12 @@ class Modal
 		this._choiceNoElement.hide();
 		this._previewElement.hide();
 		this._previewVideoElement.hide();
+		this._previewAudioElement.hide();
 		this._previewTextElement.hide();
 		this._previewImageElement.hide();
 		this._contentElement.removeClass( 'bigger-modal-content' );
 		this._previewVideoElement.trigger( 'pause' );
+		this._previewAudioElement.trigger( 'pause' );
 
 		this._previewTextElement.text( '' );
 		this._textElement.text( '' );

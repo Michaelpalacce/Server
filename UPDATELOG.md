@@ -1,3 +1,6 @@
+8.9.0
+- Implemented the newest version of event_request to add audio streams 
+
 8.8.1
 - Implemented the newest version of event_request to add more stream types
 
