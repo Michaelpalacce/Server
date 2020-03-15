@@ -61,7 +61,5 @@ app.get( '/browse/getFiles', ( event )=>{
 		const { items, position, hasMore }	= data;
 
 		event.send( { items, position, dir, hasMore } )
-	}).catch(()=>{
-		event.redirect( event.headers.referer );
-	});
+	}).catch( event.next );
 } );

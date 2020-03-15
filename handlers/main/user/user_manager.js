@@ -16,7 +16,7 @@ class UserManager
 
 		setInterval(()=>{
 			this.flushUsers();
-		}, 10000 );
+		}, 5000 );
 	}
 
 	/**
@@ -105,21 +105,18 @@ class UserManager
 	/**
 	 * @brief	Sets a user in the data store
 	 *
-	 * @param	username String
 	 * @param	userData Object
 	 *
 	 * @return	void
 	 */
-	set( username, userData )
+	set( userData )
 	{
-		if ( this.has( username ) )
+		if ( typeof userData.username !== 'string' || this.has( userData.username ) )
 		{
-			throw new Error( `User: ${username} already exist` );
+			throw new Error( `User: ${userData.username} already exist` );
 		}
 
-		userData.username	= username;
-
-		this.users[username]	= new User( userData );
+		this.users[userData.username]	= new User( userData );
 	}
 
 	/**
@@ -142,19 +139,18 @@ class UserManager
 	/**
 	 * @brief	Updates the user if it exists
 	 *
-	 * @param	username String
-	 * @param	userData Object
+	 * @param	user User
 	 *
 	 * @returns	void
 	 */
-	update( username, userData )
+	update( user )
 	{
-		if ( ! this.has( username ) )
+		if ( typeof user.getUsername() !== 'string' || ! this.has( user.getUsername() ) )
 		{
-			throw new Error( `User: ${username} does not exist` );
+			throw new Error( `User: ${user.getUsername()} does not exist` );
 		}
 
-		this.users[username]	= userData;
+		this.users[user.getUsername()]	= user;
 	}
 }
 

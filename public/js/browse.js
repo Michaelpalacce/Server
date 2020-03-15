@@ -3,7 +3,7 @@ window.Dropzone.autoDiscover	= false;
 /**
  * @brief	View Class responsible for altering the page
  */
-class View
+class Browse
 {
 	constructor()
 	{
@@ -56,12 +56,12 @@ class View
 		});
 
 		$( document ).on( 'click', '.file-delete', ( event ) => {
-			this.deleteItem( $( event.target ), View.TYPE_FILE );
+			this.deleteItem( $( event.target ), Browse.TYPE_FILE );
 			return false;
 		});
 
 		$( document ).on( 'click', '.folder-delete', ( event ) => {
-			this.deleteItem( $( event.target ), View.TYPE_FOLDER );
+			this.deleteItem( $( event.target ), Browse.TYPE_FOLDER );
 			return false;
 		});
 
@@ -140,7 +140,7 @@ class View
 	 *
 	 * @return	void
 	 */
-	deleteItem( element, type = View.TYPE_FILE )
+	deleteItem( element, type = Browse.TYPE_FILE )
 	{
 		element				= element.closest( '.item' );
 		const itemToDelete	= element.attr( 'data-item-encoded-uri' );
@@ -161,7 +161,7 @@ class View
 			});
 		};
 
-		if ( type === View.TYPE_FOLDER )
+		if ( type === Browse.TYPE_FOLDER )
 		{
 			modal.askConfirmation( `Are you sure you want to delete this item?` ).then(( confirmDelete )=>{
 				if ( ! confirmDelete )
@@ -266,12 +266,7 @@ class View
 				}
 
 				const { items, position, hasMore, dir }	= JSON.parse( data );
-
-				if ( dir !== decodeURIComponent( this.currentDir ) )
-				{
-					return;
-				}
-				this.currentPosition	= position;
+				this.currentPosition					= position;
 
 				for ( const index in items )
 				{
@@ -417,9 +412,10 @@ class View
 	}
 }
 
-View.TYPE_FILE		= 'file';
-View.TYPE_FOLDER	= 'folder';
+Browse.TYPE_FILE	= 'file';
+Browse.TYPE_FOLDER	= 'folder';
 
-const view	= new View();
+const view			= new Browse();
+const modal			= new Modal();
 
 view.browse( currentDir );

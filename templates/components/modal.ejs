@@ -27,6 +27,18 @@
 
                 <img class="preview-item" src="" alt="" id="modalPreviewImage">
             </div>
+
+            <% if ( active === 'users' ) { %>
+                <div class="row" id="userPreview" style="align-items: center; justify-content: center; display: flex;">
+                    <div class="input-group mb-3 col-lg-9 text-center">
+                        <label for="userPreviewUsername" class="input-label">Username: </label>
+                        <input type="text" class="form-control disabled" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewUsername" style="height: 35px">
+                    </div>
+
+                    <button type="button" class="btn col-lg-4 btn-outline-main-red choice-button" id="userPreviewDelete" style="height: 35px">Delete</button>
+                </div>
+            <% } %>
+
         </div>
     </div>
 </div>

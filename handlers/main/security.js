@@ -12,7 +12,8 @@ app.add(( event )=>{
 
 	if ( ! userManager.has( process.env.ADMIN_USERNAME ) )
 	{
-		userManager.set( process.env.ADMIN_USERNAME, {
+		userManager.set( {
+			username	: process.env.ADMIN_USERNAME,
 			password	: process.env.ADMIN_PASSWORD,
 			isSU		: true,
 			permissions	: [],
@@ -79,6 +80,7 @@ if ( process.env.SECURITY_ENABLED == true )
 			event.session.add( 'username', user.getUsername() );
 			event.session.add( 'route', user.getRoute() );
 			event.session.add( 'authenticated', true );
+			event.session.add( 'SU', user.isSuperUser() );
 
 			event.redirect( '/' );
 		}

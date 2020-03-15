@@ -1,3 +1,8 @@
+8.10.0
+- Added ability ot add and delete users
+- Updating users is not possible yet
+- Users will have different route permissions
+
 8.9.1
 - Forgot to update event_request
 

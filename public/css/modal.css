@@ -27,7 +27,7 @@
 		margin: auto;
 		padding: 20px;
 		border: 1px solid #888;
-		width: 35% !important;
+		width: 50% !important;
 	}
 
 	.bigger-modal-content{
@@ -74,4 +74,9 @@
 .preview-item{
 	width: 100%;
 	height: auto;
+}
+
+.input-label{
+	margin-right: 10px;
+	font-size: 20px;
 }

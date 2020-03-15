@@ -269,5 +269,3 @@ class Modal
 		this.detachEvents();
 	}
 }
-
-const modal	= new Modal();

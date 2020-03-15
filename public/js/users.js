@@ -3,7 +3,91 @@
  */
 class Users
 {
-	loadUsers()
+	constructor()
+	{
+		this.loadAllUsers();
+		this.attachEvents();
+	}
+
+	/**
+	 * @brief
+	 */
+	attachEvents()
+	{
+		$( document ).on( 'click', '#addUser', async ( event )=>{
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+			event.preventDefault();
+
+			const username		= await modal.askUserInput( 'What is the user\'s username?' ).catch( this.showError );
+			const password		= await modal.askUserInput( 'What is the user\'s password?' ).catch( this.showError );
+			const route			= encodeURIComponent( await modal.askUserInput( 'What is the user\'s allowed route?', '/' ).catch( this.showError ) );
+			const isSU			= await modal.askConfirmation( 'Is the user a super user' ).catch( this.showError );
+			const permissions	= [];
+
+			const userParams	= {
+				username,
+				password,
+				route,
+				isSU,
+				permissions
+			};
+
+			$.ajax({
+				url		: '/users/add',
+				method	: 'POST',
+				data	: userParams,
+				success	: ()=>{
+					this.showUser( username );
+				},
+				error	: this.showError
+			});
+
+			return false;
+		});
+	}
+
+	/**
+	 * @brief	Shows the user modal with information about the user
+	 *
+	 * @param	String username
+	 *
+	 * @return	void
+	 */
+	showUserModal( username )
+	{
+		this.fetchUserData( username ).then( ( userData )=>{
+			modal.showUserInfo( userData );
+		}).catch( this.showError );
+	}
+
+	/**
+	 * @brief	Fetches data about the user
+	 *
+	 * @param	username String
+	 *
+	 * @return	Promise
+	 */
+	fetchUserData( username )
+	{
+		return new Promise(( resolve, reject )=>{
+			$.ajax({
+				url		: `/users/${username}`,
+				method	: 'GET',
+				success	: ( userData )=>{
+					resolve( JSON.parse( userData ) );
+				},
+				error	: reject
+			});
+		});
+	}
+
+	/**
+	 * @brief	Loads all the users from the DB
+	 *
+	 * @return	void
+	 */
+	loadAllUsers()
 	{
 		$.ajax({
 			url		: '/users/list',
@@ -13,11 +97,11 @@ class Users
 
 				for ( const username of users )
 				{
-					this.addUser( username );
+					this.showUser( username );
 				}
 			},
-			error	: this.showError.bind( this )
-		})
+			error	: this.showError
+		});
 	}
 
 	/**
@@ -27,15 +111,41 @@ class Users
 	 *
 	 * @return	void
 	 */
-	addUser( username )
+	showUser( username )
 	{
-		const element	= $( '#userRow' ).clone().removeAttr( 'id' );
+		const element	= $( '#userRow' ).clone().removeAttr( 'id' ).attr( 'data-username', username );
 
 		element.find( '.userRowName' ).text( username );
 
 		element.appendTo( '#userStructure' );
 
+		element.on( 'click', ()=>{
+			this.showUserModal( username );
+		});
+
 		element.show();
+	}
+
+	/**
+	 * @brief	Deletes the given user
+	 *
+	 * @param	username String
+	 *
+	 * @return	void
+	 */
+	deleteUser( username )
+	{
+		return new Promise(( resolve, reject )=>{
+			$.ajax({
+				url		: `/users/${username}`,
+				method	: 'DELETE',
+				success	: ( response )=>{
+					$( `*[data-username="${username}"]` ).remove();
+					resolve( response );
+				},
+				error	: reject
+			});
+		});
 	}
 
 	/**
@@ -52,5 +162,4 @@ class Users
 }
 
 const users	= new Users();
-
-users.loadUsers();
+const modal	= new UsersModal();

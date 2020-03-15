@@ -7,9 +7,25 @@ class User
 	{
 		this.username		= userData.username || '';
 		this.password		= userData.password || '';
-		this.isSU			= userData.isSU || false;
+		this.isSU			= userData.isSU === 'true' || userData.isSU === true;
 		this.route			= userData.route || '/';
 		this.permissions	= userData.permissions || [];
+	}
+
+	/**
+	 * @brief	Gets the user in an object
+	 *
+	 * @return	Object
+	 */
+	getUserData()
+	{
+		return {
+			username	: this.username,
+			password	: this.password,
+			isSU		: this.isSU,
+			route		: this.route,
+			permissions	: this.permissions,
+		}
 	}
 
 	/**
@@ -50,6 +66,16 @@ class User
 	getRoute()
 	{
 		return this.route;
+	}
+
+	/**
+	 * @brief	Returns if the user is a super user or not
+	 *
+	 * @return	Boolean
+	 */
+	isSuperUser()
+	{
+		return this.isSU;
 	}
 }
 

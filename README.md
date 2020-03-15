@@ -55,6 +55,13 @@ https://github.com/Michaelpalacce/Server/releases
 - DEBUG - Whether to write logs on a debug level 1 or 0
 - Others should probably not be touched
 
+#Adding users
+- If you want to add users go to the users page from the sidebar and click on the Add Users button
+- You will be asked to fill in the new user's data
+- Permissions currently does not work
+- Route will be the path from which the user can access the FS
+- When adding a user the user will persist after 5 seconds so don't stop the server
+
 #Known Bugs:
 - When handling big folders and uploading at the same time, may display some items twice or fail loading
 

@@ -11,7 +11,7 @@
 <body>
 	<%- include("components/contextmenu") %>
 	<%- include("components/browse-templates") %>
-	<%- include("components/modal") %>
+	<%- include("components/modal", { active: "browse" }) %>
 	<%- include("components/sidebar", { active: "browse" }) %>
 
 	<div class="pt-5 container">
@@ -27,5 +27,5 @@
 	let currentDir	= '<%= dir %>';
 </script>
 <script src="/public/js/contextMenu.js"></script>
-<script src="/public/js/main.js"></script>
+<script src="/public/js/browse.js"></script>
 </html>
