@@ -48,11 +48,11 @@ https://github.com/Michaelpalacce/Server/releases
 #Modifications
 - You can modify the .env file to your needs.
 - APP_PORT will be which port the app is attached to
-- SECURITY_ENABLED - whether to secure the app
+- SECURITY_ENABLED - whether to secure the app 1 or 0
 - ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
-- REQUEST_TIMEOUT - How much to keep requests active for
-- UPLOADS_DIR - where to put the temporary upload files
-- DEBUG - Whether to write logs on a debug level
+- REQUEST_TIMEOUT - How much to keep requests active for in milliseconds
+- UPLOADS_DIR - where to put the temporary upload files 
+- DEBUG - Whether to write logs on a debug level 1 or 0
 - Others should probably not be touched
 
 #Known Bugs:

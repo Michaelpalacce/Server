@@ -4,21 +4,22 @@
 	<meta charset="UTF-8">
 	<title>Login</title>
 	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/public/css/login.css">
 </head>
-<body>
+<body class="bg-dark">
 <div class="container">
-	<form class="p-xl-5" role="form" action="/login" method="POST" enctype="application/x-www-form-urlencoded">
-		<div class="input-group">
+	<form class="col-lg-3 loginForm" role="form" action="/login" method="POST" enctype="application/x-www-form-urlencoded" >
+		<div class="input-group mt-3">
 			<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 			<input id="email" type="text" class="form-control" name="username" value="" placeholder="Username">
 		</div>
 
-		<div class="input-group">
+		<div class="input-group mt-3">
 			<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 			<input id="password" type="password" class="form-control" name="password" value="" placeholder="Password">
 		</div>
 
-		<button type="submit" class="btn btn-primary">Login</button>
+		<button type="submit" class="btn btn-primary mt-3 mb-3">Login</button>
 	</form>
 </div>
 </body>

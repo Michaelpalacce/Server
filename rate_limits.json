@@ -2,7 +2,7 @@
   {
     "path": "/login",
     "methods": ["POST"],
-    "maxAmount": 5,
+    "maxAmount": 500,
     "refillTime": 10,
     "refillAmount": 1,
     "policy": "strict",

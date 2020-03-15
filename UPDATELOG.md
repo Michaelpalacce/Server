@@ -1,3 +1,12 @@
+8.8.0
+- Added a logout functionality
+- Implemented the newest version of event_request to fix the session ttl and the set cookie in general
+- Added a User section that for now only lists the users
+- You can now see the IP section from anywhere and use it from anywhere 
+- The login page is now also black
+- Updated README 
+- Started working on the users functionality and added a UserManager in the backend 
+
 8.7.1
 - Updated README
 

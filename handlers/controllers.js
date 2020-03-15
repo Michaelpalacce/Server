@@ -13,3 +13,5 @@ require( './folder/controller/browse' );
 require( './folder/controller/delete' );
 require( './folder/controller/upload' );
 require( './folder/controller/move' );
+require( './user/controller/list' );
+require( './user/controller/add' );

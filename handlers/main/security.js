@@ -2,13 +2,36 @@
 
 // Dependencies
 const { Server }	= require( 'event_request' );
-const path			= require( './path' );
+const UserManager	= require( './user/user_manager' );
 
 const app			= Server();
+const userManager	= new UserManager( process.cachingServer );
+
+app.add(( event )=>{
+	event.userManager	= userManager;
+
+	if ( ! userManager.has( process.env.ADMIN_USERNAME ) )
+	{
+		userManager.set( process.env.ADMIN_USERNAME, {
+			password	: process.env.ADMIN_PASSWORD,
+			isSU		: true,
+			permissions	: [],
+			route		: '/'
+		});
+	}
+
+	event.next();
+});
 
 // Initialize the session
 app.add( async ( event )=>{
 	event.initSession( event.next ).catch( event.next );
+});
+
+app.get( '/logout', async ( event )=>{
+	await event.session.removeSession();
+
+	event.redirect( '/login', 302 );
 });
 
 if ( process.env.SECURITY_ENABLED == true )
@@ -30,7 +53,7 @@ if ( process.env.SECURITY_ENABLED == true )
 	});
 
 	app.get( '/login', ( event )=>{
-		event.render( 'login' );
+		event.render( 'login', {} );
 	});
 
 	app.post( '/login', async ( event )=>{
@@ -38,29 +61,30 @@ if ( process.env.SECURITY_ENABLED == true )
 
 		if ( result.hasValidationFailed() )
 		{
-			event.render( '/login' );
+			event.render( '/login', {} );
 			return;
 		}
 
-		result			= result.getValidationResult();
-		let cacheServer	= Server().getPlugin( 'er_cache_server' );
-		let dataServer	= cacheServer.getServer();
+		const { username, password }	= result.getValidationResult();
 
-		const dataSet	= await dataServer.get( result.username );
-
-		if ( dataSet !== null && typeof dataSet.value.password === 'string' && dataSet.value.password === result.password )
+		if ( ! event.userManager.has( username ) )
 		{
-			const route	= typeof dataSet.value.route !== 'undefined' ? dataSet.value.route : path.getRootDir();
+			return event.render( '/login', {} );
+		}
 
-			event.session.add( 'username', dataSet.key );
+		const user	= event.userManager.get( username );
+
+		if ( user.getPassword() === password )
+		{
+			event.session.add( 'username', user.getUsername() );
+			event.session.add( 'route', user.getRoute() );
 			event.session.add( 'authenticated', true );
-			event.session.add( 'route', route );
 
 			event.redirect( '/' );
 		}
 		else
 		{
-			event.render( '/login' );
+			event.render( '/login', {} );
 		}
 	});
 }
@@ -69,5 +93,9 @@ else
 	app.add(( event )=>{
 		event.session.add( 'route', '/' );
 		event.next();
-	})
+	});
+
+	app.get( '/login', ( event )=>{
+		event.redirect( '/', 302 );
+	});
 }
