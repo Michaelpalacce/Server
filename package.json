@@ -1,6 +1,6 @@
 {
   "name": "server-emulator",
-  "version": "8.9.0",
+  "version": "8.9.1",
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   "dependencies": {
     "archiver": "^3.1.1",
     "ejs": "^2.7.4",
-    "event_request": "13.5.6",
+    "event_request": "13.*",
     "ncp": "^2.0.0"
   }
 }

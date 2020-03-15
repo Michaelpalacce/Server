@@ -1,3 +1,6 @@
+8.9.1
+- Forgot to update event_request
+
 8.9.0
 - Implemented the newest version of event_request to add audio streams 
 
