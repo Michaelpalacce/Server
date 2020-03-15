@@ -37,7 +37,7 @@ class Modal
 		this._contentElement.addClass( 'bigger-modal-content' );
 		switch ( type )
 		{
-			case 'mp4':
+			case 'video':
 				this._previewVideoElement.show();
 				this._previewVideoElement.attr( 'src', dataSrc );
 				break;

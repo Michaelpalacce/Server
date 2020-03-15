@@ -1,3 +1,6 @@
+8.8.1
+- Implemented the newest version of event_request to add more stream types
+
 8.8.0
 - Added a logout functionality
 - Implemented the newest version of event_request to fix the session ttl and the set cookie in general
