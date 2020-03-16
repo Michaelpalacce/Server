@@ -1,3 +1,6 @@
+8.11.1
+- Changed some text
+
 8.11.0
 - Added ability to update the users
 
