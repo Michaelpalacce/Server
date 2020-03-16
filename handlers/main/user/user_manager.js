@@ -139,18 +139,20 @@ class UserManager
 	/**
 	 * @brief	Updates the user if it exists
 	 *
-	 * @param	user User
+	 * @param	username String
+	 * @param	userData Object
 	 *
 	 * @returns	void
 	 */
-	update( user )
+	update( username, userData )
 	{
-		if ( typeof user.getUsername() !== 'string' || ! this.has( user.getUsername() ) )
+		if ( typeof username !== 'string' || ! this.has( username ) )
 		{
-			throw new Error( `User: ${user.getUsername()} does not exist` );
+			throw new Error( `User: ${username} does not exist` );
 		}
 
-		this.users[user.getUsername()]	= user;
+		userData.username		= username;
+		this.users[username]	= new User( userData );
 	}
 }
 

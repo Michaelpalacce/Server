@@ -8,8 +8,8 @@ class User
 		this.username		= userData.username || '';
 		this.password		= userData.password || '';
 		this.isSU			= userData.isSU === 'true' || userData.isSU === true;
-		this.route			= userData.route || '/';
-		this.permissions	= userData.permissions || [];
+		this.route			= typeof userData.route === 'string' ? userData.route : '/';
+		this.permissions	= userData.permissions || '';
 	}
 
 	/**

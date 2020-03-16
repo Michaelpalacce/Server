@@ -1,3 +1,6 @@
+8.11.0
+- Added ability to update the users
+
 8.10.0
 - Added ability ot add and delete users
 - Updating users is not possible yet

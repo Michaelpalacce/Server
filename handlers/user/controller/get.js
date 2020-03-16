@@ -20,5 +20,10 @@ app.get( '/users/:username:', async ( event ) =>{
 
 	const { username }	= result.getValidationResult();
 
+	if ( event.session.get( 'SU' ) === false && event.session.get( 'username' ) !== username )
+	{
+		return event.sendError( 'Only super users can view other users', 400 );
+	}
+
 	event.send( userManager.get( username ).getUserData() );
 });

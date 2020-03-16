@@ -33,15 +33,7 @@ class Users
 				permissions
 			};
 
-			$.ajax({
-				url		: '/users/add',
-				method	: 'POST',
-				data	: userParams,
-				success	: ()=>{
-					this.showUser( username );
-				},
-				error	: this.showError
-			});
+			this.addUser( userParams );
 
 			return false;
 		});
@@ -56,30 +48,9 @@ class Users
 	 */
 	showUserModal( username )
 	{
-		this.fetchUserData( username ).then( ( userData )=>{
+		this.getUser( username ).then( ( userData )=>{
 			modal.showUserInfo( userData );
 		}).catch( this.showError );
-	}
-
-	/**
-	 * @brief	Fetches data about the user
-	 *
-	 * @param	username String
-	 *
-	 * @return	Promise
-	 */
-	fetchUserData( username )
-	{
-		return new Promise(( resolve, reject )=>{
-			$.ajax({
-				url		: `/users/${username}`,
-				method	: 'GET',
-				success	: ( userData )=>{
-					resolve( JSON.parse( userData ) );
-				},
-				error	: reject
-			});
-		});
 	}
 
 	/**
@@ -127,6 +98,51 @@ class Users
 	}
 
 	/**
+	 * @brief	Adds a new user
+	 *
+	 * @param	userParams Object
+	 *
+	 * @return	Promise
+	 */
+	addUser( userParams )
+	{
+		return new Promise(( resolve, reject )=>{
+			$.ajax({
+				url		: '/users/add',
+				method	: 'POST',
+				data	: userParams,
+				success	: ()=>{
+					this.showUser( userParams.username );
+
+					resolve();
+				},
+				error	: this.showError
+			});
+		});
+	}
+
+	/**
+	 * @brief	Gets the user
+	 *
+	 * @param	username String
+	 *
+	 * @return	Promise
+	 */
+	getUser( username )
+	{
+		return new Promise(( resolve, reject )=>{
+			$.ajax({
+				url		: `/users/${username}`,
+				method	: 'GET',
+				success	: ( userData )=>{
+					resolve( JSON.parse( userData ) );
+				},
+				error	: this.showError
+			});
+		});
+	}
+
+	/**
 	 * @brief	Deletes the given user
 	 *
 	 * @param	username String
@@ -143,7 +159,28 @@ class Users
 					$( `*[data-username="${username}"]` ).remove();
 					resolve( response );
 				},
-				error	: reject
+				error	: this.showError
+			});
+		});
+	}
+
+	/**
+	 * @brief	Updates the user with the given information
+	 *
+	 * @param	username String
+	 * @param	userData Object
+	 *
+	 * @return	Promise
+	 */
+	updateUser( username, userData )
+	{
+		return new Promise(( resolve, reject )=>{
+			$.ajax({
+				url		: `/users/${username}`,
+				method	: 'PATCH',
+				data	: userData,
+				success	: resolve,
+				error	: this.showError
 			});
 		});
 	}
@@ -157,6 +194,8 @@ class Users
 	 */
 	showError( jqXHR )
 	{
+		modal.hide();
+
 		modal.show( jqXHR.responseText );
 	}
 }

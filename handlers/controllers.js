@@ -17,3 +17,4 @@ require( './user/controller/list' );
 require( './user/controller/add' );
 require( './user/controller/get' );
 require( './user/controller/delete' );
+require( './user/controller/update' );
