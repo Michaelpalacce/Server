@@ -7,7 +7,26 @@ const pty			= require( 'node-pty' );
 const { io }		= require( '../../main/server/server' );
 const shell			= os.platform() === 'win32' ? 'powershell.exe' : 'bash';
 
-io.on( 'connection', ( socket )=>{
+/**
+ * @details	The connection will only be established if there is a sid header sent with the sid cookie
+ * 			The user will also be checked if he/she is a Super User and if not, the socket will be disconnected
+ */
+io.on( 'connection', async ( socket )=>{
+	const cacheServer	= process.cachingServer;
+	const sidCookie		= socket.request.headers.sid;
+
+	if ( ! sidCookie )
+	{
+		return socket.disconnect( true );
+	}
+
+	const dataSet		= await cacheServer.get( sidCookie );
+
+	if ( dataSet === null || dataSet.value.SU !== true )
+	{
+		return socket.disconnect( true );
+	}
+
 	Loggur.log( `New Socket Established: ${socket.id}` );
 
 	const ptyProcess	= pty.spawn( shell, [], {

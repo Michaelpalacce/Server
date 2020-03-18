@@ -416,6 +416,5 @@ Browse.TYPE_FILE	= 'file';
 Browse.TYPE_FOLDER	= 'folder';
 
 const view			= new Browse();
-const modal			= new Modal();
 
 view.browse( currentDir );

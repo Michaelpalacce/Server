@@ -201,4 +201,3 @@ class Users
 }
 
 const users	= new Users();
-const modal	= new UsersModal();

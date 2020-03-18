@@ -97,3 +97,5 @@ class UsersModal extends Modal
 		});
 	}
 }
+
+modal	= new UsersModal();

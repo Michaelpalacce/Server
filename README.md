@@ -43,7 +43,7 @@ https://github.com/Michaelpalacce/Server/releases
 #Port Forwarding
 - You can enable port forwarding on your router to point to the local machine running the server emulator on a given port
 - This way you can access the server using your public IP
-- Search "Router Port Forwarding for more information"
+- Search "Router Port Forwarding" for more information
 
 #Modifications
 - You can modify the .env file to your needs.
@@ -52,19 +52,37 @@ https://github.com/Michaelpalacce/Server/releases
 - ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
 - REQUEST_TIMEOUT - How much to keep requests active for in milliseconds
 - UPLOADS_DIR - where to put the temporary upload files 
+- ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled 
 - DEBUG - Whether to write logs on a debug level 1 or 0
 - Others should probably not be touched
 
 #Adding users
 - If you want to add users go to the users page from the sidebar and click on the Add Users button
 - You will be asked to fill in the new user's data
-- Permissions currently does not work
+- Permissions currently do not work
 - Route will be the path from which the user can access the FS
 - When adding a user the user will persist after 5 seconds so don't stop the server
+- Only superusers can use the terminal, add/ view/ modify other users ( and self ) 
+
+#Notes
+- You may need to delete the cache file if you do changes to the environment ( like enabling security )
+- Deleting the cache file will delete all the current users
+- If a state arises where there is no root user, one will be created automatically ( with the username and password in the .env file )
+- It is a good idea to change the password ( via the gui ) after you've started the server
+
+#Dependencies
+- For linux python and make may be required ( for node-pty )
+- For Windows you may need to have an installed Windows SDK ( https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/ ).
+You may also need the windows-build-tools. You can install them by running a cmd as an administrator and typing:
+~~~ bash
+npm install --global --production windows-build-tools
+~~~
+- Install these dependencies only if there is an error while doing npm i server-emulator
+- Look for more information here: https://www.npmjs.com/package/node-pty?activeTab=readme
 
 #Known Bugs:
 - When handling big folders and uploading at the same time, may display some items twice or fail loading
+- Design on mobile when using the terminal is not optimal
 
 #Future Improvements:
-- A terminal emulator
 - Ability to connect to a different server to serve as a connection between your devices and a private instance of the Server Emulator

@@ -25,4 +25,7 @@ require( './user/controller/delete' );
 require( './user/controller/update' );
 
 require( './terminal/controller/view' );
-require( './terminal/controller/cmd' );
+if ( process.env.ENABLE_TERMINAL == 1 )
+{
+	require( './terminal/controller/cmd' );
+}

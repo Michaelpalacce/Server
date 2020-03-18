@@ -1,6 +1,8 @@
 9.0.0
 - Added a terminal
 - Refactored the structure of the project entirely to be more separated
+- Added new env variable
+- Added more details to the readme
 
 8.11.2
 - Updated the README
