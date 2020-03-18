@@ -10,6 +10,11 @@ class User
 		this.isSU			= userData.isSU === 'true' || userData.isSU === true;
 		this.route			= typeof userData.route === 'string' ? userData.route : '/';
 		this.permissions	= userData.permissions || '';
+
+		if ( this.isSU )
+		{
+			this.route	= '/';
+		}
 	}
 
 	/**

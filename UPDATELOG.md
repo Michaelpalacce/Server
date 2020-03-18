@@ -3,6 +3,7 @@
 - Refactored the structure of the project entirely to be more separated
 - Added new env variable
 - Added more details to the readme
+- All SU users will have route === /
 
 8.11.2
 - Updated the README
