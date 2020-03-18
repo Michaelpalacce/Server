@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("components/partial/stylesheets") %>
+    <link rel="stylesheet" href="/node_modules/xterm/css/xterm.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Server Emulator</title>
+</head>
+<body>
+<%- include("components/modal", { active: "terminal" }) %>
+<%- include("components/sidebar", { active: "terminal" }) %>
+
+    <div class="container pt-5" style="color: gray">
+
+    </div>
+</body>
+<%- include("components/partial/js-libs") %>
+<script src="node_modules/xterm/lib/xterm.js"></script>
+<script>
+	const term  = new Terminal();
+	term.open( document.getElementById( 'terminal' ) );
+	term.write( 'Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ' );
+</script>
+</html>

@@ -1,3 +1,7 @@
+8.11.2
+- Updated the README
+- Moved some controllers around
+
 8.11.1
 - Changed some text
 

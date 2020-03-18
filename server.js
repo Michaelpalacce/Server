@@ -16,7 +16,7 @@ app.apply( 'er_env' );
 // Configure the plugins
 require( './handlers/main/bootstrap_plugins' );
 
-app.apply( app.er_static_resources, { paths : [process.env.STATIC_PATH, 'favicon.ico'] } );
+app.apply( app.er_static_resources, { paths : [process.env.STATIC_PATH, 'favicon.ico', '/node_modules/xterm/'] } );
 app.apply( app.er_body_parser_form );
 app.apply( app.er_body_parser_json );
 app.apply( app.er_body_parser_multipart, { tempDir : path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );
