@@ -7,7 +7,7 @@
 yum install -y gcc-c++ make && curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash - && yum install -y nodejs && mkdir server-emulator && cd server-emulator && sudo npm i server-emulator
 
 // With Already Existing NodeJs Installation
-mkdir server-emulator && cd server-emulator && npm i server-emulator
+mkdir server-emulator && cd server-emulator && sudo npm i server-emulator
 ~~~
 
 #Install Windows
