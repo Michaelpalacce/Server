@@ -12,14 +12,11 @@
 <%- include("components/sidebar", { active: "terminal" }) %>
 
     <div class="container pt-5" style="color: gray">
-
+        <div id="terminal" ></div>
     </div>
 </body>
 <%- include("components/partial/js-libs") %>
-<script src="node_modules/xterm/lib/xterm.js"></script>
-<script>
-	const term  = new Terminal();
-	term.open( document.getElementById( 'terminal' ) );
-	term.write( 'Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ' );
-</script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/node_modules/xterm/lib/xterm.js"></script>
+<script src="/public/js/terminal/terminal.js"></script>
 </html>

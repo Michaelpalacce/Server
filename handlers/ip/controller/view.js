@@ -2,12 +2,12 @@
 
 // Dependencies
 const { Server }	= require( 'event_request' );
-const IpLookup		= require( '../../main/ip_address_lookup' );
+const IpLookup		= require( '../../main/utils/ip_address_lookup' );
 
 const app			= Server();
 
 /**
- * @brief	Adds a '/ip' route with method GET
+ * @brief	Adds a '/ip/private' route with method GET
  *
  * @details	Required Parameters: NONE
  * 			Optional Parameters: NONE
@@ -15,17 +15,20 @@ const app			= Server();
  * @return	void
  */
 app.get( '/ip/private', async( event ) => {
-		const ipInterfaces	= IpLookup.getLocalIpV4s();
-		const externalIP	= await IpLookup.getExternalIpv4().catch( event.next );
-
-		event.send( ipInterfaces );
+		event.send( IpLookup.getLocalIpV4s() );
 	}
 );
 
+/**
+ * @brief	Adds a '/ip/public' route with method GET
+ *
+ * @details	Required Parameters: NONE
+ * 			Optional Parameters: NONE
+ *
+ * @return	void
+ */
 app.get( '/ip/public', async( event ) => {
-		const ip	= await IpLookup.getExternalIpv4().catch( event.next );
-
-		event.send( ip );
+		event.send( await IpLookup.getExternalIpv4().catch( event.next ) );
 	}
 );
 

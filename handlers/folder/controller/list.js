@@ -1,7 +1,9 @@
+'use strict';
 
+// Dependencies
 const { Server }	= require( 'event_request' );
 const app			= Server();
-const PathHelper	= require( '../../main/path' );
+const PathHelper	= require( '../../main/utils/path' );
 const BrowseInput	= require( '../input/browse_input' );
 
 /**

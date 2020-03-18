@@ -4,6 +4,8 @@
 const { Server }	= require( 'event_request' );
 const ejs			= require( 'ejs' );
 const path			= require( 'path' );
+
+const logger		= require( '../logging/logger' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 /**
@@ -11,18 +13,14 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
  */
 const app	= Server();
 
-app.apply( 'er_env' );
-
-// Configure the plugins
-require( './handlers/main/bootstrap_plugins' );
-
-app.apply( app.er_static_resources, { paths : [process.env.STATIC_PATH, 'favicon.ico', '/node_modules/xterm/'] } );
+// Boostrap the server with all the desired functionality/plug-ins
+app.apply( app.er_static_resources, { paths : [process.env.STATIC_PATH, 'favicon.ico', 'node_modules/xterm/'] } );
 app.apply( app.er_body_parser_form );
 app.apply( app.er_body_parser_json );
 app.apply( app.er_body_parser_multipart, { tempDir : path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );
 app.apply( app.er_timeout, { timeout : process.env.REQUEST_TIMEOUT } );
 app.apply( app.er_rate_limits );
-app.apply( app.er_logger );
+app.apply( app.er_logger, { logger } );
 app.apply( app.er_cache_server );
 app.apply( app.er_response_cache );
 app.apply( app.er_file_stream );
@@ -38,6 +36,4 @@ app.add(( event )=>{
 });
 app.apply( app.er_session );
 
-require( './handlers/controllers' );
-
-module.exports	= app;
+process.cachingServer	= app.getPluginManager().getPlugin( app.er_cache_server ).getServer();

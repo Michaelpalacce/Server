@@ -1,6 +1,7 @@
 'use strict';
 
-const { Server, Logging }					= require( 'event_request' );
+// Dependencies
+const { Logging }							= require( 'event_request' );
 const { Console, File, Loggur, LOG_LEVELS }	= Logging;
 
 const transports	= [
@@ -33,13 +34,6 @@ const logger	= Loggur.createLogger({
 	transports	: transports
 });
 
-const app				= Server();
-const PluginManager		= app.getPluginManager();
-const cacheServerPlugin	= PluginManager.getPlugin( app.er_cache_server );
-const loggerPlugin		= PluginManager.getPlugin( app.er_logger );
+Loggur.addLogger( 'storage', logger );
 
-const dataServer		= cacheServerPlugin.getServer();
-process.cachingServer	= dataServer;
-
-loggerPlugin.setOptions({ logger });
-Loggur.addLogger( logger );
+module.exports	= logger;

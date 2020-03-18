@@ -1,9 +1,9 @@
 'use strict';
 
 // Dependencies
-const { FileStream }	= require( 'event_request' ).Development;
-const path				= require( 'path' );
-const fs				= require( 'fs' );
+const { FileStream }		= require( 'event_request' ).Development;
+const path					= require( 'path' );
+const fs					= require( 'fs' );
 
 const getRootDir			= () => path.parse( process.cwd() ).root;
 const BACK_ITEM_TEXT		= 'BACK';

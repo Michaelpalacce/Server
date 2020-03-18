@@ -1,3 +1,7 @@
+9.0.0
+- Added a terminal
+- Refactored the structure of the project entirely to be more separated
+
 8.11.2
 - Updated the README
 - Moved some controllers around

@@ -4,7 +4,7 @@
 const { Server }	= require( 'event_request' );
 const app			= Server();
 
-const PathHelper	= require( '../../main/path' );
+const PathHelper	= require( '../../main/utils/path' );
 const FileDataInput	= require( '../input/file_data_input' );
 const { promisify }	= require( 'util' );
 const fs			= require( 'fs' );

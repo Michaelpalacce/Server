@@ -26,6 +26,10 @@
                 <a class="nav-link" href="/users">Users</a>
             </li>
 
+            <li class="nav-item navbar-action <% if ( active === 'terminal' ) { %> active <% }%>">
+                <a class="nav-link" href="/terminal">Terminal</a>
+            </li>
+
             <% if ( active === 'users' ) { %>
                 <div class="nav-line pt-5"></div>
                 <li id="addUser" class="nav-item navbar-action" >
