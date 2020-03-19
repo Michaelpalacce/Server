@@ -1,3 +1,6 @@
+9.0.1
+- Font size is smaller
+
 9.0.0
 - Added a terminal
 - Refactored the structure of the project entirely to be more separated

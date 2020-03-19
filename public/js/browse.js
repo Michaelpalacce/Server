@@ -343,7 +343,7 @@ class Browse
 				this.browse( encodedURI );
 			});
 
-			this.setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20, 55 );
+			this.setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20, 25 );
 		}
 		else
 		{
@@ -393,7 +393,7 @@ class Browse
 
 			element.appendTo( '#fileStructure' ).removeAttr( 'id' ).show();
 
-			this.setItemNameToFit( element, '.file-name', '.item-row', fullName, 30, 90 );
+			this.setItemNameToFit( element, '.file-name', '.item-row', fullName, 30, 80 );
 		}
 
 		return element;
