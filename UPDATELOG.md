@@ -1,3 +1,6 @@
+9.1.1
+- Implemented new EventRequest version with the improved Data Server 
+
 9.1.0
 - Implemented new EventRequest version to fix some issues with the data server
 - Refactored the code to make it more readable and separated the logic where needed
