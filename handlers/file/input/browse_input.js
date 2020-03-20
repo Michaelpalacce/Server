@@ -1,3 +1,6 @@
+'use strict';
+
+// Dependencies
 const Input	= require( '../../main/validation/input' );
 
 /**
@@ -31,10 +34,13 @@ class BrowseInput extends Input
 	_validate()
 	{
 		if ( ! this.event.session.has( 'route' ) )
+		{
+			this.reason	= { route: ['missing'] };
 			return false;
+		}
 
-		const route		= this.event.session.get( 'route' );
-		const result	= this.validationHandler.validate(
+		const route	= this.event.session.get( 'route' );
+		this.reason	= this.validationHandler.validate(
 			this.event.queryString,
 			{
 				dir			: { rules: 'optional||string', default: route },
@@ -42,10 +48,10 @@ class BrowseInput extends Input
 			}
 		);
 
-		if ( result.hasValidationFailed() )
+		if ( this.reason.hasValidationFailed() )
 			return false;
 
-		const { dir, position }	= result.getValidationResult();
+		const { dir, position }	= this.reason.getValidationResult();
 
 		this.model[BrowseInput.DIR_KEY]			= dir.includes( route ) ? dir : route;
 		this.model[BrowseInput.POSITION_KEY]	= parseInt( position );

@@ -1,4 +1,6 @@
+'use strict';
 
+// Dependencies
 const { Server }	= require( 'event_request' );
 const app			= Server();
 
@@ -6,7 +8,7 @@ const app			= Server();
  * @brief	Renders the Users page
  */
 app.get( '/users', async ( event ) =>{
-	event.render( 'users', {} );
+	event.render( 'users' );
 });
 
 /**

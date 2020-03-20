@@ -13,7 +13,11 @@ const PAGE_SIZE				= 50;
 /**
  * @brief	Path helper used to retrieve data about files and folders
  *
- * @TODO	This file is disgusting in how it works, please save my soul and refactor this
+ * @TODO	This file is disgusting, please save my soul and refactor this. After you actually refactor this piece of shit
+ * 			go and fix the associated front end javascript. My life will have no meaning until this is fixed but.... BUT
+ * 			believe me I have no desire to actually fix it. So here I am just whining about it and hope to whoever can hear
+ * 			me to do my job for me. Please. HELP.
+ * 			On a more serious note I wrote this to test if this will work even and it did... so i left it.
  */
 class PathHelper
 {

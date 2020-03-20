@@ -8,10 +8,14 @@ const address		= '0.0.0.0';
 
 require( './handlers/controllers' );
 
-// Start the server
-server.listen( port, address, ( error )=>{
-	if ( error )
-		return Loggur.log( `There was an error while starting the server: ${error.text}` );
+server.on( 'error', ( error )=>{
+	Loggur.log( `There was an error while starting the server: ${error}`, Loggur.LOG_LEVELS.error );
+	setImmediate(()=>{
+		process.exit( 1 );
+	});
+});
 
-	Loggur.log( `Server started on port: ${port} and address: ${address}` );
+// Start the server
+server.listen( port, address, ()=>{
+	Loggur.log( `Server started on port: ${port} and address: ${address}`, Loggur.LOG_LEVELS.warning );
 });

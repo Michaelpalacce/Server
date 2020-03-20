@@ -1,4 +1,6 @@
+'use strict';
 
+// Dependencies
 const { Server }	= require( 'event_request' );
 const app			= Server();
 

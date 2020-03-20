@@ -5,7 +5,7 @@ const { Server }	= require( 'event_request' );
 const app			= Server();
 
 const PathHelper	= require( '../../main/utils/path' );
-const FileDataInput	= require( '../input/file_data_input' );
+const FileInput		= require( '../input/file_input' );
 const { promisify }	= require( 'util' );
 const fs			= require( 'fs' );
 const path			= require( 'path' );
@@ -23,7 +23,7 @@ const stat			= promisify( fs.stat );
  * @return	void
  */
 app.get( '/file/getFileData', ( event )=>{
-	const input	= new FileDataInput( event );
+	const input	= new FileInput( event );
 
 	if ( ! input.isValid() )
 	{

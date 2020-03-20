@@ -1,3 +1,12 @@
+9.1.0
+- Implemented new EventRequest version to fix some issues with the data server
+- Refactored the code to make it more readable and separated the logic where needed
+- Added more user validation
+- Users are now flushed more often
+- Added TERMINAL_TO_SPAWN option
+- The Server on error is now handled gracefully
+- Fixed uploading of duplicates 
+
 9.0.1
 - Font size is smaller
 

@@ -5,7 +5,11 @@ const { Loggur }	= require( 'event_request' );
 const os			= require( 'os' );
 const pty			= require( 'node-pty' );
 const { io }		= require( '../../main/server/server' );
-const shell			= os.platform() === 'win32' ? 'powershell.exe' : 'bash';
+const shell			= process.env.TERMINAL_TO_SPAWN !== ''
+					? process.env.TERMINAL_TO_SPAWN
+						: os.platform() === 'win32'
+						? 'powershell.exe'
+						: 'bash';
 
 /**
  * @details	The connection will only be established if there is a sid header sent with the sid cookie

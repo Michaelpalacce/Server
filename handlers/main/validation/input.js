@@ -10,6 +10,7 @@ class Input
 
 		this.model				= {};
 		this.isInputValid		= null;
+		this.reason				= [];
 	}
 
 	/**
@@ -37,6 +38,16 @@ class Input
 	getEvent()
 	{
 		return this.event;
+	}
+
+	/**
+	 * @brief	Gets the reason for the failure
+	 *
+	 * @returns	Array
+	 */
+	getReason()
+	{
+		return this.reason;
 	}
 
 	/**

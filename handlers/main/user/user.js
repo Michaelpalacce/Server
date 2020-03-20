@@ -9,7 +9,7 @@ class User
 		this.password		= userData.password || '';
 		this.isSU			= userData.isSU === 'true' || userData.isSU === true;
 		this.route			= typeof userData.route === 'string' ? userData.route : '/';
-		this.permissions	= userData.permissions || '';
+		this.permissions	= userData.permissions || [];
 
 		if ( this.isSU )
 		{
@@ -40,7 +40,11 @@ class User
 	 */
 	isValid()
 	{
-		return this.username !== '' && typeof this.username === 'string';
+		return this.username !== ''
+			&& typeof this.username === 'string'
+			&& typeof this.isSU === 'boolean'
+			&& typeof this.password === 'string'
+			&& typeof this.route === 'string';
 	}
 
 	/**

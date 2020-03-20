@@ -126,6 +126,12 @@ class Browse
 				const itemData														= JSON.parse( data );
 				const { name, encodedURI, size, isDir, fileType, previewAvailable }	= itemData;
 
+				const duplicateElement	= $( `*[data-item-name="${name}"]` )[0];
+				if ( duplicateElement !== undefined )
+				{
+					duplicateElement.remove();
+				}
+
 				this.addItem( name, encodedURI, size, isDir, previewAvailable, fileType, this.currentDir );
 			},
 			error	: this.showError.bind( this )

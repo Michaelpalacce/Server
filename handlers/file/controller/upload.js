@@ -5,6 +5,8 @@ const { Server }			= require( 'event_request' );
 const fs					= require( 'fs' );
 const { promisify }			= require( 'util' );
 const path					= require( 'path' );
+const UploadInput			= require( '../input/upload_input' );
+
 const rename				= promisify( fs.rename );
 
 const app					= Server();
@@ -23,17 +25,15 @@ const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
  * @return	void
  */
 app.post( '/file', ( event ) => {
-		let result	= event.validationHandler.validate( event.body, { directory : 'filled||string', $files : 'filled' } );
+		const input	= new UploadInput( event );
 
-		if ( ! ! result.hasValidationFailed() )
+		if ( ! input.isValid() )
 		{
-			event.next( 'Could not upload one or more files', 400 );
-			return;
+			return event.next( 'Could not upload one or more files', 400 );
 		}
-		result			= result.getValidationResult();
 
-		const directory	= decodeURIComponent( result.directory );
-		const files		= result.$files;
+		const directory	= input.getDirectory();
+		const files		= input.getFiles();
 
 		const promises	= [];
 
@@ -66,6 +66,7 @@ app.post( '/file', ( event ) => {
 						return;
 					}
 
+					console.log(error)
 					reject( error );
 				} );
 			} ).catch( event.next ) );

@@ -3,6 +3,7 @@
 // Dependencies
 const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
+const FileInput		= require( '../input/file_input' );
 
 const app			= Server();
 
@@ -15,13 +16,15 @@ const app			= Server();
  * @return	void
  */
 app.get( '/file/data', ( event ) =>{
-		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
+		const input	= new FileInput( event );
+		if ( ! input.isValid() )
+		{
+			return event.next( 'Invalid file given', 400 );
+		}
 
-		const file		= ! result.hasValidationFailed()
-						? result.getValidationResult().file
-						: false;
+		const file	= input.getFile()
 
-		if ( ! file || ! fs.existsSync( file ) )
+		if ( ! fs.existsSync( file ) )
 		{
 			return event.next( 'File does not exist', 400 );
 		}

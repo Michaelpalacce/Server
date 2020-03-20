@@ -35,7 +35,7 @@ IpLookup.getExternalIpv4	= function()
 
 			res.on( 'error', ()=>{
 				reject( 'Could not get external ipv4' );
-			} );
+			});
 		});
 	});
 };

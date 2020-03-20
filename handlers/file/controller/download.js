@@ -5,6 +5,7 @@ const { Server }	= require( 'event_request' );
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 const archiver		= require( 'archiver' );
+const FileInput		= require( '../input/file_input' );
 
 const app			= Server();
 
@@ -31,50 +32,58 @@ const downloadFailedCallback	= ( event ) => {
  * @return	void
  */
 app.get( '/file', ( event ) => {
-		const result	= event.validationHandler.validate( event.queryString, { file: 'filled||string||min:1' } );
-		const file		= ! result.hasValidationFailed()
-						? result.getValidationResult().file
-						: false;
+		const input	= new FileInput( event );
 
-		if ( ! file || ! fs.existsSync( file ) )
+		if ( ! input.isValid() )
 		{
-			downloadFailedCallback( event );
+			return downloadFailedCallback( event );
 		}
-		else
+
+		const file	= input.getFile();
+
+		if ( ! fs.existsSync( file ) )
 		{
-			const fileStats	= path.parse( file );
-			const fileName	= fileStats.base.replace( '/', '' );
+			return downloadFailedCallback( event );
+		}
 
-			if ( fs.lstatSync( file ).isDirectory() )
+		event.clearTimeout();
+
+		const fileStats	= path.parse( file );
+		const fileName	= fileStats.base.replace( '/', '' );
+
+		if ( fs.lstatSync( file ).isDirectory() )
+		{
+			const archive	= archiver( 'zip', {
+				zlib: { level: 9 }
+			});
+
+			archive.pipe( event.response );
+			event.setHeader( 'content-disposition', `attachment; filename="${fileName}.zip"` );
+			event.setHeader( 'Content-type', 'zip' );
+
+			try
 			{
-				event.clearTimeout();
-				const archive	= archiver( 'zip', {
-					zlib: { level: 9 }
-				});
-
-				const output	= event.response;
-
-				archive.pipe( output );
-				event.setHeader( 'content-disposition', `attachment; filename="${fileName}.zip"` );
-				event.setHeader( 'Content-type', 'zip' );
 				archive.directory( file, false );
 				archive.finalize();
 			}
-			else
+			catch ( e )
 			{
-				event.setHeader( 'content-disposition', `attachment; filename="${fileName}"` );
-				event.setHeader( 'Content-type', fileStats.ext );
-				event.setHeader( 'Content-Length', fs.statSync( file ).size );
+				downloadFailedCallback( event );
+			}
+		}
+		else
+		{
+			event.setHeader( 'content-disposition', `attachment; filename="${fileName}"` );
+			event.setHeader( 'Content-type', fileStats.ext );
+			event.setHeader( 'Content-Length', fs.statSync( file ).size );
 
-				try
-				{
-					event.clearTimeout();
-					event.send( fs.createReadStream( file ) );
-				}
-				catch ( e )
-				{
-					downloadFailedCallback( event );
-				}
+			try
+			{
+				event.send( fs.createReadStream( file ) );
+			}
+			catch ( e )
+			{
+				downloadFailedCallback( event );
 			}
 		}
 	}

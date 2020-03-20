@@ -54,6 +54,7 @@ https://github.com/Michaelpalacce/Server/releases
 - UPLOADS_DIR - where to put the temporary upload files 
 - ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled 
 - DEBUG - Whether to write logs on a debug level 1 or 0
+- TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - Others should probably not be touched
 
 #Adding users
@@ -81,8 +82,8 @@ npm install --global --production windows-build-tools
 - Look for more information here: https://www.npmjs.com/package/node-pty?activeTab=readme
 
 #Known Bugs:
-- When handling big folders and uploading at the same time, may display some items twice or fail loading
-- Design on mobile when using the terminal is not optimal
+- When uploading files while loading a directory the position counter will be messed up and files may not be 100% correct, a refresh will fix it
+- Sometimes when cutting a folder after it has been created and uploaded to may result in a not permitted error
 
 #Future Improvements:
 - Ability to connect to a different server to serve as a connection between your devices and a private instance of the Server Emulator
