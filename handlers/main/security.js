@@ -98,6 +98,9 @@ else
 {
 	app.add(( event )=>{
 		event.session.add( 'route', '/' );
+		event.session.add( 'username', process.env.ADMIN_USERNAME );
+		event.session.add( 'authenticated', true );
+		event.session.add( 'SU', true );
 		event.next();
 	});
 

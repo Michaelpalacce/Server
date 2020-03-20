@@ -1,3 +1,6 @@
+9.1.2
+- Can now use the terminal and add users even if the security is disabled
+
 9.1.1
 - Implemented new EventRequest version with the improved Data Server 
 
