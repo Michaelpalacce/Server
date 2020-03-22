@@ -150,7 +150,7 @@ class PathHelper
 	{
 		const itemName			= goBack ? name.dir : name.base;
 		const uriToEncode		= ( goBack ? name.dir : path.join( name.dir, name.base ) ).replace( '\\', '/' );
-		const encodedURI		= encodeURIComponent( uriToEncode );
+		const encodedURI		= encodeURIComponent( Buffer.from( uriToEncode ).toString( 'base64' ) );
 		const fileStreamer		= PathHelper.getFileStreamerForFile( event, itemName );
 		const previewAvailable	= fileStreamer !== null;
 		const size				= stats.size;

@@ -1,3 +1,13 @@
+10.0.0
+- Only SU can now access the Project Root
+- Most pages are now cached
+- Added A LOT of security regarding what you can do with the permissions you have
+- Project Root can not be changed now, no matter what you do
+- Added a lot of error handling
+- Upload failed now will show an error
+- Fixed a reload bug if accessing unauthorized pages
+- Small design overhaul
+
 9.1.2
 - Can now use the terminal and add users even if the security is disabled
 

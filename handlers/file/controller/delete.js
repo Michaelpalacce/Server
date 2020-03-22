@@ -22,20 +22,10 @@ app.delete( '/file', ( event ) => {
 
 		if ( ! input.isValid() )
 		{
-			return event.next( 'Invalid item provided', 400 );
+			return event.next( `Invalid input: ${input.getReasonToString()}`, 400 );
 		}
 
 		const item	= input.getItem();
-
-		if ( ! fs.existsSync( item ) )
-		{
-			return event.next( 'Item does not exist', 400 );
-		}
-
-		if ( fs.statSync( item ).isDirectory() )
-		{
-			return event.sendError( 'Cannot delete directory', 400 );
-		}
 
 		unlink( item ).then(()=>{
 			event.send( 'ok' );

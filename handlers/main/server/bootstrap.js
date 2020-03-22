@@ -46,7 +46,7 @@ app.apply( app.er_file_stream );
 app.add(( event )=>{
 	event.render	= ( templateName, variables = {} )=>{
 		return ejs.renderFile( path.join( process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables )
-			.then( data =>{ event.send( data, 200, true ); } );
+			.then( data =>{ event.send( data, 200 ); } );
 	};
 
 	event.on( 'cleanUp', ()=>{ event.render	= undefined; });

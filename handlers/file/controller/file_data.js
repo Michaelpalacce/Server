@@ -27,7 +27,7 @@ app.get( '/file/getFileData', ( event )=>{
 
 	if ( ! input.isValid() )
 	{
-		return event.send( false );
+		return event.send( `Invalid input provided: ${input.getReasonToString()}`, 400 );
 	}
 
 	const file	= input.getFile();

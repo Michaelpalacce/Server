@@ -18,16 +18,16 @@
 <!--                </div>-->
 <!--            </li>-->
 
-            <li class="nav-item navbar-action <% if ( active === 'browse' ) { %> active <% }%>">
-                <a class="nav-link" href="/">Browse</a>
+            <li class="nav-item navbar-action">
+                <a class="nav-element <% if ( active === 'browse' ) { %> active <% }%>" href="/">Browse</a>
             </li>
 
-            <li class="nav-item navbar-action <% if ( active === 'users' ) { %> active <% }%>">
-                <a class="nav-link" href="/users">Users</a>
+            <li class="nav-item navbar-action">
+                <a class="nav-element <% if ( active === 'users' ) { %> active <% }%>" href="/users">Users</a>
             </li>
 
-            <li class="nav-item navbar-action <% if ( active === 'terminal' ) { %> active <% }%>">
-                <a class="nav-link" href="/terminal">Terminal</a>
+            <li class="nav-item navbar-action">
+                <a class="nav-element <% if ( active === 'terminal' ) { %> active <% }%>" href="/terminal">Terminal</a>
             </li>
 
             <% if ( active === 'users' ) { %>
@@ -55,23 +55,23 @@
                 </li>
 
 <!--                <li class="nav-item navbar-action">-->
-<!--                    <a class="nav-link" href="/ip">Something</a>-->
+<!--                    <a class="nav-element" href="/ip">Something</a>-->
 <!--                </li>-->
             <% } %>
 
             <div class="nav-line pt-5"></div>
 
             <li id="getPublicIp" class="nav-item navbar-action">
-                <a class="nav-link" href="#">Get Public IP</a>
+                <a class="nav-element" href="#">Get Public IP</a>
             </li>
             <li id="getPrivateIps" class="nav-item navbar-action">
-                <a class="nav-link" href="#">Get Private IPs</a>
+                <a class="nav-element" href="#">Get Private IPs</a>
             </li>
 
             <div class="nav-line pt-5"></div>
 
             <li class="nav-item navbar-action">
-                <a class="nav-link" href="/logout">Logout</a>
+                <a class="nav-element" href="/logout">Logout</a>
             </li>
         </ul>
     </div>

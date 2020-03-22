@@ -36,7 +36,7 @@ app.post( '/users/add', ( event ) =>{
 	}
 
 	const userData	= result.getValidationResult();
-	userData.route	= decodeURIComponent( userData.route );
+	userData.route	= Buffer.from( decodeURIComponent( userData.route ), 'base64' ).toString();
 
 	userManager.set( userData );
 

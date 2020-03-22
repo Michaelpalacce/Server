@@ -6,4 +6,4 @@ const app			= Server();
 
 app.get( '/terminal', ( event )=>{
 	event.render( 'terminal' )
-});
+}, 'cache.request' );

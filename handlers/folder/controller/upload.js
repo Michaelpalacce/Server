@@ -3,9 +3,11 @@
 // Dependencies
 const { Server }			= require( 'event_request' );
 const fs					= require( 'fs' );
-const app					= Server();
+const { promisify }			= require( 'util' );
+const UploadInput			= require( '../input/upload_input' );
 
-const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
+const app					= Server();
+const mkdir					= promisify( fs.mkdir );
 
 /**
  * @brief	Adds a '/folder' route with method PUT
@@ -18,41 +20,23 @@ const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
  * @return	void
  */
 app.post( '/folder', ( event ) => {
-	const result	= event.validationHandler.validate( event.body, { folder : 'filled||string' } );
+		const input	= new UploadInput( event );
 
-		if ( ! ! result.hasValidationFailed() )
+		if ( ! input.isValid() )
 		{
-			event.next( 'Invalid folder given', 400 );
+			event.next( `Invalid input: ${input.getReasonToString()}`, 400 );
 			return;
 		}
 
-		const folder	= decodeURIComponent( result.getValidationResult().folder );
-
-		for ( const charIndex in FORBIDDEN_CHARACTERS )
+		try
 		{
-			const character	= FORBIDDEN_CHARACTERS[charIndex];
-			if ( folder.includes( character ) )
-			{
-				event.sendError( 'Folder name contains invalid characters', 400 );
-				return;
-			}
+			mkdir( input.getDirectory() ).then(()=>{
+				event.send( 'ok', 201 );
+			}).catch( event.next );
 		}
-
-		if ( ! fs.existsSync( folder ) || folder === '/' )
+		catch ( e )
 		{
-			try
-			{
-				fs.mkdirSync( folder );
-				event.send( ['ok'], 201 );
-			}
-			catch ( e )
-			{
-				event.sendError( 'Could not create folder', 400 );
-			}
-		}
-		else
-		{
-			event.sendError( 'Directory already exists', 400 );
+			event.sendError( 'Could not create folder', 400 );
 		}
 	}
 );

@@ -112,17 +112,19 @@ class ContextMenu
 		const itemType	= this.getElementType( target );
 
 		modal.askUserInput( 'What is the new name of the item', oldName ).then( ( newName )=>{
+			const decodedCurrentDir	= atob( decodeURIComponent( this.view.currentDir ) );
+
 			$.ajax({
 				url		: `/${itemType}/rename`,
 				method	:'POST',
 				data	: {
-					newPath: this.view.currentDir + encodeURIComponent( '/' + newName ),
+					newPath: encodeURIComponent( btoa( `${decodedCurrentDir}/${newName}` ) ),
 					oldPath: this.getElementPath( target )
 				},
 				success	: ( data )=>
 				{
 					target.remove();
-					this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
+					this.view.fetchDataForFileAndAddItem( JSON.parse( data ).newPath );
 					this.flushActionElementData();
 				},
 				error	: this.view.showError.bind( this.view )
@@ -257,7 +259,7 @@ class ContextMenu
 						},
 						success	: ( data )=>
 						{
-							this.view.fetchDataForFileAndAddItem( encodeURIComponent( JSON.parse( data ).newPath ) );
+							this.view.fetchDataForFileAndAddItem( JSON.parse( data ).newPath );
 						},
 						complete	: () =>
 						{

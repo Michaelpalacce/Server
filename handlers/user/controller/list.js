@@ -9,7 +9,7 @@ const app			= Server();
  */
 app.get( '/users', async ( event ) =>{
 	event.render( 'users' );
-});
+}, 'cache.request' );
 
 /**
  * @brief	Returns all the usernames

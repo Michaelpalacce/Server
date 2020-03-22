@@ -2,6 +2,9 @@
 
 // Dependencies
 const Input	= require( '../../main/validation/input' );
+const path			= require( 'path' );
+
+const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 /**
  * @brief	Validates that the provided request contains the correct data
@@ -33,14 +36,39 @@ class UploadInput extends Input
 	 */
 	_validate()
 	{
+		if ( ! this.event.session.has( 'route' ) || ! this.event.session.has( 'SU' ) )
+		{
+			this.reason	= 'Missing session params';
+			return false;
+		}
+
+		const isSU	= this.event.session.get( 'SU' );
+		const route	= this.event.session.get( 'route' );
+
 		this.reason	= this.validationHandler.validate( this.event.body, { directory : 'filled||string', $files : 'filled' } );
 
 		if ( this.reason.hasValidationFailed() )
 			return false;
 
-		const { directory, $files }				= this.reason.getValidationResult();
+		let { directory, $files }	= this.reason.getValidationResult();
+		directory					= Buffer.from( decodeURIComponent( directory ), 'base64' ).toString();
 
-		this.model[UploadInput.DIRECTORY_KEY]	= decodeURIComponent( directory );
+		const resolvedDir			= path.resolve( directory );
+		const resolvedRoute			= path.resolve( route );
+
+		if ( resolvedDir.includes( PROJECT_ROOT ) )
+		{
+			this.reason	= `Cannot upload files in project ROOT ${PROJECT_ROOT}`;
+			return false;
+		}
+
+		if ( ! isSU && ! resolvedDir.includes( resolvedRoute ) )
+		{
+			this.reason	= `No permissions to upload to ${resolvedDir}`;
+			return false;
+		}
+
+		this.model[UploadInput.DIRECTORY_KEY]	= directory;
 		this.model[UploadInput.FILES_KEY]		= $files;
 
 		return true;

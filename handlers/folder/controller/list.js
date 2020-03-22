@@ -18,9 +18,9 @@ app.get( '/browse/getFiles', ( event )=>{
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
-		throw new Error( 'Invalid params' );
+		throw new Error( `Invalid input: ${input.getReasonToString()}` );
 
-	const dir	= input.getDir();
+	const dir	= input.getDirectory();
 
 	PathHelper.getItems( event, dir, input.getPosition() ).then(( data ) => {
 		const { items, position, hasMore }	= data;

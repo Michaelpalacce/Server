@@ -124,7 +124,7 @@
 	transition: margin 0.4s;
 }
 .face-button .face-primary {
-	background-color: #343a40;
+	background-color: #373a3d;
 	color: white ;
 }
 .face-button:hover .face-primary {
@@ -153,7 +153,7 @@
 	transition: margin 0.4s;
 }
 .file-delete.face-button .file-delete.face-primary {
-	background-color: #343a40;
+	background-color: #373a3d;
 	color: #c55454;
 }
 .file-delete.face-button:hover .face-primary {

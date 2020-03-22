@@ -29,7 +29,7 @@ app.post( '/file', ( event ) => {
 
 		if ( ! input.isValid() )
 		{
-			return event.next( 'Could not upload one or more files', 400 );
+			return event.next( `Could not upload one or more files: ${input.getReasonToString()}`, 400 );
 		}
 
 		const directory	= input.getDirectory();
@@ -66,7 +66,6 @@ app.post( '/file', ( event ) => {
 						return;
 					}
 
-					console.log(error)
 					reject( error );
 				} );
 			} ).catch( event.next ) );
@@ -78,7 +77,7 @@ app.post( '/file', ( event ) => {
 				return event.send( ['ok'], 201 );
 			}
 
-			event.redirect( '/browse?dir='+  encodeURIComponent( directory ) );
+			event.redirect( `/browse?dir=${encodeURIComponent( Buffer.from( directory ).toString( 'base64' ) )}` );
 		}).catch( event.next );
 	}
 );

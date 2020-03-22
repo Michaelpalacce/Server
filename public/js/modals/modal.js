@@ -58,6 +58,11 @@ class Modal
 						result	= result.replace( /\n/g, '<br>' );
 
 						this._previewTextElement.append( result );
+					},
+					error: ( jqXHR )=>{
+						this.hide();
+
+						modal.show( jqXHR.responseText );
 					}
 				});
 

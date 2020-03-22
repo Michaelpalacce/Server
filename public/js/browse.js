@@ -45,14 +45,21 @@ class Browse
 		this.dropzone.on( 'addedfile', () => { this.canBrowse	= false; } );
 		this.dropzone.on( 'queuecomplete', () => { this.canBrowse	= true; } );
 
-		this.dropzone.on( 'complete', ( file ) => {
-			const encodedURI	= this.currentDir + encodeURIComponent( '/' + file.name );
+		this.dropzone.on( 'success', ( file ) => {
+			const decodedCurrentDir	= atob( decodeURIComponent( this.currentDir ) );
+			const encodedURI		= encodeURIComponent( btoa( `${decodedCurrentDir}/${file.name}` ) );
 
 			this.fetchDataForFileAndAddItem( encodedURI );
 
 			setTimeout(()=>{
 				this.dropzone.removeFile( file );
 			}, 2000 );
+		});
+
+		this.dropzone.on( 'error', ( file, error )=>{
+			modal.hide();
+
+			modal.show( error );
 		});
 
 		$( document ).on( 'click', '.file-delete', ( event ) => {
@@ -88,13 +95,16 @@ class Browse
 			}
 
 			const folderName		= userFolder;
-			const encodedFolderName	= encodeURIComponent( '/' + userFolder );
-			const encodedUri		= decodeURIComponent( this.currentDir ) === '/' ? encodedFolderName : this.currentDir + encodedFolderName;
+			const decodedCurrentDir	= atob( decodeURIComponent( this.currentDir ) );
+
+			const encodedUri		= decodedCurrentDir === '/'
+									? encodeURIComponent( btoa( `/${userFolder}` ) )
+									: encodeURIComponent( btoa( `${decodedCurrentDir}/${userFolder}` ) );
 
 			$.ajax({
 				url		: '/folder',
 				data	: {
-					folder: encodedUri
+					directory: encodedUri
 				},
 				method		: 'POST',
 				success	: ()=>
@@ -247,6 +257,8 @@ class Browse
 	 */
 	browse( directory, loadData = false )
 	{
+		const pastDir	= this.currentDir;
+
 		if ( ! this.canBrowse && ! loadData )
 		{
 			return;
@@ -255,7 +267,7 @@ class Browse
 		if ( ! loadData )
 		{
 			this.currentPosition	= 0;
-			this.currentDir		= directory;
+			this.currentDir			= directory;
 		}
 
 		$( '#upload-dir' ).val( directory );
@@ -294,7 +306,16 @@ class Browse
 					}, 500 );
 				}
 			},
-			error	: this.showError.bind( this )
+			error	: ( jqXHR )=>{
+				window.history.pushState( {}, '', `/browse?dir=${pastDir}` );
+				this.currentDir			= pastDir;
+				this.currentPosition	= 0;
+
+				$( '#upload-dir' ).val( this.currentDir );
+				$( '#upload-file' ).val( this.currentDir );
+
+				this.showError( jqXHR );
+			}
 		});
 	}
 
@@ -349,7 +370,7 @@ class Browse
 				this.browse( encodedURI );
 			});
 
-			this.setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20, 25 );
+			this.setItemNameToFit( element, '.folder-name', '.item-row', fullName, 20, 40 );
 		}
 		else
 		{

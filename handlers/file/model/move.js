@@ -3,23 +3,12 @@
 const fs		= require( 'fs' );
 const util		= require( 'util' );
 const path		= require( 'path' );
+const MoveInput	= require( '../input/move_input' );
 
 const rename	= util.promisify( fs.rename );
 const copy		= util.promisify( fs.copyFile );
 
 const Model		= {};
-
-/**
- * @brief	Validation for both the cut and copy routes
- *
- * @param	EventRequest event
- *
- * @returns	ValidationResult
- */
-Model.validate	= function( event )
-{
-	return event.validationHandler.validate( event.body, { newPath: 'filled||string', oldPath: 'filled||string' } );
-};
 
 /**
  * @brief	Moves the given item to a new path
@@ -30,22 +19,15 @@ Model.validate	= function( event )
  */
 Model.cut	= function( event )
 {
-	const result	= Model.validate( event );
+	const input	= new MoveInput( event );
 
-	if ( result.hasValidationFailed() )
-		return event.sendError( 'Invalid body parameters passed', 400 );
+	if ( ! input.isValid() )
+		return event.sendError( `Invalid input: ${JSON.stringify( input.getReason() )}`, 400 );
 
-	let { newPath, oldPath }	= result.getValidationResult();
-	newPath						= decodeURIComponent( newPath );
-	oldPath						= decodeURIComponent( oldPath );
+	const oldPath		= input.getOldPath();
+	let newPath			= input.getNewPath();
 
-	const fileStats				= fs.statSync( oldPath );
-	const oldPathParsed			= path.parse( oldPath );
-
-	if ( fileStats.isDirectory() )
-	{
-		return event.send( 'Cannot cut Folders', 400 );
-	}
+	const oldPathParsed	= path.parse( oldPath );
 
 	if ( ! fs.existsSync( newPath ) )
 	{
@@ -56,6 +38,7 @@ Model.cut	= function( event )
 
 	event.clearTimeout();
 	rename( oldPath, newPath ).then(()=>{
+		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	}).catch( event.next );
 };
@@ -69,22 +52,15 @@ Model.cut	= function( event )
  */
 Model.copy	= function( event )
 {
-	const result	= Model.validate( event );
+	const input	= new MoveInput( event );
 
-	if ( result.hasValidationFailed() )
-		return event.sendError( 'Invalid body parameters passed', 400 );
+	if ( ! input.isValid() )
+		return event.sendError( `Invalid input: ${JSON.stringify( input.getReason() )}`, 400 );
 
-	let { newPath, oldPath }	= result.getValidationResult();
-	newPath						= decodeURIComponent( newPath );
-	oldPath						= decodeURIComponent( oldPath );
+	const oldPath		= input.getOldPath();
+	let newPath			= input.getNewPath();
 
-	const fileStats				= fs.statSync( oldPath );
-	const oldPathParsed			= path.parse( oldPath );
-
-	if ( fileStats.isDirectory() )
-	{
-		return event.send( 'Cannot copy Folders', 400 );
-	}
+	const oldPathParsed	= path.parse( oldPath );
 
 	if ( ! fs.existsSync( newPath ) )
 	{
@@ -95,6 +71,7 @@ Model.copy	= function( event )
 
 	event.clearTimeout();
 	copy( oldPath, newPath ).then(()=>{
+		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	}).catch( event.next );
 };
@@ -108,21 +85,13 @@ Model.copy	= function( event )
  */
 Model.rename	= function( event )
 {
-	const result	= Model.validate( event );
+	const input	= new MoveInput( event );
 
-	if ( result.hasValidationFailed() )
-		return event.sendError( 'Invalid body parameters passed', 400 );
+	if ( ! input.isValid() )
+		return event.sendError( `Invalid input: ${JSON.stringify( input.getReason() )}`, 400 );
 
-	let { newPath, oldPath }	= result.getValidationResult();
-	newPath						= decodeURIComponent( newPath );
-	oldPath						= decodeURIComponent( oldPath );
-
-	const fileStats				= fs.statSync( oldPath );
-
-	if ( fileStats.isDirectory() )
-	{
-		return event.send( 'Cannot rename Folders', 400 );
-	}
+	const oldPath	= input.getOldPath();
+	let newPath	= input.getNewPath();
 
 	if ( fs.existsSync( newPath ) )
 	{
@@ -130,6 +99,7 @@ Model.rename	= function( event )
 	}
 
 	rename( oldPath, newPath ).then(()=>{
+		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	}).catch( event.next );
 };

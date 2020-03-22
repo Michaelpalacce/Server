@@ -18,9 +18,9 @@ app.get( '/', async ( event )=>{
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
-		throw new Error( 'Invalid params' );
+		throw new Error( `Invalid input: ${input.getReasonToString()}` );
 
-	event.render( 'browse', { dir: encodeURIComponent( input.getDir() ) } );
+	event.render( 'browse', { dir: encodeURIComponent( Buffer.from( input.getDirectory() ).toString( 'base64' ) ) } );
 } );
 
 /**
@@ -35,7 +35,7 @@ app.get( '/browse', async ( event )=>{
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
-		throw new Error( 'Invalid params' );
+		throw new Error( `Invalid input: ${input.getReasonToString()}` );
 
-	event.render( 'browse', { dir: encodeURIComponent( input.getDir() ) } );
+	event.render( 'browse', { dir: encodeURIComponent( Buffer.from( input.getDirectory() ).toString( 'base64' ) ) } );
 } );

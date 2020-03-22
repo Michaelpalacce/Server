@@ -3,6 +3,7 @@
 const fs		= require( 'fs' );
 const util		= require( 'util' );
 const path		= require( 'path' );
+const MoveInput	= require( '../input/move_input' );
 
 const rename	= util.promisify( fs.rename );
 const ncp		= require('ncp').ncp;
@@ -10,46 +11,27 @@ const ncp		= require('ncp').ncp;
 const Model		= {};
 
 /**
- * @brief	Validation for both the cut and copy routes
- *
- * @param	EventRequest event
- *
- * @returns	ValidationResult
- */
-Model.validate	= function( event )
-{
-	return event.validationHandler.validate( event.body, { newPath: 'filled||string', oldPath: 'filled||string' } );
-};
-
-/**
  * @brief	Moves the given item to a new path
  *
  * @param	EventRequest event
  *
- * @returns	void
+ * @returns	mixed
  */
 Model.cut	= function( event )
 {
-	const result	= Model.validate( event );
+	const input	= new MoveInput( event );
 
-	if ( result.hasValidationFailed() )
-		return event.sendError( 'Invalid body parameters passed', 400 );
+	if ( ! input.isValid() )
+		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
 
-	let { newPath, oldPath }	= result.getValidationResult();
-	newPath						= decodeURIComponent( newPath );
-	oldPath						= decodeURIComponent( oldPath );
+	const oldPath		= input.getOldPath();
+	let newPath			= input.getNewPath();
 
-	if ( newPath.substring( 0, oldPath.length ) === oldPath )
+	const oldPathParsed	= path.parse( oldPath );
+
+	if ( newPath.includes( oldPath ) )
 	{
-		return event.send( 'I just saved your HDD/SSD', 400 );
-	}
-
-	const fileStats				= fs.statSync( oldPath );
-	const oldPathParsed			= path.parse( oldPath );
-
-	if ( fileStats.isFile() )
-	{
-		return event.send( 'Cannot cut files', 400 );
+		return event.send( 'Possible recursion prevented ( item may also have similar names )', 400 );
 	}
 
 	if ( ! fs.existsSync( newPath ) )
@@ -60,6 +42,7 @@ Model.cut	= function( event )
 	newPath	= path.join( newPath, oldPathParsed.base );
 
 	rename( oldPath, newPath ).then(()=>{
+		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	}).catch( event.next );
 };
@@ -69,30 +52,23 @@ Model.cut	= function( event )
  *
  * @param	EventRequest event
  *
- * @returns	void
+ * @returns	mixed
  */
 Model.copy	= function( event )
 {
-	const result	= Model.validate( event );
+	const input	= new MoveInput( event );
 
-	if ( result.hasValidationFailed() )
-		return event.sendError( 'Invalid body parameters passed', 400 );
+	if ( ! input.isValid() )
+		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
 
-	let { newPath, oldPath }	= result.getValidationResult();
-	newPath						= decodeURIComponent( newPath );
-	oldPath						= decodeURIComponent( oldPath );
+	const oldPath		= input.getOldPath();
+	let newPath			= input.getNewPath();
 
-	if ( newPath.substring( 0, oldPath.length ) === oldPath )
+	const oldPathParsed	= path.parse( oldPath );
+
+	if ( newPath.includes( oldPath ) )
 	{
-		return event.send( 'I just saved your HDD/SSD', 400 );
-	}
-
-	const fileStats				= fs.statSync( oldPath );
-	const oldPathParsed			= path.parse( oldPath );
-
-	if ( fileStats.isFile() )
-	{
-		return event.send( 'Cannot copy Files', 400 );
+		return event.send( 'Possible recursion prevented ( item may also have similar names )', 400 );
 	}
 
 	if ( ! fs.existsSync( newPath ) )
@@ -108,7 +84,7 @@ Model.copy	= function( event )
 		{
 			return event.sendError( err );
 		}
-
+		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	});
 };
@@ -118,25 +94,17 @@ Model.copy	= function( event )
  *
  * @param	EventRequest event
  *
- * @returns	void
+ * @returns	mixed
  */
 Model.rename	= function( event )
 {
-	const result	= Model.validate( event );
+	const input	= new MoveInput( event );
 
-	if ( result.hasValidationFailed() )
-		return event.sendError( 'Invalid body parameters passed', 400 );
+	if ( ! input.isValid() )
+		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
 
-	let { newPath, oldPath }	= result.getValidationResult();
-	newPath						= decodeURIComponent( newPath );
-	oldPath						= decodeURIComponent( oldPath );
-
-	const fileStats				= fs.statSync( oldPath );
-
-	if ( fileStats.isFile() )
-	{
-		return event.send( 'Cannot rename files', 400 );
-	}
+	const oldPath	= input.getOldPath();
+	let newPath		= input.getNewPath();
 
 	if ( fs.existsSync( newPath ) )
 	{
@@ -144,6 +112,7 @@ Model.rename	= function( event )
 	}
 
 	rename( oldPath, newPath ).then(()=>{
+		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	}).catch( event.next );
 };

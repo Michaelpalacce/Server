@@ -3,10 +3,9 @@
 // Dependencies
 const { Server }	= require( 'event_request' );
 const fs			= require( 'fs' );
-const util			= require( 'util' );
-const path			= require('path');
+const path			= require( 'path' );
+const DeleteInput	= require( '../input/delete_input' );
 
-const unlink		= util.promisify( fs.unlink );
 const app			= Server();
 
 /**
@@ -46,35 +45,14 @@ const deleteFolderRecursive	= function( dir )
  * @return	void
  */
 app.delete( '/folder', ( event ) => {
-		const result	= event.validationHandler.validate( event.queryString, { item : 'optional||string' } );
+		const input	= new DeleteInput( event );
 
-		if ( result.hasValidationFailed() )
+		if ( ! input.isValid() )
 		{
-			return event.next( 'Invalid item provided', 400 );
+			return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
 		}
 
-		let { item }	= result.getValidationResult();
-
-		if ( ! fs.existsSync( item ) )
-		{
-			return event.next( 'Item does not exist', 400 );
-		}
-		else
-		{
-			if ( fs.statSync( item ).isDirectory() )
-			{
-				if ( item === '/' )
-				{
-					return event.next( 'CANNOT DELETE ROOT!', 400 );
-				}
-
-				deleteFolderRecursive( item );
-				event.send( 'ok' );
-			}
-			else
-			{
-				event.sendError( 'Trying to delete a file', 400 );
-			}
-		}
+		deleteFolderRecursive( input.getDirectory() );
+		event.send( 'ok' );
 	}
 );

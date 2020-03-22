@@ -12,15 +12,16 @@ const app			= Server();
 /**
  * @brief	Callback called when downloading a file fails
  *
- * @param	RequestEvent event
+ * @param	event EventRequest
+ * @param	text String
  *
  * @return	void
  */
-const downloadFailedCallback	= ( event ) => {
+const downloadFailedCallback	= ( event, text = 'The file specified does not exist' ) => {
 	event.setHeader( 'Content-disposition', 'attachment; filename="error.log"' );
 	event.setHeader( 'Content-type', '.log' );
 
-	event.send( 'The file specified does not exist' );
+	event.send( text );
 };
 
 /**
@@ -36,15 +37,10 @@ app.get( '/file', ( event ) => {
 
 		if ( ! input.isValid() )
 		{
-			return downloadFailedCallback( event );
+			return downloadFailedCallback( event, `Invalid input: ${input.getReasonToString()}` );
 		}
 
 		const file	= input.getFile();
-
-		if ( ! fs.existsSync( file ) )
-		{
-			return downloadFailedCallback( event );
-		}
 
 		event.clearTimeout();
 

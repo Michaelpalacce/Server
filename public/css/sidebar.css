@@ -1,13 +1,13 @@
 body {
 	padding-top: 90px;
-	background: #343a40;
+	background: #373a3d;
 }
 
 @media (min-width: 768px) {
 	body {
 		padding-top: 0;
 		margin-left: 232px;
-		background: #343a40;
+		background: #373a3d;
 	}
 
 	.navbar.fixed-left {
@@ -65,7 +65,7 @@ body {
 }
 
 .navbar{
-	background: #343a40!important;
+	background: #373a3d!important;
 	border-bottom: 1px solid gray;
 }
 
@@ -76,7 +76,12 @@ body {
 	border-bottom: 1px solid #c55454;
 }
 
+.active{
+	color: whitesmoke!important;
+}
+
 .navbar-action{
+	margin-bottom: 10px;
 	font-size: 1.05em;
 	font-weight: bold;
 	display: inline-block;
@@ -88,6 +93,14 @@ body {
 
 .navbar-action:hover{
 	color: whitesmoke;
+}
+
+.nav-element{
+	text-decoration: none;
+	color: rgba(255,255,255,.5);
+}
+.nav-element:hover{
+	color: white;
 }
 
 .dropdown-item:hover{

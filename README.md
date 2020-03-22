@@ -84,6 +84,7 @@ npm install --global --production windows-build-tools
 #Known Bugs:
 - When uploading files while loading a directory the position counter will be messed up and files may not be 100% correct, a refresh will fix it
 - Sometimes when cutting a folder after it has been created and uploaded to may result in a not permitted error
+- Please do not have folders with names like: "Folder!@#$%!@%!@#!@%!@##!@" I cannot guarantee anything will work 
 
 #Future Improvements:
 - Ability to connect to a different server to serve as a connection between your devices and a private instance of the Server Emulator

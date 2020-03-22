@@ -177,7 +177,7 @@
   min-height: 150px;
   border-radius: 25px;
   border: 2px dashed gray;
-  background: #343a40!important;
+  background: #373a3d!important;
   font-size: 40px;
   color: gray;
 }
@@ -208,11 +208,11 @@
         opacity: 1; }
     .dropzone .dz-preview.dz-file-preview .dz-image {
       border-radius: 20px;
-      background: #343a40!important; }
+      background: #373a3d!important; }
     .dropzone .dz-preview.dz-file-preview .dz-details {
       opacity: 1; }
     .dropzone .dz-preview.dz-image-preview {
-      background: #343a40!important;
+      background: #373a3d!important;
     }
       .dropzone .dz-preview.dz-image-preview .dz-details {
         -webkit-transition: opacity 0.2s linear;

@@ -19,10 +19,10 @@ app.get( '/file/data', ( event ) =>{
 		const input	= new FileInput( event );
 		if ( ! input.isValid() )
 		{
-			return event.next( 'Invalid file given', 400 );
+			return event.next( `Invalid input provided: ${input.getReasonToString()}`, 400 );
 		}
 
-		const file	= input.getFile()
+		const file	= input.getFile();
 
 		if ( ! fs.existsSync( file ) )
 		{

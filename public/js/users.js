@@ -21,7 +21,11 @@ class Users
 
 			const username		= await modal.askUserInput( 'What is the user\'s username?' ).catch( this.showError );
 			const password		= await modal.askUserInput( 'What is the user\'s password?' ).catch( this.showError );
-			const route			= encodeURIComponent( await modal.askUserInput( 'What is the user\'s allowed route?', '/' ).catch( this.showError ) );
+			const route			= encodeURIComponent(
+				btoa(
+					await modal.askUserInput( 'What is the user\'s allowed route?', '/' ).catch( this.showError )
+				)
+			);
 			const isSU			= await modal.askConfirmation( 'Is the user a super user' ).catch( this.showError );
 			const permissions	= [];
 

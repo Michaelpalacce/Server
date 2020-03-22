@@ -1,3 +1,8 @@
+'use strict';
+
+// Dependencies
+const ValidationResult	= require( 'event_request/server/components/validation/validation_result' );
+
 /**
  * @brief	Base Input Class
  */
@@ -47,7 +52,17 @@ class Input
 	 */
 	getReason()
 	{
-		return this.reason;
+		return this.reason instanceof ValidationResult ? this.reason.getValidationResult() : this.reason;
+	}
+
+	/**
+	 * @brief	Gets the reason as a string
+	 *
+	 * @returns	String
+	 */
+	getReasonToString()
+	{
+		return JSON.stringify( this.getReason() );
 	}
 
 	/**
