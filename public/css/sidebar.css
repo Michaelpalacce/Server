@@ -1,17 +1,8 @@
-body {
-	padding-top: 90px;
-	background: #373a3d;
-}
-
 @media (min-width: 768px) {
 	body {
 		padding-top: 0;
 		margin-left: 232px;
 		background: #373a3d;
-	}
-
-	.navbar.fixed-left {
-		border-right: 2px solid #c55454!important;
 	}
 }
 
@@ -64,20 +55,10 @@ body {
 	}
 }
 
-.navbar{
-	background: #373a3d!important;
-	border-bottom: 1px solid gray;
-}
-
 .nav-line
 {
 	margin-top: 50px;
 	margin-bottom: 10px;
-	border-bottom: 1px solid #c55454;
-}
-
-.active{
-	color: whitesmoke!important;
 }
 
 .navbar-action{
@@ -86,25 +67,12 @@ body {
 	font-weight: bold;
 	display: inline-block;
 	text-align: center;
-	color: rgba(255,255,255,.5);
 	margin-top: 10px;
 	cursor: pointer;
 }
 
-.navbar-action:hover{
-	color: whitesmoke;
-}
-
 .nav-element{
 	text-decoration: none;
-	color: rgba(255,255,255,.5);
-}
-.nav-element:hover{
-	color: white;
-}
-
-.dropdown-item:hover{
-	background: transparent!important;
 }
 
 .inputfile {
@@ -120,6 +88,5 @@ body {
 }
 
 .inputfile:focus + label {
-	outline: 1px dotted #000;
 	outline: -webkit-focus-ring-color auto 5px;
 }

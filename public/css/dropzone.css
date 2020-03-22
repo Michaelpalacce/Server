@@ -176,11 +176,9 @@
 .dropzone {
   min-height: 150px;
   border-radius: 25px;
-  border: 2px dashed gray;
-  background: #373a3d!important;
   font-size: 40px;
-  color: gray;
 }
+
   .dropzone.dz-clickable {
     cursor: pointer; }
     .dropzone.dz-clickable * {

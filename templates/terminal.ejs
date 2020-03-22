@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include("components/partial/stylesheets") %>
-    <link rel="stylesheet" href="/node_modules/xterm/css/xterm.css" />
-    <link rel="stylesheet" href="/public/css/style.css">
+	<%- include("components/partial/stylesheets") %>
+	<link rel="stylesheet" href="/node_modules/xterm/css/xterm.css" />
+	<link rel="stylesheet" href="/public/css/style.css">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Server Emulator</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Server Emulator</title>
 </head>
 <body>
-<%- include("components/modal", { active: "terminal" }) %>
-<%- include("components/sidebar", { active: "terminal" }) %>
+	<%- include("components/modal", { active: "terminal" }) %>
+	<%- include("components/sidebar", { active: "terminal" }) %>
 
-    <div class="container pt-5" style="color: gray">
-        <div id="terminal" ></div>
-    </div>
+	<div class="container pt-5" style="color: gray">
+		<div id="terminal" ></div>
+	</div>
 </body>
 <%- include("components/partial/js-libs") %>
 <script src="/socket.io/socket.io.js"></script>

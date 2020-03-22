@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Error</title>
+	<%- include("components/partial/stylesheets") %>
+	<link rel="stylesheet" href="/public/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/public/css/error.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div class="container">
+		<p class="text-center error-sad"> :( </p>
+
+		<p class="text-center error-code">HTTP: <%- code %></p>
+
+		<p class="text-center error-message"><%- error %></p>
+
+		<div class="text-center">
+			<a class="error-home" href="/"><u>HOME</u></a>
+		</div>
+
+	</div>
+</body>
+<script type="text/javascript" src="/public/js/library/bootstrap.js"></script>
+</html>

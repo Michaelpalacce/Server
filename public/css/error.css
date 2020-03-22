@@ -1,0 +1,53 @@
+.error-sad
+{
+	font-size: 125px;
+	color: rgba(255,255,255,.5);
+}
+
+.error-code
+{
+	margin-top: 10px;
+	font-size: 100px;
+	color: rgba(255,255,255,.5);
+}
+
+.error-message
+{
+	margin-top: 25px;
+	font-size: 35px;
+	color: rgba(255,255,255,.5);
+}
+
+.error-home
+{
+	margin-top: 25px;
+	font-size: 40px;
+	color: rgba(255,255,255,.5);
+	text-decoration: underline;
+}
+
+.error-home:hover{
+	color: rgba(255,255,255,.5);
+}
+
+@media (max-width: 768px) {
+	.error-sad
+	{
+		font-size: 75px;
+	}
+
+	.error-code
+	{
+		font-size: 60px;
+	}
+
+	.error-message
+	{
+		font-size: 20px;
+	}
+
+	.error-home
+	{
+		font-size: 25px;
+	}
+}

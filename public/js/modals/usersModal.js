@@ -82,7 +82,7 @@ class UsersModal extends Modal
 			const username	= this._userPreviewUsernameElement.val();
 			const userData	= {
 				password	: this._userPreviewPasswordElement.val(),
-				route		: encodeURIComponent( this._userPreviewRouteElement.val() ),
+				route		: encodeURIComponent( btoa( this._userPreviewRouteElement.val() ) ),
 				permissions	: this._userPreviewPermissionsElement.val(),
 				isSU		: this._userPreviewIsSUElement.val() === 'true' || this._userPreviewIsSUElement.val() === true
 			};

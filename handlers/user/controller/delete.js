@@ -1,8 +1,9 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const app			= Server();
+const { Server }		= require( 'event_request' );
+const DeleteUserInput	= require( '../input/delete_user_input' );
+const app				= Server();
 
 /**
  * @brief	Deletes an existing user
@@ -11,31 +12,14 @@ const app			= Server();
  * 			Can not delete self
  */
 app.delete( '/users/:username:', async ( event ) =>{
-	if ( event.session.get( 'SU' ) === false )
-	{
-		return event.sendError( 'Only super users can delete other users', 400 );
-	}
 
 	const userManager	= event.userManager;
-	const result		= event.validationHandler.validate( event.params,
-		{
-			username	: 'filled||string||range:3-64'
-		}
-	);
+	const input			= new DeleteUserInput( event, userManager );
 
-	if ( result.hasValidationFailed() )
-	{
-		return event.sendError( `There is an error: ${JSON.stringify( result.getValidationResult() )}`, 400 )
-	}
+	if ( ! input.isValid() )
+		return event.next( `Invalid input params: ${input.getReasonToString()}`, 400 );
 
-	const { username }	= result.getValidationResult();
-
-	if ( event.session.get( 'username' ) === username )
-	{
-		return event.sendError( 'Cannot delete self!', 400 );
-	}
-
-	userManager.delete( username );
+	userManager.delete( input.getUsername() );
 
 	event.send( 'ok' );
 });

@@ -1,7 +1,6 @@
 .folder
 {
 	text-decoration: none;
-	color: white;
 	cursor: pointer;
 }
 
@@ -17,7 +16,6 @@
 .file
 {
 	text-decoration: none;
-	color: white;
 	cursor: default;
 }
 
@@ -26,12 +24,10 @@
 	font-size: 15px !important;
 	text-align: center;
 	white-space: nowrap;
-	color: gray;
 }
 
 .folder-icon
 {
-	color:darkgray;
 	text-align: center;
 	font-size: 15px !important;
 	margin-right: 5px;
@@ -41,12 +37,6 @@
 {
 	margin-bottom: 0;
 	margin-top: 3px;
-	border-top: 1px dashed lightgray;
-}
-
-.file-name-icon
-{
-	color: #c55454;
 }
 
 .item
@@ -57,16 +47,13 @@
 .item-row
 {
 	border-radius: 10px;
-	border: 1px solid gray;
 }
 
 .no-preview
 {
-	color: darkgray;
 	text-decoration: none;
 	cursor: default;
 	text-underline: none;
-	text-underline-color: darkgray;
 	pointer-events: none;
 }
 
@@ -74,21 +61,14 @@
 {
 	text-decoration: none;
 	text-underline: none;
-	text-underline-color: darkgray;
-	color: white;
 	font-weight: bold;
 }
 
 .has-preview:hover
 {
-	color: white !important;
 	cursor: pointer;
 }
 
-.no-preview:hover
-{
-	color: darkgray;
-}
 
 .card-body
 {
@@ -108,25 +88,19 @@
 	border-radius: 25px;
 	height: 40px;
 	display: block;
-	border: 1.5px dashed white;
-	font-family: 'Roboto', sans-serif;
 	font-size: 15px;
 	font-weight: 500;
 	text-align: center;
 	text-decoration: none;
-	color: white;
 	overflow: hidden;
 }
+
 .face-button .face-primary, .face-button .face-secondary {
 	display: block;
 	line-height: 40px;
-	color: white;
 	transition: margin 0.4s;
 }
-.face-button .face-primary {
-	background-color: #373a3d;
-	color: white ;
-}
+
 .face-button:hover .face-primary {
 	margin-top: -40px;
 }
@@ -138,31 +112,25 @@
 	border-radius: 25px;
 	height: 40px;
 	display: block;
-	border: 1.5px dashed #c55454;
-	font-family: 'Roboto', sans-serif;
 	font-size: 15px;
 	font-weight: 500;
 	text-align: center;
 	text-decoration: none;
 	overflow: hidden;
 }
+
 .file-delete.face-button .face-primary, .file-delete.face-button .face-secondary {
 	display: block;
 	line-height: 40px;
-	color: #c55454;
 	transition: margin 0.4s;
 }
-.file-delete.face-button .file-delete.face-primary {
-	background-color: #373a3d;
-	color: #c55454;
-}
+
 .file-delete.face-button:hover .face-primary {
 	margin-top: -40px;
 }
 
 .deleteButton {
 	float: right;
-	color: #c55454;
 	display: none;
 	font-size: 20px;
 }

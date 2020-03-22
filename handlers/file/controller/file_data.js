@@ -4,7 +4,7 @@
 const { Server }	= require( 'event_request' );
 const app			= Server();
 
-const PathHelper	= require( '../../main/utils/path' );
+const FileSystem	= require( '../../main/utils/file_system' );
 const FileInput		= require( '../input/file_input' );
 const { promisify }	= require( 'util' );
 const fs			= require( 'fs' );
@@ -30,10 +30,13 @@ app.get( '/file/getFileData', ( event )=>{
 		return event.send( `Invalid input provided: ${input.getReasonToString()}`, 400 );
 	}
 
-	const file	= input.getFile();
+	const fileSystem	= new FileSystem( event );
+	const file			= input.getFile();
 
 	stat( file ).then(( stats )=>{
-		event.send( PathHelper.formatItem( path.parse( file ), stats, false, event ) );
+		event.send(
+			fileSystem.formatItem( { parsedItem: path.parse( file ), stats } )
+		);
 	}).catch(( e )=>{
 		event.sendError( 'File does not exist', 400 );
 	});

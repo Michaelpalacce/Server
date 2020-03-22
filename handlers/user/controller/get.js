@@ -2,6 +2,7 @@
 
 // Dependencies
 const { Server }	= require( 'event_request' );
+const GetUserInput	= require( '../input/get_user_input' );
 const app			= Server();
 
 /**
@@ -9,23 +10,10 @@ const app			= Server();
  */
 app.get( '/users/:username:', async ( event ) =>{
 	const userManager	= event.userManager;
-	const result		= event.validationHandler.validate( event.params,
-		{
-			username	: 'filled||string||range:3-64'
-		}
-	);
+	const input			= new GetUserInput( event, userManager );
 
-	if ( result.hasValidationFailed() )
-	{
-		return event.sendError( `There is an error: ${JSON.stringify( result.getValidationResult() )}`, 400 )
-	}
+	if ( ! input.isValid() )
+		return event.next( `Invalid input params: ${input.getReasonToString()}`, 400 );
 
-	const { username }	= result.getValidationResult();
-
-	if ( event.session.get( 'SU' ) === false && event.session.get( 'username' ) !== username )
-	{
-		return event.sendError( 'Only super users can view other users', 400 );
-	}
-
-	event.send( userManager.get( username ).getUserData() );
+	event.send( userManager.get( input.getUsername() ).getUserData() );
 });

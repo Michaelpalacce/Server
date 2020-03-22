@@ -59,14 +59,8 @@ class MoveInput extends Input
 
 		let { newPath, oldPath }	= this.reason.getValidationResult();
 
-		console.log(newPath)
-		console.log(oldPath)
-
 		newPath						= Buffer.from( decodeURIComponent( newPath ), 'base64' ).toString();
 		oldPath						= Buffer.from( decodeURIComponent( oldPath ), 'base64' ).toString();
-
-		console.log(newPath)
-		console.log(oldPath)
 
 		const resolvedNewPath		= path.resolve( newPath );
 		const resolvedOldPath		= path.resolve( oldPath );

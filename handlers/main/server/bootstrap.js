@@ -5,6 +5,7 @@ const { Server }	= require( 'event_request' );
 const ejs			= require( 'ejs' );
 const path			= require( 'path' );
 
+const ErrorHandler	= require( '../error/error_handler' );
 const logger		= require( '../logging/logger' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
@@ -50,6 +51,13 @@ app.add(( event )=>{
 	};
 
 	event.on( 'cleanUp', ()=>{ event.render	= undefined; });
+
+	event.next();
+});
+
+// Add Error Handler
+app.add(( event )=>{
+	event.errorHandler	= new ErrorHandler();
 
 	event.next();
 });

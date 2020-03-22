@@ -1,0 +1,195 @@
+body {
+	background: #373a3d!important;
+}
+
+.folder-name
+{
+	color: rgba(255,255,255,.5);
+}
+
+.folder-icon
+{
+	color:rgba(255,255,255,.5);
+}
+
+.file-name-icon
+{
+	color: #c55454;
+}
+
+.file
+{
+	color: rgba(255,255,255,.5);
+}
+
+.folder
+{
+	color: rgba(255,255,255,.5);
+}
+
+.file-name-hr
+{
+	border-top: 1px dashed rgba(255,255,255,.5);
+}
+
+.item-row
+{
+	border: 1px solid rgba(255,255,255,.5);
+}
+
+.no-preview
+{
+	color: rgba(255,255,255,.5);
+	text-underline-color: rgba(255,255,255,.5);
+}
+.has-preview
+{
+	text-underline-color: whitesmoke;
+	color: whitesmoke;
+}
+
+.has-preview:hover
+{
+	color: whitesmoke !important;
+}
+
+.no-preview:hover
+{
+	color: rgba(255,255,255,.5);
+}
+
+.face-button {
+	border: 1.5px dashed rgba(255,255,255,.5);
+	font-family: 'Roboto', sans-serif;
+	color: rgba(255,255,255,.5);
+}
+
+.face-button .face-primary, .face-button .face-secondary {
+	color: whitesmoke;
+}
+
+.face-button .face-primary {
+	background-color: #373a3d;
+	color: whitesmoke ;
+}
+
+.file-delete.face-button {
+	border: 1.5px dashed #c55454;
+	font-family: 'Roboto', sans-serif;
+}
+
+.file-delete.face-button .face-primary, .file-delete.face-button .face-secondary {
+	color: #c55454;
+}
+
+.file-delete.face-button .file-delete.face-primary {
+	background-color: #373a3d;
+	color: #c55454;
+}
+
+.deleteButton {
+	color: #c55454;
+}
+
+.dropzone {
+	border: 2px dashed rgba(255,255,255,.5);
+	background: #373a3d!important;
+	color: rgba(255,255,255,.5);
+}
+
+.loginForm{
+	border: 1px solid rgba(255,255,255,.5);
+}
+
+.user-row
+{
+	border-radius: 10px;
+	border: 1px solid rgba(255,255,255,.5);
+	color: rgba(255,255,255,.5);
+}
+
+@media (min-width: 768px) {
+	.navbar.fixed-left {
+		border-right: 2px solid #c55454!important;
+	}
+}
+
+.navbar{
+	background: #373a3d!important;
+	border-bottom: 1px solid gray;
+}
+
+.nav-line
+{
+	border-bottom: 1px solid #c55454;
+}
+
+.active{
+	color: whitesmoke!important;
+}
+
+.navbar-action{
+	color: rgba(255,255,255,.5);
+}
+
+.navbar-action:hover{
+	color: whitesmoke;
+}
+
+.nav-element{
+	color: rgba(255,255,255,.5);
+}
+
+.nav-element:hover{
+	color: whitesmoke;
+}
+
+.dropdown-item:hover{
+	background: transparent!important;
+}
+
+.inputfile:focus + label {
+	outline: 1px dotted #000;
+}
+
+.modal {
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+	background-color: rgb(55, 58, 61) !important;
+	border: 1px solid rgba(255,255,255,.5) !important;
+}
+
+.modal-button{
+	background-color: rgb(55, 58, 61) !important;
+	border: 1px solid rgba(255,255,255,.5) !important;
+	color: whitesmoke;
+}
+
+.modal-button:hover{
+	background-color: rgba(255,255,255,.5) !important;
+	color: black !important;
+}
+
+.close {
+	color: rgba(255,255,255,.5);
+}
+
+.close:hover,
+.close:focus {
+	color: #c55454;
+}
+
+.btn-outline-main-red{
+	color: #c55454;
+	border-color: #c55454;
+	background: transparent;
+}
+
+.btn-outline-main-red:hover{
+	color: whitesmoke;
+	border-color: #c55454;
+	background: #c55454;
+}

@@ -1,3 +1,13 @@
+11.1.0
+- Improved loading to have directories loaded first and then files
+- Updated readme
+
+11.0.0
+- Added error handling for delete as well
+- Added user input
+- Added an error page
+- Improved loading ( now is done on scroll )
+
 10.0.1
 - README changes
 

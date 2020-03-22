@@ -82,7 +82,7 @@ npm install --global --production windows-build-tools
 - Look for more information here: https://www.npmjs.com/package/node-pty?activeTab=readme
 
 #Known Bugs:
-- When uploading files while loading a directory the position counter will be messed up and files may not be 100% correct, a refresh will fix it
+- When doing file operations before the folder has been loaded may result into some files not being loaded
 - Cannot detect if you are moving a folder inside itself, so you cant do this: 
 
         /
@@ -93,3 +93,4 @@ npm install --global --production windows-build-tools
 
 #Future Improvements:
 - Ability to connect to a different server to serve as a connection between your devices and a private instance of the Server Emulator
+- In the future will make it sure that directories are loaded first and then files

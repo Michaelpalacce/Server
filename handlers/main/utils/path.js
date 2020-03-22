@@ -18,6 +18,8 @@ const PAGE_SIZE				= 50;
  * 			believe me I have no desire to actually fix it. So here I am just whining about it and hope to whoever can hear
  * 			me to do my job for me. Please. HELP.
  * 			On a more serious note I wrote this to test if this will work even and it did... so i left it.
+ *
+ * 			Brothers it has been fixed. I will leave this file here to remember. #NEVERFORGET
  */
 class PathHelper
 {

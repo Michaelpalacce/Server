@@ -12,18 +12,14 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 class BrowseInput extends Input
 {
 	/**
-	 * @brief	Returns the position of data load
-	 *
 	 * @returns	mixed
 	 */
-	getPosition()
+	getToken()
 	{
-		return this.get( BrowseInput.POSITION_KEY );
+		return this.get( BrowseInput.TOKEN_KEY );
 	}
 
 	/**
-	 * @brief	Returns the directory
-	 *
 	 * @returns	mixed
 	 */
 	getDirectory()
@@ -47,17 +43,18 @@ class BrowseInput extends Input
 		const result	= this.validationHandler.validate(
 			this.event.queryString,
 			{
-				dir			: { rules: 'optional||string', default: encodeURIComponent( Buffer.from( route ).toString( 'base64' ) ) },
-				position	: { rules: 'optional||numeric', default: 0 }
+				dir		: { rules: 'optional||string', default: encodeURIComponent( Buffer.from( route ).toString( 'base64' ) ) },
+				token	: { rules: 'optional||string', default: '' }
 			}
 		);
 
 		if ( result.hasValidationFailed() )
 			return false;
 
-		let { dir, position }	= result.getValidationResult();
-		dir						= Buffer.from( decodeURIComponent( dir ), 'base64' ).toString();
-		const resolvedDir		= path.resolve( dir );
+		let { dir, token }	= result.getValidationResult();
+		dir					= Buffer.from( decodeURIComponent( dir ), 'base64' ).toString();
+		token				= Buffer.from( decodeURIComponent( token ), 'base64' ).toString();
+		const resolvedDir	= path.resolve( dir );
 
 		if ( ! isSU && resolvedDir.includes( PROJECT_ROOT ) )
 		{
@@ -71,14 +68,14 @@ class BrowseInput extends Input
 			return false;
 		}
 
-		this.model[BrowseInput.DIR_KEY]			= dir;
-		this.model[BrowseInput.POSITION_KEY]	= parseInt( position );
+		this.model[BrowseInput.DIR_KEY]		= dir;
+		this.model[BrowseInput.TOKEN_KEY]	= token;
 
 		return true;
 	}
 }
 
-BrowseInput.POSITION_KEY	= 'position';
-BrowseInput.DIR_KEY			= 'dir';
+BrowseInput.TOKEN_KEY	= 'token';
+BrowseInput.DIR_KEY		= 'dir';
 
 module.exports	= BrowseInput;

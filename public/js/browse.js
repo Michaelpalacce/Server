@@ -7,10 +7,11 @@ class Browse
 {
 	constructor()
 	{
-		this.canBrowse			= true;
-		this.currentPosition	= 0;
-		this.contextMenu		= new ContextMenu( this );
-		this.dropzone			= new Dropzone(
+		this.canBrowse		= true;
+		this.hasMore		= false;
+		this.currentToken	= '';
+		this.contextMenu	= new ContextMenu( this );
+		this.dropzone		= new Dropzone(
 			".dropzone",
 			{
 				url: '/file',
@@ -73,6 +74,30 @@ class Browse
 		});
 
 		$( '#addFolder' ).on( 'click', this.createNewFolder.bind( this ) );
+
+		$( window ).on( 'scroll', this.tryToLoad.bind( this ) );
+	}
+
+	/**
+	 * @brief	Tries loading if conditions are met
+	 *
+	 * @return	Boolean
+	 */
+	tryToLoad()
+	{
+		if ( ! this.hasMore )
+		{
+			return false;
+		}
+		const documentScrollTop		= $( document ).scrollTop();
+		const documentOuterHeight	= $( document ).outerHeight();
+		const windowOuterHeight		= $( window ).outerHeight();
+		const offset				= 500;
+
+		if ( documentScrollTop >= documentOuterHeight - windowOuterHeight - offset )
+		{
+			this.browse( this.currentDir, true );
+		}
 	}
 
 	/**
@@ -158,6 +183,8 @@ class Browse
 	 */
 	deleteItem( element, type = Browse.TYPE_FILE )
 	{
+		element.off( 'click' );
+
 		element				= element.closest( '.item' );
 		const itemToDelete	= element.attr( 'data-item-encoded-uri' );
 
@@ -170,10 +197,11 @@ class Browse
 			$.ajax({
 				url		: `/${type}?item=${itemToDelete}`,
 				method	: 'DELETE',
-				success	: function()
-				{
+				success	: ()=>{
 					element.remove();
-				}
+					this.tryToLoad();
+				},
+				error	: this.showError.bind( this )
 			});
 		};
 
@@ -257,7 +285,14 @@ class Browse
 	 */
 	browse( directory, loadData = false )
 	{
-		const pastDir	= this.currentDir;
+		if ( this.loading )
+		{
+			return;
+		}
+
+		const pastDir		= this.currentDir;
+		const pastToken		= this.currentToken;
+		const pastHasMore	= this.hasMore;
 
 		if ( ! this.canBrowse && ! loadData )
 		{
@@ -266,15 +301,17 @@ class Browse
 
 		if ( ! loadData )
 		{
-			this.currentPosition	= 0;
-			this.currentDir			= directory;
+			this.currentToken	= '';
+			this.currentDir		= directory;
+			this.hasMore		= false;
 		}
+		this.loading			= true;
 
 		$( '#upload-dir' ).val( directory );
 		$( '#upload-file' ).val( directory );
 
 		$.ajax({
-			url		: `/browse/getFiles?dir=${directory}&position=${this.currentPosition}`,
+			url		: `/browse/getFiles?dir=${directory}&token=${this.currentToken}`,
 			method	: 'GET',
 			success	: ( data )=>
 			{
@@ -283,8 +320,8 @@ class Browse
 					$( '.item' ).remove();
 				}
 
-				const { items, position, hasMore, dir }	= JSON.parse( data );
-				this.currentPosition					= position;
+				const { items, hasMore, dir, nextToken }	= JSON.parse( data );
+				this.currentToken							= nextToken;
 
 				for ( const index in items )
 				{
@@ -294,27 +331,21 @@ class Browse
 					this.addItem( name, encodedURI, size, isDir, previewAvailable, fileType, dir );
 				}
 
-				if ( hasMore )
-				{
-					setTimeout( ()=>{
-						if ( dir !== decodeURIComponent( this.currentDir ) )
-						{
-							return;
-						}
-
-						this.browse( directory, true );
-					}, 500 );
-				}
+				this.hasMore	= hasMore;
 			},
 			error	: ( jqXHR )=>{
 				window.history.pushState( {}, '', `/browse?dir=${pastDir}` );
-				this.currentDir			= pastDir;
-				this.currentPosition	= 0;
+				this.currentDir		= pastDir;
+				this.currentToken	= pastToken;
+				this.hasMore		= pastHasMore;
 
 				$( '#upload-dir' ).val( this.currentDir );
 				$( '#upload-file' ).val( this.currentDir );
 
 				this.showError( jqXHR );
+			},
+			complete	: ()=>{
+				this.loading	= false;
 			}
 		});
 	}

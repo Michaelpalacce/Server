@@ -1,49 +1,21 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const app			= Server();
+const { Server }		= require( 'event_request' );
+const UpdateUserInput	= require( '../input/update_user_input' );
+const app				= Server();
 
 /**
  * @brief	Updates a user
  */
 app.patch( '/users/:username:', ( event ) =>{
-	if ( event.session.get( 'SU' ) === false )
-	{
-		return event.sendError( 'Only super users can update users', 400 );
-	}
-
 	const userManager	= event.userManager;
-	const params		= event.validationHandler.validate( event.params, { username : 'filled||string||range:3-64' } );
-	const result		= event.validationHandler.validate( event.body,
-		{
-			password	: 'filled||string||range:3-64',
-			isSU		: 'filled||boolean',
-			route		: 'filled||string'
-		}
-	);
+	const input			= new UpdateUserInput( event, userManager );
 
-	if ( result.hasValidationFailed() )
-	{
-		return event.sendError( `There is an error: ${JSON.stringify( result.getValidationResult() )}`, 400 )
-	}
+	if ( ! input.isValid() )
+		return event.next( `Invalid input params: ${input.getReasonToString()}`, 400 );
 
-	if ( params.hasValidationFailed() )
-	{
-		return event.sendError( `There is an error: ${JSON.stringify( params.hasValidationFailed() )}`, 400 )
-	}
-
-	const { username }	= params.getValidationResult();
-
-	if ( ! userManager.has( username ) )
-	{
-		return event.sendError( `User: ${username} does not exists`, 400 )
-	}
-
-	const userData		= result.getValidationResult();
-	userData.route		= Buffer.from( decodeURIComponent( userData.route ), 'base64' ).toString();
-
-	userManager.update( username, userData );
+	userManager.update( input.getUsername(), input.getUserData() );
 
 	event.send( 'ok' );
 });
