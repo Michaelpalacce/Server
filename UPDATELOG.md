@@ -1,3 +1,6 @@
+10.0.1
+- README changes
+
 10.0.0
 - Only SU can now access the Project Root
 - Most pages are now cached
