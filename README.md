@@ -92,5 +92,4 @@ npm install --global --production windows-build-tools
     - copy /folder into folder2 since cannot distinguish whether you are trying to copy a folder into itself
 
 #Future Improvements:
-- Ability to connect to a different server to serve as a connection between your devices and a private instance of the Server Emulator
-- In the future will make it sure that directories are loaded first and then files
+- Ability to tunnel through a different server

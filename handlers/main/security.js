@@ -5,7 +5,7 @@ const { Server }	= require( 'event_request' );
 const UserManager	= require( './user/user_manager' );
 
 const app			= Server();
-const userManager	= new UserManager( process.cachingServer );
+const userManager	= new UserManager();
 
 // Add the default user if he/she does not exist.
 app.add(( event )=>{

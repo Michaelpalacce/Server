@@ -1,4 +1,9 @@
-const User	= require( './user' );
+'use strict';
+
+// Dependencies
+const User			= require( './user' );
+const DataServer	= require( 'event_request/server/components/caching/data_server' );
+const path			= require( 'path' );
 
 const USER_KEY	= 'USERS_DATA';
 
@@ -7,9 +12,15 @@ const USER_KEY	= 'USERS_DATA';
  */
 class UserManager
 {
-	constructor( dataStore )
+	constructor()
 	{
-		this.dataStore	= dataStore;
+		this.dataStore	= new DataServer({
+			ttl				: -1,
+			persist			: true,
+			persistPath		: path.join( __dirname, '/store/users.json' ),
+			persistInterval	: 5,	// Every 5 seconds
+			gcInterval		: 86400	// One day
+		});
 		this.users		= null;
 
 		this.fetchUsers();

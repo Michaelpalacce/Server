@@ -1,3 +1,10 @@
+11.1.1
+- Newest EventRequest version
+- Updated readme a bit
+- Updated the rate limits
+- Users will NOT expire anymore
+- Users are now stored separately 
+
 11.1.0
 - Improved loading to have directories loaded first and then files
 - Updated readme
