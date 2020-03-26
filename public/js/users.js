@@ -19,15 +19,31 @@ class Users
 			event.stopImmediatePropagation();
 			event.preventDefault();
 
-			const username		= await modal.askUserInput( 'What is the user\'s username?' ).catch( this.showError );
-			const password		= await modal.askUserInput( 'What is the user\'s password?' ).catch( this.showError );
-			const route			= encodeURIComponent(
+			const username	= await modal.askUserInput( 'What is the user\'s username?' ).catch( this.hideModal );
+			const password	= await modal.askUserInput( 'What is the user\'s password?' ).catch( this.hideModal );
+			const route		= encodeURIComponent(
 				btoa(
-					await modal.askUserInput( 'What is the user\'s allowed route?', '/' ).catch( this.showError )
+					await modal.askUserInput( 'What is the user\'s allowed route?', '/' ).catch( this.hideModal )
 				)
 			);
-			const isSU			= await modal.askConfirmation( 'Is the user a super user' ).catch( this.showError );
-			const permissions	= [];
+			const isSU		= await modal.askConfirmation( 'Is the user a super user' ).catch( this.hideModal );
+			let permissions	= {};
+
+			if ( await modal.askConfirmation( 'Do you want to add route permissions?' ).catch( this.hideModal ) )
+			{
+				do
+				{
+					const route	= await modal.askUserInput( 'Route to deny:' ).catch( this.hideModal );
+
+					let method	= await modal.askUserInput( 'Route method to deny:' ).catch( this.hideModal );
+					try{ method	= JSON.parse( method ); } catch ( e ) {}
+
+					permissions[route]	= method;
+				}
+				while ( await modal.askConfirmation( 'Do you want to add more?' ) );
+			}
+
+			permissions	= encodeURIComponent( btoa( JSON.stringify( permissions ) ) );
 
 			const userParams	= {
 				username,
@@ -201,6 +217,16 @@ class Users
 		modal.hide();
 
 		modal.show( jqXHR.responseText );
+	}
+
+	/**
+	 * @brief	Hides the modal
+	 *
+	 * @return	void
+	 */
+	hideModal()
+	{
+		modal.hide();
 	}
 }
 

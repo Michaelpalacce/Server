@@ -14,18 +14,18 @@ class UserManager
 {
 	constructor()
 	{
-		this.dataStore	= new DataServer({
+		this.dataStore			= new DataServer({
 			ttl				: -1,
 			persist			: true,
 			persistPath		: path.join( __dirname, '/store/users.json' ),
 			persistInterval	: 5,	// Every 5 seconds
 			gcInterval		: 86400	// One day
 		});
-		this.users		= null;
+		this.users				= null;
 
 		this.fetchUsers();
 
-		setInterval(()=>{
+		this.flushUserInterval	= setInterval(()=>{
 			this.flushUsers();
 		}, 2500 );
 	}
@@ -66,6 +66,7 @@ class UserManager
 
 				if ( ! user.isValid() )
 				{
+					clearInterval( this.flushUserInterval );
 					throw new Error( 'Error while fetching users' );
 				}
 

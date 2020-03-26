@@ -22,6 +22,8 @@ class Modal
 		this._previewAudioElement	= this._element.find( '#modalPreviewAudio' ).hide();
 		this._previewTextElement	= this._element.find( '#modalPreviewText' ).hide();
 		this._previewImageElement	= this._element.find( '#modalPreviewImage' ).hide();
+
+		this.eventEmitter			= $( '<div></div>' );
 	}
 
 	/**
@@ -126,6 +128,10 @@ class Modal
 				}
 			});
 
+			this.eventEmitter.on( 'hide', ()=>{
+				resolve( '' );
+			});
+
 			this._inputElement.focus();
 		})
 	}
@@ -172,6 +178,10 @@ class Modal
 				getChoiceCallback( event, false );
 			});
 
+			this.eventEmitter.on( 'hide', ()=>{
+				resolve( false );
+			});
+
 			this._choiceYesElement.focus();
 		})
 	}
@@ -214,6 +224,8 @@ class Modal
 		this._element.off( 'click' );
 		this._choiceYesElement.off( 'click' );
 		this._choiceNoElement.off( 'click' );
+
+		this.eventEmitter.off( 'hide' );
 	}
 
 	/**
@@ -252,6 +264,7 @@ class Modal
 	 */
 	hide()
 	{
+		this.eventEmitter.trigger( 'hide' );
 		this._element.hide();
 		this._submitElement.hide();
 		this._inputElement.hide();

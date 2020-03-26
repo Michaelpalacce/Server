@@ -13,7 +13,7 @@ app.add(( event )=>{
 
 	if ( ! userManager.has( process.env.ADMIN_USERNAME ) )
 	{
-		userManager.set( {
+		userManager.set({
 			username	: process.env.ADMIN_USERNAME,
 			password	: process.env.ADMIN_PASSWORD,
 			isSU		: true,
@@ -48,10 +48,39 @@ if ( process.env.SECURITY_ENABLED == 1 )
 				event.redirect( '/login' );
 				return;
 			}
+			else
+			{
+				const username	= event.session.get( 'username' );
+				const user		= userManager.get( username );
+
+				event.session.add( 'route', user.getRoute() );
+				event.session.add( 'SU', user.isSuperUser() );
+				event.session.add( 'permissions', user.getPermissions() );
+			}
 
 			event.next();
 		}
 	});
+
+	app.add(( event )=>{
+			if ( event.session.has( 'permissions' ) )
+			{
+				const permissions	= event.session.get( 'permissions' );
+				for ( const permission in permissions )
+				{
+					let method	= permissions[permission];
+					try{ method	= JSON.parse( permissions[permission] ); } catch ( e ) {}
+
+					if ( app.router.matchRoute( permission, event.path ) && app.router.matchMethod( event.method, method ) )
+					{
+						event.next( `You don\'t have permissinos to access: ${permission} with method: ${permissions[permission]}` );
+					}
+				}
+			}
+
+			event.next();
+		}
+	);
 
 	app.get( '/login', ( event )=>{
 		event.render( 'login' );
@@ -81,6 +110,7 @@ if ( process.env.SECURITY_ENABLED == 1 )
 			event.session.add( 'route', user.getRoute() );
 			event.session.add( 'authenticated', true );
 			event.session.add( 'SU', user.isSuperUser() );
+			event.session.add( 'permissions', user.getPermissions() );
 
 			event.redirect( '/' );
 		}
@@ -96,6 +126,7 @@ else
 		event.session.add( 'route', '/' );
 		event.session.add( 'username', process.env.ADMIN_USERNAME );
 		event.session.add( 'authenticated', true );
+		event.session.add( 'permissions', [] );
 		event.session.add( 'SU', true );
 		event.next();
 	});

@@ -60,10 +60,14 @@ https://github.com/Michaelpalacce/Server/releases
 #Adding users
 - If you want to add users go to the users page from the sidebar and click on the Add Users button
 - You will be asked to fill in the new user's data
-- Permissions currently do not work
 - Route will be the path from which the user can access the FS
 - When adding a user the user will persist after 5 seconds so don't stop the server
+
+#Permissions:
 - Only superusers can use the terminal, add/ view/ modify other users ( and self ) 
+- Nobody can do any operations on the PROJECT_ROOT as well as many operations including the folder structure where the project is
+- When adding a user a set of permissions will be asked for. Those permissions are forbidding. Whatever you type in there, the users WON'T be able to access.
+- You may leave the method empty which will mean ANY method or pass in an Array
 
 #Notes
 - You may need to delete the cache file if you do changes to the environment ( like enabling security )

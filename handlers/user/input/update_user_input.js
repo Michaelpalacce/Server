@@ -47,6 +47,14 @@ class UpdateUserInput extends Input
 	}
 
 	/**
+	 * @return	mixed
+	 */
+	getPermissions()
+	{
+		return this.get( UpdateUserInput.PERMISSIONS_KEY );
+	}
+
+	/**
 	 * @brief	Gets the user data in a way to be saved
 	 *
 	 * @return	Object
@@ -54,9 +62,10 @@ class UpdateUserInput extends Input
 	getUserData()
 	{
 		return {
-			[UpdateUserInput.ROUTE_KEY]		: this.getRoute(),
-			[UpdateUserInput.PASSWORD_KEY]	: this.getPassword(),
-			[UpdateUserInput.IS_SU_KEY]		: this.getIsSU()
+			[UpdateUserInput.ROUTE_KEY]			: this.getRoute(),
+			[UpdateUserInput.PASSWORD_KEY]		: this.getPassword(),
+			[UpdateUserInput.PERMISSIONS_KEY]	: this.getPermissions(),
+			[UpdateUserInput.IS_SU_KEY]			: this.getIsSU()
 		}
 	}
 
@@ -87,6 +96,7 @@ class UpdateUserInput extends Input
 		this.reason	= this.validationHandler.validate( this.event.body,
 			{
 				password	: 'filled||string||range:3-64',
+				permissions	: 'filled||string',
 				isSU		: 'filled||boolean',
 				route		: 'filled||string'
 			}
@@ -95,8 +105,18 @@ class UpdateUserInput extends Input
 		if ( this.reason.hasValidationFailed() )
 			return false;
 
-		let { route, password, isSU }	= this.reason.getValidationResult();
-		route							= Buffer.from( decodeURIComponent( route ), 'base64' ).toString();
+		let { route, password, isSU, permissions }	= this.reason.getValidationResult();
+		route										= Buffer.from( decodeURIComponent( route ), 'base64' ).toString();
+
+		try
+		{
+			permissions	= JSON.parse( Buffer.from( decodeURIComponent( permissions ), 'base64' ).toString() );
+		}
+		catch ( e )
+		{
+			this.reason	= `User permissions must be a valid JSON`;
+			return false;
+		}
 
 		if ( ! this.userManager.has( username ) )
 		{
@@ -108,6 +128,7 @@ class UpdateUserInput extends Input
 		this.model[UpdateUserInput.USERNAME_KEY]	= username;
 		this.model[UpdateUserInput.PASSWORD_KEY]	= password;
 		this.model[UpdateUserInput.IS_SU_KEY]		= isSU;
+		this.model[UpdateUserInput.PERMISSIONS_KEY]	= permissions;
 
 		return true;
 	}
@@ -117,5 +138,6 @@ UpdateUserInput.ROUTE_KEY		= 'route';
 UpdateUserInput.USERNAME_KEY	= 'username';
 UpdateUserInput.PASSWORD_KEY	= 'password';
 UpdateUserInput.IS_SU_KEY		= 'isSU';
+UpdateUserInput.PERMISSIONS_KEY	= 'permissions';
 
 module.exports	= UpdateUserInput;

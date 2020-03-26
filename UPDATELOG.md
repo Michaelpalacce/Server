@@ -1,3 +1,8 @@
+11.2.0
+- Dropzone text is now unselectable
+- Added Permissions
+- Now pressing escape when the modal is up will return false or empty depending
+
 11.1.1
 - Newest EventRequest version
 - Updated readme a bit
@@ -6,7 +11,7 @@
 - Users are now stored separately 
 
 11.1.0
-- Improved loading to have directories loaded first and then files
+- Improved loading to have directories loaded rfirst and then files
 - Updated readme
 
 11.0.0

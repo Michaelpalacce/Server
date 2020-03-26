@@ -68,7 +68,7 @@ class UsersModal extends Modal
 		this._userPreviewUsernameElement.val( userData.username ).show();
 		this._userPreviewPasswordElement.val( userData.password ).show();
 		this._userPreviewRouteElement.val( userData.route ).show();
-		this._userPreviewPermissionsElement.val( userData.permissions ).show();
+		this._userPreviewPermissionsElement.val( JSON.stringify( userData.permissions ) ).show();
 		this._userPreviewIsSUElement.val( userData.isSU ).show();
 
 		this._userPreviewDeleteElement.show().on( 'click', ()=>{
@@ -83,7 +83,7 @@ class UsersModal extends Modal
 			const userData	= {
 				password	: this._userPreviewPasswordElement.val(),
 				route		: encodeURIComponent( btoa( this._userPreviewRouteElement.val() ) ),
-				permissions	: this._userPreviewPermissionsElement.val(),
+				permissions	: encodeURIComponent( btoa( this._userPreviewPermissionsElement.val() ) ),
 				isSU		: this._userPreviewIsSUElement.val() === 'true' || this._userPreviewIsSUElement.val() === true
 			};
 

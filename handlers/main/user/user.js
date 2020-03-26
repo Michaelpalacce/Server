@@ -44,7 +44,8 @@ class User
 			&& typeof this.username === 'string'
 			&& typeof this.isSU === 'boolean'
 			&& typeof this.password === 'string'
-			&& typeof this.route === 'string';
+			&& typeof this.route === 'string'
+			&& typeof this.permissions === 'object';
 	}
 
 	/**
@@ -55,6 +56,16 @@ class User
 	getUsername()
 	{
 		return this.username;
+	}
+
+	/**
+	 * @brief	Returns the permissions of the user
+	 *
+	 * @return	Array
+	 */
+	getPermissions()
+	{
+		return this.permissions;
 	}
 
 	/**

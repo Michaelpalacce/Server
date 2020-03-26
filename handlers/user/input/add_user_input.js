@@ -47,6 +47,14 @@ class AddUserInput extends Input
 	}
 
 	/**
+	 * @return	mixed
+	 */
+	getPermissions()
+	{
+		return this.get( AddUserInput.PERMISSIONS_KEY );
+	}
+
+	/**
 	 * @brief	Gets the user data in a way to be saved
 	 *
 	 * @return	Object
@@ -54,10 +62,11 @@ class AddUserInput extends Input
 	getUserData()
 	{
 		return {
-			[AddUserInput.ROUTE_KEY]	: this.getRoute(),
-			[AddUserInput.USERNAME_KEY]	: this.getUsername(),
-			[AddUserInput.PASSWORD_KEY]	: this.getPassword(),
-			[AddUserInput.IS_SU_KEY]	: this.getIsSU()
+			[AddUserInput.ROUTE_KEY]		: this.getRoute(),
+			[AddUserInput.USERNAME_KEY]		: this.getUsername(),
+			[AddUserInput.PASSWORD_KEY]		: this.getPassword(),
+			[AddUserInput.IS_SU_KEY]		: this.getIsSU(),
+			[AddUserInput.PERMISSIONS_KEY]	: this.getPermissions()
 		}
 	}
 
@@ -81,6 +90,7 @@ class AddUserInput extends Input
 		this.reason	= this.validationHandler.validate( this.event.body,
 			{
 				username	: 'filled||string||range:3-64',
+				permissions	: 'filled||string',
 				password	: 'filled||string||range:3-64',
 				isSU		: 'filled||boolean',
 				route		: 'filled||string'
@@ -90,8 +100,17 @@ class AddUserInput extends Input
 		if ( this.reason.hasValidationFailed() )
 			return false;
 
-		let { route, username, password, isSU }	= this.reason.getValidationResult();
-		route									= Buffer.from( decodeURIComponent( route ), 'base64' ).toString();
+		let { route, username, password, isSU, permissions }	= this.reason.getValidationResult();
+		route													= Buffer.from( decodeURIComponent( route ), 'base64' ).toString();
+		try
+		{
+			permissions	= JSON.parse( Buffer.from( decodeURIComponent( permissions ), 'base64' ).toString() );
+		}
+		catch ( e )
+		{
+			this.reason	= `User permissions must be a valid JSON`;
+			return false;
+		}
 
 		if ( this.userManager.has( username ) )
 		{
@@ -99,18 +118,20 @@ class AddUserInput extends Input
 			return false;
 		}
 
-		this.model[AddUserInput.ROUTE_KEY]		= route;
-		this.model[AddUserInput.USERNAME_KEY]	= username;
-		this.model[AddUserInput.PASSWORD_KEY]	= password;
-		this.model[AddUserInput.IS_SU_KEY]		= isSU;
+		this.model[AddUserInput.ROUTE_KEY]			= route;
+		this.model[AddUserInput.USERNAME_KEY]		= username;
+		this.model[AddUserInput.PASSWORD_KEY]		= password;
+		this.model[AddUserInput.IS_SU_KEY]			= isSU;
+		this.model[AddUserInput.PERMISSIONS_KEY]	= permissions;
 
 		return true;
 	}
 }
 
-AddUserInput.ROUTE_KEY		= 'route';
-AddUserInput.USERNAME_KEY	= 'username';
-AddUserInput.PASSWORD_KEY	= 'password';
-AddUserInput.IS_SU_KEY		= 'isSU';
+AddUserInput.ROUTE_KEY			= 'route';
+AddUserInput.USERNAME_KEY		= 'username';
+AddUserInput.PASSWORD_KEY		= 'password';
+AddUserInput.IS_SU_KEY			= 'isSU';
+AddUserInput.PERMISSIONS_KEY	= 'permissions';
 
 module.exports	= AddUserInput;
