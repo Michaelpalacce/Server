@@ -19,11 +19,10 @@
 		<div class="row my-1 mb-md-5" id="directoryStructure" ></div>
 		<div class="row" id="fileStructure"></div>
 	</div>
+
+	<div id="currentDir" class="display-none" data-currentDir="<%= dir %>"></div>
 </body>
 <%- include("components/partial/js-libs") %>
-<script>
-	let currentDir	= '<%= dir %>';
-</script>
 <script src="/public/js/contextMenu.js"></script>
 <script src="/public/js/browse.js"></script>
 </html>

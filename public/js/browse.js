@@ -424,7 +424,7 @@ class Browse
 					filePreviewElement.parent().remove();
 
 					filePreviewParent.append( `
-						<img style="padding-bottom: 7px; max-width: 250px; max-height: 250px" class="preview-item" src="/file/data?file=${encodedURI}" alt="${name}">
+						<img class="preview-item" src="/file/data?file=${encodedURI}" alt="${name}">
 					` );
 
 					filePreviewElement	= filePreviewParent;
@@ -475,4 +475,4 @@ Browse.TYPE_FOLDER	= 'folder';
 
 const view			= new Browse();
 
-view.browse( currentDir );
+view.browse( $( '#currentDir' ).attr( 'data-currentDir' ) );

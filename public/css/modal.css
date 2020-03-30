@@ -62,3 +62,18 @@
 	margin-right: 10px;
 	font-size: 20px;
 }
+
+.modal-textarea
+{
+	height: 100px;
+}
+
+.modal-button, .choice-button, .modal-text, .modal-input{
+	height: 35px;
+}
+
+.center-row{
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}

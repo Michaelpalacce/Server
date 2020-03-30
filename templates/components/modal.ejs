@@ -1,24 +1,24 @@
 <link rel="stylesheet" href="/public/css/modal.css">
 
 <div id="modal" class="modal">
-	<div class="modal-content" style="background: #343a40; color: white" id="modal-content">
+	<div class="modal-content" id="modal-content">
 		<span class="close" onclick="modal.hide()">&times;</span>
 		<div class="container">
 			<h6><span id="modalText" class="pb-3">Some text in the Modal..</span></h6>
 			<div class="row" id="modalInputRow">
 				<div class="input-group mb-3 col-lg-9 text-center">
-					<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="modalInput" style="height: 35px">
+					<input type="text" class="form-control modal-text" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="modalInput" >
 				</div>
 
-				<button type="button" class="btn col-lg-3 text-center modal-button" id="modalSubmit" style="height: 35px">OK</button>
+				<button type="button" class="btn col-lg-3 text-center modal-button" id="modalSubmit" >OK</button>
 			</div>
 
-			<div class="row" id="modalChoiceRow" style="align-items: center; justify-content: center; display: flex;">
-				<button type="button" class="btn modal-button col-lg-4 choice-button" id="modalchoiceYes" style="height: 35px">Yes</button>
-				<button type="button" class="btn col-lg-4 btn-outline-main-red choice-button" id="modalchoiceNo" style="height: 35px">No</button>
+			<div class="row center-row" id="modalChoiceRow" >
+				<button type="button" class="btn modal-button col-lg-4 choice-button" id="modalchoiceYes" >Yes</button>
+				<button type="button" class="btn col-lg-4 btn-outline-main-red choice-button" id="modalchoiceNo">No</button>
 			</div>
 
-			<div class="row" id="modalPreview" style="align-items: center; justify-content: center; display: flex;">
+			<div class="row center-row" id="modalPreview" >
 				<video controls class="embed-responsive-item preview-item" id="modalPreviewVideo"></video>
 
 				<video controls class="embed-responsive-item" id="modalPreviewAudio"></video>
@@ -29,34 +29,34 @@
 			</div>
 
 			<% if ( active === 'users' ) { %>
-				<div class="row" id="userPreview" style="align-items: center; justify-content: center; display: flex;">
+				<div class="row center-row" id="userPreview" >
 					<div class="input-group mb-3 col-lg-9 text-center">
 						<label for="userPreviewUsername" class="input-label">Username:</label>
-						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewUsername" style="height: 35px" disabled>
+						<input type="text" class="form-control modal-input" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewUsername" disabled>
 					</div>
 
 					<div class="input-group mb-3 col-lg-9 text-center">
 						<label for="userPreviewPassword" class="input-label">Password:</label>
-						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewPassword" style="height: 35px">
+						<input type="text" class="form-control modal-input" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewPassword" >
 					</div>
 
 					<div class="input-group mb-3 col-lg-9 text-center">
 						<label for="userPreviewRoute" class="input-label">Route:</label>
-						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewRoute" style="height: 35px">
+						<input type="text" class="form-control modal-input" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewRoute" >
 					</div>
 
 					<div class="input-group mb-3 col-lg-9 text-center">
 						<label for="userPreviewRoute" class="input-label">Super User:</label>
-						<input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewIsSU" style="height: 35px">
+						<input type="text" class="form-control modal-input" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewIsSU" >
 					</div>
 
 					<div class="input-group mb-3 col-lg-9 text-center">
 						<label for="userPreviewPermissions" class="input-label">Permissions:</label>
-						<textarea class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewPermissions" style="height: 100px" ></textarea>
+						<textarea class="form-control modal-textarea" aria-label="Default" aria-describedby="inputGroup-sizing-default" id="userPreviewPermissions" ></textarea>
 					</div>
 
-					<button type="button" class="btn col-lg-4 modal-button choice-button" id="userPreviewSave" style="height: 35px">Save</button>
-					<button type="button" class="btn col-lg-4 btn-outline-main-red choice-button" id="userPreviewDelete" style="height: 35px">Delete</button>
+					<button type="button" class="btn col-lg-4 modal-button choice-button" id="userPreviewSave" >Save</button>
+					<button type="button" class="btn col-lg-4 btn-outline-main-red choice-button" id="userPreviewDelete" >Delete</button>
 				</div>
 			<% } %>
 

@@ -1,3 +1,10 @@
+11.3.0
+- No styles are done inline
+- No scripts are done inline
+- Removed the Js libs that are repeated in the login
+- Added Security Headers
+- Render now sets content-type header
+
 11.2.1
 - Readme updated a bit
 

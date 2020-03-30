@@ -90,3 +90,7 @@
 .inputfile:focus + label {
 	outline: -webkit-focus-ring-color auto 5px;
 }
+
+.navbar-icon{
+	font-size: 15px;
+}

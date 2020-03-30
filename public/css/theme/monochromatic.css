@@ -91,6 +91,11 @@ body {
 	color: #c55454;
 }
 
+.color-gray
+{
+	color: gray;
+}
+
 .dropzone {
 	border: 2px dashed rgba(255,255,255,.5);
 	background: #373a3d!important;
@@ -158,6 +163,7 @@ body {
 }
 
 .modal-content {
+	color: white !important;
 	background-color: rgb(55, 58, 61) !important;
 	border: 1px solid rgba(255,255,255,.5) !important;
 }

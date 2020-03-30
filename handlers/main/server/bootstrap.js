@@ -14,6 +14,16 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
  */
 const app	= Server();
 
+// app.apply( app.er_security, {
+// 	csp	: {
+// 		directives	: {
+// 			'font-src'	: ['https://fonts.gstatic.com']
+// 		},
+// 		xss: true
+// 	},
+// 	build: true
+// });
+
 // Serve Static Resources
 app.apply( app.er_static_resources,			{ paths	: [process.env.STATIC_PATH] } );
 app.apply( app.er_static_resources,			{ paths	: ['favicon.ico'] } );
@@ -47,7 +57,10 @@ app.apply( app.er_file_stream );
 app.add(( event )=>{
 	event.render	= ( templateName, variables = {} )=>{
 		return ejs.renderFile( path.join( process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables )
-			.then( data =>{ event.send( data, 200 ); } );
+			.then( data =>{
+				event.setHeader( 'Content-Type', 'text/html' );
+				event.send( data, 200 );
+			}).catch( event.next );
 	};
 
 	event.on( 'cleanUp', ()=>{ event.render	= undefined; });
