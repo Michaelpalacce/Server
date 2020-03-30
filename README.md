@@ -12,10 +12,13 @@ mkdir server-emulator && cd server-emulator && sudo npm i server-emulator
 
 #Install Windows
 ~~~
-# Install NodeJS: https://nodejs.org/en/download/
-# Make a new folder and open cmd
-# Type:
-npm i server-emulator
+# 1. You need the latest version of python for the terminal
+# 2. Install NodeJS: https://nodejs.org/en/download/
+# 3. You may need ncp: 
+# - npm i -g ncp
+
+4. Make a new folder and open cmd
+- npm i server-emulator
 ~~~
 
 #To start
@@ -76,12 +79,8 @@ https://github.com/Michaelpalacce/Server/releases
 - It is a good idea to change the password ( via the gui ) after you've started the server
 
 #Dependencies
-- For linux python and make may be required ( for node-pty )
-- For Windows you may need to have an installed Windows SDK ( https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/ ).
-You may also need the windows-build-tools. You can install them by running a cmd as an administrator and typing:
-~~~ bash
-npm install --global --production windows-build-tools
-~~~
+- For linux python and make may be required ( for node-pty ) but they should be installed automatically
+- For Windows you have to install python manually
 - Install these dependencies only if there is an error while doing npm i server-emulator
 - Look for more information here: https://www.npmjs.com/package/node-pty?activeTab=readme
 
@@ -97,3 +96,4 @@ npm install --global --production windows-build-tools
 
 #Future Improvements:
 - Ability to tunnel through a different server
+- Will separate the terminal from the rest of the app

@@ -1,3 +1,6 @@
+11.2.1
+- Readme updated a bit
+
 11.2.0
 - Dropzone text is now unselectable
 - Added Permissions
