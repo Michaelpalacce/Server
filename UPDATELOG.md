@@ -2,8 +2,8 @@
 - No styles are done inline
 - No scripts are done inline
 - Removed the Js libs that are repeated in the login
-- Added Security Headers
 - Render now sets content-type header
+- Fixed the NCP command...
 
 11.2.1
 - Readme updated a bit
@@ -21,7 +21,7 @@
 - Users are now stored separately 
 
 11.1.0
-- Improved loading to have directories loaded rfirst and then files
+- Improved loading to have directories loaded first and then files
 - Updated readme
 
 11.0.0
