@@ -1,3 +1,9 @@
+11.3.2
+- Fix
+
+11.3.1
+- Small fix
+
 11.3.0
 - No styles are done inline
 - No scripts are done inline

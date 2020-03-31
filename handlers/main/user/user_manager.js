@@ -17,7 +17,7 @@ class UserManager
 		this.dataStore			= new DataServer({
 			ttl				: -1,
 			persist			: true,
-			persistPath		: path.join( __dirname, '/store/users.json' ),
+			persistPath		: path.join( __dirname, 'users.json' ),
 			persistInterval	: 5,	// Every 5 seconds
 			gcInterval		: 86400	// One day
 		});
