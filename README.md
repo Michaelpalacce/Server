@@ -12,12 +12,8 @@ mkdir server-emulator && cd server-emulator && sudo npm i server-emulator
 
 #Install Windows
 ~~~
-# 1. You need the latest version of python for the terminal
-# 2. Install NodeJS: https://nodejs.org/en/download/
-# 3. You may need ncp: 
-# - npm i -g ncp
-
-4. Make a new folder and open cmd
+#Run as Admin
+- npm install --global windows-build-tools
 - npm i server-emulator
 ~~~
 

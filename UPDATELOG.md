@@ -1,3 +1,7 @@
+11.3.3
+- Added gitignore for the users file
+- Updated the install instructions
+
 11.3.2
 - Fix
 
