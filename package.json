@@ -1,6 +1,6 @@
 {
   "name": "server-emulator",
-  "version": "11.3.5",
+  "version": "12.0.0",
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
   "scripts": {
