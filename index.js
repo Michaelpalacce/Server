@@ -3,8 +3,9 @@
 // Dependencies
 const { Loggur }	= require( 'event_request' );
 const { server }	= require( './handlers/main/server/server' );
+
+const address		= process.env.APP_ADDRESS;
 const port			= require( './handlers/main/utils/get_port' );
-const address		= '0.0.0.0';
 
 require( './handlers/controllers' );
 

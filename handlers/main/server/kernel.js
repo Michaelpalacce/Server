@@ -14,15 +14,16 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
  */
 const app	= Server();
 
-// app.apply( app.er_security, {
-// 	csp	: {
-// 		directives	: {
-// 			'font-src'	: ['https://fonts.gstatic.com']
-// 		},
-// 		xss: true
-// 	},
-// 	build: true
-// });
+if ( process.env.ENABLE_SECURITY_HEADERS == 1 )
+{
+	app.apply( app.er_security, {
+		csp	: {
+			directives	: {
+				'font-src'	: ['https://fonts.gstatic.com']
+			}
+		}
+	});
+}
 
 // Serve Static Resources
 app.apply( app.er_static_resources,			{ paths	: [process.env.STATIC_PATH] } );

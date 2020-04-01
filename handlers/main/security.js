@@ -38,7 +38,7 @@ app.get( '/logout', async ( event )=>{
 });
 
 // Add Security if it is enabled
-if ( process.env.SECURITY_ENABLED == 1 )
+if ( process.env.ENABLE_SECURITY == 1 )
 {
 	app.add({
 		route	: new RegExp( /^((?!\/login).)*$/ ),

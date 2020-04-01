@@ -1,6 +1,16 @@
 'use strict';
 
 /**
+ * @brief	Display a message if socket.io does not exist
+ */
+$.ajax( '/socket.io/socket.io.js', {
+		error	: ()=>{
+			$( '#terminal-404' ).show();
+		}
+	}
+);
+
+/**
  * @brief	Gets a cookie
  *
  * @param	name String

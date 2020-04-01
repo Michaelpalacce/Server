@@ -1,3 +1,14 @@
+12.0.0
+- Terminal separated from the project
+- Implemented newest event_request version
+- Added Security Headers
+- Renamed SECURITY_ENABLED to ENABLE_SECURITY
+- Added new ENABLE_SECURITY_HEADERS env variable
+- Added new APP_ADDRESS env variable
+
+11.3.5
+- Updated README a bit
+
 11.3.4
 - Added gitignore for the users file
 - Updated the install instructions
