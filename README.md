@@ -73,6 +73,7 @@ nexe --no-bundle
 - ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled 
 - ENABLE_SECURITY_HEADERS - 1 or 0 whether the security headers should be enabled or not ( hsts, Expect-CT, CSP, Content Type Options )
 - DEBUG - Whether to write logs on a debug level 1 or 0
+- USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === LOCAL_DIR then the project root will be used, otherwise parse it as an absolute path
 - TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - Others should probably not be touched
 
@@ -81,6 +82,7 @@ nexe --no-bundle
 - You will be asked to fill in the new user's data
 - Route will be the path from which the user can access the FS
 - When adding a user the user will persist after 5 seconds so don't stop the server
+- User's data is stored to the OS tmp directory by default and can be changed using the USERS_DIR variable
 
 #Permissions:
 - Only superusers can use the terminal, add/ view/ modify other users ( and self ) 

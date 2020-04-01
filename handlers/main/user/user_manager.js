@@ -3,9 +3,25 @@
 // Dependencies
 const User			= require( './user' );
 const DataServer	= require( 'event_request/server/components/caching/data_server' );
+const os			= require( 'os' );
 const path			= require( 'path' );
 
-const USER_KEY	= 'USERS_DATA';
+const USER_KEY		= 'USERS_DATA';
+
+let persistPath		= '';
+
+switch ( process.env.USERS_DIR )
+{
+	case 'LOCAL_DIR':
+		persistPath	= path.parse( require.main.filename ).dir;
+		break;
+	case '':
+		persistPath	= os.tmpdir();
+		break;
+	default:
+		persistPath	= process.env.USERS_DIR;
+		break;
+}
 
 /**
  * @brief	Class responsible for user CRUD operations
@@ -17,7 +33,7 @@ class UserManager
 		this.dataStore			= new DataServer({
 			ttl				: -1,
 			persist			: true,
-			persistPath		: path.join( __dirname, 'users.json' ),
+			persistPath		: path.join( persistPath, 'server_emulator_users.json' ),
 			persistInterval	: 5,	// Every 5 seconds
 			gcInterval		: 86400	// One day
 		});

@@ -1,3 +1,7 @@
+12.0.3
+- Users are now saved to the os TMP directory
+- Added new USERS_DIR variable
+
 12.0.2
 - Disabled security headers
 
