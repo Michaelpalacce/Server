@@ -1,3 +1,7 @@
+12.0.1
+- Implemented bugfix version of event_request
+- Updated the readme a bit
+
 12.0.0
 - Terminal separated from the project
 - Implemented newest event_request version

@@ -37,7 +37,7 @@ npm run terminal
 
 ###Linux
 ~~~
-npm run terminal
+sudo npm run terminal
 # set ENABLE_TERMINAL to 1 in .env
 ~~~
 
@@ -46,11 +46,10 @@ npm run terminal
 npm start
 ~~~
 
-#Dependencies
-- For linux python and make may be required ( for node-pty ) but they should be installed automatically
+#Terminal Dependencies
+- For linux python, make, gcc may be required ( for node-pty ) but they should be installed automatically
 - For windows you need to do `npm install --global windows-build-tools`
-- Install these dependencies only if there is an error while doing `npm i server-emulator`
-- Look for more information here: https://www.npmjs.com/package/node-pty?activeTab=readme
+- If you have any issues with the terminal LOOK HERE: https://www.npmjs.com/package/node-pty?activeTab=readme
 
 #To compile in windows:
 ~~~shell script
@@ -106,4 +105,3 @@ nexe --no-bundle
 
 #Future Improvements:
 - Ability to tunnel through a different server
-- Will separate the terminal from the rest of the app
