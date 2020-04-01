@@ -1,3 +1,6 @@
+12.0.2
+- Disabled security headers
+
 12.0.1
 - Implemented bugfix version of event_request
 - Updated the readme a bit
