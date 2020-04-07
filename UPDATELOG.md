@@ -1,4 +1,17 @@
+12.2.3
+- WORKING
+- Install fix
+
+12.2.2
+- BROKEN
+- Install fix
+
+12.2.1
+- BROKEN
+- Install fix
+
 12.2.0
+- BROKEN
 - Removed NCP as dependency, created own method for copying folders recursively
 - Changed the install to use this new script
 
