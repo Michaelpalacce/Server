@@ -1,3 +1,7 @@
+12.2.0
+- Removed NCP as dependency, created own method for copying folders recursively
+- Changed the install to use this new script
+
 12.1.0
 - The whole directory will no longer be read when browsing.
 - Changed the way the file system file gets the data, will create a separate project for it soon

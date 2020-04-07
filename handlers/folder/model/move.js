@@ -1,14 +1,12 @@
 'use strict';
 
-const fs		= require( 'fs' );
-const util		= require( 'util' );
-const path		= require( 'path' );
-const MoveInput	= require( '../input/move_input' );
+const { rename }	= require( 'fs' ).promises;
+const fs			= require( 'fs' );
+const path			= require( 'path' );
+const MoveInput		= require( '../input/move_input' );
+const copyFolder	= require( '../../main/utils/copyFolder' );
 
-const rename	= util.promisify( fs.rename );
-const ncp		= require('ncp').ncp;
-
-const Model		= {};
+const Model			= {};
 
 /**
  * @brief	Moves the given item to a new path
@@ -79,13 +77,11 @@ Model.copy	= function( event )
 	newPath	= path.join( newPath, oldPathParsed.base );
 
 	event.clearTimeout();
-	ncp( oldPath, newPath, ( err )=>{
-		if ( err )
-		{
-			return event.sendError( err );
-		}
+	copyFolder( oldPath, newPath ).then(()=>{
 		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
+	}).catch(( err )=>{
+		return event.sendError( err );
 	});
 };
 

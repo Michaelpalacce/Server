@@ -1,11 +1,11 @@
 {
   "name": "server-emulator",
-  "version": "12.1.0",
+  "version": "12.2.0",
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "./node_modules/.bin/ncp . ./../../.",
+    "postinstall": "./node_modules/server-emulator/cli/copyFolder . ./../../.",
     "terminal": "npm i node-pty@^0.9.0 && npm i xterm@^4.4.0 && npm i socket.io@^2.3.0"
   },
   "repository": {
@@ -31,7 +31,6 @@
   "dependencies": {
     "archiver": "^3.1.1",
     "ejs": "^2.7.4",
-    "event_request": "^16.2.1",
-    "ncp": "^2.0.0"
+    "event_request": "^16.2.1"
   }
 }
