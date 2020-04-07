@@ -89,6 +89,7 @@ class Browse
 		{
 			return false;
 		}
+
 		const documentScrollTop		= $( document ).scrollTop();
 		const documentOuterHeight	= $( document ).outerHeight();
 		const windowOuterHeight		= $( window ).outerHeight();

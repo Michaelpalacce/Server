@@ -1,3 +1,9 @@
+12.1.0
+- The whole directory will no longer be read when browsing.
+- Changed the way the file system file gets the data, will create a separate project for it soon
+- Changed the line endings of all the files
+- Moved the caching server plugin in the kernel
+
 12.0.3
 - Users are now saved to the os TMP directory
 - Added new USERS_DIR variable

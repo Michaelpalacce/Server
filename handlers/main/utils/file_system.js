@@ -1,21 +1,16 @@
 'use strict';
 
 // Dependencies
-const { readdir, stat }	= require( 'fs' ).promises;
-const { join, parse }	= require( 'path' );
+const { opendir, stat }	= require( 'fs' ).promises;
+const { join }			= require( 'path' );
 
-const DEFAULT_LIMIT		= 100;
+const DEFAULT_LIMIT		= 50;
 
 /**
  * @brief	Class that helps us paginate browsing through the file system
  */
 class FileSystem
 {
-	constructor( event )
-	{
-		this.event	= event;
-	}
-
 	/**
 	 * @brief	Gets a token in a correct format
 	 *
@@ -45,8 +40,6 @@ class FileSystem
 	 */
 	async getAllItems( directory, token = '', limit = DEFAULT_LIMIT )
 	{
-		const wasInitial	= token === '';
-
 		let adjustableLimit	= limit;
 		let nextToken		= this.sanitizeToken( token );
 		let items			= [];
@@ -59,7 +52,7 @@ class FileSystem
 			nextToken		= response.nextToken;
 			items			= [...items, ...response.items];
 
-			if ( items.length <= limit )
+			if ( items.length <= limit || limit === 0 )
 			{
 				nextToken.hasMore	= true;
 			}
@@ -73,45 +66,11 @@ class FileSystem
 			items			= [...items, ...response.items];
 		}
 
-		if ( wasInitial )
-		{
-			items	= await this.attachBackElement( directory, items ).catch( this.handleError );
-		}
-
 		return {
 			items,
 			nextToken,
 			hasMore	: nextToken.hasMore
 		}
-	}
-
-	/**
-	 * @brief	Attaches the back directory element to the items array
-	 *
-	 * @param	directory String
-	 * @param	items Array
-	 *
-	 * @return	Promise
-	 */
-	async attachBackElement( directory, items )
-	{
-		try
-		{
-			const parsedDir	= parse( directory );
-			const itemStats	= await stat( directory ).catch( this.handleError );
-
-			items	= [this.formatItem( {
-				stats		: itemStats,
-				parsedItem	: parsedDir,
-				isBack		: true
-			} ), ...items];
-		}
-		catch ( e )
-		{
-			this.handleError( e );
-		}
-
-		return items;
 	}
 
 	/**
@@ -187,22 +146,22 @@ class FileSystem
 		let count	= 0;
 		hasMore		= false;
 
-		for ( const item of await readdir( directory ) )
+		const dir	= await opendir( directory );
+		for await ( const item of dir )
 		{
 			// If we've reached the limit break
-			if ( items.length === limit )
+			if ( items.length === limit && limit !== 0 )
 			{
 				hasMore	= true;
 				break;
 			}
 
-			const absName		= join( directory, item );
-			const parsedItem	= parse( absName );
+			const absItemName	= join( directory, item.name );
 
 			// Ignore ones we don't have permissions for
 			try
 			{
-				const stats	= await stat( absName ).catch(()=>{});
+				const stats	= await stat( absItemName ).catch(()=>{});
 
 				if ( stats.isDirectory() === isDir )
 				{
@@ -214,7 +173,7 @@ class FileSystem
 					}
 
 					// Add items
-					items	= [...items, this.formatItem( { stats, parsedItem } )];
+					items.push( absItemName );
 				}
 			}
 			catch ( error )
@@ -245,39 +204,6 @@ class FileSystem
 		setImmediate(()=>{
 			throw error;
 		});
-	}
-
-	/**
-	 * @brief	Formats the item
-	 *
-	 * @param	stats Stats
-	 * @param	event EventRequest
-	 *
-	 * @return	Object
-	 */
-	formatItem( item )
-	{
-		const { stats, parsedItem, isBack }	= item;
-
-		const goBack			= isBack === true;
-		const itemName			= goBack ? parsedItem.dir : parsedItem.base;
-		const absItemName		= ( goBack ? parsedItem.dir : join( parsedItem.dir, parsedItem.base ) );
-		const uriToEncode		= absItemName.replace( '\\', '/' );
-		const encodedURI		= encodeURIComponent( Buffer.from( uriToEncode ).toString( 'base64' ) );
-		const fileStreamer		= this.event.fileStreamHandler.getFileStreamerForType( absItemName );
-		const previewAvailable	= fileStreamer !== null;
-		const size				= stats.size;
-		const isDir				= stats.isDirectory();
-		const fileType			= previewAvailable ? fileStreamer.getType() : isDir ? 'directory' : null;
-
-		return {
-			name	: goBack ? 'BACK' : itemName,
-			fileType,
-			isDir,
-			encodedURI,
-			size,
-			previewAvailable
-		};
 	}
 }
 

@@ -31,6 +31,9 @@ app.apply( app.er_static_resources,			{ paths	: ['favicon.ico'] } );
 app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/lib'] } );
 app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/css'] } );
 
+// Attach the cache server
+app.apply( app.er_cache_server );
+
 // Rate Limit the request
 app.apply( app.er_rate_limits );
 
@@ -44,9 +47,6 @@ app.apply( app.er_body_parser_multipart,	{ tempDir	: path.join( PROJECT_ROOT, pr
 
 // Add a logger
 app.apply( app.er_logger,					{ logger } );
-
-// Attach the cache server
-app.apply( app.er_cache_server );
 
 // Return response from response cache if available ( the location of this cache can be changed in the future )
 app.apply( app.er_response_cache );

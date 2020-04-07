@@ -4,13 +4,9 @@
 const { Server }	= require( 'event_request' );
 const app			= Server();
 
-const FileSystem	= require( '../../main/utils/file_system' );
+const formatItem	= require( '../../main/utils/file_formatter' );
 const FileInput		= require( '../input/file_input' );
-const { promisify }	= require( 'util' );
-const fs			= require( 'fs' );
-const path			= require( 'path' );
-
-const stat			= promisify( fs.stat );
+const { stat }		= require( 'fs' ).promises;
 
 /**
  * @brief	Adds a '/file/getFileData' route with method GET
@@ -30,14 +26,11 @@ app.get( '/file/getFileData', ( event )=>{
 		return event.send( `Invalid input provided: ${input.getReasonToString()}`, 400 );
 	}
 
-	const fileSystem	= new FileSystem( event );
-	const file			= input.getFile();
+	const itemName	= input.getFile();
 
-	stat( file ).then(( stats )=>{
-		event.send(
-			fileSystem.formatItem( { parsedItem: path.parse( file ), stats } )
-		);
-	}).catch(( e )=>{
+	stat( itemName ).then(()=>{
+		event.send( formatItem( itemName, event ) );
+	}).catch( ()=>{
 		event.sendError( 'File does not exist', 400 );
-	});
+	} );
 } );

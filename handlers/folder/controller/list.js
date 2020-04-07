@@ -5,6 +5,7 @@ const { Server }	= require( 'event_request' );
 const app			= Server();
 const BrowseInput	= require( '../input/browse_input' );
 const FileSystem	= require( '../../main/utils/file_system' );
+const formatItem	= require( '../../main/utils/file_formatter' );
 
 /**
  * @brief	Adds a '/browse/getFiles' route with method GET
@@ -21,11 +22,24 @@ app.get( '/browse/getFiles', ( event )=>{
 		throw new Error( `Invalid input: ${input.getReasonToString()}` );
 
 	const dir			= input.getDirectory();
-	const fileSystem	= new FileSystem( event );
+	const fileSystem	= new FileSystem();
 
-	fileSystem.getAllItems( dir, input.getToken() ).then(( response )=>{
-		response.dir		= dir;
-		response.nextToken	= encodeURIComponent( Buffer.from( JSON.stringify( response.nextToken ) ).toString( 'base64' ) );
+	fileSystem.getAllItems( dir, input.getToken() ).then(( result )=>{
+		const response	= {
+			items		: result.items.map( ( item )=>{
+				return formatItem( item, event );
+			}),
+			nextToken	: encodeURIComponent( Buffer.from( JSON.stringify( result.nextToken ) ).toString( 'base64' ) ),
+			hasMore		: result.hasMore,
+			dir
+		};
+
+		if ( input.getToken() === '' )
+		{
+			const backItem	= formatItem( dir, event, true );
+			response.items	= [backItem, ...response.items];
+		}
+
 		event.send( response )
 	}).catch( event.next );
 } );
