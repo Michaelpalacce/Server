@@ -4,7 +4,7 @@
 const { Server }	= require( 'event_request' );
 const app			= Server();
 const BrowseInput	= require( '../input/browse_input' );
-const FileSystem	= require( '../../main/utils/file_system' );
+const FileSystem	= require( 'fs-browser' );
 const formatItem	= require( '../../main/utils/file_formatter' );
 
 /**
@@ -29,7 +29,7 @@ app.get( '/browse/getFiles', ( event )=>{
 			items		: result.items.map( ( item )=>{
 				return formatItem( item, event );
 			}),
-			nextToken	: encodeURIComponent( Buffer.from( JSON.stringify( result.nextToken ) ).toString( 'base64' ) ),
+			nextToken	: encodeURIComponent( Buffer.from( result.nextToken ).toString( 'base64' ) ),
 			hasMore		: result.hasMore,
 			dir
 		};

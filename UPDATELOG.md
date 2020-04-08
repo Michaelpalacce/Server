@@ -1,3 +1,7 @@
+12.5.0
+- Small fix to the front end browsing
+- Removed the file-system file and replaced it with the fs-browser module
+
 12.2.4
 - Synced with latest EventRequest changes
 

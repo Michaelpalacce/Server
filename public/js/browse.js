@@ -335,7 +335,15 @@ class Browse
 				this.hasMore	= hasMore;
 			},
 			error	: ( jqXHR )=>{
-				window.history.pushState( {}, '', `/browse?dir=${pastDir}` );
+				if ( pastDir !== undefined )
+				{
+					window.history.pushState( {}, '', `/browse?dir=${pastDir}` );
+				}
+				else
+				{
+					window.history.pushState( {}, '', `/` );
+				}
+
 				this.currentDir		= pastDir;
 				this.currentToken	= pastToken;
 				this.hasMore		= pastHasMore;
