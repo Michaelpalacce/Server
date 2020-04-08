@@ -1,3 +1,6 @@
+12.2.4
+- Synced with latest EventRequest changes
+
 12.2.3
 - WORKING
 - Install fix

@@ -26,7 +26,7 @@ io.on( 'connection', async ( socket )=>{
 
 	const dataSet		= await cacheServer.get( sidCookie );
 
-	if ( dataSet === null || dataSet.value.SU !== true )
+	if ( dataSet === null || dataSet.SU !== true )
 	{
 		return socket.disconnect( true );
 	}

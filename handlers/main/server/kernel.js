@@ -32,7 +32,7 @@ app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/lib'] } );
 app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/css'] } );
 
 // Attach the cache server
-app.apply( app.er_cache_server );
+app.apply( app.er_data_server );
 
 // Rate Limit the request
 app.apply( app.er_rate_limits );
@@ -80,4 +80,4 @@ app.add(( event )=>{
 app.apply( app.er_session );
 
 // Attach the caching server to the process
-process.cachingServer	= app.getPluginManager().getPlugin( app.er_cache_server ).getServer();
+process.cachingServer	= app.getPluginManager().getPlugin( app.er_data_server ).getServer();

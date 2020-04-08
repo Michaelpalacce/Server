@@ -5,7 +5,7 @@ const copyFolder	= require( '../handlers/main/utils/copyFolder' );
 const path			= require( 'path' );
 const argv			= process.argv.slice( 2 );
 
-//Run only if 2 parameters are passed
+// Run only if 2 parameters are passed
 if ( argv.length !== 2 )
 {
 	console.log( 'Invalid amount of arguments given' );

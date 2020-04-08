@@ -73,7 +73,7 @@ class UserManager
 		{
 			this.users			= {};
 			const usersString	= await this.dataStore.get( USER_KEY ).catch( this.catchError.bind( this ) );
-			const usersData		= JSON.parse( usersString == null ? '[]' : usersString.value );
+			const usersData		= JSON.parse( usersString == null ? '[]' : usersString );
 
 			for ( const username in usersData )
 			{
