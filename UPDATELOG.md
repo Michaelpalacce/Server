@@ -1,3 +1,6 @@
+12.5.1
+- Fixed the way the caching plugin is set
+
 12.5.0
 - Small fix to the front end browsing
 - Removed the file-system file and replaced it with the fs-browser module
