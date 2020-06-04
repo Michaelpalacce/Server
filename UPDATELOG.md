@@ -1,3 +1,6 @@
+12.5.2
+- Updated to work with the latest event_request package
+
 12.5.1
 - Fixed the way the caching plugin is set
 
