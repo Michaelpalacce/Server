@@ -1,8 +1,7 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const app			= Server();
+const app			= require( 'event_request' )();
 
 const formatItem	= require( '../../main/utils/file_formatter' );
 const FileInput		= require( '../input/file_input' );

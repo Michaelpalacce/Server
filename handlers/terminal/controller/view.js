@@ -1,8 +1,7 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const app			= Server();
+const app	= require( 'event_request' )();
 
 app.get( '/terminal', ( event )=>{
 	event.render( 'terminal' )

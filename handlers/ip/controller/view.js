@@ -1,10 +1,8 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
+const app			= require( 'event_request' )();
 const IpLookup		= require( '../../main/utils/ip_address_lookup' );
-
-const app			= Server();
 
 /**
  * @brief	Adds a '/ip/private' route with method GET

@@ -1,13 +1,11 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
+const app			= require( 'event_request' )();
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 const archiver		= require( 'archiver' );
 const FileInput		= require( '../input/file_input' );
-
-const app			= Server();
 
 /**
  * @brief	Callback called when downloading a file fails

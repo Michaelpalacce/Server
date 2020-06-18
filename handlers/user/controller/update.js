@@ -1,9 +1,8 @@
 'use strict';
 
 // Dependencies
-const { Server }		= require( 'event_request' );
+const app				= require( 'event_request' )();
 const UpdateUserInput	= require( '../input/update_user_input' );
-const app				= Server();
 
 /**
  * @brief	Updates a user

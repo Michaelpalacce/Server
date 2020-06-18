@@ -1,9 +1,9 @@
 'use strict';
 
 // Dependencies
-const Input			= require( '../../main/validation/input' );
-const path			= require( 'path' );
-const fs			= require( 'fs' );
+const Input	= require( '../../main/validation/input' );
+const path	= require( 'path' );
+const fs	= require( 'fs' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 

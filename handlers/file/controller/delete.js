@@ -1,13 +1,12 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
+const app			= require( 'event_request' )();
 const fs			= require( 'fs' );
 const util			= require( 'util' );
 const DeleteInput	= require( '../input/delete_input' );
 
 const unlink		= util.promisify( fs.unlink );
-const app			= Server();
 
 /**
  * @brief	Adds a '/file' route with method DELETE

@@ -1,8 +1,7 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const app			= Server();
+const app			= require( 'event_request' )();
 const BrowseInput	= require( '../input/browse_input' );
 const FileSystem	= require( 'fs-browser' );
 const formatItem	= require( '../../main/utils/file_formatter' );

@@ -2,7 +2,7 @@
 
 // Dependencies
 const Input	= require( '../../main/validation/input' );
-const path			= require( 'path' );
+const path	= require( 'path' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 

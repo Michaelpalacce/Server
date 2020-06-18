@@ -1,9 +1,8 @@
 'use strict';
 
 // Dependencies
-const { Server }		= require( 'event_request' );
+const app			= require( 'event_request' )();
 const DeleteUserInput	= require( '../input/delete_user_input' );
-const app				= Server();
 
 /**
  * @brief	Deletes an existing user

@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const { Server }			= require( 'event_request' );
+const app					= require( 'event_request' )();
 const fs					= require( 'fs' );
 const { promisify }			= require( 'util' );
 const path					= require( 'path' );
@@ -9,7 +9,6 @@ const UploadInput			= require( '../input/upload_input' );
 
 const rename				= promisify( fs.rename );
 
-const app					= Server();
 const AJAX_HEADER			= 'x-requested-with';
 const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
 

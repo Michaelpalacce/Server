@@ -1,12 +1,11 @@
 'use strict';
 
 // Dependencies
-const http			= require( 'http' );
-const { Server }	= require( 'event_request' );
+const http		= require( 'http' );
+const app		= require( 'event_request' )();
 
-const app			= Server();
-const server		= http.createServer( app.attach() );
-let io				= null;
+const server	= http.createServer( app.attach() );
+let io			= null;
 
 // Add environment variables to the process.env
 app.apply( app.er_env );

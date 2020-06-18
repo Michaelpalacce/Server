@@ -1,11 +1,9 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
+const app			= require( 'event_request' )();
 const fs			= require( 'fs' );
 const FileInput		= require( '../input/file_input' );
-
-const app			= Server();
 
 /**
  * @brief	Adds a '/file/data' route with method GET

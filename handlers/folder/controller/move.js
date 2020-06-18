@@ -1,10 +1,8 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
-const Model			= require( '../model/move' );
-
-const app			= Server();
+const app	= require( 'event_request' )();
+const Model	= require( '../model/move' );
 
 app.post( '/folder/copy', Model.copy );
 app.post( '/folder/cut', Model.cut );

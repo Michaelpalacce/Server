@@ -1,12 +1,10 @@
 'use strict';
 
 // Dependencies
-const { Server }	= require( 'event_request' );
+const app			= require( 'event_request' )();
 const fs			= require( 'fs' );
 const path			= require( 'path' );
 const DeleteInput	= require( '../input/delete_input' );
-
-const app			= Server();
 
 /**
  * @brief	Removes a folder recursively
