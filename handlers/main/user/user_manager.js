@@ -51,7 +51,7 @@ class UserManager
 	 *
 	 * @details	setImmediate is called because we don't want to throw in a catch block of a promise
 	 *
-	 * @param	err Error
+	 * @param	{Error} err
 	 *
 	 * @return	void
 	 */
@@ -104,7 +104,7 @@ class UserManager
 	/**
 	 * @brief	Gets a user from the data store
 	 *
-	 * @param	username String
+	 * @param	{String} username
 	 *
 	 * @return	User
 	 */
@@ -121,7 +121,7 @@ class UserManager
 	/**
 	 * @brief	Checks a user in the data store
 	 *
-	 * @param	username String
+	 * @param	{String} username
 	 *
 	 * @return	Boolean
 	 */
@@ -133,7 +133,7 @@ class UserManager
 	/**
 	 * @brief	Sets a user in the data store
 	 *
-	 * @param	userData Object
+	 * @param	{Object} userData
 	 *
 	 * @return	void
 	 */
@@ -150,7 +150,7 @@ class UserManager
 	/**
 	 * @brief	Deletes a user from the data store
 	 *
-	 * @param	username String
+	 * @param	{String} username
 	 *
 	 * @return	void
 	 */
@@ -167,8 +167,8 @@ class UserManager
 	/**
 	 * @brief	Updates the user if it exists
 	 *
-	 * @param	username String
-	 * @param	userData Object
+	 * @param	{String} username
+	 * @param	{Object} userData
 	 *
 	 * @returns	void
 	 */

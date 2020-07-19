@@ -87,20 +87,7 @@ class AddUserInput extends Input
 			return false;
 		}
 
-		this.reason	= this.validationHandler.validate( this.event.body,
-			{
-				username	: 'filled||string||range:3-64',
-				permissions	: 'filled||string',
-				password	: 'filled||string||range:3-64',
-				isSU		: 'filled||boolean',
-				route		: 'filled||string'
-			}
-		);
-
-		if ( this.reason.hasValidationFailed() )
-			return false;
-
-		let { route, username, password, isSU, permissions }	= this.reason.getValidationResult();
+		let { route, username, password, isSU, permissions }	= this.event.body;
 		route													= Buffer.from( decodeURIComponent( route ), 'base64' ).toString();
 		try
 		{

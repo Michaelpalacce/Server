@@ -27,9 +27,7 @@ app.post( '/file', ( event ) => {
 		const input	= new UploadInput( event );
 
 		if ( ! input.isValid() )
-		{
 			return event.next( `Could not upload one or more files: ${input.getReasonToString()}`, 400 );
-		}
 
 		const directory	= input.getDirectory();
 		const files		= input.getFiles();
@@ -72,9 +70,7 @@ app.post( '/file', ( event ) => {
 
 		Promise.all( promises ).then( ()=>{
 			if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
-			{
 				return event.send( ['ok'], 201 );
-			}
 
 			event.redirect( `/browse?dir=${encodeURIComponent( Buffer.from( directory ).toString( 'base64' ) )}` );
 		}).catch( event.next );

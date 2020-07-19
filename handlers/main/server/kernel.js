@@ -26,11 +26,17 @@ app.apply( app.er_static_resources,			{ paths	: ['favicon.ico'] } );
 app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/lib'] } );
 app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/css'] } );
 
+app.er_validation.setOptions({
+	failureCallback: ( event, parameter, result )=>{
+		event.next( `Invalid input: ${JSON.stringify( result.getValidationResult() )}`, 400 );
+	}
+});
+
 // Attach the cache server
 app.apply( app.er_data_server );
 
 // Rate Limit the request
-app.apply( app.er_rate_limits );
+app.apply( app.er_rate_limits, { useFile: true } );
 
 // Add Timeout
 app.apply( app.er_timeout,					{ timeout	: process.env.REQUEST_TIMEOUT } );
@@ -39,6 +45,7 @@ app.apply( app.er_timeout,					{ timeout	: process.env.REQUEST_TIMEOUT } );
 app.apply( app.er_body_parser_form );
 app.apply( app.er_body_parser_json );
 app.apply( app.er_body_parser_multipart,	{ tempDir	: path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );
+app.apply( app.er_body_parser_raw );
 
 // Add a logger
 app.apply( app.er_logger,					{ logger } );
@@ -54,7 +61,7 @@ app.add(( event )=>{
 	event.render	= ( templateName, variables = {} )=>{
 		return ejs.renderFile( path.join( process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables )
 			.then( data =>{
-				event.setHeader( 'Content-Type', 'text/html' );
+				event.setResponseHeader( 'Content-Type', 'text/html' );
 				event.send( data, 200 );
 			}).catch( event.next );
 	};

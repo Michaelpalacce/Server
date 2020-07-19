@@ -11,7 +11,7 @@ const Model			= {};
 /**
  * @brief	Moves the given item to a new path
  *
- * @param	EventRequest event
+ * @param	{EventRequest} event
  *
  * @returns	mixed
  */
@@ -48,7 +48,7 @@ Model.cut	= function( event )
 /**
  * @brief	Copies the given item to a new path
  *
- * @param	EventRequest event
+ * @param	{EventRequest} event
  *
  * @returns	mixed
  */
@@ -88,7 +88,7 @@ Model.copy	= function( event )
 /**
  * @brief	Renames the given item
  *
- * @param	EventRequest event
+ * @param	{EventRequest} event
  *
  * @returns	mixed
  */

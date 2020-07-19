@@ -10,7 +10,7 @@ const { stat }		= require( 'fs' ).promises;
 /**
  * @brief	Adds a '/file/getFileData' route with method GET
  *
- * @param	event EventRequest
+ * @param	{EventRequest} event
  *
  * @details	Required Parameters: file
  * 			Optional Parameters: NONE
@@ -21,9 +21,7 @@ app.get( '/file/getFileData', ( event )=>{
 	const input	= new FileInput( event );
 
 	if ( ! input.isValid() )
-	{
 		return event.send( `Invalid input provided: ${input.getReasonToString()}`, 400 );
-	}
 
 	const itemName	= input.getFile();
 

@@ -33,15 +33,10 @@ class DeleteInput extends Input
 			return false;
 		}
 
-		const isSU	= this.event.session.get( 'SU' );
-		const route	= this.event.session.get( 'route' );
+		const isSU			= this.event.session.get( 'SU' );
+		const route			= this.event.session.get( 'route' );
 
-		this.reason	= this.validationHandler.validate( this.event.queryString, { item : 'filled||string' } );
-
-		if ( this.reason.hasValidationFailed() )
-			return false;
-
-		let { item }		= this.reason.getValidationResult();
+		let { item }		= this.event.query;
 		item				= Buffer.from( decodeURIComponent( item ), 'base64' ).toString();
 
 		const resolvedItem	= path.resolve( item );

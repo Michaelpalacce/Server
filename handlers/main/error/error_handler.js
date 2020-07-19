@@ -11,7 +11,7 @@ class ErrorHandler extends BaseErrorHandler
 	/**
 	 * @brief	Formats the error in a presentable format
 	 *
-	 * @param	error Error
+	 * @param	{*} error
 	 *
 	 * @return	Object
 	 */
@@ -34,7 +34,7 @@ class ErrorHandler extends BaseErrorHandler
 		{
 			error	= error.split( '\\\\' ).join( '\\' );
 
-			if ( event.getHeader( 'x-requested-with' ) === 'XMLHttpRequest' || event.getHeader( 'accepts' ) === 'application/json' )
+			if ( event.getRequestHeader( 'x-requested-with' ) === 'XMLHttpRequest' || event.getRequestHeader( 'accepts' ) === 'application/json' )
 			{
 				event.send( error, code );
 			}

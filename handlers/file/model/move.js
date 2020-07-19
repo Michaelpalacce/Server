@@ -13,7 +13,7 @@ const Model		= {};
 /**
  * @brief	Moves the given item to a new path
  *
- * @param	EventRequest event
+ * @param	{EventRequest} event
  *
  * @returns	void
  */
@@ -22,7 +22,7 @@ Model.cut	= function( event )
 	const input	= new MoveInput( event );
 
 	if ( ! input.isValid() )
-		return event.sendError( `Invalid input: ${JSON.stringify( input.getReason() )}`, 400 );
+		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
 
 	const oldPath		= input.getOldPath();
 	let newPath			= input.getNewPath();
@@ -46,7 +46,7 @@ Model.cut	= function( event )
 /**
  * @brief	Copies the given item to a new path
  *
- * @param	EventRequest event
+ * @param	{EventRequest} event
  *
  * @returns	void
  */
@@ -55,7 +55,7 @@ Model.copy	= function( event )
 	const input	= new MoveInput( event );
 
 	if ( ! input.isValid() )
-		return event.sendError( `Invalid input: ${JSON.stringify( input.getReason() )}`, 400 );
+		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
 
 	const oldPath		= input.getOldPath();
 	let newPath			= input.getNewPath();
@@ -79,7 +79,7 @@ Model.copy	= function( event )
 /**
  * @brief	Renames the given item
  *
- * @param	EventRequest event
+ * @param	{EventRequest} event
  *
  * @returns	void
  */
@@ -88,7 +88,7 @@ Model.rename	= function( event )
 	const input	= new MoveInput( event );
 
 	if ( ! input.isValid() )
-		return event.sendError( `Invalid input: ${JSON.stringify( input.getReason() )}`, 400 );
+		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
 
 	const oldPath	= input.getOldPath();
 	let newPath	= input.getNewPath();

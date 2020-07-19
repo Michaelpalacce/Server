@@ -41,10 +41,10 @@ class BrowseInput extends Input
 		const isSU		= this.event.session.get( 'SU' );
 		const route		= this.event.session.get( 'route' );
 		const result	= this.validationHandler.validate(
-			this.event.queryString,
+			this.event.query,
 			{
-				dir		: { rules: 'optional||string', default: encodeURIComponent( Buffer.from( route ).toString( 'base64' ) ) },
-				token	: { rules: 'optional||string', default: '' }
+				dir		: { $rules: 'optional||string', $default: encodeURIComponent( Buffer.from( route ).toString( 'base64' ) ) },
+				token	: { $rules: 'optional||string', $default: '' }
 			}
 		);
 

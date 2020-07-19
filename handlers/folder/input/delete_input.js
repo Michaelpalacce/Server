@@ -36,7 +36,7 @@ class DeleteInput extends Input
 		const isSU	= this.event.session.get( 'SU' );
 		const route	= this.event.session.get( 'route' );
 
-		this.reason	= this.validationHandler.validate( this.event.queryString, { item : 'optional||string' } );
+		this.reason	= this.validationHandler.validate( this.event.query, { item : 'optional||string' } );
 
 		if ( this.reason.hasValidationFailed() )
 			return false;

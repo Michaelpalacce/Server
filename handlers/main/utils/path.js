@@ -26,8 +26,8 @@ class PathHelper
 	/**
 	 * @brief	Accepts the abs file name as an argument
 	 *
-	 * @param	EventRequest event
-	 * @param	String file
+	 * @param	{EventRequest} event
+	 * @param	{String} absItemName
 	 *
 	 * @return	FileStream|null
 	 */
@@ -46,7 +46,7 @@ class PathHelper
 	/**
 	 * @brief	States whether the file extension given can be previewed
 	 *
-	 * @param	EventRequest event
+	 * @param	{EventRequest} event
 	 * @param	String absItemName
 	 *
 	 * @return	Boolean
@@ -59,7 +59,7 @@ class PathHelper
 	/**
 	 * @brief	Gets all the item for the given directory
 	 *
-	 * @param	EventRequest event
+	 * @param	{EventRequest} event
 	 * @param	String dir
 	 * @param	Number position
 	 * @param	Function callback
@@ -144,7 +144,7 @@ class PathHelper
 	 * @param	String name
 	 * @param	Object stats
 	 * @param	Boolean goBack
-	 * @param	EventRequest event
+	 * @param	{EventRequest} event
 	 *
 	 * @return	Object
 	 */

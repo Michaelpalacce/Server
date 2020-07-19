@@ -137,8 +137,8 @@ class ContextMenu
 	/**
 	 * @brief	Cut the items to a new place
 	 *
-	 * @param	event Event
-	 * @param	target Element
+	 * @param	{Event} event
+	 * @param	{Element} target
 	 *
 	 * @return	Boolean
 	 */

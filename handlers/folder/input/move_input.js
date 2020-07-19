@@ -43,21 +43,10 @@ class MoveInput extends Input
 			return false;
 		}
 
-		const isSU	= this.event.session.get( 'SU' );
-		const route	= this.event.session.get( 'route' );
+		const isSU					= this.event.session.get( 'SU' );
+		const route					= this.event.session.get( 'route' );
 
-		this.reason	= this.validationHandler.validate(
-			this.event.body,
-			{
-				newPath: 'filled||string',
-				oldPath: 'filled||string'
-			}
-		);
-
-		if ( this.reason.hasValidationFailed() )
-			return false;
-
-		let { newPath, oldPath }	= this.reason.getValidationResult();
+		let { newPath, oldPath }	= this.event.body;
 
 		newPath						= Buffer.from( decodeURIComponent( newPath ), 'base64' ).toString();
 		oldPath						= Buffer.from( decodeURIComponent( oldPath ), 'base64' ).toString();

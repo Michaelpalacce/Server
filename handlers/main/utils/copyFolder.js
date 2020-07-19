@@ -8,7 +8,7 @@ const { join }						= require( 'path' );
 /**
  * @brief	Throw on any error
  *
- * @param	err Error
+ * @param	{Error} err
  */
 function handleError( err )
 {
@@ -20,8 +20,8 @@ function handleError( err )
 /**
  * @brief	Copies the entire folder from one destination to another
  *
- * @param	from String
- * @param	to String
+ * @param	{String} from
+ * @param	{String} to
  *
  * @return	Promise<void>
  */

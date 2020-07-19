@@ -1,3 +1,8 @@
+13.0.0
+- Updated to work with the latest event_request package
+- Documentation improvements
+- Implemented new event request features
+
 12.5.3
 - Updated to work with the latest event_request package
 

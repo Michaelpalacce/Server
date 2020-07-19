@@ -11,7 +11,7 @@ class Input
 	constructor( event )
 	{
 		this.event				= event;
-		this.validationHandler	= event.validationHandler;
+		this.validationHandler	= event.validation;
 
 		this.model				= {};
 		this.isInputValid		= null;
@@ -68,7 +68,7 @@ class Input
 	/**
 	 * @brief	Gets a given key if the input is valid and the key exists
 	 *
-	 * @param	key String
+	 * @param	{String} key
 	 *
 	 * @return	mixed
 	 */

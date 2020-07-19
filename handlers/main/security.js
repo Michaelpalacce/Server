@@ -85,7 +85,7 @@ if ( process.env.ENABLE_SECURITY == 1 )
 	}, 'cache.request' );
 
 	app.post( '/login', async ( event )=>{
-		let result	= event.validationHandler.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
+		let result	= event.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
 
 		if ( result.hasValidationFailed() )
 		{

@@ -9,7 +9,7 @@ const DeleteInput	= require( '../input/delete_input' );
 /**
  * @brief	Removes a folder recursively
  *
- * @param	String dir
+ * @param	{String} dir
  *
  * @return	void
  */

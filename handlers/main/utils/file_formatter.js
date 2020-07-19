@@ -6,7 +6,11 @@ const { parse, join }	= require( 'path' );
 /**
  * @brief	Formats the item
  *
- * @param	itemName String
+ * @details	EW legacy
+ *
+ * @param	{String} itemName
+ * @param	{EventRequest} event
+ * @param	{Boolean} [isBack=false]
  *
  * @return	Object
  */

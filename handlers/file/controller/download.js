@@ -10,14 +10,14 @@ const FileInput		= require( '../input/file_input' );
 /**
  * @brief	Callback called when downloading a file fails
  *
- * @param	event EventRequest
- * @param	text String
+ * @param	{EventRequest} event
+ * @param	{String} text
  *
  * @return	void
  */
 const downloadFailedCallback	= ( event, text = 'The file specified does not exist' ) => {
-	event.setHeader( 'Content-disposition', 'attachment; filename="error.log"' );
-	event.setHeader( 'Content-type', '.log' );
+	event.setResponseHeader( 'Content-disposition', 'attachment; filename="error.log"' );
+	event.setResponseHeader( 'Content-type', '.log' );
 
 	event.send( text );
 };
@@ -34,9 +34,7 @@ app.get( '/file', ( event ) => {
 		const input	= new FileInput( event );
 
 		if ( ! input.isValid() )
-		{
 			return downloadFailedCallback( event, `Invalid input: ${input.getReasonToString()}` );
-		}
 
 		const file	= input.getFile();
 
@@ -52,8 +50,8 @@ app.get( '/file', ( event ) => {
 			});
 
 			archive.pipe( event.response );
-			event.setHeader( 'content-disposition', `attachment; filename="${fileName}.zip"` );
-			event.setHeader( 'Content-type', 'zip' );
+			event.setResponseHeader( 'content-disposition', `attachment; filename="${fileName}.zip"` );
+			event.setResponseHeader( 'Content-type', 'zip' );
 
 			try
 			{
@@ -67,9 +65,9 @@ app.get( '/file', ( event ) => {
 		}
 		else
 		{
-			event.setHeader( 'content-disposition', `attachment; filename="${fileName}"` );
-			event.setHeader( 'Content-type', fileStats.ext );
-			event.setHeader( 'Content-Length', fs.statSync( file ).size );
+			event.setResponseHeader( 'content-disposition', `attachment; filename="${fileName}"` );
+			event.setResponseHeader( 'Content-type', fileStats.ext );
+			event.setResponseHeader( 'Content-Length', fs.statSync( file ).size );
 
 			try
 			{

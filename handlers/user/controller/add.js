@@ -1,13 +1,21 @@
 'use strict';
 
 // Dependencies
-const app			= require( 'event_request' )();
-const AddUserInput	= require( '../input/add_user_input' );
+const app				= require( 'event_request' )();
+const AddUserInput		= require( '../input/add_user_input' );
+
+const bodyValidation	= {
+	username	: 'filled||string||range:3-64',
+	permissions	: 'filled||string',
+	password	: 'filled||string||range:3-64',
+	isSU		: 'filled||boolean',
+	route		: 'filled||string'
+};
 
 /**
  * @brief	Adds a new user
  */
-app.post( '/users/add', ( event ) =>{
+app.post( '/users/add', app.er_validation.validate( { body: bodyValidation } ),( event ) =>{
 	const userManager	= event.userManager;
 	const input			= new AddUserInput( event, userManager );
 

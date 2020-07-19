@@ -36,7 +36,7 @@ class FileInput extends Input
 		const isSU	= this.event.session.get( 'SU' );
 		const route	= this.event.session.get( 'route' );
 
-		this.reason	= this.validationHandler.validate( this.event.queryString, { file : 'filled||string||min:1' } );
+		this.reason	= this.validationHandler.validate( this.event.query, { file : 'filled||string||min:1' } );
 
 		if ( this.reason.hasValidationFailed() )
 			return false;

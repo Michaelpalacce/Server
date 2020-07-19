@@ -20,11 +20,9 @@ io.on( 'connection', async ( socket )=>{
 	const sidCookie		= socket.request.headers.sid;
 
 	if ( ! sidCookie )
-	{
 		return socket.disconnect( true );
-	}
 
-	const dataSet		= await cacheServer.get( sidCookie );
+	const dataSet	= await cacheServer.get( sidCookie );
 
 	if ( dataSet === null || dataSet.SU !== true )
 	{
