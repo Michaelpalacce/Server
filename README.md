@@ -103,7 +103,4 @@ nexe --no-bundle
             /folder
             /folder2
             
-    - copy /folder into /folder2 since I cannot distinguish whether you are trying to copy a folder into itself which will brick your disk if it happens
-
-#Future Improvements:
-- Ability to tunnel through a different server
+    - copy /folder into /folder2 since I cannot distinguish whether you are trying to copy a folder into itself which will brick your disk if it happen
