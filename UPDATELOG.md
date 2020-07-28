@@ -1,3 +1,6 @@
+13.0.1
+- Works with the latest ER
+
 13.0.0
 - Updated to work with the latest event_request package
 - Documentation improvements
