@@ -1,49 +1,24 @@
 'use strict';
 
 //Dependencies
-const BaseErrorHandler	= require( 'event_request/server/components/error/error_handler' );
+const ErrorHandler	= require( 'event_request/server/components/error/error_handler' );
+const errorHandler	= new ErrorHandler();
 
-/**
- * @brief	Error Handler used to display a stylized error page
- */
-class ErrorHandler extends BaseErrorHandler
-{
-	/**
-	 * @brief	Formats the error in a presentable format
-	 *
-	 * @param	{*} error
-	 *
-	 * @return	Object
-	 */
-	_formatError( error )
-	{
-		if ( error instanceof Error )
-		{
-			error	= error.message;
-		}
+errorHandler.addNamespace( 'app', { formatter: async ( { event, code, status, error, message, headers, emit } ) => {
+		if ( event.getRequestHeader( 'x-requested-with' ) === 'XMLHttpRequest' || event.getRequestHeader( 'accepts' ) === 'application/json' )
+			return errorHandler.defaultNamespace.formatter( { event, code, status, error, message, headers, emit } );
 
-		return error;
-	}
-
-	/**
-	 * @copydoc	BaseErrorHandler::_sendError()
-	 */
-	_sendError( event, error, code )
-	{
-		if ( ! event.isFinished() )
-		{
-			error	= error.split( '\\\\' ).join( '\\' );
-
-			if ( event.getRequestHeader( 'x-requested-with' ) === 'XMLHttpRequest' || event.getRequestHeader( 'accepts' ) === 'application/json' )
+		return await event.getRenderedData(
+			'error',
 			{
-				event.send( error, code );
+				code: status || 500,
+				error: message || code || ErrorHandler.GENERAL_ERROR_CODE
 			}
-			else
-			{
-				event.render( 'error', { error, code } );
-			}
-		}
-	}
-}
+		).catch(() => {
+			errorHandler.defaultNamespace.callback( { event, code, status, error, message, headers, emit } );
+		});
+	}}
+);
 
-module.exports	= ErrorHandler;
+
+module.exports	= errorHandler;

@@ -9,6 +9,28 @@ const ErrorHandler	= require( '../error/error_handler' );
 const logger		= require( '../logging/logger' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
+// Attach a render function
+app.add(( event )=>{
+	event.render	= async ( templateName, variables = {} )=>{
+		event.setResponseHeader( 'Content-Type', 'text/html' ).send( await event.getRenderedData( templateName, variables ) );
+	};
+
+	event.getRenderedData	= async ( templateName, variables = {} )=>{
+		return await ejs.renderFile( path.join( process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables );
+	};
+
+	event.on( 'cleanUp', ()=>{ event.render = undefined; event.getRenderedData = undefined; });
+
+	event.next();
+});
+
+// Add Error Handler
+app.add(( event )=>{
+	event.errorHandler	= ErrorHandler;
+
+	event.next();
+});
+
 if ( process.env.ENABLE_SECURITY_HEADERS == 1 )
 {
 	app.apply( app.er_security, {
@@ -33,19 +55,19 @@ app.er_validation.setOptions({
 });
 
 // Attach the cache server
-app.apply( app.er_data_server );
+app.apply( app.er_data_server, { dataServerOptions: { persist: true } } );
 
 // Rate Limit the request
 app.apply( app.er_rate_limits, { useFile: true } );
-
-// Add Timeout
-app.apply( app.er_timeout,					{ timeout	: process.env.REQUEST_TIMEOUT } );
 
 // Parse body
 app.apply( app.er_body_parser_form );
 app.apply( app.er_body_parser_json );
 app.apply( app.er_body_parser_multipart,	{ tempDir	: path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );
 app.apply( app.er_body_parser_raw );
+
+// Add Timeout
+app.apply( app.er_timeout,					{ timeout	: process.env.REQUEST_TIMEOUT } );
 
 // Add a logger
 app.apply( app.er_logger,					{ logger } );
@@ -55,28 +77,6 @@ app.apply( app.er_response_cache );
 
 // Attach the file streamers
 app.apply( app.er_file_stream );
-
-// Attach a render function
-app.add(( event )=>{
-	event.render	= ( templateName, variables = {} )=>{
-		return ejs.renderFile( path.join( process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables )
-			.then( data =>{
-				event.setResponseHeader( 'Content-Type', 'text/html' );
-				event.send( data, 200 );
-			}).catch( event.next );
-	};
-
-	event.on( 'cleanUp', ()=>{ event.render	= undefined; });
-
-	event.next();
-});
-
-// Add Error Handler
-app.add(( event )=>{
-	event.errorHandler	= new ErrorHandler();
-
-	event.next();
-});
 
 // Add a user cookie session
 app.apply( app.er_session );

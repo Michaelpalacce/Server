@@ -25,7 +25,8 @@ app.add(( event )=>{
 
 // Initialize the session
 app.add( async ( event )=>{
-	event.initSession( event.next ).catch( event.next );
+	await event.initSession();
+	event.next();
 });
 
 // Add a logout route

@@ -3,6 +3,8 @@
 // Dependencies
 const { Logging }							= require( 'event_request' );
 const { Console, File, Loggur, LOG_LEVELS }	= Logging;
+const path									= require( 'path' );
+const PROJECT_ROOT							= path.parse( require.main.filename ).dir;
 
 /**
  * @brief	Logs to the /logs/access.log
@@ -11,7 +13,7 @@ const { Console, File, Loggur, LOG_LEVELS }	= Logging;
  */
 const accessFileLog		= new File({
 	logLevel	: LOG_LEVELS.notice,
-	filePath	: '/logs/access.log',
+	filePath	: path.join( PROJECT_ROOT, '/logs/access.log' ),
 	logLevels	: { notice : LOG_LEVELS.notice }
 });
 
@@ -20,7 +22,7 @@ const accessFileLog		= new File({
  */
 const errorFileLog		= new File({
 	logLevel	: LOG_LEVELS.error,
-	filePath	: '/logs/error.log',
+	filePath	: path.join( PROJECT_ROOT, '/logs/error.log' ),
 });
 
 /**
@@ -37,7 +39,7 @@ if ( typeof process.env !== 'undefined' && process.env.DEBUG == 1 )
 	 */
 	const debugFileLog		= new File({
 		logLevel	: LOG_LEVELS.debug,
-		filePath	: '/logs/debug.log'
+		filePath	: path.join( PROJECT_ROOT, '/logs/debug.log' )
 	});
 
 	/**
