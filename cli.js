@@ -54,13 +54,13 @@ switch ( true )
 {
 	case args.length === 0:
 	case args.length === 1 && args[0] === 'start':
-		fork( path.join( projectDir, './index' ) );
+		fork( path.join( projectDir, './index' ), { stdio: 'inherit' } );
 		break;
 
 	case args.length === 1 && args[0] === 'daemon':
-		if ( fs.existsSync( lockFile ) )
+		if ( fs.existsSync( path.join( projectDir, lockFile ) ) )
 		{
-			const pid	= fs.readFileSync( lockFile );
+			const pid	= fs.readFileSync( path.join( projectDir, lockFile ) );
 			console.log( `Daemon already started with pid: ${pid}` );
 			console.log( `If the process is dead and the file is not deleted, then delete: ${path.join( projectDir, lockFile )} manually` );
 			process.exit();

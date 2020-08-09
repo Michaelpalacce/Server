@@ -28,9 +28,24 @@ server.listen( port, address, ()=>{
 	Loggur.log( `Server started on port: ${port} and address: ${address} with PID: ${processPid}`, Loggur.LOG_LEVELS.warning );
 });
 
-const handle	= () => { fs.unlinkSync( lockFile ); }
+/**
+ * @brief	Glory to StackOverflow
+ */
+function exitHandler( options, exitCode )
+{
+	if ( options.cleanup )
+		fs.unlinkSync( lockFile );
 
-process.on( 'exit', handle );
-process.on( 'SIGINT', handle );
-process.on( 'SIGHUP', handle );
-process.on( 'beforeExit', handle );
+	if ( options.exit )
+		process.exit();
+}
+
+//do something when app is closing
+process.on( 'exit', exitHandler.bind( null, { cleanup: true } ) );
+
+//catches ctrl+c event
+process.on( 'SIGINT', exitHandler.bind( null, { exit: true } ) );
+
+// catches "kill pid" (for example: nodemon restart)
+process.on( 'SIGUSR1', exitHandler.bind( null, { exit: true } ) );
+process.on( 'SIGUSR2', exitHandler.bind( null, { exit: true } ) );
