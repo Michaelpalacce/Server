@@ -1,13 +1,9 @@
 {
   "name": "server-emulator",
-  "version": "13.0.2",
+  "version": "14.0.0",
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "postinstall": "node ./cli/setupProject.js . ./../../.",
-    "terminal": "npm i node-pty@^0.9.0 && npm i xterm@^4.4.0 && npm i socket.io@^2.3.0"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Michaelpalacce/Server.git"
@@ -26,6 +22,9 @@
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Michaelpalacce/storage/issues"
+  },
+  "bin": {
+    "server-emulator": "cli.js"
   },
   "homepage": "https://github.com/Michaelpalacce/storage#readme",
   "dependencies": {

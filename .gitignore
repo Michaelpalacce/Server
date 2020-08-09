@@ -9,3 +9,4 @@ Uploads
 /package-lock.json
 /logs/*.log
 cache
+pid.lock

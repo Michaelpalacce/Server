@@ -1,5 +1,7 @@
 ###A simple storage app that emulates the file system
 
+# In Development!
+
 #Github
 https://github.com/Michaelpalacce/Server/releases
 
@@ -13,17 +15,20 @@ https://github.com/Michaelpalacce/Server/releases
 #Install Linux
 - Make sure you are sudo
 ~~~
-# With NodeJs Installation
-yum install -y gcc-c++ make && curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash - && yum install -y nodejs && mkdir server-emulator && cd server-emulator && sudo npm i server-emulator
+# Go to a new folder and Run as Admin
+sudo npm i -g server-emulator
 
-# With Already Existing NodeJs Installation
-mkdir server-emulator && cd server-emulator && sudo npm i server-emulator
+# Run:
+server-emulator
 ~~~
 
 #Install Windows
 ~~~
-# Go to a new folder and Run as Admin
-npm i server-emulator
+# Create a folder and do:
+npm i -g server-emulator
+
+# Run:
+server-emulator
 ~~~
 
 #Enabling terminal:
@@ -31,32 +36,18 @@ npm i server-emulator
 ###Windows
 ~~~
 npm install --global windows-build-tools
-npm run terminal
-# set ENABLE_TERMINAL to 1 in .env
+server-emulator set ENABLE_TERMINAL 1
+server-emulator terminal
 ~~~
 
 ###Linux
 ~~~
-sudo npm run terminal
-# set ENABLE_TERMINAL to 1 in .env
-~~~
-
-#To start
-~~~
-npm start
+server-emulator set ENABLE_TERMINAL 1
+server-emulator terminal
 ~~~
 
 #Terminal Dependencies
-- For linux python, make, gcc may be required ( for node-pty ) but they should be installed automatically
-- For windows you need to do `npm install --global windows-build-tools`
 - If you have any issues with the terminal LOOK HERE: https://www.npmjs.com/package/node-pty?activeTab=readme
-
-#To compile in windows:
-~~~shell script
-npm i -g nexe
-
-nexe --no-bundle
-~~~
 
 #Port Forwarding
 - You can enable port forwarding on your router to point to the local machine running the server emulator on a given port
@@ -70,7 +61,7 @@ nexe --no-bundle
 - ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
 - REQUEST_TIMEOUT - How much to keep requests active for in milliseconds
 - UPLOADS_DIR - where to put the temporary upload files 
-- ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled 
+- ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled ( CURRENTLY NOT WORKING )
 - ENABLE_SECURITY_HEADERS - 1 or 0 whether the security headers should be enabled or not ( hsts, Expect-CT, CSP, Content Type Options )
 - DEBUG - Whether to write logs on a debug level 1 or 0
 - USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === LOCAL_DIR then the project root will be used, otherwise parse it as an absolute path
@@ -97,6 +88,7 @@ nexe --no-bundle
 - It is a good idea to change the password ( via the gui and in the .env ) after you've started the server
 
 #Known Bugs:
+- Currently terminal is not working
 - Cannot detect if you are moving a folder inside itself, so you cant do this: 
        
         /

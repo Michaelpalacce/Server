@@ -16,7 +16,7 @@ app.add(( event )=>{
 	};
 
 	event.getRenderedData	= async ( templateName, variables = {} )=>{
-		return await ejs.renderFile( path.join( process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables );
+		return await ejs.renderFile( path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables );
 	};
 
 	event.on( 'cleanUp', ()=>{ event.render = undefined; event.getRenderedData = undefined; });

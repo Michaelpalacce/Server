@@ -46,9 +46,7 @@ app.delete( '/folder', ( event ) => {
 		const input	= new DeleteInput( event );
 
 		if ( ! input.isValid() )
-		{
 			return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
-		}
 
 		deleteFolderRecursive( input.getDirectory() );
 		event.send( 'ok' );

@@ -1,3 +1,6 @@
+14.0.0
+- Made the project act as a CLI
+
 13.0.2
 - Works with the latest ER
 
