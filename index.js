@@ -33,5 +33,4 @@ const handle	= () => { fs.unlinkSync( lockFile ); }
 process.on( 'exit', handle );
 process.on( 'SIGINT', handle );
 process.on( 'SIGHUP', handle );
-process.on( 'SIGKILL', handle );
 process.on( 'beforeExit', handle );
