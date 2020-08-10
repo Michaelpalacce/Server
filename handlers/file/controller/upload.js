@@ -6,8 +6,9 @@ const fs					= require( 'fs' );
 const { promisify }			= require( 'util' );
 const path					= require( 'path' );
 const UploadInput			= require( '../input/upload_input' );
+const mv					= require('mv');
 
-const rename				= promisify( fs.rename );
+const rename				= promisify( mv );
 
 const AJAX_HEADER			= 'x-requested-with';
 const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
