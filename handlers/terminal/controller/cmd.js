@@ -22,12 +22,10 @@ io.on( 'connection', async ( socket )=>{
 	if ( ! sidCookie )
 		return socket.disconnect( true );
 
-	const dataSet	= await cacheServer.get( sidCookie );
+	const dataSet	= await cacheServer.get( `$S:${sidCookie}` );
 
 	if ( dataSet === null || dataSet.SU !== true )
-	{
 		return socket.disconnect( true );
-	}
 
 	Loggur.log( `New Socket Established: ${socket.id}` );
 

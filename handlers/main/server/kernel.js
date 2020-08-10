@@ -45,8 +45,6 @@ if ( process.env.ENABLE_SECURITY_HEADERS == 1 )
 // Serve Static Resources
 app.apply( app.er_static_resources,			{ paths	: [process.env.STATIC_PATH] } );
 app.apply( app.er_static_resources,			{ paths	: ['favicon.ico'] } );
-app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/lib'] } );
-app.apply( app.er_static_resources,			{ paths	: ['node_modules/xterm/css'] } );
 
 app.er_validation.setOptions({
 	failureCallback: ( event, parameter, result )=>{

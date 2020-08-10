@@ -22,6 +22,27 @@ const ENV_SEPARATOR		= '=';
  */
 function setNewEnv( key, value, doneCallback )
 {
+	const variables	= getEnvs();
+
+	variables[key]	= value;
+
+	const writeStream	= fs.createWriteStream( envFile, { flags: 'w' } )
+
+	console.log( variables );
+
+	for ( const key in variables )
+		writeStream.write( `${key}=${variables[key]}${os.EOL}` );
+
+	writeStream.end( doneCallback );
+}
+
+/**
+ * @brief	Gets all the environment variables
+ *
+ * @return	Object
+ */
+function getEnvs()
+{
 	const lines		= fs.readFileSync( envFile, 'utf-8' ).split( /\r?\n/ );
 	const variables	= {};
 
@@ -36,16 +57,7 @@ function setNewEnv( key, value, doneCallback )
 		variables[key]	= parts.join( ENV_SEPARATOR ).replace( '\r', '' ).replace( '\n', '' );
 	}
 
-	variables[key]	= value;
-
-	const writeStream	= fs.createWriteStream( envFile, { flags: 'w' } )
-
-	console.log( variables );
-
-	for ( const key in variables )
-		writeStream.write( `${key}=${variables[key]}${os.EOL}` );
-
-	writeStream.end( doneCallback );
+	return variables;
 }
 
 const lockFile			= 'pid.lock';
@@ -72,7 +84,7 @@ switch ( true )
 		process.exit();
 		break;
 
-	case args.length === 1 && args[0] === 'getEnv':
+	case args.length === 1 && args[0] === 'getEnvPath':
 		console.log( envFile );
 		process.exit();
 		break;
@@ -106,6 +118,12 @@ switch ( true )
 		});
 		break;
 
+	case args.length === 1 && args[0] === 'getEnv':
+	case args.length === 1 && args[0] === 'get':
+		console.log( getEnvs() );
+		process.exit();
+		break;
+
 	case args.length === 1 && args[0] === 'help':
 	default:
 		console.log( 'Commands:' );
@@ -113,8 +131,10 @@ switch ( true )
 		console.log( 'server-emulator start ---> starts the server' );
 		console.log( 'server-emulator daemon ---> starts the server in a detached deamon mode, returns the PID. If a daemon is running, will output the daemon pid' );
 		console.log( 'server-emulator kill  ---> kills the daemon' );
-		console.log( 'server-emulator getEnv ---> returns the absolute path to the .env file' );
+		console.log( 'server-emulator getEnvPath ---> returns the absolute path to the .env file' );
 		console.log( 'server-emulator terminal ---> installs terminal dependencies ( currently not working )' );
 		console.log( 'server-emulator key ${ENV_KEY} ${ENV_VALUE} ---> Changes .env file values or adds new ones.' );
+		console.log( 'server-emulator get ---> Gets all the .env variables' );
+		console.log( 'server-emulator getEnv ---> Gets all the .env variables' );
 		process.exit();
 }

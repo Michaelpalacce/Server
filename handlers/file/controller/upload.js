@@ -23,7 +23,7 @@ const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
  *
  * @return	void
  */
-app.post( '/file', ( event ) => {
+app.post( '/file', async ( event ) => {
 		const input	= new UploadInput( event );
 
 		if ( ! input.isValid() )
@@ -34,39 +34,24 @@ app.post( '/file', ( event ) => {
 
 		const promises	= [];
 
-		files.forEach( ( file ) =>{
-			promises.push( new Promise( async ( resolve, reject )=>{
-				const oldPath	= file.path;
-				const fileName	= path.parse( file.name );
+		for ( const file of files )
+		{
+			const oldPath	= file.path;
+			const fileName	= path.parse( file.name );
 
-				let newPath		= path.join( directory, fileName.dir );
-				newPath			= path.join( newPath, fileName.name + fileName.ext );
+			let newPath		= path.join( directory, fileName.dir );
+			newPath			= path.join( newPath, fileName.name + fileName.ext );
 
-				const fileStats	= path.parse( newPath );
+			const fileStats	= path.parse( newPath );
 
-				if ( ! fs.existsSync( fileStats.dir ) )
-				{
-					fs.mkdirSync( fileStats.dir, { recursive: true } );
-				}
-				event.clearTimeout();
+			if ( ! fs.existsSync( fileStats.dir ) )
+			{
+				fs.mkdirSync( fileStats.dir, { recursive: true } );
+			}
+			event.clearTimeout();
 
-				rename( oldPath, newPath ).then( resolve ).catch( ( error )=>{
-					// Attempt to stream file to new location in case of virtualization ( may fail and used as last resort )
-					if ( typeof error !== 'undefined' && typeof error.code !== 'undefined' && error.code === 'EXDEV' )
-					{
-						const readableStream	= fs.createReadStream( oldPath );
-						readableStream.pipe( fs.createWriteStream( newPath ) );
-
-						readableStream.on( 'end', resolve );
-						readableStream.on( 'error', reject );
-
-						return;
-					}
-
-					reject( error );
-				} );
-			} ).catch( event.next ) );
-		});
+			await rename( oldPath, newPath );
+		}
 
 		Promise.all( promises ).then( ()=>{
 			if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
