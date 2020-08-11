@@ -1,6 +1,6 @@
 {
   "name": "server-emulator",
-  "version": "14.0.6",
+  "version": "14.0.7",
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
   "scripts": {},
@@ -24,6 +24,7 @@
     "url": "https://github.com/Michaelpalacce/storage/issues"
   },
   "bin": {
+    "serve": "cli.js",
     "server-emulator": "cli.js"
   },
   "homepage": "https://github.com/Michaelpalacce/storage#readme",

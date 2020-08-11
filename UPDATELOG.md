@@ -1,3 +1,7 @@
+14.0.7
+- Code Cleanup
+- Added server as an alias to server-emulator
+
 14.0.6
 - Fixed moving
 

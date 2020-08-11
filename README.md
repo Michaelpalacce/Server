@@ -11,17 +11,25 @@ https://github.com/Michaelpalacce/Server/releases
 - Linux
 
 # Use:
+- You can use either `server` or `server-emulator`
 ~~~
 server-emulator daemon # starts a daemon process
+server daemon # starts a daemon process
 
 server-emulator kill # kills the daemon process
+server kill # kills the daemon process
 
 server-emulator # starts the process without daemonizing 
 server-emulator start # starts the process without daemonizing 
 
+server # starts the process without daemonizing 
+server start # starts the process without daemonizing 
+
 server-emulator set APP_PORT 8000 # changes the app port
+server set APP_PORT 8000 # changes the app port
 
 sever-emulator set ENABLE_SECURITY 1 # enables the user management
+sever set ENABLE_SECURITY 1 # enables the user management
 ~~~
 
 

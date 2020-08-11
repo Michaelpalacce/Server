@@ -31,7 +31,7 @@ server.listen( port, address, ()=>{
 /**
  * @brief	Glory to StackOverflow
  */
-function exitHandler( options, exitCode )
+function exitHandler( options )
 {
 	if ( options.cleanup )
 		fs.unlinkSync( lockFile );
