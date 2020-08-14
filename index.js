@@ -23,10 +23,30 @@ server.on( 'error', ( error )=>{
 	});
 });
 
+if ( process.env.SSL_KEY_PATH && process.env.SSL_CERT_PATH )
+{
+	const https		= require( 'https' );
+	const fs		= require( 'fs' );
+
+	const server	= https.createServer(
+		{
+			key		: fs.readFileSync( process.env.SSL_KEY_PATH ),
+			cert	: fs.readFileSync( process.env.SSL_CERT_PATH )
+		},
+		app.attach()
+	);
+
+	server.listen( 443, () => {
+		app.Loggur.log( `HTTPS Server started on port: ${port} and address: ${address} with PID: ${processPid}`, Loggur.LOG_LEVELS.warning );
+	});
+}
+else
+{
 // Start the server
-server.listen( port, address, ()=>{
-	Loggur.log( `Server started on port: ${port} and address: ${address} with PID: ${processPid}`, Loggur.LOG_LEVELS.warning );
-});
+	server.listen( port, address, ()=>{
+		Loggur.log( `HTTP Server started on port: ${port} and address: ${address} with PID: ${processPid}`, Loggur.LOG_LEVELS.warning );
+	});
+}
 
 /**
  * @brief	Glory to StackOverflow

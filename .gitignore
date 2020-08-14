@@ -10,3 +10,4 @@ Uploads
 /logs/*.log
 cache
 pid.lock
+.env

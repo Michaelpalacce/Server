@@ -1,3 +1,7 @@
+15.0.0
+- Added SSL Support
+- .env file is now unique. It will be created for you if needed.
+
 14.0.7
 - Code Cleanup
 - Added server as an alias to server-emulator

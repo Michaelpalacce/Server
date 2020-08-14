@@ -2,90 +2,37 @@
 'use strict';
 
 const { fork, exec }	= require( 'child_process' );
-const path				= require( 'path' );
-const fs				= require( 'fs' );
-const os				= require( 'os' );
+const helper			= require( './cli_helper/cli_helper' );
 
 const args				= process.argv.slice( 2 );
-const projectDir		= __dirname;
-const envFile			= path.join( projectDir, '.env' );
-const ENV_SEPARATOR		= '=';
 
-/**
- * @brief	Sets a new env variable
- *
- * @param	{String} key
- * @param	{String} value
- * @param	{Function} doneCallback
- *
- * @return	void
- */
-function setNewEnv( key, value, doneCallback )
-{
-	const variables	= getEnvs();
-
-	variables[key]	= value;
-
-	const writeStream	= fs.createWriteStream( envFile, { flags: 'w' } )
-
-	console.log( variables );
-
-	for ( const key in variables )
-		writeStream.write( `${key}=${variables[key]}${os.EOL}` );
-
-	writeStream.end( doneCallback );
-}
-
-/**
- * @brief	Gets all the environment variables
- *
- * @return	Object
- */
-function getEnvs()
-{
-	const lines		= fs.readFileSync( envFile, 'utf-8' ).split( /\r?\n/ );
-	const variables	= {};
-
-	for ( const line of lines )
-	{
-		const parts	= line.split( ENV_SEPARATOR );
-		const key	= parts.shift();
-
-		if ( key === '' )
-			continue;
-
-		variables[key]	= parts.join( ENV_SEPARATOR ).replace( '\r', '' ).replace( '\n', '' );
-	}
-
-	return variables;
-}
-
-const lockFile			= 'pid.lock';
+if ( ! helper.environment.existsEnvFile() )
+	helper.environment.resetEnvFile();
 
 switch ( true )
 {
 	case args.length === 0:
 	case args.length === 1 && args[0] === 'start':
-		fork( path.join( projectDir, './index' ), { stdio: 'inherit' } );
+		fork( helper.locator.indexFile, { stdio: 'inherit' } );
 		break;
 
 	case args.length === 1 && args[0] === 'daemon':
-		if ( fs.existsSync( path.join( projectDir, lockFile ) ) )
+		if ( helper.pid.exists() )
 		{
-			const pid	= fs.readFileSync( path.join( projectDir, lockFile ) );
+			const pid	= helper.pid.get();
 			console.log( `Daemon already started with pid: ${pid}` );
-			console.log( `If the process is dead and the file is not deleted, then delete: ${path.join( projectDir, lockFile )} manually` );
+			console.log( `If the process is dead and the file is not deleted, then delete: ${helper.locator.lockFile} manually or call server-emulator deletePid` );
 			process.exit();
 			return;
 		}
 
-		const childProcess	= fork( path.join( projectDir, './index' ), { detached: true, stdio: 'ignore' } );
+		const childProcess	= fork( helper.locator.indexFile, { detached: true, stdio: 'ignore' } );
 		console.log( `Child Process spawned with PID: ${childProcess.pid}` );
 		process.exit();
 		break;
 
 	case args.length === 1 && args[0] === 'getEnvPath':
-		console.log( envFile );
+		console.log( helper.locator.envFile );
 		process.exit();
 		break;
 
@@ -106,21 +53,30 @@ switch ( true )
 		break;
 
 	case args.length === 1 && args[0] === 'kill':
-		process.kill( parseInt( fs.readFileSync( path.join( projectDir, lockFile ) ).toString() ) );
-		fs.unlinkSync( path.join( projectDir, lockFile ) );
+		process.kill( helper.pid.get());
+		helper.pid.delete();
+
+		process.exit();
+		break;
+
+	case args.length === 1 && args[0] === 'deletePid':
+		helper.pid.delete();
 		process.exit();
 		break;
 
 	case args.length === 3 && args[0] === 'set':
-		setNewEnv( args[1], args[2], () => {
+		helper.environment.setNewEnvVariable( args[1], args[2], () => {
 			console.log( 'SET!' );
 			process.exit();
 		});
 		break;
 
-	case args.length === 1 && args[0] === 'getEnv':
+	case args.length === 1 && args[0] === 'resetEnv':
+		helper.environment.resetEnvFile();
+		break;
+
 	case args.length === 1 && args[0] === 'get':
-		console.log( getEnvs() );
+		console.log( helper.environment.getEnvVariables() );
 		process.exit();
 		break;
 
@@ -133,8 +89,9 @@ switch ( true )
 		console.log( 'server-emulator kill  ---> kills the daemon' );
 		console.log( 'server-emulator getEnvPath ---> returns the absolute path to the .env file' );
 		console.log( 'server-emulator terminal ---> installs terminal dependencies ( currently not working )' );
-		console.log( 'server-emulator key ${ENV_KEY} ${ENV_VALUE} ---> Changes .env file values or adds new ones.' );
+		console.log( 'server-emulator set ${ENV_KEY} ${ENV_VALUE} ---> Changes .env file values or adds new ones.' );
 		console.log( 'server-emulator get ---> Gets all the .env variables' );
-		console.log( 'server-emulator getEnv ---> Gets all the .env variables' );
+		console.log( 'server-emulator resetEnv ---> Resets the .env file to the defaults.' );
+		console.log( 'server-emulator deletePid ---> Deletes the PID file' );
 		process.exit();
 }

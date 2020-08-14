@@ -68,7 +68,12 @@ server-emulator terminal
 - DEBUG - Whether to write logs on a debug level 1 or 0
 - USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === 'LOCAL_DIR' then the project root will be used, otherwise parse it as an absolute path
 - TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
+- SSL_KEY_PATH - The ABSOLUTE path to the SSL key
+- SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
 - Others should probably not be touched
+
+# Enabling SSL
+- Generate a certificate and point the SSL_KEY_PATH and SSL_CERT_PATH to their locations
 
 # Adding users
 - If you want to add users go to the users page from the sidebar and click on the Add Users button
