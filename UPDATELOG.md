@@ -1,3 +1,6 @@
+15.0.3
+- Terminals are now killed on socket disconnect
+
 15.0.2
 - .env is now in os.temp
 - Login rate limiting is super strict now

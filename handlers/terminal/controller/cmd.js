@@ -37,6 +37,8 @@ io.on( 'connection', async ( socket )=>{
 		env: process.env
 	});
 
+	ptyProcess.resize(150, 60);
+
 	socket.on( 'data', ( message )=>{
 		ptyProcess.write( message );
 	});
@@ -46,6 +48,7 @@ io.on( 'connection', async ( socket )=>{
 	});
 
 	socket.on( 'disconnect', ()=>{
+		ptyProcess.kill();
 		Loggur.log( `Socket Disconnected: ${socket.id}` )
 	});
 });
