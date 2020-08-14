@@ -4,6 +4,7 @@ const path			= require( 'path' );
 const fs			= require( 'fs' );
 const os			= require( 'os' );
 
+const OS_TEMP_PATH	= os.tmpdir();
 const ENV_SEPARATOR	= '=';
 
 const projectDir	= path.join( __dirname, '..' );
@@ -16,7 +17,7 @@ const projectDir	= path.join( __dirname, '..' );
 const locator		= {
 	projectDir,
 	indexFile		: path.join( projectDir, 'index.js' ),
-	envFile			: path.join( projectDir, '.env' ),
+	envFile			: path.join( OS_TEMP_PATH, '.server-emulator-env' ),
 	envTemplateFile	: path.join( projectDir, '.env.template' ),
 	lockFile		: path.join( projectDir, 'pid.lock' )
 };

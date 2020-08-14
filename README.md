@@ -74,6 +74,7 @@ server-emulator terminal
 
 # Enabling SSL
 - Generate a certificate and point the SSL_KEY_PATH and SSL_CERT_PATH to their locations
+- Set the APP_PORT to 443
 
 # Adding users
 - If you want to add users go to the users page from the sidebar and click on the Add Users button

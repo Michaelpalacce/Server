@@ -1,3 +1,10 @@
+15.0.2
+- .env is now in os.temp
+- Login rate limiting is super strict now
+
+15.0.1
+- Fix
+
 15.0.0
 - Added SSL Support
 - .env file is now unique. It will be created for you if needed.

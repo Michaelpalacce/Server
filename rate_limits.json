@@ -2,13 +2,11 @@
   {
     "path": "/login",
     "methods": ["POST"],
-    "maxAmount": 100,
+    "maxAmount": 5,
     "refillTime": 60,
-    "refillAmount": 30,
-    "policy": "connection_delay",
+    "refillAmount": 1,
+    "policy": "strict",
     "stopPropagation": true,
-	"delayTime": 3,
-	"delayRetries": 5,
     "ipLimit": true
   },
   {
