@@ -31,24 +31,18 @@ io.on( 'connection', async ( socket ) => {
 
 	const ptyProcess	= pty.spawn( shell, [], {
 		name: 'xterm-color',
-		cols: 80,
-		rows: 30,
 		cwd: process.env.HOME,
 		env: process.env
 	});
 
-	ptyProcess.resize(150, 60);
+	ptyProcess.resize( 110, 50 );
 
-	socket.on( 'data', ( message ) => {
-		ptyProcess.write( message );
-	});
+	socket.on( 'data', message => ptyProcess.write( message ) );
 
-	ptyProcess.on('data', ( data ) => {
-		socket.emit( 'data', data );
-	});
+	ptyProcess.on( 'data', data => socket.emit( 'data', data ) );
 
 	socket.on( 'disconnect', () => {
 		ptyProcess.kill();
-		Loggur.log( `Socket Disconnected: ${socket.id}` )
+		Loggur.log( `Socket Disconnected: ${socket.id}` );
 	});
 });

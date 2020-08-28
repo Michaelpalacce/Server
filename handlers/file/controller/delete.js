@@ -18,16 +18,9 @@ const itemValidation	= { item : 'filled||string' };
  *
  * @return	void
  */
-app.delete( '/file', app.er_validation.validate( { query: itemValidation } ), ( event ) => {
-		const input	= new DeleteInput( event );
+app.delete( '/file', app.er_validation.validate( { query: itemValidation } ), async ( event ) => {
+	const input	= new DeleteInput( event );
+	await unlink( input.getItem() ).catch( event.next );
 
-		if ( ! input.isValid() )
-			return event.next( `Invalid input: ${input.getReasonToString()}`, 400 );
-
-		const item	= input.getItem();
-
-		unlink( item ).then(() => {
-			event.send( 'ok' );
-		}).catch( event.next );
-	}
-);
+	event.send();
+});

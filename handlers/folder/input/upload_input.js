@@ -16,7 +16,7 @@ class UploadInput extends Input
 	/**
 	 * @brief	Returns the directory
 	 *
-	 * @returns	mixed
+	 * @returns	String
 	 */
 	getDirectory()
 	{
@@ -28,12 +28,6 @@ class UploadInput extends Input
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'route' ) || ! this.event.session.has( 'SU' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
 		const isSU	= this.event.session.get( 'SU' );
 		const route	= this.event.session.get( 'route' );
 

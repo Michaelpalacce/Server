@@ -43,19 +43,14 @@ if ( process.env.ENABLE_SECURITY == 1 )
 		route	: new RegExp( /^((?!\/login).)*$/ ),
 		handler	: ( event ) => {
 			if ( ! event.session.has( 'authenticated' ) || event.session.get( 'authenticated' ) === false )
-			{
-				event.redirect( '/login' );
-				return;
-			}
-			else
-			{
-				const username	= event.session.get( 'username' );
-				const user		= userManager.get( username );
+				return event.redirect( '/login' );
 
-				event.session.add( 'route', user.getRoute() );
-				event.session.add( 'SU', user.isSuperUser() );
-				event.session.add( 'permissions', user.getPermissions() );
-			}
+			const username	= event.session.get( 'username' );
+			const user		= userManager.get( username );
+
+			event.session.add( 'route', user.getRoute() );
+			event.session.add( 'SU', user.isSuperUser() );
+			event.session.add( 'permissions', user.getPermissions() );
 
 			event.next();
 		}
@@ -71,9 +66,7 @@ if ( process.env.ENABLE_SECURITY == 1 )
 					try{ method	= JSON.parse( permissions[permission] ); } catch ( e ) {}
 
 					if ( app.router.matchRoute( permission, event.path ) && app.router.matchMethod( event.method, method ) )
-					{
 						event.next( `You don\'t have permissinos to access: ${permission} with method: ${permissions[permission]}` );
-					}
 				}
 			}
 
@@ -97,9 +90,7 @@ if ( process.env.ENABLE_SECURITY == 1 )
 		const { username, password }	= result.getValidationResult();
 
 		if ( ! event.userManager.has( username ) )
-		{
 			return event.render( '/login' );
-		}
 
 		const user	= event.userManager.get( username );
 
@@ -111,12 +102,10 @@ if ( process.env.ENABLE_SECURITY == 1 )
 			event.session.add( 'SU', user.isSuperUser() );
 			event.session.add( 'permissions', user.getPermissions() );
 
-			event.redirect( '/' );
+			return event.redirect( '/' );
 		}
-		else
-		{
-			event.render( '/login' );
-		}
+
+		event.render( '/login' );
 	});
 }
 else

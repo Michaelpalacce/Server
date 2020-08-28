@@ -14,31 +14,22 @@ const formatItem	= require( '../../main/utils/file_formatter' );
  *
  * @return	void
  */
-app.get( '/browse/getFiles', ( event ) => {
-	const input	= new BrowseInput( event );
-
-	if ( ! input.isValid() )
-		throw new Error( `Invalid input: ${input.getReasonToString()}` );
-
+app.get( '/browse/getFiles', async ( event ) => {
+	const input			= new BrowseInput( event );
 	const dir			= input.getDirectory();
 	const fileSystem	= new FileSystem();
 
-	fileSystem.getAllItems( dir, input.getToken() ).then(( result ) => {
-		const response	= {
-			items		: result.items.map( ( item ) => {
-				return formatItem( item, event );
-			}),
-			nextToken	: encodeURIComponent( Buffer.from( result.nextToken ).toString( 'base64' ) ),
-			hasMore		: result.hasMore,
-			dir
-		};
+	const result		= await fileSystem.getAllItems( dir, input.getToken() ).catch( event.next );
 
-		if ( input.getToken() === '' )
-		{
-			const backItem	= formatItem( dir, event, true );
-			response.items	= [backItem, ...response.items];
-		}
+	const response		= {
+		items		: result.items.map( item => formatItem( item, event ) ),
+		nextToken	: encodeURIComponent( Buffer.from( result.nextToken ).toString( 'base64' ) ),
+		hasMore		: result.hasMore,
+		dir
+	};
 
-		event.send( response )
-	}).catch( event.next );
+	if ( input.getToken() === '' )
+		response.items	= [formatItem( dir, event, true ), ...response.items];
+
+	event.send( response )
 } );

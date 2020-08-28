@@ -43,8 +43,8 @@ if ( process.env.ENABLE_SECURITY_HEADERS == 1 )
 }
 
 // Serve Static Resources
-app.apply( app.er_static_resources,			{ paths	: [process.env.STATIC_PATH] } );
-app.apply( app.er_static_resources,			{ paths	: ['favicon.ico'] } );
+app.apply( app.er_static,					{ paths	: [process.env.STATIC_PATH], cache: { static : false }, useEtag: true } );
+app.apply( app.er_static,					{ paths	: ['favicon.ico'], cache: { static : false }, useEtag: true } );
 
 app.er_validation.setOptions({
 	failureCallback: ( event, parameter, result ) => {

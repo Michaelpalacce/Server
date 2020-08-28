@@ -1,9 +1,9 @@
 'use strict';
 
 // Dependencies
-const Input	= require( '../../main/validation/input' );
-const path	= require( 'path' );
-const fs	= require( 'fs' );
+const Input			= require( '../../main/validation/input' );
+const path			= require( 'path' );
+const fs			= require( 'fs' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
@@ -15,7 +15,7 @@ class MoveInput extends Input
 	/**
 	 * @brief	Retruns the new path
 	 *
-	 * @returns	mixed
+	 * @returns	String
 	 */
 	getNewPath()
 	{
@@ -25,7 +25,7 @@ class MoveInput extends Input
 	/**
 	 * @brief	Returns the old path
 	 *
-	 * @returns	mixed
+	 * @returns	String
 	 */
 	getOldPath()
 	{
@@ -37,12 +37,6 @@ class MoveInput extends Input
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'route' ) || ! this.event.session.has( 'SU' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
 		const isSU					= this.event.session.get( 'SU' );
 		const route					= this.event.session.get( 'route' );
 

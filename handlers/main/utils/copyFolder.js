@@ -31,6 +31,7 @@ module.exports	= async function copyFolder( from, to )
 		await mkdir( to ).catch( handleError );
 
 	const dir	= await opendir( from ).catch( handleError );
+
 	for await ( const element of dir )
 	{
 		const itemName		= element.name;
@@ -38,12 +39,8 @@ module.exports	= async function copyFolder( from, to )
 		const destination	= join( to, itemName );
 
 		if ( element.isFile() )
-		{
 			await copyFile( origin, destination ).catch( handleError );
-		}
 		else
-		{
 			await copyFolder( origin, destination ).catch( handleError );
-		}
 	}
 };

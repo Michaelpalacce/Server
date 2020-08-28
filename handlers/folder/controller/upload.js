@@ -15,24 +15,9 @@ const UploadInput	= require( '../input/upload_input' );
  *
  * @return	void
  */
-app.post( '/folder', ( event ) => {
-		const input	= new UploadInput( event );
+app.post( '/folder', async ( event ) => {
+	const input	= new UploadInput( event );
+	await mkdir( input.getDirectory() ).catch( event.next );
 
-		if ( ! input.isValid() )
-		{
-			event.next( `Invalid input: ${input.getReasonToString()}`, 400 );
-			return;
-		}
-
-		try
-		{
-			mkdir( input.getDirectory() ).then(() => {
-				event.send( 'ok', 201 );
-			}).catch( event.next );
-		}
-		catch ( e )
-		{
-			event.sendError( 'Could not create folder', 400 );
-		}
-	}
-);
+	event.send( '', 201 );
+});

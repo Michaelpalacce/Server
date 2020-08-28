@@ -17,30 +17,21 @@ const Model		= {};
  *
  * @returns	void
  */
-Model.cut	= function( event )
-{
-	const input	= new MoveInput( event );
-
-	if ( ! input.isValid() )
-		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
-
-	const oldPath		= input.getOldPath();
-	let newPath			= input.getNewPath();
-
-	const oldPathParsed	= path.parse( oldPath );
+Model.cut	= async ( event ) => {
+	const input		= new MoveInput( event );
+	const oldPath	= input.getOldPath();
+	let newPath		= input.getNewPath();
 
 	if ( ! fs.existsSync( newPath ) )
-	{
 		return event.send( 'New path does not exist', 400 );
-	}
 
-	newPath	= path.join( newPath, oldPathParsed.base );
+	newPath	= path.join( newPath, path.parse( oldPath ).base );
 
 	event.clearTimeout();
-	rename( oldPath, newPath ).then(() => {
-		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
-		event.send( { newPath } );
-	}).catch( event.next );
+	await rename( oldPath, newPath ).catch( event.next );
+
+	newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
+	event.send( { newPath } );
 };
 
 /**
@@ -50,30 +41,21 @@ Model.cut	= function( event )
  *
  * @returns	void
  */
-Model.copy	= function( event )
-{
-	const input	= new MoveInput( event );
-
-	if ( ! input.isValid() )
-		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
-
-	const oldPath		= input.getOldPath();
-	let newPath			= input.getNewPath();
-
-	const oldPathParsed	= path.parse( oldPath );
+Model.copy	= async ( event ) => {
+	const input		= new MoveInput( event );
+	const oldPath	= input.getOldPath();
+	let newPath		= input.getNewPath();
 
 	if ( ! fs.existsSync( newPath ) )
-	{
 		return event.send( 'New path does not exist', 400 );
-	}
 
-	newPath	= path.join( newPath, oldPathParsed.base );
+	newPath	= path.join( newPath, path.parse( oldPath ).base );
 
 	event.clearTimeout();
-	copy( oldPath, newPath ).then(() => {
-		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
-		event.send( { newPath } );
-	}).catch( event.next );
+	await copy( oldPath, newPath ).catch( event.next );
+
+	newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
+	event.send( { newPath } );
 };
 
 /**
@@ -83,25 +65,17 @@ Model.copy	= function( event )
  *
  * @returns	void
  */
-Model.rename	= function( event )
-{
+Model.rename	= async ( event ) => {
 	const input	= new MoveInput( event );
-
-	if ( ! input.isValid() )
-		return event.sendError( `Invalid input: ${input.getReasonToString()}`, 400 );
-
-	const oldPath	= input.getOldPath();
 	let newPath	= input.getNewPath();
 
 	if ( fs.existsSync( newPath ) )
-	{
 		return event.send( 'File already exists', 400 );
-	}
 
-	rename( oldPath, newPath ).then(() => {
-		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
-		event.send( { newPath } );
-	}).catch( event.next );
+	await rename( input.getOldPath(), newPath ).catch( event.next );
+
+	newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
+	event.send( { newPath } );
 };
 
 module.exports	= Model;

@@ -12,7 +12,7 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 class BrowseInput extends Input
 {
 	/**
-	 * @returns	mixed
+	 * @return	String
 	 */
 	getToken()
 	{
@@ -20,7 +20,7 @@ class BrowseInput extends Input
 	}
 
 	/**
-	 * @returns	mixed
+	 * @return	String
 	 */
 	getDirectory()
 	{
@@ -28,16 +28,18 @@ class BrowseInput extends Input
 	}
 
 	/**
+	 * @return	String
+	 */
+	getEncodedDirectory()
+	{
+		return encodeURIComponent( Buffer.from( this.get( BrowseInput.DIR_KEY ) ).toString( 'base64' ) );
+	}
+
+	/**
 	 * @copydoc	Input::_validate
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'route' ) || ! this.event.session.has( 'SU' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
 		const isSU		= this.event.session.get( 'SU' );
 		const route		= this.event.session.get( 'route' );
 		const result	= this.validationHandler.validate(

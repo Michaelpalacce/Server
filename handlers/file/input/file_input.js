@@ -1,9 +1,9 @@
 'use strict';
 
 // Dependencies
-const Input	= require( '../../main/validation/input' );
-const path	= require( 'path' );
-const fs	= require( 'fs' );
+const Input			= require( '../../main/validation/input' );
+const path			= require( 'path' );
+const fs			= require( 'fs' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
@@ -15,7 +15,7 @@ class FileInput extends Input
 	/**
 	 * @brief	Returns the file
 	 *
-	 * @returns	mixed
+	 * @returns	String
 	 */
 	getFile()
 	{
@@ -27,12 +27,6 @@ class FileInput extends Input
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'route' ) || ! this.event.session.has( 'SU' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
 		const isSU	= this.event.session.get( 'SU' );
 		const route	= this.event.session.get( 'route' );
 

@@ -48,9 +48,7 @@ IpLookup.getExternalIpv4	= function()
 IpLookup.getLocalIpV4s = function()
 {
 	if ( localIpv4s !== null )
-	{
 		return localIpv4s;
-	}
 
 	const allInterfaces	= os.networkInterfaces();
 	const interfaces	= {};
@@ -60,14 +58,10 @@ IpLookup.getLocalIpV4s = function()
 		allInterfaces[interfaceName].forEach( ( iface ) =>
 		{
 			if ( 'IPv4' !== iface.family || iface.internal !== false )
-			{
 				return;
-			}
 
 			if ( typeof interfaces[interfaceName] === 'undefined' )
-			{
 				interfaces[interfaceName]	= [];
-			}
 
 			interfaces[interfaceName].push( `${iface.address}:${require( './get_port' ) }` );
 		});

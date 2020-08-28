@@ -1,8 +1,8 @@
 'use strict';
 
 // Dependencies
-const Input	= require( '../../main/validation/input' );
-const path	= require( 'path' );
+const Input			= require( '../../main/validation/input' );
+const path			= require( 'path' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
@@ -14,7 +14,7 @@ class UploadInput extends Input
 	/**
 	 * @brief	Returns the file
 	 *
-	 * @returns	mixed
+	 * @returns	String
 	 */
 	getDirectory()
 	{
@@ -22,9 +22,17 @@ class UploadInput extends Input
 	}
 
 	/**
+	 * @return	String
+	 */
+	getEncodedDirectory()
+	{
+		return encodeURIComponent( Buffer.from( this.get( UploadInput.DIRECTORY_KEY ) ).toString( 'base64' ) );
+	}
+
+	/**
 	 * @brief	Gets the files for download
 	 *
-	 * @returns	mixed
+	 * @returns	String
 	 */
 	getFiles()
 	{
@@ -36,12 +44,6 @@ class UploadInput extends Input
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'route' ) || ! this.event.session.has( 'SU' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
 		const isSU	= this.event.session.get( 'SU' );
 		const route	= this.event.session.get( 'route' );
 

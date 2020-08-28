@@ -1,5 +1,7 @@
-15.0.4
+16.0.0
 - Code improvements according to Codacy
+- Code optimization
+- Terminal is now bigger
 
 15.0.3
 - Terminals are now killed on socket disconnect

@@ -20,5 +20,4 @@ errorHandler.addNamespace( 'app', { formatter: async ( { event, code, status, er
 	}}
 );
 
-
 module.exports	= errorHandler;

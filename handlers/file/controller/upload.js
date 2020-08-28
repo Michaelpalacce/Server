@@ -1,18 +1,17 @@
 'use strict';
 
 // Dependencies
-const app					= require( 'event_request' )();
-const fs					= require( 'fs' );
-const { promisify }			= require( 'util' );
-const path					= require( 'path' );
-const UploadInput			= require( '../input/upload_input' );
-const mv					= require('mv');
+const app				= require( 'event_request' )();
+const fs				= require( 'fs' );
+const { promisify }		= require( 'util' );
+const path				= require( 'path' );
+const UploadInput		= require( '../input/upload_input' );
+const mv				= require( 'mv' );
 
-const rename				= promisify( mv );
+const rename			= promisify( mv );
 
-const AJAX_HEADER			= 'x-requested-with';
-const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
-
+const AJAX_HEADER		= 'x-requested-with';
+const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
 
 /**
  * @brief	Adds a '/file' route with method POST
@@ -25,40 +24,29 @@ const AJAX_HEADER_VALUE		= 'XMLHttpRequest';
  * @return	void
  */
 app.post( '/file', async ( event ) => {
-		const input	= new UploadInput( event );
+	const input		= new UploadInput( event );
+	const directory	= input.getDirectory();
+	const files		= input.getFiles();
+	event.clearTimeout();
 
-		if ( ! input.isValid() )
-			return event.next( `Could not upload one or more files: ${input.getReasonToString()}`, 400 );
+	for ( const file of files )
+	{
+		const oldPath	= file.path;
+		const fileName	= path.parse( file.name );
 
-		const directory	= input.getDirectory();
-		const files		= input.getFiles();
+		let newPath		= path.join( directory, fileName.dir );
+		newPath			= path.join( newPath, fileName.name + fileName.ext );
 
-		const promises	= [];
+		const fileStats	= path.parse( newPath );
 
-		for ( const file of files )
-		{
-			const oldPath	= file.path;
-			const fileName	= path.parse( file.name );
+		if ( ! fs.existsSync( fileStats.dir ) )
+			fs.mkdirSync( fileStats.dir, { recursive: true } );
 
-			let newPath		= path.join( directory, fileName.dir );
-			newPath			= path.join( newPath, fileName.name + fileName.ext );
-
-			const fileStats	= path.parse( newPath );
-
-			if ( ! fs.existsSync( fileStats.dir ) )
-			{
-				fs.mkdirSync( fileStats.dir, { recursive: true } );
-			}
-			event.clearTimeout();
-
-			await rename( oldPath, newPath );
-		}
-
-		Promise.all( promises ).then( () => {
-			if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
-				return event.send( ['ok'], 201 );
-
-			event.redirect( `/browse?dir=${encodeURIComponent( Buffer.from( directory ).toString( 'base64' ) )}` );
-		}).catch( event.next );
+		await rename( oldPath, newPath );
 	}
-);
+
+	if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
+		return event.send( '', 201 );
+
+	event.redirect( `/browse?dir=${input.getEncodedDirectory()}` );
+});

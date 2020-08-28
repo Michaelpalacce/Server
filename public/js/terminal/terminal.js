@@ -19,7 +19,7 @@ $.ajax( '/socket.io/socket.io.js', {
  */
 function getCookie( name )
 {
-	name	+= '=';
+	name				+= '=';
 
 	const decodedCookie	= decodeURIComponent( document.cookie );
 	const cookies		= decodedCookie.split( ';' );
@@ -29,14 +29,10 @@ function getCookie( name )
 		let cookie	= cookies[i];
 
 		while ( cookie.charAt( 0 ) == ' ' )
-		{
 			cookie	= cookie.substring( 1 );
-		}
 
 		if ( cookie.indexOf( name ) == 0 )
-		{
 			return cookie.substring( name.length, cookie.length );
-		}
 	}
 
 	return '';
@@ -56,21 +52,16 @@ const socket	= io({
 // Initialize the terminal
 term.open( document.getElementById( 'terminal' ) );
 
-// Log Connect/Disconnect
+term.resize( 110, 50 )
+
 socket.on( 'connect', () => {
 	// Receive data from the server
-	socket.on( 'data', ( data ) => {
-		term.write( data );
-	});
+	socket.on( 'data', data => term.write( data ) );
+	// Send data to the server
+	term.onData( data => socket.emit( 'data', data ) );
 
-// Send data to the server
-	term.onData(( data ) => {
-		socket.emit( 'data', data );
-	});
-
-// Refresh the terminal
+	// Refresh the terminal
 	socket.emit( 'data', '' );
 });
-socket.on( 'disconnect', () => {
-	term.write( 'Only SuperUsers can use the terminal' );
-});
+
+socket.on( 'disconnect', () => { term.write( 'Only SuperUsers can use the terminal' ); } );

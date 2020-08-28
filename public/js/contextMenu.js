@@ -187,8 +187,6 @@ class ContextMenu
 	showContextMenu( event )
 	{
 		const target	= this.getItemElement( event );
-		this.element.css( this.calculateOffset( event ) ).show();
-
 		switch ( true )
 		{
 			case target.hasClass( 'folder' ):
@@ -266,6 +264,8 @@ class ContextMenu
 						error	: this.view.showError.bind( this.view )
 					});
 				} ).show();
+
+				this.element.css( this.calculateOffset( event ) ).show();
 				return;
 		}
 
@@ -279,6 +279,8 @@ class ContextMenu
 			target.find( '.itemDelete ' ).click();
 			this.element.hide();
 		} ).show();
+
+		this.element.css( this.calculateOffset( event ) ).show();
 	}
 
 	/**
@@ -359,10 +361,13 @@ class ContextMenu
 	 */
 	calculateOffset( event )
 	{
-		const winWidth	= this.document.width();
-		const winHeight	= this.document.height();
-		const posX		= event.pageX;
-		const posY		= event.pageY;
+		this.elementWidth	= this.element.width();
+		this.elementHeight	= this.element.height();
+
+		const winWidth		= this.document.width();
+		const winHeight		= this.document.height();
+		const posX			= event.pageX;
+		const posY			= event.pageY;
 
 		let posLeft, posTop;
 

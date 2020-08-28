@@ -70,12 +70,16 @@ class Input
 	 *
 	 * @param	{String} key
 	 *
-	 * @return	mixed
+	 * @return	*
 	 */
 	get( key )
 	{
 		if ( ! this.isValid() || this.model[key] == null )
-			throw new Error( 'Invalid input provided.' );
+			throw {
+				code	: 'app.validation',
+				message	: `Invalid input: ${this.getReasonToString()}`,
+				status	: 400
+			};
 
 		return this.model[key];
 	}

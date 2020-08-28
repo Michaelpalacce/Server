@@ -17,17 +17,11 @@ const { stat }		= require( 'fs' ).promises;
  *
  * @return	void
  */
-app.get( '/file/getFileData', ( event ) => {
-	const input	= new FileInput( event );
-
-	if ( ! input.isValid() )
-		return event.send( `Invalid input provided: ${input.getReasonToString()}`, 400 );
-
+app.get( '/file/getFileData', async ( event ) => {
+	const input		= new FileInput( event );
 	const itemName	= input.getFile();
 
-	stat( itemName ).then(() => {
-		event.send( formatItem( itemName, event ) );
-	}).catch( () => {
-		event.sendError( 'File does not exist', 400 );
-	} );
-} );
+	await stat( itemName ).catch( () => { event.sendError( 'File does not exist', 400 ); });
+
+	event.send( formatItem( itemName, event ) );
+});

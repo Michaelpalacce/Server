@@ -1,8 +1,8 @@
 'use strict';
 
 // Dependencies
-const app			= require( 'event_request' )();
-const Model			= require( '../model/move' );
+const app					= require( 'event_request' )();
+const Model					= require( '../model/move' );
 
 const fileMoveValidation	= {
 	body	: {
@@ -11,10 +11,6 @@ const fileMoveValidation	= {
 	}
 };
 
-app.post( /\/file\/(?:copy|cut|rename)/, app.er_validation.validate( fileMoveValidation ), ( event ) => {
-	event.next();
-});
-
-app.post( '/file/copy', Model.copy );
-app.post( '/file/cut', Model.cut );
-app.post( '/file/rename', Model.rename );
+app.post( '/file/copy', app.er_validation.validate( fileMoveValidation ), Model.copy );
+app.post( '/file/cut', app.er_validation.validate( fileMoveValidation ), Model.cut );
+app.post( '/file/rename', app.er_validation.validate( fileMoveValidation ), Model.rename );

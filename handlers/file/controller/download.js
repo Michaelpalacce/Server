@@ -31,52 +31,45 @@ const downloadFailedCallback	= ( event, text = 'The file specified does not exis
  * @return	void
  */
 app.get( '/file', ( event ) => {
-		const input	= new FileInput( event );
+	const input	= new FileInput( event );
+	const file	= input.getFile();
 
-		if ( ! input.isValid() )
-			return downloadFailedCallback( event, `Invalid input: ${input.getReasonToString()}` );
+	event.clearTimeout();
 
-		const file	= input.getFile();
+	const fileStats	= path.parse( file );
+	const fileName	= fileStats.base.replace( '/', '' );
 
-		event.clearTimeout();
+	if ( fs.lstatSync( file ).isDirectory() )
+	{
+		const archive	= archiver( 'zip', { zlib: { level: 9 } } );
 
-		const fileStats	= path.parse( file );
-		const fileName	= fileStats.base.replace( '/', '' );
+		archive.pipe( event.response );
+		event.setResponseHeader( 'content-disposition', `attachment; filename="${fileName}.zip"` );
+		event.setResponseHeader( 'Content-type', 'zip' );
 
-		if ( fs.lstatSync( file ).isDirectory() )
+		try
 		{
-			const archive	= archiver( 'zip', {
-				zlib: { level: 9 }
-			});
-
-			archive.pipe( event.response );
-			event.setResponseHeader( 'content-disposition', `attachment; filename="${fileName}.zip"` );
-			event.setResponseHeader( 'Content-type', 'zip' );
-
-			try
-			{
-				archive.directory( file, false );
-				archive.finalize();
-			}
-			catch ( e )
-			{
-				downloadFailedCallback( event );
-			}
+			archive.directory( file, false );
+			archive.finalize();
 		}
-		else
+		catch ( e )
 		{
-			event.setResponseHeader( 'content-disposition', `attachment; filename="${fileName}"` );
-			event.setResponseHeader( 'Content-type', fileStats.ext );
-			event.setResponseHeader( 'Content-Length', fs.statSync( file ).size );
-
-			try
-			{
-				event.send( fs.createReadStream( file ) );
-			}
-			catch ( e )
-			{
-				downloadFailedCallback( event );
-			}
+			downloadFailedCallback( event );
 		}
 	}
-);
+	else
+	{
+		event.setResponseHeader( 'content-disposition', `attachment; filename="${fileName}"` );
+		event.setResponseHeader( 'Content-type', fileStats.ext );
+		event.setResponseHeader( 'Content-Length', fs.statSync( file ).size );
+
+		try
+		{
+			fs.createReadStream( file ).pipe( event.response );
+		}
+		catch ( e )
+		{
+			downloadFailedCallback( event );
+		}
+	}
+});
