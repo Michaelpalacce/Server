@@ -15,7 +15,7 @@ const shell			= process.env.TERMINAL_TO_SPAWN !== ''
  * @details	The connection will only be established if there is a sid header sent with the sid cookie
  * 			The user will also be checked if he/she is a Super User and if not, the socket will be disconnected
  */
-io.on( 'connection', async ( socket )=>{
+io.on( 'connection', async ( socket ) => {
 	const cacheServer	= process.cachingServer;
 	const sidCookie		= socket.request.headers.sid;
 
@@ -39,15 +39,15 @@ io.on( 'connection', async ( socket )=>{
 
 	ptyProcess.resize(150, 60);
 
-	socket.on( 'data', ( message )=>{
+	socket.on( 'data', ( message ) => {
 		ptyProcess.write( message );
 	});
 
-	ptyProcess.on('data', ( data )=>{
+	ptyProcess.on('data', ( data ) => {
 		socket.emit( 'data', data );
 	});
 
-	socket.on( 'disconnect', ()=>{
+	socket.on( 'disconnect', () => {
 		ptyProcess.kill();
 		Loggur.log( `Socket Disconnected: ${socket.id}` )
 	});

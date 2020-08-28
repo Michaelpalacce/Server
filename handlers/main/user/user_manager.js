@@ -41,7 +41,7 @@ class UserManager
 
 		this.fetchUsers();
 
-		this.flushUserInterval	= setInterval(()=>{
+		this.flushUserInterval	= setInterval(() => {
 			this.flushUsers();
 		}, 2500 );
 	}
@@ -57,7 +57,7 @@ class UserManager
 	 */
 	catchError( err )
 	{
-		setImmediate(()=>{
+		setImmediate(() => {
 			throw err;
 		});
 	}

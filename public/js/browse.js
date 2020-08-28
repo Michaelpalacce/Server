@@ -52,12 +52,12 @@ class Browse
 
 			this.fetchDataForFileAndAddItem( encodedURI );
 
-			setTimeout(()=>{
+			setTimeout(() => {
 				this.dropzone.removeFile( file );
 			}, 2000 );
 		});
 
-		this.dropzone.on( 'error', ( file, error )=>{
+		this.dropzone.on( 'error', ( file, error ) => {
 			modal.hide();
 
 			modal.show( error );
@@ -114,7 +114,7 @@ class Browse
 		event.stopPropagation();
 		event.stopImmediatePropagation();
 
-		modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder )=>{
+		modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder ) => {
 			if ( userFolder == null || userFolder === '' )
 			{
 				return;
@@ -133,8 +133,7 @@ class Browse
 					directory: encodedUri
 				},
 				method		: 'POST',
-				success	: ()=>
-				{
+				success	: () => {
 					this.addItem( folderName, encodedUri, 0, true, false, 'directory', null );
 				},
 				error	: this.showError.bind( this )
@@ -158,7 +157,7 @@ class Browse
 		$.ajax({
 			url		: '/file/getFileData?file=' + filePath,
 			method	: 'GET',
-			success	: ( data )=> {
+			success	: ( data ) => {
 				const itemData														= JSON.parse( data );
 				const { name, encodedURI, size, isDir, fileType, previewAvailable }	= itemData;
 
@@ -194,11 +193,11 @@ class Browse
 			return;
 		}
 
-		const deleteItemAjax	= ()=>{
+		const deleteItemAjax	= () => {
 			$.ajax({
 				url		: `/${type}?item=${itemToDelete}`,
 				method	: 'DELETE',
-				success	: ()=>{
+				success	: () => {
 					element.remove();
 					this.tryToLoad();
 				},
@@ -208,7 +207,7 @@ class Browse
 
 		if ( type === Browse.TYPE_FOLDER )
 		{
-			modal.askConfirmation( `Are you sure you want to delete this item?` ).then(( confirmDelete )=>{
+			modal.askConfirmation( `Are you sure you want to delete this item?` ).then(( confirmDelete ) => {
 				if ( ! confirmDelete )
 				{
 					return;
@@ -314,8 +313,7 @@ class Browse
 		$.ajax({
 			url		: `/browse/getFiles?dir=${directory}&token=${this.currentToken}`,
 			method	: 'GET',
-			success	: ( data )=>
-			{
+			success	: ( data ) => {
 				if ( ! loadData )
 				{
 					$( '.item' ).remove();
@@ -334,7 +332,7 @@ class Browse
 
 				this.hasMore	= hasMore;
 			},
-			error	: ( jqXHR )=>{
+			error	: ( jqXHR ) => {
 				if ( pastDir !== undefined )
 				{
 					window.history.pushState( {}, '', `/browse?dir=${pastDir}` );
@@ -353,7 +351,7 @@ class Browse
 
 				this.showError( jqXHR );
 			},
-			complete	: ()=>{
+			complete	: () => {
 				this.loading	= false;
 			}
 		});
@@ -400,7 +398,7 @@ class Browse
 
 			element.find( '.folder-name' ).attr( 'data-href', encodedURI ).attr( 'title', fullName );
 
-			element.on( 'click', ( event )=>{
+			element.on( 'click', ( event ) => {
 				if ( ! this.canBrowse || event.target.closest( '.folder-delete' ) !== null  )
 				{
 					return;
@@ -443,7 +441,7 @@ class Browse
 					filePreviewElement.addClass( 'has-preview' ).removeClass( 'no-preview' );
 				}
 
-				filePreviewElement.on( 'click',( event )=>{
+				filePreviewElement.on( 'click',( event ) => {
 					event.preventDefault();
 					event.stopPropagation();
 					event.stopImmediatePropagation();

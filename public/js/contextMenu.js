@@ -111,7 +111,7 @@ class ContextMenu
 		const oldName	= target.closest( '.item' ).attr( 'data-item-name' );
 		const itemType	= this.getElementType( target );
 
-		modal.askUserInput( 'What is the new name of the item', oldName ).then( ( newName )=>{
+		modal.askUserInput( 'What is the new name of the item', oldName ).then( ( newName ) => {
 			const decodedCurrentDir	= atob( decodeURIComponent( this.view.currentDir ) );
 
 			$.ajax({
@@ -121,8 +121,7 @@ class ContextMenu
 					newPath: encodeURIComponent( btoa( `${decodedCurrentDir}/${newName}` ) ),
 					oldPath: this.getElementPath( target )
 				},
-				success	: ( data )=>
-				{
+				success	: ( data ) => {
 					target.remove();
 					this.view.fetchDataForFileAndAddItem( JSON.parse( data ).newPath );
 					this.flushActionElementData();
@@ -198,9 +197,9 @@ class ContextMenu
 				const folderDownloadLink	= this.getElementPath( target );
 				this.downloadElement.show().attr( 'href', `/file?file=${folderDownloadLink}` );
 
-				this.renameElement.on( 'click', ( event )=>{ return this.renameCallback( event, target ); } ).show();
-				this.cutElement.on( 'click', ( event )=>{ return this.cutCallback( event, target ); } ).show();
-				this.copyElement.on( 'click', ( event )=>{ return this.copyCallback( event, target ); } ).show();
+				this.renameElement.on( 'click', ( event ) => { return this.renameCallback( event, target ); } ).show();
+				this.cutElement.on( 'click', ( event ) => { return this.cutCallback( event, target ); } ).show();
+				this.copyElement.on( 'click', ( event ) => { return this.copyCallback( event, target ); } ).show();
 				break;
 
 			case target.hasClass( 'file' ):
@@ -209,9 +208,9 @@ class ContextMenu
 				const fileDownloadLink	= target.find( '.file-download' ).attr( 'href' );
 				this.downloadElement.show().attr( 'href', fileDownloadLink );
 
-				this.cutElement.on( 'click', ( event )=>{ return this.cutCallback( event, target ); } ).show();
-				this.copyElement.on( 'click', ( event )=>{ return this.copyCallback( event, target ); } ).show();
-				this.renameElement.on( 'click', ( event )=>{ return this.renameCallback( event, target ); } ).show();
+				this.cutElement.on( 'click', ( event ) => { return this.cutCallback( event, target ); } ).show();
+				this.copyElement.on( 'click', ( event ) => { return this.copyCallback( event, target ); } ).show();
+				this.renameElement.on( 'click', ( event ) => { return this.renameCallback( event, target ); } ).show();
 				break;
 
 			default:
@@ -221,12 +220,12 @@ class ContextMenu
 				this.copyElement.hide();
 				this.renameElement.hide();
 
-				this.newFolderElement.on( 'click', ( event )=>{
+				this.newFolderElement.on( 'click', ( event ) => {
 					this.element.hide();
 					view.createNewFolder( event );
 				} ).show();
 
-				this.pasteElement.on( 'click', ( event )=>{
+				this.pasteElement.on( 'click', ( event ) => {
 					event.preventDefault();
 					event.stopPropagation();
 					event.stopImmediatePropagation();
@@ -257,12 +256,10 @@ class ContextMenu
 							newPath: this.view.currentDir,
 							oldPath: this.actionElementPath
 						},
-						success	: ( data )=>
-						{
+						success	: ( data ) => {
 							this.view.fetchDataForFileAndAddItem( JSON.parse( data ).newPath );
 						},
-						complete	: () =>
-						{
+						complete	: () => {
 							this.flushActionElementData();
 							this.closeContextMenu();
 						},
@@ -274,7 +271,7 @@ class ContextMenu
 
 		this.pasteElement.hide();
 
-		this.deleteElement.on( 'click', ( event )=>{
+		this.deleteElement.on( 'click', ( event ) => {
 			event.preventDefault();
 			event.stopPropagation();
 			event.stopImmediatePropagation();
@@ -317,8 +314,7 @@ class ContextMenu
 	 */
 	attachEvents()
 	{
-		this.document.on( 'contextmenu', '.item', ( e )=>
-		{
+		this.document.on( 'contextmenu', '.item', ( e ) => {
 			this.closeContextMenu();
 
 			e.preventDefault();
@@ -338,7 +334,7 @@ class ContextMenu
 		 *
 		 * @details	Disable the default right click
 		 */
-		$( document ).on( 'contextmenu', ( e )=>{
+		$( document ).on( 'contextmenu', ( e ) => {
 			this.closeContextMenu();
 
 			e.preventDefault();
@@ -351,7 +347,7 @@ class ContextMenu
 		/**
 		 * @brief	Hide the context menu on click outside of it
 		 */
-		$( document ).click( ()=>{ this.closeContextMenu(); } );
+		$( document ).click( () => { this.closeContextMenu(); } );
 	}
 
 	/**

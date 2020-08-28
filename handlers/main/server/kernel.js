@@ -10,22 +10,22 @@ const logger		= require( '../logging/logger' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 // Attach a render function
-app.add(( event )=>{
-	event.render	= async ( templateName, variables = {} )=>{
+app.add(( event ) => {
+	event.render	= async ( templateName, variables = {} ) => {
 		event.setResponseHeader( 'Content-Type', 'text/html' ).send( await event.getRenderedData( templateName, variables ) );
 	};
 
-	event.getRenderedData	= async ( templateName, variables = {} )=>{
+	event.getRenderedData	= async ( templateName, variables = {} ) => {
 		return await ejs.renderFile( path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables );
 	};
 
-	event.on( 'cleanUp', ()=>{ event.render = undefined; event.getRenderedData = undefined; });
+	event.on( 'cleanUp', () => { event.render = undefined; event.getRenderedData = undefined; });
 
 	event.next();
 });
 
 // Add Error Handler
-app.add(( event )=>{
+app.add(( event ) => {
 	event.errorHandler	= ErrorHandler;
 
 	event.next();
@@ -47,7 +47,7 @@ app.apply( app.er_static_resources,			{ paths	: [process.env.STATIC_PATH] } );
 app.apply( app.er_static_resources,			{ paths	: ['favicon.ico'] } );
 
 app.er_validation.setOptions({
-	failureCallback: ( event, parameter, result )=>{
+	failureCallback: ( event, parameter, result ) => {
 		event.next( `Invalid input: ${JSON.stringify( result.getValidationResult() )}`, 400 );
 	}
 });

@@ -54,7 +54,7 @@ app.post( '/file', async ( event ) => {
 			await rename( oldPath, newPath );
 		}
 
-		Promise.all( promises ).then( ()=>{
+		Promise.all( promises ).then( () => {
 			if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
 				return event.send( ['ok'], 201 );
 

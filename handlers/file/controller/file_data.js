@@ -17,7 +17,7 @@ const { stat }		= require( 'fs' ).promises;
  *
  * @return	void
  */
-app.get( '/file/getFileData', ( event )=>{
+app.get( '/file/getFileData', ( event ) => {
 	const input	= new FileInput( event );
 
 	if ( ! input.isValid() )
@@ -25,9 +25,9 @@ app.get( '/file/getFileData', ( event )=>{
 
 	const itemName	= input.getFile();
 
-	stat( itemName ).then(()=>{
+	stat( itemName ).then(() => {
 		event.send( formatItem( itemName, event ) );
-	}).catch( ()=>{
+	}).catch( () => {
 		event.sendError( 'File does not exist', 400 );
 	} );
 } );

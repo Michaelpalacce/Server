@@ -12,7 +12,7 @@ const BrowseInput	= require( '../input/browse_input' );
  *
  * @return	void
  */
-app.get( '/', async ( event )=>{
+app.get( '/', async ( event ) => {
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
@@ -29,7 +29,7 @@ app.get( '/', async ( event )=>{
  *
  * @return	void
  */
-app.get( '/browse', async ( event )=>{
+app.get( '/browse', async ( event ) => {
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )

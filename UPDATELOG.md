@@ -1,3 +1,6 @@
+15.0.4
+- Code improvements according to Codacy
+
 15.0.3
 - Terminals are now killed on socket disconnect
 

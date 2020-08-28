@@ -4,7 +4,7 @@
  * @brief	Display a message if socket.io does not exist
  */
 $.ajax( '/socket.io/socket.io.js', {
-		error	: ()=>{
+		error	: () => {
 			$( '#terminal-404' ).show();
 		}
 	}
@@ -57,23 +57,20 @@ const socket	= io({
 term.open( document.getElementById( 'terminal' ) );
 
 // Log Connect/Disconnect
-socket.on( 'connect', ()=>{
-	console.log( 'Connected to server' );
-
+socket.on( 'connect', () => {
 	// Receive data from the server
-	socket.on( 'data', ( data )=>{
+	socket.on( 'data', ( data ) => {
 		term.write( data );
 	});
 
 // Send data to the server
-	term.onData(( data )=>{
+	term.onData(( data ) => {
 		socket.emit( 'data', data );
 	});
 
 // Refresh the terminal
 	socket.emit( 'data', '' );
 });
-socket.on( 'disconnect', ()=>{
+socket.on( 'disconnect', () => {
 	term.write( 'Only SuperUsers can use the terminal' );
-	console.log( 'Disconnected from server' );
 });

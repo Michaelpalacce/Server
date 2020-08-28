@@ -14,7 +14,7 @@ const formatItem	= require( '../../main/utils/file_formatter' );
  *
  * @return	void
  */
-app.get( '/browse/getFiles', ( event )=>{
+app.get( '/browse/getFiles', ( event ) => {
 	const input	= new BrowseInput( event );
 
 	if ( ! input.isValid() )
@@ -23,9 +23,9 @@ app.get( '/browse/getFiles', ( event )=>{
 	const dir			= input.getDirectory();
 	const fileSystem	= new FileSystem();
 
-	fileSystem.getAllItems( dir, input.getToken() ).then(( result )=>{
+	fileSystem.getAllItems( dir, input.getToken() ).then(( result ) => {
 		const response	= {
-			items		: result.items.map( ( item )=>{
+			items		: result.items.map( ( item ) => {
 				return formatItem( item, event );
 			}),
 			nextToken	: encodeURIComponent( Buffer.from( result.nextToken ).toString( 'base64' ) ),

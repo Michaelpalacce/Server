@@ -26,7 +26,7 @@ app.delete( '/file', app.er_validation.validate( { query: itemValidation } ), ( 
 
 		const item	= input.getItem();
 
-		unlink( item ).then(()=>{
+		unlink( item ).then(() => {
 			event.send( 'ok' );
 		}).catch( event.next );
 	}

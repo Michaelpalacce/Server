@@ -17,7 +17,7 @@ let publicIpv4		= null;
  */
 IpLookup.getExternalIpv4	= function()
 {
-	return new Promise( async ( resolve, reject )=>{
+	return new Promise( async ( resolve, reject ) => {
 		if ( publicIpv4 !== null )
 		{
 			return resolve( publicIpv4 );
@@ -33,7 +33,7 @@ IpLookup.getExternalIpv4	= function()
 				resolve( publicIpv4 );
 			});
 
-			res.on( 'error', ()=>{
+			res.on( 'error', () => {
 				reject( 'Could not get external ipv4' );
 			});
 		});

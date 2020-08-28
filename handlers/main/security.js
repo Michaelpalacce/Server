@@ -6,7 +6,7 @@ const UserManager	= require( './user/user_manager' );
 const userManager	= new UserManager();
 
 // Add the default user if he/she does not exist.
-app.add(( event )=>{
+app.add(( event ) => {
 	event.userManager	= userManager;
 
 	if ( ! userManager.has( process.env.ADMIN_USERNAME ) )
@@ -24,13 +24,13 @@ app.add(( event )=>{
 });
 
 // Initialize the session
-app.add( async ( event )=>{
+app.add( async ( event ) => {
 	await event.initSession();
 	event.next();
 });
 
 // Add a logout route
-app.get( '/logout', async ( event )=>{
+app.get( '/logout', async ( event ) => {
 	await event.session.removeSession();
 
 	event.redirect( '/login', 302 );
@@ -41,7 +41,7 @@ if ( process.env.ENABLE_SECURITY == 1 )
 {
 	app.add({
 		route	: new RegExp( /^((?!\/login).)*$/ ),
-		handler	: ( event )=>{
+		handler	: ( event ) => {
 			if ( ! event.session.has( 'authenticated' ) || event.session.get( 'authenticated' ) === false )
 			{
 				event.redirect( '/login' );
@@ -61,7 +61,7 @@ if ( process.env.ENABLE_SECURITY == 1 )
 		}
 	});
 
-	app.add(( event )=>{
+	app.add(( event ) => {
 			if ( event.session.has( 'permissions' ) )
 			{
 				const permissions	= event.session.get( 'permissions' );
@@ -81,11 +81,11 @@ if ( process.env.ENABLE_SECURITY == 1 )
 		}
 	);
 
-	app.get( '/login', ( event )=>{
+	app.get( '/login', ( event ) => {
 		event.render( 'login' );
 	}, 'cache.request' );
 
-	app.post( '/login', async ( event )=>{
+	app.post( '/login', async ( event ) => {
 		let result	= event.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
 
 		if ( result.hasValidationFailed() )
@@ -121,7 +121,7 @@ if ( process.env.ENABLE_SECURITY == 1 )
 }
 else
 {
-	app.add(( event )=>{
+	app.add(( event ) => {
 		event.session.add( 'route', '/' );
 		event.session.add( 'username', process.env.ADMIN_USERNAME );
 		event.session.add( 'authenticated', true );
@@ -130,7 +130,7 @@ else
 		event.next();
 	});
 
-	app.get( '/login', ( event )=>{
+	app.get( '/login', ( event ) => {
 		event.redirect( '/', 302 );
 	}, 'cache.request');
 }

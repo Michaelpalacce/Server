@@ -1,4 +1,4 @@
-$( document ).on( 'click', '#getPublicIp', ( event )=>{
+$( document ).on( 'click', '#getPublicIp', ( event ) => {
 	event.preventDefault();
 	event.stopPropagation();
 	event.stopImmediatePropagation();
@@ -6,10 +6,10 @@ $( document ).on( 'click', '#getPublicIp', ( event )=>{
 	$.ajax({
 		url		: '/ip/public',
 		method	: 'GET',
-		success	:( ip )=>{
+		success	:( ip ) => {
 			modal.show( `Your Public IP is: ${ip}` )
 		},
-		error	: ( jqXHR )=>{
+		error	: ( jqXHR ) => {
 			modal.show( jqXHR.responseText );
 		}
 	});
@@ -17,7 +17,7 @@ $( document ).on( 'click', '#getPublicIp', ( event )=>{
 	return false;
 });
 
-$( document ).on( 'click', '#getPrivateIps', ( event )=>{
+$( document ).on( 'click', '#getPrivateIps', ( event ) => {
 	event.preventDefault();
 	event.stopPropagation();
 	event.stopImmediatePropagation();
@@ -25,7 +25,7 @@ $( document ).on( 'click', '#getPrivateIps', ( event )=>{
 	$.ajax({
 		url		: '/ip/private',
 		method	: 'GET',
-		success	:( ips )=>{
+		success	:( ips ) => {
 			let result	= '';
 			ips			= JSON.parse( ips );
 
@@ -46,7 +46,7 @@ $( document ).on( 'click', '#getPrivateIps', ( event )=>{
 
 			modal.show( result, true )
 		},
-		error	: ( jqXHR )=>{
+		error	: ( jqXHR ) => {
 			modal.show( jqXHR.responseText );
 		}
 	});

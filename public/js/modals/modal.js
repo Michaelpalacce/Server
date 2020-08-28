@@ -54,14 +54,14 @@ class Modal
 					url			: dataSrc,
 					method		: 'GET',
 					dataType	: 'text',
-					success		: ( result )=>{
+					success		: ( result ) => {
 						result	= result.replace( / /g, '&nbsp;' );
 						result	= result.replace( /\t/g, '&emsp;' );
 						result	= result.replace( /\n/g, '<br>' );
 
 						this._previewTextElement.append( result );
 					},
-					error: ( jqXHR )=>{
+					error: ( jqXHR ) => {
 						this.hide();
 
 						modal.show( jqXHR.responseText );
@@ -94,7 +94,7 @@ class Modal
 	{
 		this.show( text );
 
-		return new Promise(( resolve, reject )=>{
+		return new Promise(( resolve, reject ) => {
 			let resolved	= false;
 
 			this._inputElement.show();
@@ -103,7 +103,7 @@ class Modal
 
 			this._inputElement.val( defaultInput );
 
-			const getDataCallback	= ( event )=>{
+			const getDataCallback	= ( event ) => {
 				event.preventDefault();
 				event.stopPropagation();
 				event.stopImmediatePropagation();
@@ -128,7 +128,7 @@ class Modal
 				}
 			});
 
-			this.eventEmitter.on( 'hide', ()=>{
+			this.eventEmitter.on( 'hide', () => {
 				resolve( '' );
 			});
 
@@ -147,14 +147,14 @@ class Modal
 	{
 		this.show( text );
 
-		return new Promise(( resolve, reject )=>{
+		return new Promise(( resolve, reject ) => {
 			let resolved	= false;
 
 			this._choiceRowElement.show();
 			this._choiceYesElement.show();
 			this._choiceNoElement.show();
 
-			const getChoiceCallback	= ( event, choice )=>{
+			const getChoiceCallback	= ( event, choice ) => {
 				event.preventDefault();
 				event.stopPropagation();
 				event.stopImmediatePropagation();
@@ -170,15 +170,15 @@ class Modal
 				this.hide();
 			};
 
-			this._choiceYesElement.on( 'click', ( event )=>{
+			this._choiceYesElement.on( 'click', ( event ) => {
 				getChoiceCallback( event, true );
 			});
 
-			this._choiceNoElement.on( 'click', ( event )=>{
+			this._choiceNoElement.on( 'click', ( event ) => {
 				getChoiceCallback( event, false );
 			});
 
-			this.eventEmitter.on( 'hide', ()=>{
+			this.eventEmitter.on( 'hide', () => {
 				resolve( false );
 			});
 
@@ -200,7 +200,7 @@ class Modal
 			}
 		});
 
-		this._element.on( 'click', ( event )=>{
+		this._element.on( 'click', ( event ) => {
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 			event.preventDefault();

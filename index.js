@@ -16,15 +16,15 @@ fs.writeFileSync( lockFile, processPid + '' );
 
 require( './handlers/controllers' );
 
-server.on( 'error', ( error )=>{
+server.on( 'error', ( error ) => {
 	Loggur.log( `There was an error while starting the server: ${error}`, Loggur.LOG_LEVELS.error );
-	setImmediate(()=>{
+	setImmediate(() => {
 		process.exit( 1 );
 	});
 });
 
 // Start the server
-server.listen( port, address, ()=>{
+server.listen( port, address, () => {
 	Loggur.log( `Server started on port: ${port} and address: ${address} with PID: ${processPid}`, Loggur.LOG_LEVELS.warning );
 });
 

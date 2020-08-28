@@ -14,7 +14,7 @@ class Users
 	 */
 	attachEvents()
 	{
-		$( document ).on( 'click', '#addUser', async ( event )=>{
+		$( document ).on( 'click', '#addUser', async ( event ) => {
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 			event.preventDefault();
@@ -68,7 +68,7 @@ class Users
 	 */
 	showUserModal( username )
 	{
-		this.getUser( username ).then( ( userData )=>{
+		this.getUser( username ).then( ( userData ) => {
 			modal.showUserInfo( userData );
 		}).catch( this.showError );
 	}
@@ -83,7 +83,7 @@ class Users
 		$.ajax({
 			url		: '/users/list',
 			method	: 'GET',
-			success	: ( usersString )=>{
+			success	: ( usersString ) => {
 				const users	= JSON.parse( usersString );
 
 				for ( const username of users )
@@ -110,7 +110,7 @@ class Users
 
 		element.appendTo( '#userStructure' );
 
-		element.on( 'click', ()=>{
+		element.on( 'click', () => {
 			this.showUserModal( username );
 		});
 
@@ -126,12 +126,12 @@ class Users
 	 */
 	addUser( userParams )
 	{
-		return new Promise(( resolve, reject )=>{
+		return new Promise(( resolve, reject ) => {
 			$.ajax({
 				url		: '/users/add',
 				method	: 'POST',
 				data	: userParams,
-				success	: ()=>{
+				success	: () => {
 					this.showUser( userParams.username );
 
 					resolve();
@@ -150,11 +150,11 @@ class Users
 	 */
 	getUser( username )
 	{
-		return new Promise(( resolve, reject )=>{
+		return new Promise(( resolve, reject ) => {
 			$.ajax({
 				url		: `/users/${username}`,
 				method	: 'GET',
-				success	: ( userData )=>{
+				success	: ( userData ) => {
 					resolve( JSON.parse( userData ) );
 				},
 				error	: this.showError
@@ -171,11 +171,11 @@ class Users
 	 */
 	deleteUser( username )
 	{
-		return new Promise(( resolve, reject )=>{
+		return new Promise(( resolve, reject ) => {
 			$.ajax({
 				url		: `/users/${username}`,
 				method	: 'DELETE',
-				success	: ( response )=>{
+				success	: ( response ) => {
 					$( `*[data-username="${username}"]` ).remove();
 					resolve( response );
 				},
@@ -194,7 +194,7 @@ class Users
 	 */
 	updateUser( username, userData )
 	{
-		return new Promise(( resolve, reject )=>{
+		return new Promise(( resolve, reject ) => {
 			$.ajax({
 				url		: `/users/${username}`,
 				method	: 'PATCH',

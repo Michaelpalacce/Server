@@ -7,7 +7,7 @@ const UpdateUserInput	= require( '../input/update_user_input' );
 /**
  * @brief	Updates a user
  */
-app.patch( '/users/:username:', ( event ) =>{
+app.patch( '/users/:username:', ( event ) => {
 	const userManager	= event.userManager;
 	const input			= new UpdateUserInput( event, userManager );
 

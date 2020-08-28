@@ -13,7 +13,7 @@ const FileInput		= require( '../input/file_input' );
  *
  * @return	void
  */
-app.get( '/file/data', ( event ) =>{
+app.get( '/file/data', ( event ) => {
 		const input	= new FileInput( event );
 
 		if ( ! input.isValid() )

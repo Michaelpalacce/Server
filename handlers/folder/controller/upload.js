@@ -26,7 +26,7 @@ app.post( '/folder', ( event ) => {
 
 		try
 		{
-			mkdir( input.getDirectory() ).then(()=>{
+			mkdir( input.getDirectory() ).then(() => {
 				event.send( 'ok', 201 );
 			}).catch( event.next );
 		}

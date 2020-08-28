@@ -71,14 +71,14 @@ class UsersModal extends Modal
 		this._userPreviewPermissionsElement.val( JSON.stringify( userData.permissions ) ).show();
 		this._userPreviewIsSUElement.val( userData.isSU ).show();
 
-		this._userPreviewDeleteElement.show().on( 'click', ()=>{
-			users.deleteUser( userData.username ).then( this.hide.bind( this ) ).catch( ()=>{
+		this._userPreviewDeleteElement.show().on( 'click', () => {
+			users.deleteUser( userData.username ).then( this.hide.bind( this ) ).catch( () => {
 				this.hide();
 				this.show( `Could not delete ${userData.username}` )
 			} );
 		});
 
-		this._userPreviewSaveElement.show().on( 'click', ()=>{
+		this._userPreviewSaveElement.show().on( 'click', () => {
 			const username	= this._userPreviewUsernameElement.val();
 			const userData	= {
 				password	: this._userPreviewPasswordElement.val(),
@@ -87,10 +87,10 @@ class UsersModal extends Modal
 				isSU		: this._userPreviewIsSUElement.val() === 'true' || this._userPreviewIsSUElement.val() === true
 			};
 
-			users.updateUser( username, userData ).then(()=>{
+			users.updateUser( username, userData ).then(() => {
 				this.hide();
 				this.show( `User ${username} has been updated successfully!` )
-			}).catch(()=>{
+			}).catch(() => {
 				this.hide();
 				this.show( `Could not update ${username}` )
 			});

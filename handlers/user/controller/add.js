@@ -15,7 +15,7 @@ const bodyValidation	= {
 /**
  * @brief	Adds a new user
  */
-app.post( '/users/add', app.er_validation.validate( { body: bodyValidation } ),( event ) =>{
+app.post( '/users/add', app.er_validation.validate( { body: bodyValidation } ),( event ) => {
 	const userManager	= event.userManager;
 	const input			= new AddUserInput( event, userManager );
 

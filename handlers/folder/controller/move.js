@@ -11,7 +11,7 @@ const fileMoveValidation	= {
 	}
 };
 
-app.post( /\/folder\/(?:copy|cut|rename)/, app.er_validation.validate( fileMoveValidation ), ( event )=>{
+app.post( /\/folder\/(?:copy|cut|rename)/, app.er_validation.validate( fileMoveValidation ), ( event ) => {
 	event.next();
 });
 

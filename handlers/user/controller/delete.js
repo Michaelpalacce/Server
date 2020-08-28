@@ -10,7 +10,7 @@ const DeleteUserInput	= require( '../input/delete_user_input' );
  * @details	Can only delete if current user is SU
  * 			Can not delete self
  */
-app.delete( '/users/:username:', async ( event ) =>{
+app.delete( '/users/:username:', async ( event ) => {
 
 	const userManager	= event.userManager;
 	const input			= new DeleteUserInput( event, userManager );

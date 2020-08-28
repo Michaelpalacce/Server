@@ -39,7 +39,7 @@ Model.cut	= function( event )
 
 	newPath	= path.join( newPath, oldPathParsed.base );
 
-	rename( oldPath, newPath ).then(()=>{
+	rename( oldPath, newPath ).then(() => {
 		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	}).catch( event.next );
@@ -77,10 +77,10 @@ Model.copy	= function( event )
 	newPath	= path.join( newPath, oldPathParsed.base );
 
 	event.clearTimeout();
-	copyFolder( oldPath, newPath ).then(()=>{
+	copyFolder( oldPath, newPath ).then(() => {
 		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
-	}).catch(( err )=>{
+	}).catch(( err ) => {
 		return event.sendError( err );
 	});
 };
@@ -107,7 +107,7 @@ Model.rename	= function( event )
 		return event.send( 'Folder already exists', 400 );
 	}
 
-	rename( oldPath, newPath ).then(()=>{
+	rename( oldPath, newPath ).then(() => {
 		newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
 		event.send( { newPath } );
 	}).catch( event.next );

@@ -61,7 +61,7 @@ const logger	= Loggur.createLogger({
 	serverName	: 'Server-Emulator',
 	logLevel	: LOG_LEVELS.debug,
 	capture		: false,
-	transports	: transports
+	transports
 });
 
 // Adds a Logger to the Loggur with an id of storage

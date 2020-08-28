@@ -12,7 +12,7 @@ const { join }						= require( 'path' );
  */
 function handleError( err )
 {
-	setImmediate(()=>{
+	setImmediate(() => {
 		throw err;
 	})
 }

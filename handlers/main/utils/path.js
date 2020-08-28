@@ -54,7 +54,7 @@ class PathHelper
 	static supportedExtensions( event, absItemName )
 	{
 		return PathHelper.getFileStreamerForFile( event, absItemName ) !== null;
-	};
+	}
 
 	/**
 	 * @brief	Gets all the item for the given directory
@@ -68,7 +68,7 @@ class PathHelper
 	 */
 	static async getItems( event, dir, position )
 	{
-		return new Promise( async ( resolve, reject )=>{
+		return new Promise( async ( resolve, reject ) => {
 			const contents	= await fs.promises.opendir( dir, { bufferSize: PAGE_SIZE } ).catch( event.next );
 			let items		= {
 				directories	: [],
