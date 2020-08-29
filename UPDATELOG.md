@@ -1,5 +1,7 @@
-16.0.1
+16.1.0
 - Works with the latest ER
+- Added Badges and a lot of code improvements
+- Now non super users no longer have access to the OS tmp dir
 
 16.0.0
 - Code improvements according to Codacy
