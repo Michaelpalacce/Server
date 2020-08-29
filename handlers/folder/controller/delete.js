@@ -17,17 +17,12 @@ const deleteFolderRecursive	= function( dir )
 {
 	if ( fs.existsSync( dir ) )
 	{
-		fs.readdirSync( dir ).forEach( ( file ) =>
-		{
+		fs.readdirSync( dir ).forEach( ( file ) => {
 			const curPath	= path.join( dir, file );
 			if ( fs.lstatSync( curPath ).isDirectory() )
-			{
 				deleteFolderRecursive( curPath );
-			}
 			else
-			{
 				fs.unlinkSync( curPath );
-			}
 		});
 
 		fs.rmdirSync( dir );
