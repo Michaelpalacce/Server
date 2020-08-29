@@ -1,14 +1,13 @@
 ### A simple storage app that emulates the file system
 
-# Github
-https://github.com/Michaelpalacce/Server/releases
-
 # Supported NodeJS
 - \>= 12.x 
 
 # Supported Systems:
 - Windows
 - Linux
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0b4f4870655d46e59396a530b651d5b9)](https://app.codacy.com/manual/Michaelpalacce/Server?utm_source=github.com&utm_medium=referral&utm_content=Michaelpalacce/Server&utm_campaign=Badge_Grade_Dashboard)
 
 # Use:
 - You can use either `server` or `server-emulator`
