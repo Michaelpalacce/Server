@@ -1,3 +1,6 @@
+16.0.1
+- Works with the latest ER
+
 16.0.0
 - Code improvements according to Codacy
 - Code optimization

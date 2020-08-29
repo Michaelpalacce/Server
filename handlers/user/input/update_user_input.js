@@ -66,7 +66,7 @@ class UpdateUserInput extends Input
 			[UpdateUserInput.PASSWORD_KEY]		: this.getPassword(),
 			[UpdateUserInput.PERMISSIONS_KEY]	: this.getPermissions(),
 			[UpdateUserInput.IS_SU_KEY]			: this.getIsSU()
-		}
+		};
 	}
 
 	/**

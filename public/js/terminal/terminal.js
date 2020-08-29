@@ -28,10 +28,10 @@ function getCookie( name )
 	{
 		let cookie	= cookies[i];
 
-		while ( cookie.charAt( 0 ) == ' ' )
+		while ( cookie.charAt( 0 ) === ' ' )
 			cookie	= cookie.substring( 1 );
 
-		if ( cookie.indexOf( name ) == 0 )
+		if ( cookie.indexOf( name ) === 0 )
 			return cookie.substring( name.length, cookie.length );
 	}
 
@@ -52,7 +52,7 @@ const socket	= io({
 // Initialize the terminal
 term.open( document.getElementById( 'terminal' ) );
 
-term.resize( 110, 50 )
+term.resize( 110, 50 );
 
 socket.on( 'connect', () => {
 	// Receive data from the server

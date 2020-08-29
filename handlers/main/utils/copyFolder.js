@@ -14,7 +14,7 @@ function handleError( err )
 {
 	setImmediate(() => {
 		throw err;
-	})
+	});
 }
 
 /**

@@ -48,7 +48,7 @@ class Input
 	/**
 	 * @brief	Gets the reason for the failure
 	 *
-	 * @returns	Array
+	 * @returns	Array|String
 	 */
 	getReason()
 	{
@@ -62,7 +62,11 @@ class Input
 	 */
 	getReasonToString()
 	{
-		return JSON.stringify( this.getReason() );
+		const reason	= this.getReason();
+		if ( typeof reason === 'string' )
+			return reason;
+
+		return JSON.stringify( reason );
 	}
 
 	/**
@@ -74,7 +78,7 @@ class Input
 	 */
 	get( key )
 	{
-		if ( ! this.isValid() || this.model[key] == null )
+		if ( ! this.isValid() || typeof this.model[key] === 'undefined' )
 			throw {
 				code	: 'app.validation',
 				message	: `Invalid input: ${this.getReasonToString()}`,

@@ -115,10 +115,8 @@ class Browse
 		event.stopImmediatePropagation();
 
 		modal.askUserInput( 'Please enter the name of the folder.', 'New Folder' ).then(( userFolder ) => {
-			if ( userFolder == null || userFolder === '' )
-			{
+			if ( typeof userFolder === 'undefined' || userFolder === '' )
 				return;
-			}
 
 			const folderName		= userFolder;
 			const decodedCurrentDir	= atob( decodeURIComponent( this.currentDir ) );

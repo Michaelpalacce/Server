@@ -3,6 +3,7 @@
 // Dependencies
 const Input			= require( '../../main/validation/input' );
 const path			= require( 'path' );
+const os			= require( 'os' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
@@ -59,6 +60,12 @@ class BrowseInput extends Input
 		const resolvedDir	= path.resolve( dir );
 
 		if ( ! isSU && resolvedDir.includes( PROJECT_ROOT ) )
+		{
+			this.reason	= `You don\'t have permissions to access: ${resolvedDir}`;
+			return false;
+		}
+
+		if ( ! isSU && resolvedDir.includes( os.tmpdir() ) )
 		{
 			this.reason	= `You don\'t have permissions to access: ${resolvedDir}`;
 			return false;

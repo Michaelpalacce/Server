@@ -30,7 +30,7 @@ class User
 			isSU		: this.isSU,
 			route		: this.route,
 			permissions	: this.permissions,
-		}
+		};
 	}
 
 	/**

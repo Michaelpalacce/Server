@@ -30,7 +30,7 @@ const errorFileLog		= new File({
  */
 const transports		= [accessFileLog, errorFileLog];
 
-if ( typeof process.env !== 'undefined' && process.env.DEBUG == 1 )
+if ( typeof process.env !== 'undefined' && process.env.DEBUG === '1' )
 {
 	/**
 	 * @brief	Logs all information capable of logging to /logs/debug.log

@@ -74,7 +74,7 @@ class UsersModal extends Modal
 		this._userPreviewDeleteElement.show().on( 'click', () => {
 			users.deleteUser( userData.username ).then( this.hide.bind( this ) ).catch( () => {
 				this.hide();
-				this.show( `Could not delete ${userData.username}` )
+				this.show( `Could not delete ${userData.username}` );
 			} );
 		});
 
@@ -89,10 +89,10 @@ class UsersModal extends Modal
 
 			users.updateUser( username, userData ).then(() => {
 				this.hide();
-				this.show( `User ${username} has been updated successfully!` )
+				this.show( `User ${username} has been updated successfully!` );
 			}).catch(() => {
 				this.hide();
-				this.show( `Could not update ${username}` )
+				this.show( `Could not update ${username}` );
 			});
 		});
 	}

@@ -67,7 +67,7 @@ class AddUserInput extends Input
 			[AddUserInput.PASSWORD_KEY]		: this.getPassword(),
 			[AddUserInput.IS_SU_KEY]		: this.getIsSU(),
 			[AddUserInput.PERMISSIONS_KEY]	: this.getPermissions()
-		}
+		};
 	}
 
 	/**

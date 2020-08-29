@@ -64,7 +64,7 @@ const environment	= {
 		const variables		= environment.getEnvVariables();
 		variables[key]		= value;
 
-		const writeStream	= fs.createWriteStream( locator.envFile, { flags: 'w' } )
+		const writeStream	= fs.createWriteStream( locator.envFile, { flags: 'w' } );
 
 		console.log( variables );
 
@@ -120,7 +120,7 @@ const pid			= {
 	 */
 	delete	: () => {
 		if ( fs.existsSync( locator.lockFile ) )
-			fs.unlinkSync( locator.lockFile )
+			fs.unlinkSync( locator.lockFile );
 	}
 };
 

@@ -7,7 +7,7 @@ $( document ).on( 'click', '#getPublicIp', ( event ) => {
 		url		: '/ip/public',
 		method	: 'GET',
 		success	:( ip ) => {
-			modal.show( `Your Public IP is: ${ip}` )
+			modal.show( `Your Public IP is: ${ip}` );
 		},
 		error	: ( jqXHR ) => {
 			modal.show( jqXHR.responseText );
@@ -44,7 +44,7 @@ $( document ).on( 'click', '#getPrivateIps', ( event ) => {
 				result	+= '<br>';
 			}
 
-			modal.show( result, true )
+			modal.show( result, true );
 		},
 		error	: ( jqXHR ) => {
 			modal.show( jqXHR.responseText );

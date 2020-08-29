@@ -15,11 +15,9 @@ switch ( process.env.USERS_DIR )
 	case 'LOCAL_DIR':
 		persistPath	= path.parse( require.main.filename ).dir;
 		break;
-	case '':
-		persistPath	= os.tmpdir();
-		break;
+
 	default:
-		persistPath	= process.env.USERS_DIR;
+		persistPath	= os.tmpdir();
 		break;
 }
 
@@ -73,7 +71,8 @@ class UserManager
 		{
 			this.users			= {};
 			const usersString	= await this.dataStore.get( USER_KEY ).catch( this.catchError.bind( this ) );
-			const usersData		= JSON.parse( usersString == null ? '[]' : usersString );
+
+			const usersData		= JSON.parse( typeof usersString !== 'string' ? '[]' : usersString );
 
 			for ( const username in usersData )
 			{
@@ -98,7 +97,7 @@ class UserManager
 	 */
 	flushUsers()
 	{
-		this.dataStore.set( USER_KEY, JSON.stringify( this.users ) ).catch( this.catchError.bind( this ) )
+		this.dataStore.set( USER_KEY, JSON.stringify( this.users ) ).catch( this.catchError.bind( this ) );
 	}
 
 	/**
@@ -127,7 +126,7 @@ class UserManager
 	 */
 	has( username )
 	{
-		return this.users[username] != undefined;
+		return typeof this.users[username] !== 'undefined';
 	}
 
 	/**

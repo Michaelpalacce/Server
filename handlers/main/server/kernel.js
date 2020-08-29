@@ -31,7 +31,7 @@ app.add(( event ) => {
 	event.next();
 });
 
-if ( process.env.ENABLE_SECURITY_HEADERS == 1 )
+if ( process.env.ENABLE_SECURITY_HEADERS === '1' )
 {
 	app.apply( app.er_security, {
 		csp	: {

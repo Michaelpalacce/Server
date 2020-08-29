@@ -32,7 +32,6 @@ sever-emulator set ENABLE_SECURITY 1 # enables the user management
 sever set ENABLE_SECURITY 1 # enables the user management
 ~~~
 
-
 # Enabling the terminal
 
 ### Windows
@@ -66,7 +65,7 @@ server-emulator terminal
 - ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled ( CURRENTLY NOT WORKING )
 - ENABLE_SECURITY_HEADERS - 1 or 0 whether the security headers should be enabled or not ( hsts, Expect-CT, CSP, Content Type Options )
 - DEBUG - Whether to write logs on a debug level 1 or 0
-- USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === 'LOCAL_DIR' then the project root will be used, otherwise parse it as an absolute path
+- USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === 'LOCAL_DIR' then the project root will be used, otherwise default to os tmp dir
 - TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
@@ -81,17 +80,17 @@ server-emulator terminal
 - You will be asked to fill in the new user's data
 - Route will be the path from which the user can access the FS
 - When adding a user the user will persist after 5 seconds so don't stop the server
-- User's data is stored to the OS tmp directory by default and can be changed using the USERS_DIR variable
+- User's data is stored to the OS tmp directory by default and can be changed using the USERS_DIR variable ( either LOCAL_DIR or empty )
 
 # Permissions:
-- Only superusers can use the terminal, add/ view/ modify other users ( and self ) 
+- Only superusers can use the terminal, add/ view/ modify other users ( and self ). Only superusers can access the project folder and the OS tmp directory.
+- Nobody can delete or change the permissions of the root user.
 - Nobody can do any operations on the PROJECT_ROOT as well as many operations including the folder structure where the project is
 - When adding a user a set of permissions will be asked for. Those permissions are forbidding. Whatever you type in there, the users WON'T be able to access.
 - You may leave the method empty which will mean ANY method or pass in an Array
 
 # Notes
 - You may need to delete the cache file if you do changes to the environment ( like enabling security )
-- Deleting the cache file will delete all the current users
 - If a state arises where there is no root user, one will be created automatically ( with the username and password in the .env file )
 - It is a good idea to change the password ( via the gui and in the .env ) after you've started the server
 

@@ -31,5 +31,5 @@ app.get( '/browse/getFiles', async ( event ) => {
 	if ( input.getToken() === '' )
 		response.items	= [formatItem( dir, event, true ), ...response.items];
 
-	event.send( response )
+	event.send( response );
 } );

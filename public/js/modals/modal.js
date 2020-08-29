@@ -133,7 +133,7 @@ class Modal
 			});
 
 			this._inputElement.focus();
-		})
+		});
 	}
 
 	/**
@@ -195,20 +195,18 @@ class Modal
 	{
 		$( document ).on( 'keyup', ( e ) => {
 			if ( e.key === 'Escape' )
-			{
 				this.hide();
-			}
 		});
 
-		this._element.on( 'click', ( event ) => {
+		this._element.on( 'mousedown', ( event ) => {
+			if ( event.target.closest( '.modal-content' ) )
+				return;
+
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 			event.preventDefault();
 
-			if ( ! event.target.closest( '.modal-content' ) )
-			{
-				this.hide();
-			}
+			return this.hide();
 		});
 	}
 
