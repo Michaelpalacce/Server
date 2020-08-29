@@ -38,9 +38,8 @@ const deleteFolderRecursive	= function( dir )
  * @return	void
  */
 app.delete( '/folder', ( event ) => {
-		const input	= new DeleteInput( event );
+	const input	= new DeleteInput( event );
 
-		deleteFolderRecursive( input.getDirectory() );
-		event.send();
-	}
-);
+	deleteFolderRecursive( input.getDirectory() );
+	event.send();
+});

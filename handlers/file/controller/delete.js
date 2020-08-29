@@ -2,11 +2,8 @@
 
 // Dependencies
 const app				= require( 'event_request' )();
-const fs				= require( 'fs' );
-const util				= require( 'util' );
+const { unlink }		= require( 'fs' ).promises;
 const DeleteInput		= require( '../input/delete_input' );
-
-const unlink			= util.promisify( fs.unlink );
 
 const itemValidation	= { item : 'filled||string' };
 

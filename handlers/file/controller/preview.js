@@ -2,7 +2,6 @@
 
 // Dependencies
 const app		= require( 'event_request' )();
-const fs		= require( 'fs' );
 const FileInput	= require( '../input/file_input' );
 
 /**

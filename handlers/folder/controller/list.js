@@ -32,4 +32,4 @@ app.get( '/browse/getFiles', async ( event ) => {
 		response.items	= [formatItem( dir, event, true ), ...response.items];
 
 	event.send( response );
-} );
+});
