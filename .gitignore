@@ -11,3 +11,5 @@ Uploads
 cache
 pid.lock
 .env
+.env-location
+.server-emulator-env

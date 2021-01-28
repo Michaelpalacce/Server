@@ -16,6 +16,21 @@ switch ( true )
 		fork( helper.locator.indexFile, { stdio: 'inherit' } );
 		break;
 
+	case args.length === 1 && args[0] === 'getProjectDir':
+		console.log( helper.locator.projectDir );
+		break;
+
+	case args.length === 2 && args[0] === 'setEnv':
+		if ( helper.locator.setNewEnv( args[1] ) )
+		{
+			helper.environment.resetEnvFile();
+			console.log( 'SET' );
+			return;
+		}
+
+		console.log( 'Location does not exist' );
+		break;
+
 	case args.length === 1 && args[0] === 'daemon':
 		if ( helper.pid.exists() )
 		{
@@ -87,11 +102,13 @@ switch ( true )
 		console.log( 'server-emulator start ---> starts the server' );
 		console.log( 'server-emulator daemon ---> starts the server in a detached deamon mode, returns the PID. If a daemon is running, will output the daemon pid' );
 		console.log( 'server-emulator kill  ---> kills the daemon' );
+		console.log( 'server-emulator getProjectDir ---> returns the absolute path to the project' );
 		console.log( 'server-emulator getEnvPath ---> returns the absolute path to the .env file' );
 		console.log( 'server-emulator terminal ---> installs terminal dependencies ( currently not working )' );
 		console.log( 'server-emulator set ${ENV_KEY} ${ENV_VALUE} ---> Changes .env file values or adds new ones.' );
 		console.log( 'server-emulator get ---> Gets all the .env variables' );
 		console.log( 'server-emulator resetEnv ---> Resets the .env file to the defaults.' );
+		console.log( 'server-emulator setEnv ---> Sets a new location for the .env file and resets it' );
 		console.log( 'server-emulator deletePid ---> Deletes the PID file' );
 		process.exit();
 }

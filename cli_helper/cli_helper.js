@@ -4,10 +4,25 @@ const path			= require( 'path' );
 const fs			= require( 'fs' );
 const os			= require( 'os' );
 
-const OS_TEMP_PATH	= os.tmpdir();
-const ENV_SEPARATOR	= '=';
+const projectDir				= path.join( __dirname, '..' );
+const OS_TEMP_PATH				= os.tmpdir();
+const ENV_SEPARATOR				= '=';
+const ENV_FILE_NAME				= '.server-emulator-env';
+const ENV_FILE_LOCATION_FILE	= path.join( projectDir, '.env-location' );
 
-const projectDir	= path.join( __dirname, '..' );
+/**
+ * @brief	Gets the location for the env file
+ *
+ * @return	String
+ */
+const getEnvFileLocation	= () => {
+	if ( ! fs.existsSync( ENV_FILE_LOCATION_FILE ) )
+	{
+		fs.writeFileSync( ENV_FILE_LOCATION_FILE, path.join( OS_TEMP_PATH, ENV_FILE_NAME ) );
+	}
+
+	return fs.readFileSync( ENV_FILE_LOCATION_FILE, { encoding: 'utf8', flag: 'r' } );
+}
 
 /**
  * @brief	Holds the locations of different files
@@ -17,9 +32,20 @@ const projectDir	= path.join( __dirname, '..' );
 const locator		= {
 	projectDir,
 	indexFile		: path.join( projectDir, 'index.js' ),
-	envFile			: path.join( OS_TEMP_PATH, '.server-emulator-env' ),
+	envFile			: getEnvFileLocation(),
 	envTemplateFile	: path.join( projectDir, '.env.template' ),
-	lockFile		: path.join( projectDir, 'pid.lock' )
+	lockFile		: path.join( projectDir, 'pid.lock' ),
+	setNewEnv		: ( location ) => {
+		if ( fs.existsSync( location ) )
+		{
+			const newPath	= path.resolve( location, ENV_FILE_NAME );
+			locator.envFile	= newPath;
+			fs.writeFileSync( ENV_FILE_LOCATION_FILE, newPath );
+			return true;
+		}
+
+		return false;
+	}
 };
 
 /**

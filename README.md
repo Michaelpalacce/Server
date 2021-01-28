@@ -31,6 +31,24 @@ sever-emulator set ENABLE_SECURITY 1 # enables the user management
 sever set ENABLE_SECURITY 1 # enables the user management
 ~~~
 
+- List of commands:
+~~~
+Commands:
+server-emulator ---> starts the server
+server-emulator start ---> starts the server
+server-emulator daemon ---> starts the server in a detached deamon mode, returns the PID. If a daemon is running, will output the daemon pid
+server-emulator kill  ---> kills the daemon
+server-emulator getProjectDir ---> returns the absolute path to the project
+server-emulator getEnvPath ---> returns the absolute path to the .env file
+server-emulator terminal ---> installs terminal dependencies ( currently not working )
+server-emulator set ${ENV_KEY} ${ENV_VALUE} ---> Changes .env file values or adds new ones.
+server-emulator get ---> Gets all the .env variables
+server-emulator resetEnv ---> Resets the .env file to the defaults.
+server-emulator setEnv ---> Sets a new location for the .env file and resets it
+server-emulator deletePid ---> Deletes the PID file
+
+~~~
+
 # Enabling the terminal
 
 ### Windows
@@ -73,6 +91,12 @@ server-emulator terminal
 # Enabling SSL
 - Generate a certificate and point the SSL_KEY_PATH and SSL_CERT_PATH to their locations
 - Set the APP_PORT to 443
+
+# Changing env file location
+- By default the env file that the server will use will be located in the OS' temp folder.
+- If you wish to change it you can do it by: `server-emulator setEnv .` ( this will change it to the current folder)
+- This will reset any env variables you may have set before, so back those up
+- It is a good idea to put this in the project directory, as this will prevent it from modified by anyone who is not a Super user
 
 # Adding users
 - If you want to add users go to the users page from the sidebar and click on the Add Users button

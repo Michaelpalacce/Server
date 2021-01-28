@@ -1,3 +1,8 @@
+16.2.0
+- Added a way to change the location of the env file
+- Documentation improvements
+- Added a way to get the project dir
+
 16.1.0
 - Works with the latest ER
 - Added Badges and a lot of code improvements
