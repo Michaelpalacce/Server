@@ -1,3 +1,6 @@
+16.2.1
+- Updated ER to v29.5.2 due to set-cookie bug
+
 16.2.0
 - Added a way to change the location of the env file
 - Documentation improvements
