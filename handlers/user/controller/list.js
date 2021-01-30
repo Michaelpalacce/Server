@@ -8,7 +8,7 @@ const app	= require( 'event_request' )();
  */
 app.get( '/users', async ( event ) => {
 	event.render( 'users' );
-}, 'cache.request' );
+});
 
 /**
  * @brief	Returns all the usernames

@@ -76,7 +76,7 @@ if ( process.env.ENABLE_SECURITY === '1' )
 
 	app.get( '/login', ( event ) => {
 		event.render( 'login' );
-	}, 'cache.request' );
+	} );
 
 	app.post( '/login', async ( event ) => {
 		let result	= event.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
@@ -121,5 +121,5 @@ else
 
 	app.get( '/login', ( event ) => {
 		event.redirect( '/', 302 );
-	}, 'cache.request');
+	});
 }

@@ -1,3 +1,6 @@
+16.2.3
+- Small fix
+
 16.2.2
 - Documentation improvements
 - Changed the flush for the users ( every 2000ms instead of 2500ms )

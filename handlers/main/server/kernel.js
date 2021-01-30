@@ -70,9 +70,6 @@ app.apply( app.er_timeout,					{ timeout	: process.env.REQUEST_TIMEOUT } );
 // Add a logger
 app.apply( app.er_logger,					{ logger } );
 
-// Return response from response cache if available ( the location of this cache can be changed in the future )
-app.apply( app.er_response_cache );
-
 // Attach the file streamers
 app.apply( app.er_file_stream );
 
