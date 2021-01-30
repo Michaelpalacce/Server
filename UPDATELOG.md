@@ -1,3 +1,7 @@
+16.3.0
+- Added a start command
+- ER version bump
+
 16.2.3
 - Small fix
 

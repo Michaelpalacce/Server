@@ -1,9 +1,11 @@
 {
   "name": "server-emulator",
-  "version": "16.2.3",
+  "version": "16.3.0",
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node cli.js start"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Michaelpalacce/Server.git"
@@ -31,7 +33,7 @@
   "dependencies": {
     "archiver": "^3.1.1",
     "ejs": "^2.7.4",
-    "event_request": "^29.5.3",
+    "event_request": "^30.0.0",
     "fs-browser": "^1.0.0",
     "mv": "^2.1.1"
   }
