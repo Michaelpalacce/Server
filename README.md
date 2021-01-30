@@ -82,7 +82,7 @@ server-emulator terminal
 - ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled ( CURRENTLY NOT WORKING )
 - ENABLE_SECURITY_HEADERS - 1 or 0 whether the security headers should be enabled or not ( hsts, Expect-CT, CSP, Content Type Options )
 - DEBUG - Whether to write logs on a debug level 1 or 0
-- USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === 'LOCAL_DIR' then the project root will be used, otherwise default to os tmp dir
+- USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === 'LOCAL_DIR' then the project root will be used
 - TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate

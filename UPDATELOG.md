@@ -1,3 +1,8 @@
+16.2.2
+- Documentation improvements
+- Changed the flush for the users ( every 2000ms instead of 2500ms )
+- Updated ER to v29.5.3
+
 16.2.1
 - Updated ER to v29.5.2 due to set-cookie bug
 

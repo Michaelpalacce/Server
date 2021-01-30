@@ -41,7 +41,7 @@ class UserManager
 
 		this.flushUserInterval	= setInterval(() => {
 			this.flushUsers();
-		}, 2500 );
+		}, 2000 );
 	}
 
 	/**
