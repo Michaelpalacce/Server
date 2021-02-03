@@ -1,3 +1,6 @@
+16.3.1
+- Fixed a big bug with route permissions
+
 16.3.0
 - Added a start command
 - ER version bump

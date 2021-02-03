@@ -22,7 +22,7 @@ module.exports	= function formatItem( itemName, event, isBack = false )
 	const goBack			= isBack === true;
 	itemName				= goBack ? parsedItem.dir : parsedItem.base;
 	const absItemName		= ( goBack ? parsedItem.dir : join( parsedItem.dir, parsedItem.base ) );
-	const uriToEncode		= absItemName.replace( '\\', '/' );
+	const uriToEncode		= absItemName.replace( /\\/g, '/' );
 	const encodedURI		= encodeURIComponent( Buffer.from( uriToEncode ).toString( 'base64' ) );
 	const fileStreamer		= event.fileStreamHandler.getFileStreamerForType( absItemName );
 	const previewAvailable	= fileStreamer !== null;
