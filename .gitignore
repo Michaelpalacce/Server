@@ -13,3 +13,4 @@ pid.lock
 .env
 .env-location
 .server-emulator-env
+/server_emulator_users.json

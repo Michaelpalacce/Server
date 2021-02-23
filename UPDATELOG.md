@@ -1,3 +1,6 @@
+16.3.2
+- Style changes
+
 16.3.1
 - Fixed a big bug with route permissions
 
