@@ -31,26 +31,50 @@ function getCommandLine()
 	}
 }
 
-switch ( true )
-{
-	case args.length === 0:
-		pm2.connect(( err ) => {
-			if ( err )
-			{
-				console.error( err );
-				process.exit( 2 );
-			}
+pm2.connect(( err ) => {
+	if ( err )
+	{
+		console.error( err );
+		process.exit( 2 );
+	}
 
+	switch ( true )
+	{
+		case args.length === 0:
+		case args.length === 1 && args[0] === 'start':
 			if ( NODE_ENV === 'dev' )
-			{
 				spawn( 'pm2-runtime', ['dev.ecosystem.config.js'], { stdio: 'inherit' } );
-			}
 			else
-				pm2.start( 'ecosystem.config.js', console.log );
-		});
-		break;
+				pm2.start( 'ecosystem.config.js', ( err, apps ) => {
+					pm2.disconnect();
+					if ( err ) throw err;
+				});
 
-	case args.length === 1 && args[0] === 'edit':
-		exec( `${getCommandLine()} ${projectDir}/.env.js`);
-		break;
-}
+			break;
+
+		case args.length === 1 && args[0] === 'edit':
+			exec( `${getCommandLine()} ${projectDir}/env.js`, ( err ) => {
+				if ( err ) throw err;
+
+				pm2.disconnect();
+			});
+			break;
+
+		case args.length === 1 && args[0] === 'stop':
+			pm2.stop( 'server-emulator', ( err, proc ) => {
+				pm2.disconnect();
+
+				if ( err ) throw err;
+			});
+			break;
+
+		default:
+			console.log( 'Available commands:' );
+			console.log( 'serve ---> starts the server' );
+			console.log( 'serve start ---> starts the server' );
+			console.log( 'serve edit ---> edits the server\'s env variables' );
+			console.log( 'serve stop ---> stop the server' );
+			pm2.disconnect();
+			break;
+	}
+});

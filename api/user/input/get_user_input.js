@@ -27,24 +27,12 @@ class GetUserInput extends Input
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'SU' ) || ! this.event.session.has( 'username' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
 		this.reason	= this.validationHandler.validate( this.event.params, { username : 'filled||string||range:3-64' } );
 
 		if ( this.reason.hasValidationFailed() )
 			return false;
 
 		const { username }	= this.reason.getValidationResult();
-
-		if ( ! this.event.session.get( 'SU' ) && this.event.session.get( 'username' ) !== username )
-		{
-			this.reason	= `Only Super Users can view other users`;
-			return false;
-		}
 
 		if ( ! this.userManager.has( username ) )
 		{

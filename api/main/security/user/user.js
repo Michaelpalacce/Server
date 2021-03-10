@@ -1,3 +1,7 @@
+'use strict';
+
+const REGEX_PATTERN	= '${RE}:'
+
 /**
  * @brief	Holds user information
  */
@@ -7,14 +11,44 @@ class User
 	{
 		this.username		= userData.username || '';
 		this.password		= userData.password || '';
-		this.isSU			= userData.isSU === 'true' || userData.isSU === true;
 		this.route			= typeof userData.route === 'string' ? userData.route : '/';
-		this.permissions	= userData.permissions || [];
+		this.permissions	= this._parsePermissions( userData.permissions || '{"test":"1"}' );
+	}
 
-		if ( this.isSU )
-		{
-			this.route	= '/';
-		}
+	/**
+	 * @brief	Parses the permissions by decoding the JSON
+	 *
+	 * @details	Further creates regex patterns if any were defined
+	 *
+	 * @param	{Object} permissions
+	 *
+	 * @return	Object
+	 */
+	_parsePermissions( permissions )
+	{
+		return typeof permissions !== 'string' ? permissions : JSON.parse( permissions, ( key, value ) => {
+			if ( typeof value === 'string' && value.includes( REGEX_PATTERN ) )
+				value	= new RegExp( value.substring( REGEX_PATTERN.length ) );
+
+			return value;
+		});
+	}
+
+	/**
+	 * @brief	Formats the permissions
+	 *
+	 * @param	{Object} permissions
+	 *
+	 * @return	Object
+	 */
+	_formatPermissions( permissions )
+	{
+		return JSON.stringify( permissions, ( key, value ) => {
+			if( value instanceof RegExp )
+				return `${REGEX_PATTERN}value.source`;
+			else
+				return value;
+		});
 	}
 
 	/**
@@ -27,9 +61,8 @@ class User
 		return {
 			username	: this.username,
 			password	: this.password,
-			isSU		: this.isSU,
 			route		: this.route,
-			permissions	: this.permissions,
+			permissions	: this._formatPermissions( this.permissions ),
 		};
 	}
 
@@ -42,7 +75,6 @@ class User
 	{
 		return this.username !== ''
 			&& typeof this.username === 'string'
-			&& typeof this.isSU === 'boolean'
 			&& typeof this.password === 'string'
 			&& typeof this.route === 'string'
 			&& typeof this.permissions === 'object';
@@ -59,9 +91,9 @@ class User
 	}
 
 	/**
-	 * @brief	Returns the permissions of the user
+	 * @brief	Returns the user's permissions
 	 *
-	 * @return	Array
+	 * @return	String
 	 */
 	getPermissions()
 	{
@@ -86,16 +118,6 @@ class User
 	getRoute()
 	{
 		return this.route;
-	}
-
-	/**
-	 * @brief	Returns if the user is a super user or not
-	 *
-	 * @return	Boolean
-	 */
-	isSuperUser()
-	{
-		return this.isSU;
 	}
 }
 

@@ -41,14 +41,6 @@ class UpdateUserInput extends Input
 	/**
 	 * @return	mixed
 	 */
-	getIsSU()
-	{
-		return this.get( UpdateUserInput.IS_SU_KEY );
-	}
-
-	/**
-	 * @return	mixed
-	 */
 	getPermissions()
 	{
 		return this.get( UpdateUserInput.PERMISSIONS_KEY );
@@ -65,7 +57,6 @@ class UpdateUserInput extends Input
 			[UpdateUserInput.ROUTE_KEY]			: this.getRoute(),
 			[UpdateUserInput.PASSWORD_KEY]		: this.getPassword(),
 			[UpdateUserInput.PERMISSIONS_KEY]	: this.getPermissions(),
-			[UpdateUserInput.IS_SU_KEY]			: this.getIsSU()
 		};
 	}
 

@@ -4,8 +4,8 @@
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "main": "index.js",
   "scripts": {
-    "start": "node cli.js",
-    "start-dev": "NODE_ENV=dev node cli.js"
+    "serve": "node cli.js",
+    "serve-dev": "NODE_ENV=dev node cli.js"
   },
   "repository": {
     "type": "git",

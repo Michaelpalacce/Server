@@ -9,19 +9,10 @@ const ErrorHandler	= require( '../error/error_handler' );
 const logger		= require( '../logging/logger' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
-// Attach a render function
-app.add(( event ) => {
-	event.render	= async ( templateName, variables = {} ) => {
-		event.setResponseHeader( 'Content-Type', 'text/html' ).send( await event.getRenderedData( templateName, variables ) );
-	};
-
-	event.getRenderedData	= async ( templateName, variables = {} ) => {
-		return await ejs.renderFile( path.join( PROJECT_ROOT, './templates', templateName + '.ejs' ), variables );
-	};
-
-	event.on( 'cleanUp', () => { event.render = undefined; event.getRenderedData = undefined; });
-
-	event.next();
+app.apply( app.er_templating_engine, {
+	render				: ejs.renderFile.bind( ejs ),
+	templateDir			: path.join( PROJECT_ROOT, './public/templates' ),
+	templateExtension	: 'ejs'
 });
 
 // Add Error Handler
@@ -32,8 +23,7 @@ app.add(( event ) => {
 });
 
 // Serve Static Resources
-app.apply( app.er_static,					{ paths	: [process.env.STATIC_PATH], cache: { static : false }, useEtag: true } );
-app.apply( app.er_static,					{ paths	: ['favicon.ico'], cache: { static : false }, useEtag: true } );
+app.apply( app.er_static, { paths	: ['public/js', 'public/css', 'public/fonts', 'favicon.ico'], cache: { static : false }, useEtag: true } );
 
 app.er_validation.setOptions({
 	failureCallback: ( event, parameter, result ) => {

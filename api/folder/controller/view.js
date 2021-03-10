@@ -12,7 +12,7 @@ const BrowseInput	= require( '../input/browse_input' );
 const browseCallback	= async ( event ) => {
 	const input	= new BrowseInput( event );
 
-	event.render( 'browse', { dir: input.getEncodedDirectory() } );
+	event.render( 'browse', { dir: input.getEncodedDirectory() } ).catch( event.next );
 };
 
 /**
@@ -23,5 +23,5 @@ const browseCallback	= async ( event ) => {
  *
  * @return	void
  */
-app.get( '/', browseCallback );
-app.get( '/browse', browseCallback );
+app	.get( '/', browseCallback )
+	.get( '/browse', browseCallback );

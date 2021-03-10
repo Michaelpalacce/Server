@@ -41,14 +41,6 @@ class AddUserInput extends Input
 	/**
 	 * @return	mixed
 	 */
-	getIsSU()
-	{
-		return this.get( AddUserInput.IS_SU_KEY );
-	}
-
-	/**
-	 * @return	mixed
-	 */
 	getPermissions()
 	{
 		return this.get( AddUserInput.PERMISSIONS_KEY );
@@ -65,7 +57,6 @@ class AddUserInput extends Input
 			[AddUserInput.ROUTE_KEY]		: this.getRoute(),
 			[AddUserInput.USERNAME_KEY]		: this.getUsername(),
 			[AddUserInput.PASSWORD_KEY]		: this.getPassword(),
-			[AddUserInput.IS_SU_KEY]		: this.getIsSU(),
 			[AddUserInput.PERMISSIONS_KEY]	: this.getPermissions()
 		};
 	}
@@ -75,23 +66,11 @@ class AddUserInput extends Input
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'SU' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
-		if ( ! this.event.session.get( 'SU' ) )
-		{
-			this.reason	= `Only Super Users can add other users`;
-			return false;
-		}
-
-		let { route, username, password, isSU, permissions }	= this.event.body;
+		let { route, username, password, permissions }	= this.event.body;
 		route													= Buffer.from( decodeURIComponent( route ), 'base64' ).toString();
 		try
 		{
-			permissions	= JSON.parse( Buffer.from( decodeURIComponent( permissions ), 'base64' ).toString() );
+			permissions	= [{"rules":[{"type":"ALLOW"}]}];
 		}
 		catch ( e )
 		{
@@ -108,7 +87,6 @@ class AddUserInput extends Input
 		this.model[AddUserInput.ROUTE_KEY]			= route;
 		this.model[AddUserInput.USERNAME_KEY]		= username;
 		this.model[AddUserInput.PASSWORD_KEY]		= password;
-		this.model[AddUserInput.IS_SU_KEY]			= isSU;
 		this.model[AddUserInput.PERMISSIONS_KEY]	= permissions;
 
 		return true;

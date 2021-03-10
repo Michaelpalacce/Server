@@ -2,12 +2,12 @@
 
 // Dependencies
 const { Loggur }	= require( 'event_request' );
-const { server }	= require( './handlers/main/server/server' );
+const { server }	= require( './api/main/server/server' );
 
 const address		= process.env.APP_ADDRESS;
-const port			= require( './handlers/main/utils/get_port' );
+const port			= require( './api/main/utils/get_port' );
 
-require( './handlers/controllers' );
+require( './api/controllers' );
 
 server.on( 'error', ( error ) => {
 	Loggur.log( `There was an error while starting the server: ${error}`, Loggur.LOG_LEVELS.error );

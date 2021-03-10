@@ -8,7 +8,7 @@ errorHandler.addNamespace( 'app', { formatter: async ( { event, code, status, er
 		if ( event.getRequestHeader( 'x-requested-with' ) === 'XMLHttpRequest' || event.getRequestHeader( 'accepts' ) === 'application/json' )
 			return errorHandler.defaultNamespace.formatter( { event, code, status, error, message, headers, emit } );
 
-		return await event.getRenderedData(
+		return await event.render(
 			'error',
 			{
 				code: status || 500,

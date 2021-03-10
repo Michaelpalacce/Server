@@ -27,18 +27,6 @@ class DeleteUserInput extends Input
 	 */
 	_validate()
 	{
-		if ( ! this.event.session.has( 'SU' ) || ! this.event.session.has( 'username' ) )
-		{
-			this.reason	= 'Missing session params';
-			return false;
-		}
-
-		if ( ! this.event.session.get( 'SU' ) )
-		{
-			this.reason	= `Only Super Users can delete other users`;
-			return false;
-		}
-
 		this.reason	= this.validationHandler.validate( this.event.params, { username : 'filled||string||range:3-64' } );
 
 		if ( this.reason.hasValidationFailed() )

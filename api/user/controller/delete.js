@@ -11,7 +11,6 @@ const DeleteUserInput	= require( '../input/delete_user_input' );
  * 			Can not delete self
  */
 app.delete( '/users/:username:', async ( event ) => {
-
 	const userManager	= event.userManager;
 	const input			= new DeleteUserInput( event, userManager );
 

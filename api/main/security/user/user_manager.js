@@ -97,9 +97,7 @@ class UserManager
 	get( username )
 	{
 		if ( ! this.has( username ) )
-		{
 			throw new Error( `User: ${username} does not exist` );
-		}
 
 		return this.users[username];
 	}

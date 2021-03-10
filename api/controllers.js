@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-require( './main/security' );
+require( './main/security/security' );
 
 require( './ip/controller/view' );
 

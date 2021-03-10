@@ -8,7 +8,5 @@ Uploads
 /logs/error_log.log
 /logs/*.log
 cache
-pid.lock
-.env-location
-.server-emulator-env
 /server_emulator_users.json
+env.js

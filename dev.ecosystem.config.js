@@ -1,6 +1,7 @@
 module.exports	= {
 	apps : [
 		{
+			name: 'server-emulator',
 			script: 'index.js',
 			watch: true,
 			ignore_watch : ["node_modules", "cache", "logs", "*.log", "*.json", "*.tmp", ".idea", ".git"],

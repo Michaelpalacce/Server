@@ -64,7 +64,7 @@ const logger	= Loggur.createLogger({
 	transports
 });
 
-// Adds a Logger to the Loggur with an id of storage
+// Adds a Logger to the Loggur with an id of server-emulator
 Loggur.addLogger( loggerId, logger );
 
 module.exports	= logger;
