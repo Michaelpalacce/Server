@@ -3,23 +3,10 @@
 // Dependencies
 const User			= require( './user' );
 const DataServer	= require( 'event_request/server/components/caching/data_server' );
-const os			= require( 'os' );
 const path			= require( 'path' );
 
 const USER_KEY		= 'USERS_DATA';
-
-let persistPath		= '';
-
-switch ( process.env.USERS_DIR )
-{
-	case 'LOCAL_DIR':
-		persistPath	= path.parse( require.main.filename ).dir;
-		break;
-
-	default:
-		persistPath	= os.tmpdir();
-		break;
-}
+const persistPath	= path.parse( require.main.filename ).dir;
 
 /**
  * @brief	Class responsible for user CRUD operations

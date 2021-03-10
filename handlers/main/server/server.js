@@ -2,14 +2,10 @@
 
 // Dependencies
 const app		= require( 'event_request' )();
-const helper	= require( '../../../cli_helper/cli_helper' );
+const socketIO	= require( 'socket.io' );
 const fs		= require( 'fs' );
-let io			= null;
 
 let server;
-
-// Add environment variables to the process.env
-app.apply( app.er_env, { fileLocation: helper.locator.envFile } );
 
 if ( process.env.SSL_KEY_PATH && process.env.SSL_CERT_PATH )
 {
@@ -28,11 +24,7 @@ else
 	server		= http.createServer( app.attach() );
 }
 
-if ( process.env.ENABLE_TERMINAL == 1 )
-{
-	const socketIO	= require( 'socket.io' );
-	io				= socketIO( server );
-}
+const io	= socketIO( server );
 
 require( './kernel' );
 

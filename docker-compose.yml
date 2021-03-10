@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+
+    environment:
+      - REQUEST_TIMEOUT=60000
+
+    volumes:
+      - .:/app
+
+    ports:
+      - "80:80"
+
+    restart: unless-stopped
+
+    working_dir: /app
+
+    entrypoint: ["pm2-runtime", "start", "dev.ecosystem.config.js"]

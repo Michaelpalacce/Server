@@ -31,17 +31,6 @@ app.add(( event ) => {
 	event.next();
 });
 
-if ( process.env.ENABLE_SECURITY_HEADERS === '1' )
-{
-	app.apply( app.er_security, {
-		csp	: {
-			directives	: {
-				'font-src'	: ['https://fonts.gstatic.com']
-			}
-		}
-	});
-}
-
 // Serve Static Resources
 app.apply( app.er_static,					{ paths	: [process.env.STATIC_PATH], cache: { static : false }, useEtag: true } );
 app.apply( app.er_static,					{ paths	: ['favicon.ico'], cache: { static : false }, useEtag: true } );

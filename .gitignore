@@ -6,11 +6,9 @@ Uploads
 /logs/access.log
 /logs/debug_log.log
 /logs/error_log.log
-/package-lock.json
 /logs/*.log
 cache
 pid.lock
-.env
 .env-location
 .server-emulator-env
 /server_emulator_users.json
