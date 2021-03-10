@@ -10,25 +10,12 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0b4f4870655d46e59396a530b651d5b9)](https://app.codacy.com/manual/Michaelpalacce/Server?utm_source=github.com&utm_medium=referral&utm_content=Michaelpalacce/Server&utm_campaign=Badge_Grade_Dashboard)
 
 # Use:
-- You can use either `server` or `server-emulator`
+- You can use either `serve` or `server-emulator`
 ~~~
-server-emulator daemon # starts a daemon process
-server daemon # starts a daemon process
+server-emulator # Starts the server
+serve # also starts the server
 
-server-emulator kill # kills the daemon process
-server kill # kills the daemon process
-
-server-emulator # starts the process without daemonizing 
-server-emulator start # starts the process without daemonizing 
-
-server # starts the process without daemonizing 
-server start # starts the process without daemonizing 
-
-server-emulator set APP_PORT 8000 # changes the app port
-server set APP_PORT 8000 # changes the app port
-
-sever-emulator set ENABLE_SECURITY 1 # enables the user management
-sever set ENABLE_SECURITY 1 # enables the user management
+serve edit # allows you to edit the environment variables set for the server
 ~~~
 
 - List of commands:
@@ -75,14 +62,7 @@ server-emulator terminal
 # Modifications
 - You can modify the .env file to your needs.
 - APP_PORT will be which port the app is attached to
-- ENABLE_SECURITY - whether to secure the app 1 or 0
 - ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
-- REQUEST_TIMEOUT - How much to keep requests active for in milliseconds
-- UPLOADS_DIR - where to put the temporary upload files 
-- ENABLE_TERMINAL - 1 or 0 whether the terminal should be enabled ( CURRENTLY NOT WORKING )
-- ENABLE_SECURITY_HEADERS - 1 or 0 whether the security headers should be enabled or not ( hsts, Expect-CT, CSP, Content Type Options )
-- DEBUG - Whether to write logs on a debug level 1 or 0
-- USERS_DIR - Where the users should be stored. If empty then the os.tmpDir will be used, if === 'LOCAL_DIR' then the project root will be used
 - TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
@@ -102,7 +82,6 @@ server-emulator terminal
 - You will be asked to fill in the new user's data
 - Route will be the path from which the user can access the FS
 - When adding a user the user will persist after 5 seconds so don't stop the server
-- User's data is stored to the OS tmp directory by default and can be changed using the USERS_DIR variable ( either LOCAL_DIR or empty )
 
 # Permissions:
 - Only superusers can use the terminal, add/ view/ modify other users ( and self ). Only superusers can access the project folder and the OS tmp directory.

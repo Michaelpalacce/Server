@@ -7,7 +7,7 @@ services:
       target: dev
 
     environment:
-      - REQUEST_TIMEOUT=60000
+      - APP_PORT=80
 
     volumes:
       - .:/app

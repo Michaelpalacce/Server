@@ -16,7 +16,7 @@ app.add(( event ) => {
 	};
 
 	event.getRenderedData	= async ( templateName, variables = {} ) => {
-		return await ejs.renderFile( path.join( PROJECT_ROOT, process.env.TEMPLATING_DIR, templateName + '.ejs' ), variables );
+		return await ejs.renderFile( path.join( PROJECT_ROOT, './templates', templateName + '.ejs' ), variables );
 	};
 
 	event.on( 'cleanUp', () => { event.render = undefined; event.getRenderedData = undefined; });
@@ -50,11 +50,11 @@ app.apply( app.er_rate_limits, { useFile: true } );
 // Parse body
 app.apply( app.er_body_parser_form );
 app.apply( app.er_body_parser_json );
-app.apply( app.er_body_parser_multipart,	{ tempDir	: path.join( PROJECT_ROOT, process.env.UPLOADS_DIR ) } );
+app.apply( app.er_body_parser_multipart,	{ tempDir	: path.join( PROJECT_ROOT, './Uploads' ) } );
 app.apply( app.er_body_parser_raw );
 
 // Add Timeout
-app.apply( app.er_timeout,					{ timeout	: process.env.REQUEST_TIMEOUT } );
+app.apply( app.er_timeout,					{ timeout	: 60000 } );
 
 // Add a logger
 app.apply( app.er_logger,					{ logger } );

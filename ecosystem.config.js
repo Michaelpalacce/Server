@@ -5,7 +5,7 @@ module.exports	=
 		{
 			script: 'index.js',
 			watch: false,
-			env: require( '.env' )
+			env: require( './env' )
 		}
 	]
 };
