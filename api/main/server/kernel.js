@@ -2,17 +2,25 @@
 
 // Dependencies
 const app			= require( 'event_request' )();
-const ejs			= require( 'ejs' );
 const path			= require( 'path' );
 
 const ErrorHandler	= require( '../error/error_handler' );
 const logger		= require( '../logging/logger' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
-app.apply( app.er_templating_engine, {
-	render				: ejs.renderFile.bind( ejs ),
-	templateDir			: path.join( PROJECT_ROOT, './public/templates' ),
-	templateExtension	: 'ejs'
+app.apply( app.er_cors, {
+	origin: 'er_dynamic',
+	headers: [
+		'Access-Control-Allow-Headers',
+		'Origin',
+		'Accept',
+		'X-Requested-With',
+		'Content-Type',
+		'Access-Control-Request-Method',
+		'Access-Control-Request-Headers',
+		'token'
+	],
+	exposedHeaders: ['token']
 });
 
 // Add Error Handler
@@ -53,7 +61,7 @@ app.apply( app.er_logger,					{ logger } );
 app.apply( app.er_file_stream );
 
 // Add a user cookie session
-app.apply( app.er_session );
+app.apply( app.er_session, { isCookieSession: false, sessionKey: 'token' } );
 
 // Attach the caching server to the process
 process.cachingServer	= app.getPlugin( app.er_data_server ).getServer();

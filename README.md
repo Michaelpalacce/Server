@@ -21,7 +21,8 @@ serve start # also starts the server
 Commands:
 serve ---> starts the server
 serve start ---> starts the server
-serve edit ---> edit environment variables
+serve edit api---> edit environment variables for the API
+serve edit app---> edit environment variables for the APP
 serve stop ---> stop the server
 ~~~
 
@@ -42,17 +43,19 @@ sudo apt install -y make python build-essential
 # Terminal Dependencies
 - If you have any issues with the terminal LOOK HERE: https://www.npmjs.com/package/node-pty?activeTab=readme
 
-# Environment variables
-- APP_PORT - Which port the app is attached to
+# API Environment variables
+- API_PORT - Which port the api will be running on
 - APP_ADDRESS - Which IP address to bind to
 - ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
 - TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
 
+# APP Environment variables
+- PORT - which port the front end app should listen on
+
 # Enabling SSL
 - Generate a certificate and point the SSL_KEY_PATH and SSL_CERT_PATH to their locations
-- Set the APP_PORT to 443
 
 # Adding users
 - If you want to add users go to the users page from the sidebar and click on the Add Users button

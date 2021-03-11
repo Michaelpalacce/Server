@@ -4,7 +4,7 @@
 const { Loggur }	= require( 'event_request' );
 const { server }	= require( './api/main/server/server' );
 
-const address		= process.env.APP_ADDRESS;
+const address		= process.env.API_ADDRESS;
 const port			= require( './api/main/utils/get_port' );
 
 require( './api/controllers' );

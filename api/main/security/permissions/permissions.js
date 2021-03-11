@@ -11,7 +11,7 @@ app.add(( event ) => {
 		const ruleMatch	= app.router.matchRoute( event.path, route ) && app.router.matchMethod( event.method, methods );
 
 		if ( type === 'DENY' && ruleMatch )
-			event.next( `You don\'t have permission to ${event.method} ${event.path}`, 403 );
+			throw { code: 'app.security.forbidden', message: `You don\'t have permission to ${event.method} ${event.path}` }
 		else if ( type === 'ALLOW' && ruleMatch )
 			break;
 	}

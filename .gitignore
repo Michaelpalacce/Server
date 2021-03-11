@@ -1,12 +1,30 @@
+.DS_Store
 node_modules
+/dist
 .data
-.vagrant
-.idea
-Uploads
-/logs/access.log
-/logs/debug_log.log
-/logs/error_log.log
+
+# local env files
+.env.local
+.env.*.local
+env.js
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 /logs/*.log
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Custom
 cache
 /server_emulator_users.json
-env.js
+Uploads

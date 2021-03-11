@@ -52,8 +52,16 @@ pm2.connect(( err ) => {
 
 			break;
 
-		case args.length === 1 && args[0] === 'edit':
+		case args.length === 2 && args[0] === 'edit' && args[1] === 'api':
 			exec( `${getCommandLine()} ${projectDir}/env.js`, ( err ) => {
+				if ( err ) throw err;
+
+				pm2.disconnect();
+			});
+			break;
+
+		case args.length === 2 && args[0] === 'edit' && args[1] === 'app':
+			exec( `${getCommandLine()} ${projectDir}/.env`, ( err ) => {
 				if ( err ) throw err;
 
 				pm2.disconnect();
