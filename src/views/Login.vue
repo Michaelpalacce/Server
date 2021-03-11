@@ -56,11 +56,19 @@ export default {
 
 			communicator.login( this.username, this.password ).then(( response )=>{
 				this.$router.push( 'dashboard' );
+				this.emitter.emit( 'user.credentials' );
 			}).catch(( error ) => {
 				this.setError( access( () => error.response.data.error.message, 'Invalid Credentials' ) );
 			});
 		},
 
+		/**
+		 * @brief	Sets an error in the login box
+		 *
+		 * @param	{String} error
+		 *
+		 * @return	void
+		 */
 		setError( error = '' )
 		{
 			this.errorMessage	= error;

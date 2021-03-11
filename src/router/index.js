@@ -18,7 +18,7 @@ const routes	= [
 		path: '/browse',
 		name: 'Browse',
 		component: function () {
-			return import( '../views/App/Dashboard.vue' );
+			return import( '../views/App/Browse.vue' );
 		}
 	}
 ]

@@ -1,3 +1,29 @@
 <template>
-  <router-view/>
+	<Navbar v-if="loggedIn === true" />
+	<router-view/>
 </template>
+
+<script>
+import communicator	from "@/app/main/api/communicator"
+import Navbar		from "@/views/App/Components/Navbar";
+
+export default {
+	name: 'Dashboard',
+	data()
+	{
+		return {
+			loggedIn: !! localStorage.token
+		}
+	},
+	components: {
+		Navbar
+	},
+	created: function () {
+		if ( ! communicator.hasCredentials() )
+			this.$router.push( '/' );
+
+		// Handle user credentials change
+		this.emitter.on( 'user.credentials', () => { this.loggedIn	= !! localStorage.token; });
+	}
+}
+</script>
