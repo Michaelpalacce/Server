@@ -3,10 +3,10 @@
 		<div class="max-w-7xl mx-auto relative flex items-center justify-between sm:items-stretch sm:justify-start p-3">
 			<div class="hidden sm:block sm:ml-6">
 				<div class="flex space-x-4">
-					<router-link class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" to="/dashboard">Dashboard</router-link>
+					<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/dashboard">Dashboard</router-link>
 					<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/browse">Browse</router-link>
 
-					<button class="float-right bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" type="button" @click="logout">
+					<button class="bg-red-500 hover:bg-red-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium" type="button" @click="logout">
 						Logout
 					</button>
 				</div>
@@ -18,7 +18,7 @@
 			<div class="px-2 pt-2 pb-3 space-y-1">
 				<router-link class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" to="/dashboard">Dashboard</router-link>
 				<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" to="/browse">Browse</router-link>
-				<button class="float-right bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" type="button" @click="logout">
+				<button class="bg-red-500 hover:bg-red-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium" type="button" @click="logout">
 					Logout
 				</button>
 			</div>
