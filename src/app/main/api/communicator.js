@@ -2,9 +2,16 @@
 
 import { API_PORT, API_ADDRESS, SSL_KEY_PATH, SSL_CERT_PATH }	from '../../../../env';
 import axios													from 'axios';
+import { encode, decode }										from '@/../api/main/utils/base_64_encoder'
 
+/**
+ * @brief	ApiCommunicator used to make request to the API of the ServerEmulator
+ */
 class ApiCommunicator
 {
+	/**
+	 * @details	The API_ADDRESS is very important for the CORS headers, so this must be set correctly or it will fail
+	 */
 	constructor()
 	{
 		this.port		= API_PORT;
@@ -61,6 +68,27 @@ class ApiCommunicator
 		localStorage.removeItem( 'token' );
 
 		return response;
+	}
+
+	async browse( directory = '/', token = '' )
+	{
+		directory			= encode( directory );
+
+		const browseResult	= await axios.get(
+			`${this.url}/browse`,
+			{ directory, token },
+			{ headers: { token: localStorage.token } }
+		).catch( ( error ) => {
+			return error;
+		});
+
+		const data		= browseResult.data;
+		const status	= browseResult.status;
+
+		if ( status !== 200 )
+			throw new Error( data );
+
+		return data;
 	}
 }
 

@@ -3,7 +3,7 @@
 // Dependencies
 const app			= require( 'event_request' )();
 
-const formatItem	= require( '../../main/utils/file_formatter' );
+const formatItem	= require( '../../../../main/utils/file_formatter' );
 const FileInput		= require( '../input/file_input' );
 const { stat }		= require( 'fs' ).promises;
 

@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const Input			= require( '../../main/validation/input' );
+const Input			= require( '../../../../main/validation/input' );
 const path			= require( 'path' );
 const os			= require( 'os' );
 
@@ -25,7 +25,7 @@ class BrowseInput extends Input
 	 */
 	getDirectory()
 	{
-		return this.get( BrowseInput.DIR_KEY );
+		return this.get( BrowseInput.DIRECTORY_KEY );
 	}
 
 	/**
@@ -33,7 +33,7 @@ class BrowseInput extends Input
 	 */
 	getEncodedDirectory()
 	{
-		return encodeURIComponent( Buffer.from( this.get( BrowseInput.DIR_KEY ) ).toString( 'base64' ) );
+		return encodeURIComponent( Buffer.from( this.get( BrowseInput.DIRECTORY_KEY ) ).toString( 'base64' ) );
 	}
 
 	/**
@@ -77,7 +77,7 @@ class BrowseInput extends Input
 			return false;
 		}
 
-		this.model[BrowseInput.DIR_KEY]		= dir;
+		this.model[BrowseInput.DIRECTORY_KEY]		= dir;
 		this.model[BrowseInput.TOKEN_KEY]	= token;
 
 		return true;
@@ -85,6 +85,6 @@ class BrowseInput extends Input
 }
 
 BrowseInput.TOKEN_KEY	= 'token';
-BrowseInput.DIR_KEY		= 'dir';
+BrowseInput.DIRECTORY_KEY		= 'dir';
 
 module.exports	= BrowseInput;

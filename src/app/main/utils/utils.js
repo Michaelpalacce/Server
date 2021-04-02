@@ -1,5 +1,13 @@
 'use strict';
 
+/**
+ * @brief	Safe array accessing
+ *
+ * @param	{Function} fn
+ * @param	{*} defaultVal
+ *
+ * @return	{*}
+ */
 export function access( fn, defaultVal )
 {
 	try

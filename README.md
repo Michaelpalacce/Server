@@ -45,11 +45,13 @@ sudo apt install -y make python build-essential
 
 # API Environment variables
 - API_PORT - Which port the api will be running on
-- APP_ADDRESS - Which IP address to bind to
+- API_ADDRESS - Which IP address to bind to
 - ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
 - TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
+- USER_PERSIST_INTERVAL - How often in milliseconds the users will be persisted to storage, Defaults to 10000
+- DEBUG - Whether to display console logs or not
 
 # APP Environment variables
 - PORT - which port the front end app should listen on

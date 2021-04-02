@@ -7,6 +7,7 @@ const path			= require( 'path' );
 
 const USER_KEY		= 'USERS_DATA';
 const persistPath	= path.parse( require.main.filename ).dir;
+const PERSIST_TIME	= process.env.USER_PERSIST_INTERVAL;
 
 /**
  * @brief	Class responsible for user CRUD operations
@@ -19,7 +20,7 @@ class UserManager
 			ttl				: -1,
 			persist			: true,
 			persistPath		: path.join( persistPath, 'server_emulator_users.json' ),
-			persistInterval	: 5,	// Every 5 seconds
+			persistInterval	: 5,	// Every 30 seconds
 			gcInterval		: 86400	// One day
 		});
 		this.users				= null;
@@ -28,7 +29,7 @@ class UserManager
 
 		this.flushUserInterval	= setInterval(() => {
 			this.flushUsers();
-		}, 2000 );
+		}, PERSIST_TIME );
 	}
 
 	/**
@@ -84,7 +85,16 @@ class UserManager
 	 */
 	flushUsers()
 	{
-		this.dataStore.set( USER_KEY, JSON.stringify( this.users ) ).catch( this.catchError.bind( this ) );
+		const users	= [];
+
+		for ( const userName in this.users )
+		{
+			const user	= this.users[userName];
+
+			users.push( user.getUserData() );
+		}
+
+		this.dataStore.set( USER_KEY, JSON.stringify( users ) ).catch( this.catchError.bind( this ) );
 	}
 
 	/**
@@ -147,25 +157,6 @@ class UserManager
 
 		delete this.users[username];
 	}
-
-	/**
-	 * @brief	Updates the user if it exists
-	 *
-	 * @param	{String} username
-	 * @param	{Object} userData
-	 *
-	 * @returns	void
-	 */
-	update( username, userData )
-	{
-		if ( typeof username !== 'string' || ! this.has( username ) )
-		{
-			throw new Error( `User: ${username} does not exist` );
-		}
-
-		userData.username		= username;
-		this.users[username]	= new User( userData );
-	}
 }
 
-module.exports	= UserManager;
+module.exports	= new UserManager();

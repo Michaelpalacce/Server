@@ -1,6 +1,17 @@
 'use strict';
 
-const REGEX_PATTERN	= '${RE}:'
+const BrowseMetadata	= require( './metadata/browse' );
+
+const REGEX_PATTERN		= '${RE}:'
+
+/**
+ * @brief	Used to dynamically get the revivers
+ *
+ * @var		{Object}
+ */
+const metadataPool		= {
+	'BrowseMetadata'	: BrowseMetadata
+}
 
 /**
  * @brief	Holds user information
@@ -11,8 +22,9 @@ class User
 	{
 		this.username		= userData.username || '';
 		this.password		= userData.password || '';
-		this.route			= typeof userData.route === 'string' ? userData.route : '/';
-		this.permissions	= this._parsePermissions( userData.permissions || '{"test":"1"}' );
+		this.roles			= userData.roles || [];
+		this.metadata		= this._parseMetadata( userData.metadata || '{}' );
+		this.permissions	= this._parsePermissions( userData.permissions || '{}' );
 	}
 
 	/**
@@ -52,17 +64,53 @@ class User
 	}
 
 	/**
+	 * @brief	Parses the metadata by decoding the JSON
+	 *
+	 * @param	{Object} metadata
+	 *
+	 * @return	Object
+	 */
+	_parseMetadata( metadata )
+	{
+		return typeof metadata !== 'string' ? metadata : JSON.parse( metadata, ( key, value ) => {
+			if ( typeof value === 'object' && typeof metadataPool[key] !== 'undefined' )
+				value	= new metadataPool[key]( value.metadata );
+
+			return value;
+		});
+	}
+
+	/**
+	 * @brief	Formats the metadata using the metadata's replacers
+	 *
+	 * @param	{Object} metadata
+	 *
+	 * @return	Object
+	 */
+	_formatMetadata( metadata )
+	{
+		return JSON.stringify( metadata, ( key, value ) => {
+			if ( typeof metadataPool[key] !== 'undefined' )
+				return { metadata: value };
+
+			return value;
+		});
+	}
+
+	/**
 	 * @brief	Gets the user in an object
 	 *
 	 * @return	Object
 	 */
 	getUserData()
 	{
+		const metadata	= this._formatMetadata( this.metadata );
 		return {
 			username	: this.username,
 			password	: this.password,
-			route		: this.route,
+			metadata	: metadata,
 			permissions	: this._formatPermissions( this.permissions ),
+			roles		: this.roles
 		};
 	}
 
@@ -76,14 +124,15 @@ class User
 		return this.username !== ''
 			&& typeof this.username === 'string'
 			&& typeof this.password === 'string'
-			&& typeof this.route === 'string'
-			&& typeof this.permissions === 'object';
+			&& typeof this.metadata === 'object'
+			&& typeof this.permissions === 'object'
+			&& Array.isArray( this.roles );
 	}
 
 	/**
 	 * @brief	Returns the username
 	 *
-	 * @return	String
+	 * @return	{String}
 	 */
 	getUsername()
 	{
@@ -93,7 +142,7 @@ class User
 	/**
 	 * @brief	Returns the user's permissions
 	 *
-	 * @return	String
+	 * @return	{Array}
 	 */
 	getPermissions()
 	{
@@ -101,9 +150,19 @@ class User
 	}
 
 	/**
+	 * @brief	Returns the user's roles
+	 *
+	 * @return	{Array}
+	 */
+	getRoles()
+	{
+		return this.roles;
+	}
+
+	/**
 	 * @brief	Returns the password
 	 *
-	 * @return	String
+	 * @return	{String}
 	 */
 	getPassword()
 	{
@@ -111,14 +170,23 @@ class User
 	}
 
 	/**
-	 * @brief	Returns the route
+	 * @brief	Returns the requested metadata by key
 	 *
-	 * @return	String
+	 * @details	If the metadata does not exist, throws
+	 *
+	 * @return	{Object}
 	 */
-	getRoute()
+	getMetadata( key )
 	{
-		return this.route;
+		if ( typeof this.metadata[key] === 'undefined' )
+			this.metadata[key]	= new metadataPool[key]( {} );
+
+		return this.metadata[key];
 	}
+}
+
+User.ROLES	= {
+	root: 'root'
 }
 
 module.exports	= User;

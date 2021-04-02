@@ -4,7 +4,7 @@ const { rename }	= require( 'fs' ).promises;
 const fs			= require( 'fs' );
 const path			= require( 'path' );
 const MoveInput		= require( '../input/move_input' );
-const copyFolder	= require( '../../main/utils/copyFolder' );
+const copyFolder	= require( '../../../../main/utils/copyFolder' );
 
 const Model			= {};
 

@@ -65,3 +65,5 @@ app.apply( app.er_session, { isCookieSession: false, sessionKey: 'token' } );
 
 // Attach the caching server to the process
 process.cachingServer	= app.getPlugin( app.er_data_server ).getServer();
+// Require ACL AFTER the caching server has been set
+require( '../acls/acl' )

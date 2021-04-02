@@ -12,8 +12,8 @@ require( './main/security/security' );
 // require( './file/controller/delete' );
 // require( './file/controller/preview' );
 //
-// require( './folder/controller/view' );
-// require( './folder/controller/list' );
+require( './modules/browse/folder/controller/view' );
+require( './modules/browse/folder/controller/list' );
 // require( './folder/controller/delete' );
 // require( './folder/controller/upload' );
 // require( './folder/controller/move' );

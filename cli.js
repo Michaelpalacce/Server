@@ -42,14 +42,10 @@ pm2.connect(( err ) => {
 	{
 		case args.length === 0:
 		case args.length === 1 && args[0] === 'start':
-			if ( NODE_ENV === 'dev' )
-				spawn( 'pm2-runtime', ['dev.ecosystem.config.js'], { stdio: 'inherit' } );
-			else
-				pm2.start( 'ecosystem.config.js', ( err, apps ) => {
-					pm2.disconnect();
-					if ( err ) throw err;
-				});
-
+			pm2.start( 'ecosystem.config.js', ( err, apps ) => {
+				pm2.disconnect();
+				if ( err ) throw err;
+			});
 			break;
 
 		case args.length === 2 && args[0] === 'edit' && args[1] === 'api':

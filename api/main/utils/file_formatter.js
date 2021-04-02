@@ -28,7 +28,7 @@ module.exports	= function formatItem( itemName, event, isBack = false )
 	const previewAvailable	= fileStreamer !== null;
 	const size				= stats.size;
 	const isDir				= stats.isDirectory();
-	const fileType			= previewAvailable ? fileStreamer.getType() : isDir ? 'directory' : null;
+	const fileType			= isDir ? 'directory' : previewAvailable ? fileStreamer.getType() : null;
 
 	return {
 		name	: goBack ? 'BACK' : itemName,

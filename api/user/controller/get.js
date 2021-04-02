@@ -8,7 +8,7 @@ const GetUserInput	= require( '../input/get_user_input' );
  * @brief	Gets information about the user
  */
 app.get( '/users/:username:', async ( event ) => {
-	const userManager	= event.userManager;
+	const userManager	= event.$userManager;
 	const input			= new GetUserInput( event, userManager );
 
 	if ( ! input.isValid() )

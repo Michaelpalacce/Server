@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "vue-cli-service build",
 		"serve": "node cli.js",
-		"serve-dev": "NODE_ENV=dev node cli.js"
+		"serve-dev": "pm2-runtime dev.ecosystem.config.j"
 	},
 	"main": "index.js",
 	"dependencies": {

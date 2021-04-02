@@ -1,7 +1,7 @@
 'use strict';
 
 // Dependencies
-const Input			= require( '../../main/validation/input' );
+const Input			= require( '../../../../main/validation/input' );
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 

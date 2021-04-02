@@ -1,9 +1,9 @@
 'use strict';
 
 // Dependencies
-const Input			= require( '../../main/validation/input' );
-const fs			= require( 'fs' );
+const Input			= require( '../../../../main/validation/input' );
 const path			= require( 'path' );
+const fs			= require( 'fs' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
@@ -13,7 +13,7 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 class MoveInput extends Input
 {
 	/**
-	 * @brief	Returns the new path
+	 * @brief	Retruns the new path
 	 *
 	 * @returns	String
 	 */
@@ -73,9 +73,9 @@ class MoveInput extends Input
 			return false;
 		}
 
-		if ( fs.statSync( oldPath ).isFile() )
+		if ( fs.statSync( oldPath ).isDirectory() )
 		{
-			this.reason	= `Cannot do operations on a file: ${oldPath}`;
+			this.reason	= `Cannot do operations on a directory: ${oldPath}`;
 			return false;
 		}
 
