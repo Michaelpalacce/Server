@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory }	from 'vue-router'
-import Login								from '../views/Login.vue'
+import Login								from '@/views/App/Login/Login'
+import Browse								from '@/views/App/Browse/Browse'
+import Preview								from '@/views/App/Browse/Preview'
+import Dashboard							from '@/views/App/Dashboard/Dashboard'
 
 const routes	= [
 	{
@@ -10,22 +13,21 @@ const routes	= [
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: function () {
-			return import( '../views/App/Dashboard.vue' );
-		}
+		component: Dashboard
 	},
 	{
 		path: '/browse',
 		name: 'Browse',
-		component: function () {
-			return import( '../views/App/Browse.vue' );
-		}
+		component: Browse
+	},
+	{
+		path: '/preview',
+		name: 'Preview',
+		component: Preview
 	}
 ]
 
-const router	= createRouter({
-	history: createWebHistory(process.env.BASE_URL),
+export default createRouter({
+	history: createWebHistory( process.env.BASE_URL ),
 	routes
 })
-
-export default router

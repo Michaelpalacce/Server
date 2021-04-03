@@ -18,6 +18,9 @@ export default {
 	components: {
 		Navbar
 	},
+	/**
+	 * @brief	On creation, redirect the user to the login page if no credentials are set
+	 */
 	created: function () {
 		if ( ! communicator.hasCredentials() )
 			this.$router.push( '/' );

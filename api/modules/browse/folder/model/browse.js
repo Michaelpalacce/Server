@@ -2,12 +2,14 @@
 
 // Dependencies
 const path			= require( 'path' );
+const FileSystem	= require( 'fs-browser' );
+
 const Acl			= require( '../../../../main/acls/acl' );
 const User			= require( '../../../../main/security/user/user' );
-const FileSystem	= require( 'fs-browser' );
+const formatItem	= require( '../../../../main/utils/file_formatter' );
+const { encode }	= require( '../../../../main/utils/base_64_encoder' );
+
 const fileSystem	= new FileSystem();
-
-
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 /**
@@ -17,6 +19,7 @@ class BrowseModel
 {
 	constructor( event )
 	{
+		this.event				= event;
 		this.user				= event.$user;
 		this.validationHandler	= event.validation;
 		this.query				= event.query;
@@ -33,14 +36,23 @@ class BrowseModel
 	 *
 	 * @return	Object
 	 */
-	browse( browseInput )
+	async browse( browseInput )
 	{
 		const directory	= browseInput.getDirectory();
 
 		if ( ! this._canAccess( browseInput ) )
 			throw { code: 'app.browse.unauthorized', message: { directory } };
 
-		return fileSystem.getAllItems( directory, browseInput.getToken() );
+		const parsedItem			= path.parse( directory );
+		const itemsResult			= await fileSystem.getAllItems( directory, browseInput.getToken() );
+
+		return {
+			currentDirectory:	browseInput.getEncodedDirectory(),
+			previousDirectory:	encode( parsedItem.dir.replace( /\\/g, '/' ) ),
+			nextToken:			encode( itemsResult.nextToken ),
+			items:				itemsResult.items.map( item => formatItem( item, this.event ) ),
+			hasMore:			itemsResult.hasMore,
+		};
 	}
 
 	/**

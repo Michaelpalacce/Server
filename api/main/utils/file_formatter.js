@@ -10,18 +10,16 @@ const { parse, join }	= require( 'path' );
  *
  * @param	{String} itemName
  * @param	{EventRequest} event
- * @param	{Boolean} [isBack=false]
  *
  * @return	Object
  */
-module.exports	= function formatItem( itemName, event, isBack = false )
+module.exports	= function formatItem( itemName, event )
 {
 	const stats				= statSync( itemName );
 	const parsedItem		= parse( itemName );
 
-	const goBack			= isBack === true;
-	itemName				= goBack ? parsedItem.dir : parsedItem.base;
-	const absItemName		= ( goBack ? parsedItem.dir : join( parsedItem.dir, parsedItem.base ) );
+	itemName				= parsedItem.base;
+	const absItemName		= join( parsedItem.dir, parsedItem.base );
 	const uriToEncode		= absItemName.replace( /\\/g, '/' );
 	const encodedURI		= encodeURIComponent( Buffer.from( uriToEncode ).toString( 'base64' ) );
 	const fileStreamer		= event.fileStreamHandler.getFileStreamerForType( absItemName );
@@ -31,7 +29,7 @@ module.exports	= function formatItem( itemName, event, isBack = false )
 	const fileType			= isDir ? 'directory' : previewAvailable ? fileStreamer.getType() : null;
 
 	return {
-		name	: goBack ? 'BACK' : itemName,
+		name	: itemName,
 		fileType,
 		isDir,
 		encodedURI,

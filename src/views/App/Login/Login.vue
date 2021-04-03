@@ -37,6 +37,9 @@ export default {
 			errorMessage: ''
 		};
 	},
+	/**
+	 * @brief	On creation if the user has credentials, redirect to the dashboard
+	 */
 	created: function () {
 		if ( communicator.hasCredentials() )
 			this.$router.push( 'dashboard' );

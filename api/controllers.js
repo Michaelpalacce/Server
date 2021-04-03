@@ -10,7 +10,7 @@ require( './main/security/security' );
 // require( './file/controller/download' );
 // require( './file/controller/upload' );
 // require( './file/controller/delete' );
-// require( './file/controller/preview' );
+require( './modules/browse/file/controller/preview' );
 //
 require( './modules/browse/folder/controller/view' );
 require( './modules/browse/folder/controller/list' );

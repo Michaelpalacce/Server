@@ -2,7 +2,6 @@
 
 import { API_PORT, API_ADDRESS, SSL_KEY_PATH, SSL_CERT_PATH }	from '../../../../env';
 import axios													from 'axios';
-import { encode, decode }										from '@/../api/main/utils/base_64_encoder'
 
 /**
  * @brief	ApiCommunicator used to make request to the API of the ServerEmulator
@@ -18,6 +17,16 @@ class ApiCommunicator
 		this.address	= API_ADDRESS;
 		this.protocol	= SSL_KEY_PATH && SSL_CERT_PATH ? 'https' : 'http';
 		this.url		= `${this.protocol}://${this.address}:${this.port}`;
+	}
+
+	/**
+	 * @brief	Returns the API url
+	 *
+	 * @return	{String}
+	 */
+	getApiUrl()
+	{
+		return this.url;
 	}
 
 	/**
@@ -62,7 +71,7 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/logout`,
 			{},
-			{ headers: { token: localStorage.token } }
+			{ headers: this._getAuthHeaders() }
 		).catch(() => {});
 
 		localStorage.removeItem( 'token' );
@@ -70,14 +79,22 @@ class ApiCommunicator
 		return response;
 	}
 
-	async browse( directory = '/', token = '' )
+	/**
+	 * @brief	Returns the items given a directory
+	 *
+	 * @details	Supports pagination by passing the token returned by the previous browse
+	 *
+	 * @param	{String} directory
+	 * @param	{String} token
+	 *
+	 * @return	{Promise}
+	 */
+	async browse( directory = '', token = '' )
 	{
-		directory			= encode( directory );
-
 		const browseResult	= await axios.get(
-			`${this.url}/browse`,
-			{ directory, token },
-			{ headers: { token: localStorage.token } }
+			this._formatUrlWithQueryParams( `${this.url}/browse`, { directory, token } ),
+			{},
+			{ headers: this._getAuthHeaders() }
 		).catch( ( error ) => {
 			return error;
 		});
@@ -89,6 +106,42 @@ class ApiCommunicator
 			throw new Error( data );
 
 		return data;
+	}
+
+	/**
+	 * @brief	Gets the authentication headers
+	 *
+	 * @return	Object
+	 */
+	_getAuthHeaders()
+	{
+		return { token: localStorage.token };
+	}
+
+	/**
+	 * @brief	Accepts a url and an Object of query parameters. Formats and returns the new url
+	 *
+	 * @param	{String} url
+	 * @param	{Object} queryParams
+	 *
+	 * @return	{String}
+	 */
+	_formatUrlWithQueryParams( url, queryParams )
+	{
+		let params	= new URLSearchParams();
+
+		for ( const [key, value] of Object.entries( queryParams ) )
+		{
+			if ( value )
+				params.append( key, value );
+		}
+
+		params	= params.toString();
+
+		if ( params )
+			url += `?${params}`;
+
+		return url;
 	}
 }
 
