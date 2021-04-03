@@ -20,7 +20,7 @@ class UserManager
 			ttl				: -1,
 			persist			: true,
 			persistPath		: path.join( persistPath, 'server_emulator_users.json' ),
-			persistInterval	: 5,	// Every 30 seconds
+			persistInterval	: 30,	// Every 30 seconds
 			gcInterval		: 86400	// One day
 		});
 		this.users				= null;

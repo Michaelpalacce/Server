@@ -50,6 +50,7 @@ export default {
 		 *
 		 * @details	This will display an error in case of an error and will clean the error at the beginning
 		 * 			If everything is successful, the user will be redirected to the dashboard
+		 * 			On success, set the name in localStorage
 		 *
 		 * @return	void
 		 */
@@ -58,6 +59,8 @@ export default {
 			this.setError();
 
 			communicator.login( this.username, this.password ).then(( response )=>{
+				localStorage.name	= this.username;
+
 				this.$router.push( 'dashboard' );
 				this.emitter.emit( 'user.credentials' );
 			}).catch(( error ) => {

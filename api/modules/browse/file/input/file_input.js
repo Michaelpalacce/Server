@@ -1,13 +1,8 @@
 'use strict';
 
 // Dependencies
-const Input					= require( '../../../../main/validation/input' );
-const path					= require( 'path' );
-const fs					= require( 'fs' );
-const { encode, decode }	= require( '../../../../main/utils/base_64_encoder' );
-
-
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const Input			= require( '../../../../main/validation/input' );
+const { decode }	= require( '../../../../main/utils/base_64_encoder' );
 
 /**
  * @brief	Validates that the provided request contains the correct data

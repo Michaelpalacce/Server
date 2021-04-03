@@ -15,10 +15,16 @@ app.apply( app.er_cors, {
 		'Origin',
 		'Accept',
 		'X-Requested-With',
+		'Cache-Control',
 		'Content-Type',
+		'Referer',
+		'User-Agent',
 		'Access-Control-Request-Method',
 		'Access-Control-Request-Headers',
-		'token'
+		'token',
+		'DNT',
+		'sec-ch-ua',
+		'sec-ch-ua-mobile'
 	],
 	exposedHeaders: ['token']
 });

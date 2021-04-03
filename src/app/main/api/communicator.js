@@ -71,7 +71,7 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/logout`,
 			{},
-			{ headers: this._getAuthHeaders() }
+			{ headers: this.getAuthHeaders() }
 		).catch(() => {});
 
 		localStorage.removeItem( 'token' );
@@ -94,7 +94,31 @@ class ApiCommunicator
 		const browseResult	= await axios.get(
 			this._formatUrlWithQueryParams( `${this.url}/browse`, { directory, token } ),
 			{},
-			{ headers: this._getAuthHeaders() }
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error;
+		});
+
+		const data		= browseResult.data;
+		const status	= browseResult.status;
+
+		if ( status !== 200 )
+			throw new Error( data );
+
+		return data;
+	}
+
+	/**
+	 * @brief	Gets a single item file data
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async getFileData( file )
+	{
+		const browseResult	= await axios.get(
+			this._formatUrlWithQueryParams( `${this.url}/file/getFileData`, { file } ),
+			{},
+			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error;
 		});
@@ -113,7 +137,7 @@ class ApiCommunicator
 	 *
 	 * @return	Object
 	 */
-	_getAuthHeaders()
+	getAuthHeaders()
 	{
 		return { token: localStorage.token };
 	}

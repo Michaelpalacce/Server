@@ -6,9 +6,9 @@ require( './main/security/security' );
 // require( './ip/controller/view' );
 //
 // require( './file/controller/move' );
-// require( './file/controller/file_data' );
+require( './modules/browse/file/controller/file_data' );
 // require( './file/controller/download' );
-// require( './file/controller/upload' );
+require( './modules/browse/file/controller/upload' );
 // require( './file/controller/delete' );
 require( './modules/browse/file/controller/preview' );
 //

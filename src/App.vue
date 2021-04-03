@@ -8,7 +8,7 @@ import communicator	from "@/app/main/api/communicator"
 import Navbar		from "@/views/App/Components/Navbar";
 
 export default {
-	name: 'Dashboard',
+	name: 'App',
 	data()
 	{
 		return {

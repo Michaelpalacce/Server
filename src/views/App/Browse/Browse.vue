@@ -1,8 +1,9 @@
 <template>
-	<div class="rounded-t-lg m-5 mx-auto bg-gray-700 text-gray-200 px-5 mb-64">
+	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64" v-if="upload === false">
 		<div class="text-left border-b border-gray-300 table-row md:w-full text-sm md:text-base">
 			<MenuElement text="Refresh" @click="browse( currentDirectory )"/>
-			<div class="border-l-2 inline"></div>
+			<MenuElement text="Upload" @click="showUpload"/>
+			<div class="border-l-2 inline mx-2"></div>
 			<MenuElement text="Rename"/>
 			<MenuElement text="Download"/>
 			<MenuElement text="Delete"/>
@@ -12,15 +13,33 @@
 		<BrowseItem name="Back" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
 
 		<div v-for="item in items">
-			<BrowseItem :name="item.name" :isFolder="item.isDir" :type="item.fileType" :encodedURI="item.encodedURI" @click="onItemClick( item )" />
+			<BrowseItem
+				:key="item.name + Math.random()"
+				:name="item.name"
+				:isFolder="item.isDir"
+				:type="item.fileType"
+				:encodedURI="item.encodedURI"
+				:size="item.size"
+				@click="onItemClick( item )"
+			/>
 		</div>
+	</div>
+	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5 mb-64" v-else>
+		<BrowseItem name="Back" :isFolder="true" @click="upload = ! canBrowse" :isBack="true" class="mb-5"/>
+
+		<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
+			<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
+		</form>
 	</div>
 </template>
 
 <script>
-import BrowseItem	from "@/views/App/Browse/Components/BrowseItem";
-import MenuElement	from "@/views/App/Browse/Components/MenuElement";
-import communicator	from "@/app/main/api/communicator";
+import BrowseItem			from "@/views/App/Browse/Components/BrowseItem";
+import MenuElement			from "@/views/App/Browse/Components/MenuElement";
+import communicator			from "@/app/main/api/communicator";
+import { encode, decode }	from '@/../api/main/utils/base_64_encoder';
+import Dropzone				from '@/app/lib/dropzone';
+
 
 export default {
 	name: 'Browse',
@@ -35,16 +54,38 @@ export default {
 			hasMore				: true,
 			currentDirectory	: '',
 			previousDirectory	: '',
-			loading				: false
+
+			loading				: false,
+			upload				: false,
+			apiUrl				: communicator.getApiUrl(),
+			dropzone			: null,
+			canBrowse			: true
 		};
 	},
 
-	async created()
+	/**
+	 * @brief	Loads initial data and adds an onscroll event
+	 *
+	 * @details	The initial data will be loaded according to the directory query param
+	 * 			The on scroll event will attempt to load more data if the user scrolls close to the bottom of the page
+	 */
+	async mounted()
 	{
 		// Load the page
 		await this.browse( this.$route.query.directory || '' );
 
-		window.onscroll	= this.tryToLoad
+		window.onscroll			= this.tryToLoad
+		Dropzone.autoDiscover	= false;
+	},
+
+	/**
+	 * @brief	Remove the onscroll event
+	 *
+	 * @return	void
+	 */
+	unmounted()
+	{
+		window.onscroll	= null;
 	},
 
 	methods	: {
@@ -124,19 +165,8 @@ export default {
 
 			this.setUrlToCurrentDirectory();
 
-			if ( isNewDir )
-			{
-				this.items	= [];
-				setTimeout(() => {
-					this.items		= newItems;
-					this.loading	= false;
-				});
-			}
-			else
-			{
-				this.items		= newItems;
-				this.loading	= false;
-			}
+			this.items		= newItems;
+			this.loading	= false;
 		},
 
 		/**
@@ -147,6 +177,60 @@ export default {
 		setUrlToCurrentDirectory()
 		{
 			this.$router.push( { path: 'browse', query: { directory: this.currentDirectory } } );
+		},
+
+		/**
+		 * @brief	Shows the upload part of the browse
+		 *
+		 * @return	void
+		 */
+		showUpload()
+		{
+			this.upload	= true;
+
+			setTimeout( ()=>{
+				this.dropzone	= new Dropzone(
+					'.dropzone',
+					{
+						url: `${this.apiUrl}/file`,
+						method: 'post',
+						parallelUploads: 5,
+						maxFilesize: 40000,
+						timeout:0,
+						headers: communicator.getAuthHeaders()
+					}
+				);
+
+				if ( this.dropzone !== null )
+				{
+					this.dropzone.on( 'addedfile', () => { this.canBrowse	= false; } );
+					this.dropzone.on( 'queuecomplete', () => { this.canBrowse	= true; } );
+
+					this.dropzone.on( 'success', async( file ) => {
+						const decodedCurrentDir	= decode( this.currentDirectory );
+
+						const item	= await communicator.getFileData( encode( `${decodedCurrentDir}/${file.name}` ) ).catch( ( error ) => {
+							console.log( error );
+
+							return null;
+						} );
+
+						if ( item === null )
+							return;
+
+						item.key	= item.name;
+						this.items	= this.items.concat( [item] );
+
+						setTimeout(() => {
+							this.dropzone.removeFile( file );
+						}, 2000 );
+					});
+
+					this.dropzone.on( 'error', ( file, error ) => {
+						alert( error );
+					});
+				}
+			});
 		}
 	}
 }

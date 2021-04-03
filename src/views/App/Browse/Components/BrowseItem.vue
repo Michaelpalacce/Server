@@ -7,8 +7,8 @@
 				@mouseover="show"
 				@mouseleave="hover = false"
 	>
-		<span class="absolute left-1/3" :class="[hover === false ? 'hidden' : '']">
-			<img :src="imageSrc" alt="" :class="[hover === false ? 'visible top-0 z-10' : '']" style="height: 15vh">
+		<span class="absolute right-1/4" :class="[hover === false ? 'hidden' : '']">
+			<img :src="imageSrc" alt="" :class="[hover === false ? 'visible top-0 z-10' : '']" style="height: 25vh">
 		</span>
 
 		<span class="fa fa-angle-double-left md:hidden fa-3x w-1/6" v-if="isBack === true"></span>
@@ -26,8 +26,7 @@
 			</div>
 			<div class="w-full md:w-1/6 inline-block">
 				<p class="truncate" v-if="isFolder === false">
-					<span class="md:hidden mr-2">Size:</span>
-					50MB
+					<span class="md:hidden mr-2">Size:</span> {{ bytesToSize( size ) }}
 				</p>
 			</div>
 		</div>
@@ -50,16 +49,21 @@ export default {
 	props: {
 		name		: String,
 		encodedURI	: String,
+		size		: {
+			type	: Number,
+			default	: 0
+		},
 		isFolder	: {
-			type: Boolean,
-			default: true
+			type	: Boolean,
+			default	: true
 		},
 		isBack		: {
-			type: Boolean,
-			default: false
+			type	: Boolean,
+			default	: false
 		},
 		type		: String
 	},
+
 	methods: {
 		/**
 		 * @brief	Shows the image after 250 milliseconds
@@ -82,6 +86,24 @@ export default {
 						break;
 				}
 			}, 250 );
+		},
+
+		/**
+		 * @brief	Converts bytes to KB,MB,GB,TB
+		 *
+		 * @param	{Number} bytes
+		 *
+		 * @returns	String
+		 */
+		bytesToSize( bytes )
+		{
+			const sizes	= ['B', 'KB', 'MB', 'GB', 'TB'];
+			if ( bytes === 0 )
+				return '0 B';
+
+			const i	= parseInt( Math.floor( Math.log( bytes ) / Math.log( 1024 ) ) );
+
+			return Math.round( bytes / Math.pow( 1024, i ), 2 ) + ' ' + sizes[i];
 		}
 	}
 }

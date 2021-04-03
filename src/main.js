@@ -3,7 +3,8 @@ import App				from './App.vue';
 import router			from './router';
 import mitt				from 'mitt';
 
-import './index.css';
+import './style/index.css';
+import './style/dropzone.css';
 
 const emitter	= mitt();
 const app		= createApp( App );
