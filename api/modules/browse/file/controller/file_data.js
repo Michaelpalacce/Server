@@ -1,11 +1,11 @@
 'use strict';
 
 // Dependencies
-const app			= require( 'event_request' )();
+const app		= require( 'event_request' )();
 
-const formatItem	= require( '../../../../main/utils/file_formatter' );
-const FileInput		= require( '../input/file_input' );
-const { stat }		= require( 'fs' ).promises;
+const FileInput	= require( '../input/file_input' );
+const FileModel	= require( '../model/file' );
+
 
 /**
  * @brief	Adds a '/file/getFileData' route with method GET
@@ -19,9 +19,8 @@ const { stat }		= require( 'fs' ).promises;
  */
 app.get( '/file/getFileData', async ( event ) => {
 	const input		= new FileInput( event );
-	const itemName	= input.getFile();
+	const model		= new FileModel( event );
+	const result	= await model.getFile( input ).catch( event.next );
 
-	await stat( itemName ).catch( () => { event.sendError( 'File does not exist', 400 ); });
-
-	event.send( formatItem( itemName, event ) );
+	event.send( result );
 });

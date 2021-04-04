@@ -14,9 +14,9 @@ const BrowseModel	= require( '../model/browse' )
  * @return	void
  */
 app.get( '/browse', async ( event ) => {
-	const input			= new BrowseInput( event );
-	const model			= new BrowseModel( event );
-	const browseResult	= await model.browse( input ).catch( event.next );
+	const input		= new BrowseInput( event );
+	const model		= new BrowseModel( event );
+	const result	= await model.browse( input ).catch( event.next );
 
-	event.send( browseResult ).catch( event.next );
+	event.send( result );
 });

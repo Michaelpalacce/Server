@@ -99,13 +99,12 @@ class ApiCommunicator
 			return error;
 		});
 
-		const data		= browseResult.data;
 		const status	= browseResult.status;
 
 		if ( status !== 200 )
-			throw new Error( data );
+			throw browseResult.response.data;
 
-		return data;
+		return browseResult.data;
 	}
 
 	/**
@@ -123,13 +122,12 @@ class ApiCommunicator
 			return error;
 		});
 
-		const data		= browseResult.data;
 		const status	= browseResult.status;
 
 		if ( status !== 200 )
-			throw new Error( data );
+			throw browseResult.response.data;
 
-		return data;
+		return browseResult.data;
 	}
 
 	/**

@@ -1,18 +1,7 @@
 <template>
 	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64" v-if="upload === false">
-<!--		<div class="text-left border-b border-gray-300 table-row md:w-full text-sm md:text-base">-->
-<!--			<MenuElement key="Refresh" text="Refresh" @on-click="showUpload"/>-->
-<!--			<MenuElement key="Upload" text="Upload" @on-click="browse( currentDirectory )"/>-->
-<!--			<div class="border-l-2 inline mx-2"></div>-->
-<!--			<MenuElement key="Rename" text="Rename" :isDisabled="renameDisabled" @on-click="$emit( 'rename-click' )"/>-->
-<!--			<MenuElement key="Download" text="Download" :isDisabled="downloadDisabled" @on-click="$emit( 'download-click' )"/>-->
-<!--			<MenuElement key="Delete" text="Delete" :isDisabled="deleteDisabled" @on-click="$emit( 'delete-click' )"/>-->
-<!--			<MenuElement key="Copy" text="Copy" :isDisabled="copyDisabled" @on-click="$emit( 'copy-click' )"/>-->
-<!--			<MenuElement key="Move" text="Move" :isDisabled="moveDisabled" @on-click="$emit( 'move-click' )"/>-->
-<!--		</div>-->
-<!--		-->
 		<Menu
-			:key="'Menu'"
+			key="Menu"
 			:renameDisabled="renameDisabled"
 			:downloadDisabled="downloadDisabled"
 			:deleteDisabled="deleteDisabled"
@@ -23,9 +12,11 @@
 		/>
 		<BrowseItem :key="'Back'" name="Back" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
 
+		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
+
 		<div v-for="item in items">
 			<BrowseItem
-				:key="item.name + Math.random()"
+				:key="item.name"
 				:name="item.name"
 				:isFolder="item.isDir"
 				:fileType="item.fileType"
@@ -38,7 +29,8 @@
 		</div>
 	</div>
 	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5 mb-64" v-else>
-		<BrowseItem :key="'BackUpload'" name="Back" :isFolder="true" @click="upload = ! canBrowse" :isBack="true" class="mb-5"/>
+		<BrowseItem key="BackUpload" name="Back" :isFolder="true" @click="upload = ! canBrowse; uploadErrorMessage = ''" :isBack="true" class="mb-5"/>
+		<Error :errorMessage="uploadErrorMessage" class="mx-auto w-4/5 mb-5"/>
 
 		<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
 			<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
@@ -53,11 +45,12 @@ import communicator			from "@/app/main/api/communicator";
 import { encode, decode }	from '@/../api/main/utils/base_64_encoder';
 import Dropzone				from '@/app/lib/dropzone';
 import Menu					from "@/views/App/Browse/Components/Menu";
+import Error				from "@/views/App/Browse/Components/Error";
 
 
 export default {
 	name: 'Browse',
-	components: { Menu, BrowseItem, MenuElement },
+	components: { Error, Menu, BrowseItem, MenuElement },
 
 	data: () => {
 		return {
@@ -66,9 +59,11 @@ export default {
 			hasMore				: true,
 			currentDirectory	: '',
 			previousDirectory	: '',
+			browseErrorMessage	: '',
 
 			loading				: false,
 			upload				: false,
+			uploadErrorMessage	: '',
 			apiUrl				: communicator.getApiUrl(),
 			dropzone			: null,
 			canBrowse			: true,
@@ -143,8 +138,6 @@ export default {
 		onItemChecked( checkedItem )
 		{
 			const item		= checkedItem.item;
-
-			const key		= item.name;
 			const isChecked	= checkedItem.checked;
 
 			if ( isChecked )
@@ -156,13 +149,9 @@ export default {
 			let filesCount		= 0
 
 			for ( const item of this.checkedItems )
-			{
 				item.isFolder ? foldersCount ++ : filesCount ++;
-			}
 
 			this.setMenu( foldersCount, filesCount );
-
-			console.log( `Folders: ${foldersCount} and files: ${filesCount}` );
 		},
 
 		/**
@@ -177,35 +166,29 @@ export default {
 				// Either one folder or one file
 				case ! foldersCount && filesCount === 1:
 				case foldersCount === 1 && ! filesCount:
-					console.log( 'One folder or one file' );
 					this.renameDisabled		= false;
 					this.downloadDisabled	= false;
 					break;
 
 				// Only folders ( more than one )
 				case foldersCount !== 0 && ! filesCount:
-					console.log( 'Only folders ( more than one )' );
-
 					this.renameDisabled		= true;
 					this.downloadDisabled	= false;
 					break;
 
 				// Only files ( more than one )
 				case ! foldersCount && filesCount !== 0:
-					console.log( 'Only files ( more than one )' );
 					this.renameDisabled		= true;
 					this.downloadDisabled	= false;
 					break;
 
 				// Folders and files
 				case foldersCount !== 0 && filesCount !== 0:
-					console.log( 'Folders and files' );
 					this.renameDisabled		= true;
 					this.downloadDisabled	= true;
 					break;
 
 				default:
-					console.log( 'DEFAULT' );
 					this.renameDisabled		= false;
 					this.downloadDisabled	= false;
 					break;
@@ -234,6 +217,8 @@ export default {
 		 * @details	The token is used for pagination and is retrieved from the API
 		 * 			This method has a flag for loading set so it will not attempt to load anything if there is already
 		 * 				a request being processed.
+		 * 			In the case of a newDirectory, items will be set directly, otherwise they will be concatenated. Also
+		 * 				the checkedItems will be reset and all items set in there will be unchecked
 		 * 			The items when loading a new dir are displayed after completely removing the old ones ( via a setTimeout )
 		 * 				for some reason Vue does not clear the old data and it stays in the new elements, so the items are
 		 * 				first fully cleared and then set
@@ -248,11 +233,11 @@ export default {
 			this.loading	= true;
 
 			const browseResult	= await communicator.browse( directory, token ).catch( ( error ) => {
-				return null;
+				return error;
 			});
 
-			if ( ! browseResult )
-				return console.log( 'There was an error loading data' );
+			if ( browseResult.error )
+				return this.browseErrorMessage	= this.formatErrorMessage( browseResult.error );
 
 			const isNewDir			= token === '';
 			this.items				= isNewDir ? browseResult.items : this.items.concat( browseResult.items );
@@ -263,6 +248,9 @@ export default {
 
 			if ( isNewDir )
 			{
+				for ( const item of this.checkedItems )
+					item.checked	= false;
+
 				this.checkedItems	= [];
 				this.setMenu();
 			}
@@ -313,13 +301,11 @@ export default {
 						const decodedCurrentDir	= decode( this.currentDirectory );
 
 						const item	= await communicator.getFileData( encode( `${decodedCurrentDir}/${file.name}` ) ).catch( ( error ) => {
-							console.log( error );
+							return error;
+						});
 
-							return null;
-						} );
-
-						if ( item === null )
-							return;
+						if ( item.error )
+							return this.uploadErrorMessage	= this.formatErrorMessage( item.error );
 
 						item.key	= item.name;
 						this.items	= this.items.concat( [item] );
@@ -330,17 +316,23 @@ export default {
 					});
 
 					this.dropzone.on( 'error', ( file, error ) => {
-						alert( error );
+						error	= JSON.parse( error );
+						this.uploadErrorMessage	= this.formatErrorMessage( error.error )
 					});
 				}
 			});
-		}
-	},
+		},
 
-	watch: {
-		items: function ()
+		/**
+		 * @brief	Formats and returns an error message given an error
+		 *
+		 * @param	{Object} error
+		 *
+		 * @return	{String}
+		 */
+		formatErrorMessage( error )
 		{
-			console.log( 'ITEMS HAVE BEEN CHANGED!?' );
+			return `An error has occurred: Code: ${error.code}${error.message ? `, message: ${error.message}` : ''}`
 		}
 	}
 }

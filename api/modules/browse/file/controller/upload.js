@@ -2,17 +2,8 @@
 
 // Dependencies
 const app				= require( 'event_request' )();
-const fs				= require( 'fs' );
-const { promisify }		= require( 'util' );
-const path				= require( 'path' );
 const UploadInput		= require( '../input/upload_input' );
-const mv				= require( 'mv' );
-
-const rename			= promisify( mv );
-
-const AJAX_HEADER		= 'x-requested-with';
-const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
-
+const UploadModel		= require( '../model/upload' );
 /**
  * @brief	Adds a '/file' route with method POST
  *
@@ -23,30 +14,11 @@ const AJAX_HEADER_VALUE	= 'XMLHttpRequest';
  *
  * @return	void
  */
-app.post( '/file', async ( event ) => {
-	const input		= new UploadInput( event );
-	const directory	= input.getDirectory();
-	const files		= input.getFiles();
-	event.clearTimeout();
+app.post( '/file', ( event ) => {
+	const input	= new UploadInput( event );
+	const model	= new UploadModel( event );
 
-	for ( const file of files )
-	{
-		const oldPath	= file.path;
-		const fileName	= path.parse( file.name );
-
-		let newPath		= path.join( directory, fileName.dir );
-		newPath			= path.join( newPath, fileName.name + fileName.ext );
-
-		const fileStats	= path.parse( newPath );
-
-		if ( ! fs.existsSync( fileStats.dir ) )
-			fs.mkdirSync( fileStats.dir, { recursive: true } );
-
-		await rename( oldPath, newPath );
-	}
-
-	if ( typeof event.headers[AJAX_HEADER] === 'string' && event.headers[AJAX_HEADER] === AJAX_HEADER_VALUE )
-		return event.send( '', 201 );
-
-	event.redirect( `/browse?dir=${input.getEncodedDirectory()}` );
+	model.upload( input ).then(() => {
+		event.send( '', 201 );
+	}).catch( event.next );
 });

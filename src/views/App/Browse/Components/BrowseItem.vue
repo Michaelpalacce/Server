@@ -17,7 +17,6 @@
 		<span class="fa fa-folder-open md:hidden fa-3x w-1/6" v-if="isFolder && ! isBack"></span>
 		<span class="fa fa-file md:hidden fa-3x w-1/6" v-if="! isFolder && ! isBack"></span>
 
-		{{checked}}
 		<div class="flex flex-wrap md:block md:w-full w-5/6 text-xs md:text-base px-5 md:px-0">
 			<div class="w-full md:w-10 hidden md:inline-block" v-if="! isBack">
 				<input type="checkbox" class="form-checkbox h-5 w-5 mt-3 mx-auto" v-model="checked">
@@ -42,6 +41,7 @@
 
 <script>
 import communicator	from "@/app/main/api/communicator";
+
 
 export default {
 	name: "BrowseItem",
@@ -108,6 +108,11 @@ export default {
 	},
 
 	watch: {
+		/**
+		 * @brief	Emits an `on-checked` event with the item and the checked state
+		 *
+		 * @return	void
+		 */
 		checked: function ()
 		{
 			this.$emit( 'on-checked', { checked: this.checked, item: this } );

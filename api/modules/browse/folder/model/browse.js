@@ -38,13 +38,19 @@ class BrowseModel
 	 */
 	async browse( browseInput )
 	{
-		const directory	= browseInput.getDirectory();
+		if ( ! browseInput.isValid() )
+			throw { code: 'app.input.invalidBrowseInput', message : browseInput.getReasonToString() };
 
-		if ( ! this._canAccess( browseInput ) )
-			throw { code: 'app.browse.unauthorized', message: { directory } };
+		const directory			= browseInput.getDirectory();
+		const route				= this.user.getBrowseMetadata().getRoute();
+		const requestedDir		= browseInput.getDirectory();
+		const resolvedDir		= path.resolve( requestedDir );
 
-		const parsedItem			= path.parse( directory );
-		const itemsResult			= await fileSystem.getAllItems( directory, browseInput.getToken() );
+		if ( resolvedDir.includes( PROJECT_ROOT ) || ! requestedDir.includes( route ) )
+			throw { code: 'app.browse.unauthorized', message: `You don\'t have permissions to access: ${resolvedDir}`, status: 403 };
+
+		const parsedItem	= path.parse( directory );
+		const itemsResult	= await fileSystem.getAllItems( directory, browseInput.getToken() );
 
 		return {
 			currentDirectory:	browseInput.getEncodedDirectory(),
@@ -53,40 +59,6 @@ class BrowseModel
 			items:				itemsResult.items.map( item => formatItem( item, this.event ) ),
 			hasMore:			itemsResult.hasMore,
 		};
-	}
-
-	/**
-	 * @brief	Checks if the user can access the given directory
-	 *
-	 * @param	{BrowseInput} browseInput
-	 *
-	 * @return	{Boolean}
-	 */
-	_canAccess( browseInput )
-	{
-		const isRoot			= Acl.is( this.user, User.ROLES.root );
-		const browseMetadata	= this.user.getMetadata( 'BrowseMetadata' );
-
-		if ( ! browseMetadata.hasRoute() )
-			browseMetadata.setDefaultRoute();
-
-		const route			= browseMetadata.getRoute();
-		const requestedDir	= browseInput.getDirectory();
-		const resolvedDir	= path.resolve( requestedDir );
-
-		if ( ! isRoot && resolvedDir.includes( PROJECT_ROOT ) )
-		{
-			this.reason	= `You don\'t have permissions to access: ${resolvedDir}`;
-			return false;
-		}
-
-		if ( ! requestedDir.includes( route ) )
-		{
-			this.reason	= `You don\'t have permissions to access: ${resolvedDir}`;
-			return false;
-		}
-
-		return true;
 	}
 }
 

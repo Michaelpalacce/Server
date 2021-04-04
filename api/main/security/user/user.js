@@ -179,9 +179,27 @@ class User
 	getMetadata( key )
 	{
 		if ( typeof this.metadata[key] === 'undefined' )
-			this.metadata[key]	= new metadataPool[key]( {} );
+			if ( typeof metadataPool[key] !== 'string' )
+				this.metadata[key]	= new metadataPool[key]( {} );
+			else
+				throw { code: 'app.user.invalidMetadata', message: 'Internal Server Error' };
 
 		return this.metadata[key];
+	}
+
+	/**
+	 * @brief	Gets the browse metadata and sets it up if it is not already setUp
+	 *
+	 * @return	{BrowseMetadata}
+	 */
+	getBrowseMetadata()
+	{
+		const metadata	= this.getMetadata( 'BrowseMetadata' );
+
+		if ( ! metadata.hasRoute() )
+			metadata.setDefaultRoute();
+
+		return metadata;
 	}
 }
 
