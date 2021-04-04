@@ -2,6 +2,8 @@
 	<div class="text-left border-b border-gray-300 table-row md:w-full text-sm md:text-base">
 		<MenuElement key="Refresh" text="Refresh" @on-click="$emit( 'refresh-click' )"/>
 		<MenuElement key="Upload" text="Upload" @on-click="$emit( 'upload-click' )"/>
+		<MenuElement key="NewFolder" text="New Folder" @on-click="$emit( 'new-folder-click' )"/>
+
 		<div class="border-l-2 inline mx-2"></div>
 		<MenuElement key="Rename" text="Rename" :isDisabled="renameDisabled" @on-click="$emit( 'rename-click' )"/>
 		<MenuElement key="Download" text="Download" :isDisabled="downloadDisabled" @on-click="$emit( 'download-click' )"/>

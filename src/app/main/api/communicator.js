@@ -91,20 +91,15 @@ class ApiCommunicator
 	 */
 	async browse( directory = '', token = '' )
 	{
-		const browseResult	= await axios.get(
+		const response	= await axios.get(
 			this._formatUrlWithQueryParams( `${this.url}/browse`, { directory, token } ),
 			{},
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
-			return error;
+			return error.response;
 		});
 
-		const status	= browseResult.status;
-
-		if ( status !== 200 )
-			throw browseResult.response.data;
-
-		return browseResult.data;
+		return response.data;
 	}
 
 	/**
@@ -114,20 +109,45 @@ class ApiCommunicator
 	 */
 	async getFileData( file )
 	{
-		const browseResult	= await axios.get(
+		const response	= await axios.get(
 			this._formatUrlWithQueryParams( `${this.url}/file/getFileData`, { file } ),
 			{},
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
-			return error;
+			return error.response;
 		});
 
-		const status	= browseResult.status;
+		return response.data;
+	}
 
-		if ( status !== 200 )
-			throw browseResult.response.data;
+	/**
+	 * @brief	Deletes an item
+	 *
+	 * @details	Works with both folders and files
+	 *
+	 * @param	{Object} item
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async deleteItem( item )
+	{
+		if ( ! item.isFolder )
+		{
+			const response	= await axios.delete(
+				this._formatUrlWithQueryParams( `${this.url}/file`, { item: item.encodedURI } ),
+				{},
+				{ headers: this.getAuthHeaders() }
+			).catch( ( error ) => {
+				return error.response;
+			});
 
-		return browseResult.data;
+			return response.data;
+		}
+		else
+		{
+			throw 'WIP';
+			return null;
+		}
 	}
 
 	/**
@@ -138,6 +158,23 @@ class ApiCommunicator
 	getAuthHeaders()
 	{
 		return { token: localStorage.token };
+	}
+
+	/**
+	 * @brief	Returns either an error response or the actual response if it was 2xx
+	 *
+	 * @param	{Object} response
+	 *
+	 * @return	{*}
+	 */
+	_handleResponse( response )
+	{
+		const status	= response.status;
+
+		if ( status % 200 >= 100 )
+			throw response.response.data;
+
+		return response.data;
 	}
 
 	/**

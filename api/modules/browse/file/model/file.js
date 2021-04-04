@@ -26,8 +26,6 @@ class FileModel
 	 */
 	async getFile( fileInput )
 	{
-		const route	= this.user.getBrowseMetadata().getRoute();
-
 		if ( ! fileInput.isValid() )
 			throw { code: 'app.input.invalidFileInput', message : fileInput.getReasonToString() };
 
@@ -37,6 +35,7 @@ class FileModel
 		if ( stats.code )
 			throw stats;
 
+		const route			= this.user.getBrowseMetadata().getRoute();
 		const resolvedFile	= path.resolve( itemName );
 		const resolvedRoute	= path.resolve( route );
 

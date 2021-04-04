@@ -31,12 +31,10 @@ class UploadModel
 	 */
 	async upload( uploadInput )
 	{
-		// const route	= this.user.getBrowseMetadata().getRoute();
-		const route	= '/Someth';
-
 		if ( ! uploadInput.isValid() )
 			throw { code: 'app.input.invalidUploadInput', message : uploadInput.getReasonToString() };
 
+		const route			= this.user.getBrowseMetadata().getRoute();
 		const resolvedDir	= path.resolve( uploadInput.getDirectory() );
 		const resolvedRoute	= path.resolve( route );
 

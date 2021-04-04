@@ -9,6 +9,7 @@
 			:moveDisabled="moveDisabled"
 			@upload-click="showUpload"
 			@refresh-click="browse( currentDirectory )"
+			@delete-click="deleteCheckedItems"
 		/>
 		<BrowseItem :key="'Back'" name="Back" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
 
@@ -145,22 +146,22 @@ export default {
 			else
 				this.checkedItems.splice( this.checkedItems.indexOf( checkedItem ), 1 );
 
+			this.setMenu();
+		},
+
+		/**
+		 * @brief	Sets the menu according to the current checked items
+		 *
+		 * @return	void
+		 */
+		setMenu()
+		{
 			let foldersCount	= 0;
 			let filesCount		= 0
 
 			for ( const item of this.checkedItems )
 				item.isFolder ? foldersCount ++ : filesCount ++;
 
-			this.setMenu( foldersCount, filesCount );
-		},
-
-		/**
-		 * @brief	Resets the menu so all items are NOT disabled
-		 *
-		 * @return	void
-		 */
-		setMenu( foldersCount = 0, filesCount = 0 )
-		{
 			switch ( true )
 			{
 				// Either one folder or one file
@@ -321,6 +322,35 @@ export default {
 					});
 				}
 			});
+		},
+
+		/**
+		 * @brief	Triggered by the menu or context menu ( future ), deletes one or more items
+		 *
+		 * @details	Deletes all checked items, whether they are folders or files one by one
+		 *
+		 * @return	void
+		 */
+		deleteCheckedItems()
+		{
+			const deletePromises	= [];
+			const items				= [];
+
+			for ( const item of this.checkedItems )
+			{
+				deletePromises.push( communicator.deleteItem( item ) );
+				items.push( item.name );
+			}
+
+			Promise.all( deletePromises ).then(( promises ) => {
+				for ( const promise of promises )
+					if ( typeof promise.error !== 'undefined' )
+						this.browseErrorMessage	=  this.formatErrorMessage( promise.error ) + '. Other errors may have occurred if multiple items were being deleted.';
+
+				this.browse( this.currentDirectory );
+			}).catch(( errors ) => {
+				this.browseErrorMessage	= `An error has occurred ${errors[0]}`;
+			})
 		},
 
 		/**

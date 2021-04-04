@@ -9,11 +9,10 @@ require( './main/security/security' );
 require( './modules/browse/file/controller/file_data' );
 // require( './file/controller/download' );
 require( './modules/browse/file/controller/upload' );
-// require( './file/controller/delete' );
+require( './modules/browse/file/controller/delete' );
 require( './modules/browse/file/controller/preview' );
 //
 require( './modules/browse/folder/controller/view' );
-require( './modules/browse/folder/controller/list' );
 // require( './folder/controller/delete' );
 // require( './folder/controller/upload' );
 // require( './folder/controller/move' );

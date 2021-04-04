@@ -4,8 +4,6 @@
 const path			= require( 'path' );
 const FileSystem	= require( 'fs-browser' );
 
-const Acl			= require( '../../../../main/acls/acl' );
-const User			= require( '../../../../main/security/user/user' );
 const formatItem	= require( '../../../../main/utils/file_formatter' );
 const { encode }	= require( '../../../../main/utils/base_64_encoder' );
 
