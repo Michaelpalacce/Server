@@ -1,31 +1,44 @@
 <template>
 	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64" v-if="upload === false">
-		<div class="text-left border-b border-gray-300 table-row md:w-full text-sm md:text-base">
-			<MenuElement text="Refresh" @click="browse( currentDirectory )"/>
-			<MenuElement text="Upload" @click="showUpload"/>
-			<div class="border-l-2 inline mx-2"></div>
-			<MenuElement text="Rename"/>
-			<MenuElement text="Download"/>
-			<MenuElement text="Delete"/>
-			<MenuElement text="Copy"/>
-			<MenuElement text="Move"/>
-		</div>
-		<BrowseItem name="Back" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
+<!--		<div class="text-left border-b border-gray-300 table-row md:w-full text-sm md:text-base">-->
+<!--			<MenuElement key="Refresh" text="Refresh" @on-click="showUpload"/>-->
+<!--			<MenuElement key="Upload" text="Upload" @on-click="browse( currentDirectory )"/>-->
+<!--			<div class="border-l-2 inline mx-2"></div>-->
+<!--			<MenuElement key="Rename" text="Rename" :isDisabled="renameDisabled" @on-click="$emit( 'rename-click' )"/>-->
+<!--			<MenuElement key="Download" text="Download" :isDisabled="downloadDisabled" @on-click="$emit( 'download-click' )"/>-->
+<!--			<MenuElement key="Delete" text="Delete" :isDisabled="deleteDisabled" @on-click="$emit( 'delete-click' )"/>-->
+<!--			<MenuElement key="Copy" text="Copy" :isDisabled="copyDisabled" @on-click="$emit( 'copy-click' )"/>-->
+<!--			<MenuElement key="Move" text="Move" :isDisabled="moveDisabled" @on-click="$emit( 'move-click' )"/>-->
+<!--		</div>-->
+<!--		-->
+		<Menu
+			:key="'Menu'"
+			:renameDisabled="renameDisabled"
+			:downloadDisabled="downloadDisabled"
+			:deleteDisabled="deleteDisabled"
+			:copyDisabled="copyDisabled"
+			:moveDisabled="moveDisabled"
+			@upload-click="showUpload"
+			@refresh-click="browse( currentDirectory )"
+		/>
+		<BrowseItem :key="'Back'" name="Back" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
 
 		<div v-for="item in items">
 			<BrowseItem
 				:key="item.name + Math.random()"
 				:name="item.name"
 				:isFolder="item.isDir"
-				:type="item.fileType"
+				:fileType="item.fileType"
 				:encodedURI="item.encodedURI"
+				:previewAvailable="item.previewAvailable"
 				:size="item.size"
-				@click="onItemClick( item )"
+				@on-click="onItemClick( item )"
+				@on-checked="onItemChecked"
 			/>
 		</div>
 	</div>
 	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5 mb-64" v-else>
-		<BrowseItem name="Back" :isFolder="true" @click="upload = ! canBrowse" :isBack="true" class="mb-5"/>
+		<BrowseItem :key="'BackUpload'" name="Back" :isFolder="true" @click="upload = ! canBrowse" :isBack="true" class="mb-5"/>
 
 		<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
 			<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
@@ -35,17 +48,16 @@
 
 <script>
 import BrowseItem			from "@/views/App/Browse/Components/BrowseItem";
-import MenuElement			from "@/views/App/Browse/Components/MenuElement";
+import MenuElement			from "@/views/App/Browse/Components/MenuComponents/MenuElement";
 import communicator			from "@/app/main/api/communicator";
 import { encode, decode }	from '@/../api/main/utils/base_64_encoder';
 import Dropzone				from '@/app/lib/dropzone';
+import Menu					from "@/views/App/Browse/Components/Menu";
 
 
 export default {
 	name: 'Browse',
-	components: {
-		BrowseItem, MenuElement
-	},
+	components: { Menu, BrowseItem, MenuElement },
 
 	data: () => {
 		return {
@@ -59,7 +71,15 @@ export default {
 			upload				: false,
 			apiUrl				: communicator.getApiUrl(),
 			dropzone			: null,
-			canBrowse			: true
+			canBrowse			: true,
+
+			checkedItems		: [],
+
+			renameDisabled		: false,
+			downloadDisabled	: false,
+			deleteDisabled		: false,
+			copyDisabled		: false,
+			moveDisabled		: false,
 		};
 	},
 
@@ -114,6 +134,85 @@ export default {
 		},
 
 		/**
+		 * @brief	Triggered when an item checkbox is clicked
+		 *
+		 * @details	This adds or removes the item from the buffer of checked items
+		 *
+		 * @return	void
+		 */
+		onItemChecked( checkedItem )
+		{
+			const item		= checkedItem.item;
+
+			const key		= item.name;
+			const isChecked	= checkedItem.checked;
+
+			if ( isChecked )
+				this.checkedItems	= this.checkedItems.concat( item );
+			else
+				this.checkedItems.splice( this.checkedItems.indexOf( checkedItem ), 1 );
+
+			let foldersCount	= 0;
+			let filesCount		= 0
+
+			for ( const item of this.checkedItems )
+			{
+				item.isFolder ? foldersCount ++ : filesCount ++;
+			}
+
+			this.setMenu( foldersCount, filesCount );
+
+			console.log( `Folders: ${foldersCount} and files: ${filesCount}` );
+		},
+
+		/**
+		 * @brief	Resets the menu so all items are NOT disabled
+		 *
+		 * @return	void
+		 */
+		setMenu( foldersCount = 0, filesCount = 0 )
+		{
+			switch ( true )
+			{
+				// Either one folder or one file
+				case ! foldersCount && filesCount === 1:
+				case foldersCount === 1 && ! filesCount:
+					console.log( 'One folder or one file' );
+					this.renameDisabled		= false;
+					this.downloadDisabled	= false;
+					break;
+
+				// Only folders ( more than one )
+				case foldersCount !== 0 && ! filesCount:
+					console.log( 'Only folders ( more than one )' );
+
+					this.renameDisabled		= true;
+					this.downloadDisabled	= false;
+					break;
+
+				// Only files ( more than one )
+				case ! foldersCount && filesCount !== 0:
+					console.log( 'Only files ( more than one )' );
+					this.renameDisabled		= true;
+					this.downloadDisabled	= false;
+					break;
+
+				// Folders and files
+				case foldersCount !== 0 && filesCount !== 0:
+					console.log( 'Folders and files' );
+					this.renameDisabled		= true;
+					this.downloadDisabled	= true;
+					break;
+
+				default:
+					console.log( 'DEFAULT' );
+					this.renameDisabled		= false;
+					this.downloadDisabled	= false;
+					break;
+			}
+		},
+
+		/**
 		 * @brief	Tries to load the page if the bottom of the page is reached
 		 */
 		async tryToLoad()
@@ -156,16 +255,20 @@ export default {
 				return console.log( 'There was an error loading data' );
 
 			const isNewDir			= token === '';
-			const newItems			= isNewDir ? browseResult.items : this.items.concat( browseResult.items );
-
+			this.items				= isNewDir ? browseResult.items : this.items.concat( browseResult.items );
 			this.previousDirectory	= browseResult.previousDirectory;
 			this.currentDirectory	= browseResult.currentDirectory;
 			this.nextToken			= browseResult.nextToken;
 			this.hasMore			= browseResult.hasMore;
 
+			if ( isNewDir )
+			{
+				this.checkedItems	= [];
+				this.setMenu();
+			}
+
 			this.setUrlToCurrentDirectory();
 
-			this.items		= newItems;
 			this.loading	= false;
 		},
 
@@ -231,6 +334,13 @@ export default {
 					});
 				}
 			});
+		}
+	},
+
+	watch: {
+		items: function ()
+		{
+			console.log( 'ITEMS HAVE BEEN CHANGED!?' );
 		}
 	}
 }
