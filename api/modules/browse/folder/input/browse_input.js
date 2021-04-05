@@ -40,7 +40,7 @@ class BrowseInput extends Input
 	 */
 	_validate()
 	{
-		const result	= this.validationHandler.validate(
+		this.reason	= this.validationHandler.validate(
 			this.event.query,
 			{
 				directory	: { $rules: 'optional||string', $default: DEFAULT_ENCODED_DIR },
@@ -48,10 +48,10 @@ class BrowseInput extends Input
 			}
 		);
 
-		if ( result.hasValidationFailed() )
+		if ( this.reason.hasValidationFailed() )
 			return false;
 
-		const { directory, token }				= result.getValidationResult();
+		const { directory, token }				= this.reason.getValidationResult();
 
 		this.model[BrowseInput.DIRECTORY_KEY]	= decode( directory );
 		this.model[BrowseInput.TOKEN_KEY]		= decode( token );

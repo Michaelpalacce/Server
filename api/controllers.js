@@ -13,7 +13,7 @@ require( './modules/browse/file/controller/delete' );
 require( './modules/browse/file/controller/preview' );
 //
 require( './modules/browse/folder/controller/view' );
-// require( './folder/controller/delete' );
+require( './modules/browse/folder/controller/delete' );
 // require( './folder/controller/upload' );
 // require( './folder/controller/move' );
 //

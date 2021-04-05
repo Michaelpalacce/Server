@@ -2,44 +2,22 @@
 
 // Dependencies
 const app			= require( 'event_request' )();
-const fs			= require( 'fs' );
-const path			= require( 'path' );
 const DeleteInput	= require( '../input/delete_input' );
+const DeleteModel	= require( '../model/delete' );
 
 /**
- * @brief	Removes a folder recursively
+ * @brief	Adds a '/delete' route with method DELETE
  *
- * @param	{String} dir
- *
- * @return	void
- */
-const deleteFolderRecursive	= function( dir )
-{
-	if ( fs.existsSync( dir ) )
-	{
-		fs.readdirSync( dir ).forEach( ( file ) => {
-			const curPath	= path.join( dir, file );
-			if ( fs.lstatSync( curPath ).isDirectory() )
-				deleteFolderRecursive( curPath );
-			else
-				fs.unlinkSync( curPath );
-		});
-
-		fs.rmdirSync( dir );
-	}
-};
-
-/**
- * @brief	Adds a '/delete' route with method GET
- *
- * @details	Required Parameters: file || folder
+ * @details	Required Parameters: item
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
 app.delete( '/folder', ( event ) => {
 	const input	= new DeleteInput( event );
+	const model	= new DeleteModel( event );
 
-	deleteFolderRecursive( input.getDirectory() );
+	model.delete( input );
+
 	event.send();
 });

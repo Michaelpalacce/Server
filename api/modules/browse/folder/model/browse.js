@@ -41,7 +41,7 @@ class BrowseModel
 
 		const directory			= browseInput.getDirectory();
 		const route				= this.user.getBrowseMetadata().getRoute();
-		const requestedDir		= browseInput.getDirectory();
+		const requestedDir		= directory;
 		const resolvedDir		= path.resolve( requestedDir );
 
 		if ( resolvedDir.includes( PROJECT_ROOT ) || ! requestedDir.includes( route ) )

@@ -1,0 +1,82 @@
+'use strict';
+
+const path			= require( 'path' );
+const fs			= require( 'fs' );
+
+const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+
+/**
+ * @brief	Class responsible for deletion of folders
+ */
+class DeleteModel
+{
+	/**
+	 * @param	{EventRequest} event
+	 */
+	constructor( event )
+	{
+		this.event	= event;
+		this.user	= event.$user;
+	}
+
+	/**
+	 * @brief	Deletes the given folder
+	 *
+	 * @details	This function will check if the current user has permissions to delete the folder
+	 * 			This function will check what you are trying to delete (cannot delete project root or root dir)
+	 * 			This function will check if the directory exists or not and return an error if it does not exist
+	 *
+	 * @param	{DeleteInput} deleteInput
+	 *
+	 * @return	void
+	 */
+	delete( deleteInput )
+	{
+		if ( ! deleteInput.isValid() )
+			throw { code: 'app.input.invalidDeleteInput', message : deleteInput.getReasonToString() };
+
+		const directory		= deleteInput.getDirectory();
+		const route			= this.user.getBrowseMetadata().getRoute();
+		const resolvedDir	= path.resolve( directory );
+		const resolvedRoute	= path.resolve( route );
+
+		if ( resolvedDir.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedDir ) )
+			throw { code: 'app.browse.delete.projectRoot', message : `Cannot delete project ROOT ${resolvedDir}` };
+
+		if ( ! resolvedDir.includes( resolvedRoute ) || directory === '/' )
+			throw { code: 'app.browse.delete.unauthorized', message : `No permissions to delete ${resolvedDir}` };
+
+		if ( ! fs.existsSync( directory ) )
+			throw { code: 'app.browse.delete.directoryMissing', message : `Directory does not exist: ${resolvedDir}` };
+
+		if ( ! fs.statSync( directory ).isDirectory() )
+			throw { code: 'app.browse.delete.wrongCall', message : `Trying to delete a file: ${resolvedDir}` };
+
+		this._deleteFolderRecursive( directory );
+	}
+
+	/**
+	 * @brief	Removes a folder recursively
+	 *
+	 * @param	{String} dir
+	 *
+	 * @return	void
+	 */
+	_deleteFolderRecursive( dir )
+	{
+		if ( fs.existsSync( dir ) )
+		{
+			fs.readdirSync( dir ).forEach( ( file ) => {
+				const curPath	= path.join( dir, file );
+				if ( fs.lstatSync( curPath ).isDirectory() )
+					this._deleteFolderRecursive( curPath );
+				else
+					fs.unlinkSync( curPath );
+			});
+
+			fs.rmdirSync( dir );
+		}
+	};
+}
+
+module.exports	= DeleteModel;

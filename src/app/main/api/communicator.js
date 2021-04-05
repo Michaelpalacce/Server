@@ -131,23 +131,17 @@ class ApiCommunicator
 	 */
 	async deleteItem( item )
 	{
-		if ( ! item.isFolder )
-		{
-			const response	= await axios.delete(
-				this._formatUrlWithQueryParams( `${this.url}/file`, { item: item.encodedURI } ),
-				{},
-				{ headers: this.getAuthHeaders() }
-			).catch( ( error ) => {
-				return error.response;
-			});
+		const url	= `${this.url}/${item.isFolder ? 'folder' : 'file'}`
 
-			return response.data;
-		}
-		else
-		{
-			throw 'WIP';
-			return null;
-		}
+		const response	= await axios.delete(
+			this._formatUrlWithQueryParams( url, { item: item.encodedURI } ),
+			{},
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
 	}
 
 	/**

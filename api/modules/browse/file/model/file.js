@@ -39,7 +39,7 @@ class FileModel
 		const resolvedFile	= path.resolve( itemName );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( resolvedFile.includes( resolvedRoute ) || resolvedFile.includes( PROJECT_ROOT ) )
+		if ( ! resolvedFile.includes( resolvedRoute ) || resolvedFile.includes( PROJECT_ROOT ) )
 			throw { code: 'app.browse.fileData.unauthorized', message : `No permissions to access ${resolvedFile}`, status: 403 };
 
 		return formatItem( itemName, this.event );

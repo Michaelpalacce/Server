@@ -48,7 +48,7 @@ class DeleteModel
 			throw { code: 'app.browse.delete.wrongCall', message : itemName };
 
 		await unlink( deleteInput.getItem() ).catch(( error )=>{
-			throw { code: 'app.browse.deleteFailed', message : error, status: 500 };
+			throw { code: 'app.browse.delete.failed', message : error, status: 500 };
 		});
 	}
 }
