@@ -10,7 +10,9 @@
 			@upload-click="showUpload"
 			@refresh-click="browse( currentDirectory )"
 			@delete-click="deleteCheckedItems"
+			@new-folder-click="createNewFolder"
 		/>
+		<div class="my-2 mx-auto justify-center text-center text-xl font-medium tracking-wide">{{decodedCurrentDir}}</div>
 		<BrowseItem :key="'Back'" name="Back" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
 
 		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
@@ -47,7 +49,7 @@ import { encode, decode }	from '@/../api/main/utils/base_64_encoder';
 import Dropzone				from '@/app/lib/dropzone';
 import Menu					from "@/views/App/Browse/Components/Menu";
 import Error				from "@/views/App/Browse/Components/Error";
-
+import path					from "path";
 
 export default {
 	name: 'Browse',
@@ -59,6 +61,7 @@ export default {
 			nextToken			: '',
 			hasMore				: true,
 			currentDirectory	: '',
+			decodedCurrentDir	: '',
 			previousDirectory	: '',
 			browseErrorMessage	: '',
 
@@ -127,6 +130,31 @@ export default {
 						}
 					}
 				);
+		},
+
+		/**
+		 * @brief	Creates a new folder and adds it to the view
+		 *
+		 * @todo	Make a better way to create folders than a prompt!
+		 *
+		 * @return	void
+		 */
+		async createNewFolder()
+		{
+			const folderName	= prompt( 'What should the folder be called?' );
+
+			if ( typeof folderName === 'string' && folderName.length > 0 )
+			{
+				const newPath				= encode( `${this.decodedCurrentDir}/${folderName}` );
+				const createFolderResponse	= await communicator.createFolder( newPath ).catch( ( error ) => {
+					return error;
+				});
+
+				if ( createFolderResponse.error )
+					return this.browseErrorMessage	= this.formatErrorMessage( createFolderResponse.error );
+
+				this.browse( this.currentDirectory );
+			}
 		},
 
 		/**
@@ -233,19 +261,20 @@ export default {
 
 			this.loading	= true;
 
-			const browseResult	= await communicator.browse( directory, token ).catch( ( error ) => {
+			const browseResponse	= await communicator.browse( directory, token ).catch( ( error ) => {
 				return error;
 			});
 
-			if ( browseResult.error )
-				return this.browseErrorMessage	= this.formatErrorMessage( browseResult.error );
+			if ( browseResponse.error )
+				return this.browseErrorMessage	= this.formatErrorMessage( browseResponse.error );
 
 			const isNewDir			= token === '';
-			this.items				= isNewDir ? browseResult.items : this.items.concat( browseResult.items );
-			this.previousDirectory	= browseResult.previousDirectory;
-			this.currentDirectory	= browseResult.currentDirectory;
-			this.nextToken			= browseResult.nextToken;
-			this.hasMore			= browseResult.hasMore;
+			this.items				= isNewDir ? browseResponse.items : this.items.concat( browseResponse.items );
+			this.previousDirectory	= browseResponse.previousDirectory;
+			this.currentDirectory	= browseResponse.currentDirectory;
+			this.decodedCurrentDir	= decode( browseResponse.currentDirectory );
+			this.nextToken			= browseResponse.nextToken;
+			this.hasMore			= browseResponse.hasMore;
 
 			if ( isNewDir )
 			{
@@ -299,9 +328,7 @@ export default {
 					this.dropzone.on( 'queuecomplete', () => { this.canBrowse	= true; } );
 
 					this.dropzone.on( 'success', async( file ) => {
-						const decodedCurrentDir	= decode( this.currentDirectory );
-
-						const item	= await communicator.getFileData( encode( `${decodedCurrentDir}/${file.name}` ) ).catch( ( error ) => {
+						const item	= await communicator.getFileData( encode( `${this.decodedCurrentDir}/${file.name}` ) ).catch( ( error ) => {
 							return error;
 						});
 

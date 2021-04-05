@@ -39,13 +39,13 @@ class BrowseModel
 		if ( ! browseInput.isValid() )
 			throw { code: 'app.input.invalidBrowseInput', message : browseInput.getReasonToString() };
 
-		const directory			= browseInput.getDirectory();
-		const route				= this.user.getBrowseMetadata().getRoute();
-		const requestedDir		= directory;
-		const resolvedDir		= path.resolve( requestedDir );
+		const directory		= browseInput.getDirectory();
+		const route			= this.user.getBrowseMetadata().getRoute();
+		const requestedDir	= directory;
+		const resolvedDir	= path.resolve( requestedDir );
 
 		if ( resolvedDir.includes( PROJECT_ROOT ) || ! requestedDir.includes( route ) )
-			throw { code: 'app.browse.unauthorized', message: `You don\'t have permissions to access: ${resolvedDir}`, status: 403 };
+			throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${resolvedDir}`, status: 403 };
 
 		const parsedItem	= path.parse( directory );
 		const itemsResult	= await fileSystem.getAllItems( directory, browseInput.getToken() );

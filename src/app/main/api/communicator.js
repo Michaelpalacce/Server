@@ -145,6 +145,26 @@ class ApiCommunicator
 	}
 
 	/**
+	 * @brief	Creates a new folder
+	 *
+	 * @param	{Object} directory
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async createFolder( directory )
+	{
+		const response	= await axios.post(
+			`${this.url}/folder`,
+			{ directory },
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
 	 * @brief	Gets the authentication headers
 	 *
 	 * @return	Object

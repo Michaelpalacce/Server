@@ -2,22 +2,24 @@
 
 // Dependencies
 const app			= require( 'event_request' )();
-const { mkdir }		= require( 'fs' ).promises;
 const UploadInput	= require( '../input/upload_input' );
+const UploadModel	= require( '../model/upload' );
 
 /**
  * @brief	Adds a '/folder' route with method PUT
  *
  * @details	Creates a new folder
  *
- * @details	Required Parameters: folder
+ * @details	Required Parameters: directory
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
 app.post( '/folder', async ( event ) => {
 	const input	= new UploadInput( event );
-	await mkdir( input.getDirectory() ).catch( event.next );
+	const model	= new UploadModel( event );
+
+	await model.createFolder( input ).catch( event.next );
 
 	event.send( '', 201 );
 });

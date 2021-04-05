@@ -14,7 +14,7 @@ require( './modules/browse/file/controller/preview' );
 //
 require( './modules/browse/folder/controller/view' );
 require( './modules/browse/folder/controller/delete' );
-// require( './folder/controller/upload' );
+require( './modules/browse/folder/controller/upload' );
 // require( './folder/controller/move' );
 //
 // require( './user/controller/list' );
