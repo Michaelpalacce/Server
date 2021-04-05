@@ -1,81 +1,124 @@
 'use strict';
 
-const fs		= require( 'fs' );
-const util		= require( 'util' );
-const path		= require( 'path' );
-const MoveInput	= require( '../input/move_input' );
+const { rename }	= require( 'fs' ).promises;
+const fs			= require( 'fs' );
+const path			= require( 'path' );
 
-const rename	= util.promisify( fs.rename );
-const copy		= util.promisify( fs.copyFile );
-
-const Model		= {};
+const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 /**
- * @brief	Moves the given item to a new path
- *
- * @param	{EventRequest} event
- *
- * @returns	void
+ * @brief	Model responsible for cutting, copying or renaming a File
  */
-Model.cut	= async ( event ) => {
-	const input		= new MoveInput( event );
-	const oldPath	= input.getOldPath();
-	let newPath		= input.getNewPath();
+class MoveModel
+{
+	/**
+	 * @param	{EventRequest} event
+	 */
+	constructor( event )
+	{
+		this.event	= event;
+		this.user	= event.$user;
+	}
 
-	if ( ! fs.existsSync( newPath ) )
-		return event.send( 'New path does not exist', 400 );
+	/**
+	 * @brief	Cuts the given File to a new place
+	 *
+	 * @param	{MoveInput} moveInput
+	 *
+	 * @return	{Promise<void>}
+	 */
+	cut( moveInput )
+	{
+		this._canPerformOperation( moveInput );
+		const oldPath	= input.getOldPath();
+		const newPath	= input.getNewPath();
 
-	newPath	= path.join( newPath, path.parse( oldPath ).base );
+		if ( newPath.includes( oldPath ) )
+			throw { code: 'app.browse.move.recursionDetected', message: 'Possible recursion prevented' };
 
-	event.clearTimeout();
-	await rename( oldPath, newPath ).catch( event.next );
+		if ( ! fs.existsSync( newPath ) )
+			throw { code: 'app.browse.move.fileDoesNotExist', message: 'New path does not exist' };
 
-	newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
-	event.send( { newPath } );
-};
+		this.event.clearTimeout();
 
-/**
- * @brief	Copies the given item to a new path
- *
- * @param	{EventRequest} event
- *
- * @returns	void
- */
-Model.copy	= async ( event ) => {
-	const input		= new MoveInput( event );
-	const oldPath	= input.getOldPath();
-	let newPath		= input.getNewPath();
+		return rename( oldPath, path.join( newPath, path.parse( oldPath ).base ) );
+	}
 
-	if ( ! fs.existsSync( newPath ) )
-		return event.send( 'New path does not exist', 400 );
+	/**
+	 * @brief	Copies the given File to a new place
+	 *
+	 * @param	{MoveInput} moveInput
+	 *
+	 * @return	{Promise<void>}
+	 */
+	copy( moveInput )
+	{
+		this._canPerformOperation( moveInput );
 
-	newPath	= path.join( newPath, path.parse( oldPath ).base );
+		const oldPath	= moveInput.getOldPath();
+		const newPath	= moveInput.getNewPath();
 
-	event.clearTimeout();
-	await copy( oldPath, newPath ).catch( event.next );
+		if ( newPath.includes( oldPath ) )
+			throw { code: 'app.browse.move.recursionDetected', message: 'Possible recursion prevented' };
 
-	newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
-	event.send( { newPath } );
-};
+		if ( ! fs.existsSync( newPath ) )
+			throw { code: 'app.browse.move.fileDoesNotExist', message: 'New path does not exist' };
 
-/**
- * @brief	Renames the given item
- *
- * @param	{EventRequest} event
- *
- * @returns	void
- */
-Model.rename	= async ( event ) => {
-	const input	= new MoveInput( event );
-	let newPath	= input.getNewPath();
+		this.event.clearTimeout();
 
-	if ( fs.existsSync( newPath ) )
-		return event.send( 'File already exists', 400 );
+		return copy( oldPath, path.join( newPath, path.parse( oldPath ).base ) );
+	}
 
-	await rename( input.getOldPath(), newPath ).catch( event.next );
+	/**
+	 * @brief	Renames the given File
+	 *
+	 * @param	{MoveInput} moveInput
+	 *
+	 * @return	{Promise<void>}
+	 */
+	rename( moveInput )
+	{
+		this._canPerformOperation( moveInput );
 
-	newPath	= encodeURIComponent( Buffer.from( newPath ).toString( 'base64' ) );
-	event.send( { newPath } );
-};
+		const oldPath	= moveInput.getOldPath();
+		const newPath	= moveInput.getNewPath();
 
-module.exports	= Model;
+		if ( fs.existsSync( newPath ) )
+			throw { code: 'app.browse.move.fileExists', message: 'File already exists' };
+
+		return rename( oldPath, newPath );
+	}
+
+	/**
+	 * @brief	Checks if the current user has permissions to perform the operation
+	 *
+	 * @details	Returns void but throws in case of an error
+	 *
+	 * @param	{MoveInput} moveInput
+	 *
+	 * @return	void
+	 */
+	_canPerformOperation( moveInput )
+	{
+		if ( ! moveInput.isValid() )
+			throw { code: 'app.input.invalidMoveInput', message : moveInput.getReasonToString() };
+
+		const route				= this.user.getBrowseMetadata().getRoute();
+		const oldPath			= moveInput.getOldPath();
+		const newPath			= moveInput.getOldPath();
+		const resolvedNewPath	= path.resolve( newPath );
+		const resolvedOldPath	= path.resolve( oldPath );
+		const resolvedRoute		= path.resolve( route );
+
+		if ( resolvedNewPath.includes( PROJECT_ROOT ) || resolvedOldPath.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedOldPath ))
+			throw { code: 'app.browse.move.unauthorized', message : `Cannot do operations to project ROOT ${PROJECT_ROOT}` };
+
+		if ( ! resolvedOldPath.includes( resolvedRoute ) || ! resolvedNewPath.includes( resolvedRoute ) )
+			throw { code: 'app.browse.move.unauthorized', message : `No permissions to do operations on ${resolvedOldPath}` };
+
+		if ( fs.statSync( oldPath ).isDirectory() )
+			throw { code: 'app.browse.move.wrongCall', message : `Cannot do operations on a directory: ${oldPath}` };
+	}
+}
+
+module.exports	= MoveModel;

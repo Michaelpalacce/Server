@@ -145,6 +145,29 @@ class ApiCommunicator
 	}
 
 	/**
+	 * @brief	Renames an item
+	 *
+	 * @details	Works with both folders and files
+	 *
+	 * @param	{Object} item
+	 * @param	{String} newPath
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async renameItem( item, newPath )
+	{
+		const response	= await axios.post(
+			`${this.url}/${item.isFolder ? 'folder' : 'file'}/rename`,
+			{ oldPath: item.encodedURI, newPath },
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
 	 * @brief	Creates a new folder
 	 *
 	 * @param	{Object} directory

@@ -1,6 +1,6 @@
 <template>
 	<div class="rounded-t-lg mx-5 mt-2 bg-gray-700 text-gray-200 px-5">
-		<BrowseItem name="Back" :isFolder="true" @click="$router.go( -1 )" :isBack="true" class="mb-1"/>
+		<BrowseItem initialName="PreviewBack" :isFolder="true" @click="$router.go( -1 )" :isBack="true" class="mb-1"/>
 
 		<span class="flex justify-center items-center mx-auto mb-10 text-md md:text-xl" >Name: {{itemName}}</span>
 

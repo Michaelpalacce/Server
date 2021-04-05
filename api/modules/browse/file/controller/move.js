@@ -1,16 +1,64 @@
 'use strict';
 
 // Dependencies
-const app					= require( 'event_request' )();
-const Model					= require( '../model/move' );
+const app		= require( 'event_request' )();
 
-const fileMoveValidation	= {
-	body	: {
-		newPath: 'filled||string',
-		oldPath: 'filled||string'
-	}
-};
+const MoveModel	= require( '../model/move' );
+const MoveInput	= require( '../input/move_input' );
 
-app.post( '/file/copy', app.er_validation.validate( fileMoveValidation ), Model.copy );
-app.post( '/file/cut', app.er_validation.validate( fileMoveValidation ), Model.cut );
-app.post( '/file/rename', app.er_validation.validate( fileMoveValidation ), Model.rename );
+/**
+ * @brief	Adds a '/file/copy' route with method POST
+ *
+ * @param	{EventRequest} event
+ *
+ * @details	Required Parameters: newPath, oldPath
+ * 			Optional Parameters: NONE
+ *
+ * @return	void
+ */
+app.post( '/file/copy',  async ( event ) => {
+	const input	= new MoveInput( event );
+	const model	= new MoveModel( event );
+
+	await model.copy( input ).catch( event.next );
+
+	event.send();
+});
+
+/**
+ * @brief	Adds a '/file/cut' route with method POST
+ *
+ * @param	{EventRequest} event
+ *
+ * @details	Required Parameters: newPath, oldPath
+ * 			Optional Parameters: NONE
+ *
+ * @return	void
+ */
+app.post( '/file/cut', async ( event ) => {
+	const input	= new MoveInput( event );
+	const model	= new MoveModel( event );
+
+	await model.cut( input ).catch( event.next );
+
+	event.send();
+});
+
+/**
+ * @brief	Adds a '/file/rename' route with method POST
+ *
+ * @param	{EventRequest} event
+ *
+ * @details	Required Parameters: newPath, oldPath
+ * 			Optional Parameters: NONE
+ *
+ * @return	void
+ */
+app.post( '/file/rename', async ( event ) => {
+	const input	= new MoveInput( event );
+	const model	= new MoveModel( event );
+
+	await model.rename( input ).catch( event.next );
+
+	event.send();
+});

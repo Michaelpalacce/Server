@@ -51,12 +51,14 @@ export default {
 			hover			: false,
 			checked			: false,
 			hoverTimeout	: null,
+			name			: this.initialName,
+			encodedURI		: this.initialEncodedURI,
 			imageSrc		: ''
 		};
 	},
 	props: {
-		name				: String,
-		encodedURI			: String,
+		initialName			: String,
+		initialEncodedURI	: String,
 		fileType			: String,
 		previewAvailable	: Boolean,
 		size				: { type : Number,	default : 0		},
@@ -104,6 +106,21 @@ export default {
 			const i	= parseInt( Math.floor( Math.log( bytes ) / Math.log( 1024 ) ) );
 
 			return Math.round( bytes / Math.pow( 1024, i ), 2 ) + ' ' + sizes[i];
+		},
+
+		/**
+		 * @brief	Change the item's name
+		 *
+		 * @details	Only renames the item if the new name is a string
+		 *
+		 * @param	{String} name
+		 *
+		 * @return	void
+		 */
+		rename( name )
+		{
+			if ( typeof name === 'string' )
+				this.name	= name;
 		}
 	},
 

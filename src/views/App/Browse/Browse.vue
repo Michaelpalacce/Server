@@ -11,19 +11,20 @@
 			@refresh-click="browse( currentDirectory )"
 			@delete-click="deleteCheckedItems"
 			@new-folder-click="createNewFolder"
+			@rename-click="onRenameClick"
 		/>
 		<div class="my-2 mx-auto justify-center text-center text-xl font-medium tracking-wide">{{decodedCurrentDir}}</div>
-		<BrowseItem :key="'Back'" name="Back" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
+		<BrowseItem key="BrowseBack" initialName="BrowseBack" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
 
 		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
 
 		<div v-for="item in items">
 			<BrowseItem
 				:key="item.name"
-				:name="item.name"
+				:initialName="item.name"
 				:isFolder="item.isDir"
 				:fileType="item.fileType"
-				:encodedURI="item.encodedURI"
+				:initialEncodedURI="item.encodedURI"
 				:previewAvailable="item.previewAvailable"
 				:size="item.size"
 				@on-click="onItemClick( item )"
@@ -32,7 +33,7 @@
 		</div>
 	</div>
 	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5 mb-64" v-else>
-		<BrowseItem key="BackUpload" name="Back" :isFolder="true" @click="upload = ! canBrowse; uploadErrorMessage = ''" :isBack="true" class="mb-5"/>
+		<BrowseItem key="BackUpload" initialName="BackUpload" :isFolder="true" @click="upload = ! canBrowse; uploadErrorMessage = ''" :isBack="true" class="mb-5"/>
 		<Error :errorMessage="uploadErrorMessage" class="mx-auto w-4/5 mb-5"/>
 
 		<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
@@ -49,7 +50,6 @@ import { encode, decode }	from '@/../api/main/utils/base_64_encoder';
 import Dropzone				from '@/app/lib/dropzone';
 import Menu					from "@/views/App/Browse/Components/Menu";
 import Error				from "@/views/App/Browse/Components/Error";
-import path					from "path";
 
 export default {
 	name: 'Browse',
@@ -155,6 +155,36 @@ export default {
 
 				this.browse( this.currentDirectory );
 			}
+		},
+
+		/**
+		 * @brief	Rename the item and set reset the checked items
+		 *
+		 * @return	void
+		 */
+		async onRenameClick()
+		{
+			const item			= this.checkedItems[0];
+			const newItemName	= prompt( 'New item name:', item.name );
+
+			if ( typeof newItemName !== 'string' )
+				return;
+
+			const encodedNewName	= encode( `${this.decodedCurrentDir}/${newItemName}` );
+			const response			= await communicator.renameItem( item, encodedNewName ).catch(( error ) => {
+				return error;
+			});
+
+			if ( response.error )
+				return this.browseErrorMessage	= this.formatErrorMessage( response.error );
+
+			// Change item data
+			item.name			= newItemName;
+			item.encodedURI		= encodedNewName;
+			item.checked		= false;
+
+			this.checkedItems	= [];
+			this.setMenu();
 		},
 
 		/**
@@ -278,9 +308,6 @@ export default {
 
 			if ( isNewDir )
 			{
-				for ( const item of this.checkedItems )
-					item.checked	= false;
-
 				this.checkedItems	= [];
 				this.setMenu();
 			}

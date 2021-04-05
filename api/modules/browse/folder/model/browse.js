@@ -41,10 +41,10 @@ class BrowseModel
 
 		const directory		= browseInput.getDirectory();
 		const route			= this.user.getBrowseMetadata().getRoute();
-		const requestedDir	= directory;
-		const resolvedDir	= path.resolve( requestedDir );
+		const resolvedDir	= path.resolve( directory );
+		const resolvedRoute	= path.resolve( route );
 
-		if ( resolvedDir.includes( PROJECT_ROOT ) || ! requestedDir.includes( route ) )
+		if ( resolvedDir.includes( PROJECT_ROOT ) || ! resolvedDir.includes( resolvedRoute ) )
 			throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${resolvedDir}`, status: 403 };
 
 		const parsedItem	= path.parse( directory );

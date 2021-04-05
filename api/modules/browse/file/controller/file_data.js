@@ -6,7 +6,6 @@ const app		= require( 'event_request' )();
 const FileInput	= require( '../input/file_input' );
 const FileModel	= require( '../model/file' );
 
-
 /**
  * @brief	Adds a '/file/getFileData' route with method GET
  *

@@ -2,10 +2,7 @@
 
 // Dependencies
 const Input			= require( '../../../../main/validation/input' );
-const path			= require( 'path' );
-const fs			= require( 'fs' );
-
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const { decode }	= require( '../../../../main/utils/base_64_encoder' );
 
 /**
  * @brief	Validates that the provided request contains the correct data
@@ -13,7 +10,7 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 class MoveInput extends Input
 {
 	/**
-	 * @brief	Retruns the new path
+	 * @brief	Returns the new path
 	 *
 	 * @returns	String
 	 */
@@ -37,50 +34,20 @@ class MoveInput extends Input
 	 */
 	_validate()
 	{
-		const isSU					= this.event.session.get( 'SU' );
-		const route					= this.event.session.get( 'route' );
+		this.reason	= this.validationHandler.validate(
+			this.event.body,
+			{
+				newPath: 'filled||string',
+				oldPath: 'filled||string'
+			}
+		);
 
-		let { newPath, oldPath }	= this.event.body;
-
-		newPath						= Buffer.from( decodeURIComponent( newPath ), 'base64' ).toString();
-		oldPath						= Buffer.from( decodeURIComponent( oldPath ), 'base64' ).toString();
-
-		const resolvedNewPath		= path.resolve( newPath );
-		const resolvedOldPath		= path.resolve( oldPath );
-		const resolvedRoute			= path.resolve( route );
-
-		if ( resolvedNewPath.includes( PROJECT_ROOT ) )
-		{
-			this.reason	= `Cannot do operations to project ROOT ${PROJECT_ROOT}`;
+		if ( this.reason.hasValidationFailed() )
 			return false;
-		}
 
-		if ( resolvedOldPath.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedOldPath ) )
-		{
-			this.reason	= `Cannot do operations to project ROOT ${PROJECT_ROOT}`;
-			return false;
-		}
-
-		if ( ! isSU && ! resolvedOldPath.includes( resolvedRoute ) )
-		{
-			this.reason	= `No permissions to do operations on ${resolvedOldPath}`;
-			return false;
-		}
-
-		if ( ! isSU && ! resolvedNewPath.includes( resolvedRoute ) )
-		{
-			this.reason	= `No permissions to do operations on ${resolvedNewPath}`;
-			return false;
-		}
-
-		if ( fs.statSync( oldPath ).isDirectory() )
-		{
-			this.reason	= `Cannot do operations on a directory: ${oldPath}`;
-			return false;
-		}
-
-		this.model[MoveInput.NEW_PATH_KEY]	= newPath;
-		this.model[MoveInput.OLD_PATH_KEY]	= oldPath;
+		const { newPath, oldPath }			= this.reason.getValidationResult();
+		this.model[MoveInput.NEW_PATH_KEY]	= decode( newPath );
+		this.model[MoveInput.OLD_PATH_KEY]	= decode( oldPath );
 
 		return true;
 	}
