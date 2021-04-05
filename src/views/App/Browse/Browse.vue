@@ -178,6 +178,7 @@ export default {
 			if ( response.error )
 				return this.browseErrorMessage	= this.formatErrorMessage( response.error );
 
+			// @TODO RESET THE PREVIEW
 			// Change item data
 			item.name			= newItemName;
 			item.encodedURI		= encodedNewName;
