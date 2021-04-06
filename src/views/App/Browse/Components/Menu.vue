@@ -1,15 +1,18 @@
 <template>
-	<div class="text-left border-b border-gray-300 table-row md:w-full text-sm md:text-base">
-		<MenuElement key="Refresh" text="Refresh" @on-click="$emit( 'refresh-click' )"/>
-		<MenuElement key="Upload" text="Upload" @on-click="$emit( 'upload-click' )"/>
-		<MenuElement key="NewFolder" text="New Folder" @on-click="$emit( 'new-folder-click' )"/>
+	<div class="text-left
+				text-white bg-gray-700
+				md:w-full text-sm md:text-base sticky top-0">
+		<MenuElement text="Refresh" @on-click="$emit( 'refresh-click' )"/>
+		<MenuElement text="Upload" @on-click="$emit( 'upload-click' )"/>
+		<MenuElement text="New Folder" @on-click="$emit( 'new-folder-click' )"/>
+		<MenuElement text="Paste" @on-click="$emit( 'paste-click' )" v-if="showPaste"/>
 
 		<div class="border-l-2 inline mx-2"></div>
-		<MenuElement key="Rename" text="Rename" :isDisabled="renameDisabled" @on-click="$emit( 'rename-click' )"/>
-		<MenuElement key="Download" text="Download" :isDisabled="downloadDisabled" @on-click="$emit( 'download-click' )"/>
-		<MenuElement key="Delete" text="Delete" :isDisabled="deleteDisabled" @on-click="$emit( 'delete-click' )"/>
-		<MenuElement key="Copy" text="Copy" :isDisabled="copyDisabled" @on-click="$emit( 'copy-click' )"/>
-		<MenuElement key="Move" text="Move" :isDisabled="moveDisabled" @on-click="$emit( 'move-click' )"/>
+		<MenuElement text="Rename" :isDisabled="renameDisabled" @on-click="$emit( 'rename-click' )"/>
+		<MenuElement text="Download" :isDisabled="downloadDisabled" @on-click="$emit( 'download-click' )"/>
+		<MenuElement text="Delete" :isDisabled="deleteDisabled" @on-click="$emit( 'delete-click' )"/>
+		<MenuElement text="Copy" :isDisabled="copyDisabled" @on-click="$emit( 'copy-click' )"/>
+		<MenuElement text="Cut" :isDisabled="cutDisabled" @on-click="$emit( 'cut-click' )"/>
 	</div>
 </template>
 
@@ -20,6 +23,10 @@ export default {
 	name		: 'Menu',
 	components	: { MenuElement },
 	props		: {
+		showPaste		: {
+			type	: Boolean,
+			default	: true
+		},
 		renameDisabled		: {
 			type	: Boolean,
 			default	: true
@@ -36,7 +43,7 @@ export default {
 			type	: Boolean,
 			default	: false
 		},
-		moveDisabled		: {
+		cutDisabled			: {
 			type	: Boolean,
 			default	: false
 		}
@@ -45,5 +52,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

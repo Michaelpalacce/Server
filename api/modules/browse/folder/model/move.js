@@ -31,8 +31,8 @@ class MoveModel
 	cut( moveInput )
 	{
 		this._canPerformOperation( moveInput );
-		const oldPath	= input.getOldPath();
-		const newPath	= input.getNewPath();
+		const oldPath	= moveInput.getOldPath();
+		const newPath	= moveInput.getNewPath();
 
 		if ( newPath.includes( oldPath ) )
 			throw { code: 'app.browse.move.recursionDetected', message: 'Possible recursion prevented' };

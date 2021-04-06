@@ -124,6 +124,7 @@ class ApiCommunicator
 	 * @brief	Deletes an item
 	 *
 	 * @details	Works with both folders and files
+	 * 			This will return the response and not the response body intentionally
 	 *
 	 * @param	{Object} item
 	 *
@@ -141,7 +142,7 @@ class ApiCommunicator
 			return error.response;
 		});
 
-		return response.data;
+		return response;
 	}
 
 	/**
@@ -158,6 +159,52 @@ class ApiCommunicator
 	{
 		const response	= await axios.post(
 			`${this.url}/${item.isFolder ? 'folder' : 'file'}/rename`,
+			{ oldPath: item.encodedURI, newPath },
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Copies an item
+	 *
+	 * @details	Works with both folders and files
+	 *
+	 * @param	{Object} item
+	 * @param	{String} newPath
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async copyItem( item, newPath )
+	{
+		const response	= await axios.post(
+			`${this.url}/${item.isFolder ? 'folder' : 'file'}/copy`,
+			{ oldPath: item.encodedURI, newPath },
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Cuts an item
+	 *
+	 * @details	Works with both folders and files
+	 *
+	 * @param	{Object} item
+	 * @param	{String} newPath
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async cutItem( item, newPath )
+	{
+		const response	= await axios.post(
+			`${this.url}/${item.isFolder ? 'folder' : 'file'}/cut`,
 			{ oldPath: item.encodedURI, newPath },
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {

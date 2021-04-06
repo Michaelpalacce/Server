@@ -1,10 +1,10 @@
 'use strict';
 
-const { rename }	= require( 'fs' ).promises;
-const fs			= require( 'fs' );
-const path			= require( 'path' );
+const { rename, copyFile }	= require( 'fs' ).promises;
+const fs					= require( 'fs' );
+const path					= require( 'path' );
 
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const PROJECT_ROOT			= path.parse( require.main.filename ).dir;
 
 /**
  * @brief	Model responsible for cutting, copying or renaming a File
@@ -30,8 +30,8 @@ class MoveModel
 	cut( moveInput )
 	{
 		this._canPerformOperation( moveInput );
-		const oldPath	= input.getOldPath();
-		const newPath	= input.getNewPath();
+		const oldPath	= moveInput.getOldPath();
+		const newPath	= moveInput.getNewPath();
 
 		if ( newPath.includes( oldPath ) )
 			throw { code: 'app.browse.move.recursionDetected', message: 'Possible recursion prevented' };
@@ -66,7 +66,7 @@ class MoveModel
 
 		this.event.clearTimeout();
 
-		return copy( oldPath, path.join( newPath, path.parse( oldPath ).base ) );
+		return copyFile( oldPath, path.join( newPath, path.parse( oldPath ).base ) );
 	}
 
 	/**

@@ -36,21 +36,22 @@ class DeleteModel
 			throw { code: 'app.input.invalidDeleteInput', message : deleteInput.getReasonToString() };
 
 		const directory		= deleteInput.getDirectory();
+		const itemName		= path.parse( directory ).base;
 		const route			= this.user.getBrowseMetadata().getRoute();
 		const resolvedDir	= path.resolve( directory );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( resolvedDir.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedDir ) )
-			throw { code: 'app.browse.delete.projectRoot', message : `Cannot delete project ROOT ${resolvedDir}` };
+		if ( ! resolvedDir.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedDir ) )
+			throw { code: 'app.browse.delete.projectRoot', message : { error: `Cannot delete project ROOT or items in project ROOT`, itemName } };
 
 		if ( ! resolvedDir.includes( resolvedRoute ) || directory === '/' )
-			throw { code: 'app.browse.delete.unauthorized', message : `No permissions to delete ${resolvedDir}` };
+			throw { code: 'app.browse.delete.unauthorized', message : { error: `No permissions to delete item`, itemName } };
 
 		if ( ! fs.existsSync( directory ) )
-			throw { code: 'app.browse.delete.directoryMissing', message : `Directory does not exist: ${resolvedDir}` };
+			throw { code: 'app.browse.delete.directoryMissing', message : { error: `Directory does not exist`, itemName } };
 
 		if ( ! fs.statSync( directory ).isDirectory() )
-			throw { code: 'app.browse.delete.wrongCall', message : `Trying to delete a file: ${resolvedDir}` };
+			throw { code: 'app.browse.delete.wrongCall', message : { error: `Trying to delete a file`, itemName } };
 
 		this._deleteFolderRecursive( directory );
 	}

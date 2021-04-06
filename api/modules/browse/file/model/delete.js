@@ -39,16 +39,16 @@ class DeleteModel
 		const resolvedRoute	= path.resolve( route );
 
 		if ( ! resolvedItem.includes( resolvedRoute ) || resolvedItem.includes( PROJECT_ROOT ) )
-			throw { code: 'app.browse.delete.unauthorized', message : itemName, status: 403 };
+			throw { code: 'app.browse.delete.unauthorized', message : { error: `Cannot delete items in project ROOT`, itemName }, status: 403 };
 
 		if ( ! fs.existsSync( item ) )
-			throw { code: 'app.browse.delete.fileMissing', message : itemName };
+			throw { code: 'app.browse.delete.fileMissing', message : { error: `File does not exist`, itemName } };
 
 		if ( fs.statSync( item ).isDirectory() )
-			throw { code: 'app.browse.delete.wrongCall', message : itemName };
+			throw { code: 'app.browse.delete.wrongCall', message : { error: `Trying to delete a directory`, itemName } };
 
 		await unlink( deleteInput.getItem() ).catch(( error )=>{
-			throw { code: 'app.browse.delete.failed', message : error, status: 500 };
+			throw { code: 'app.browse.delete.failed', message : { error, itemName }, status: 500 };
 		});
 	}
 }

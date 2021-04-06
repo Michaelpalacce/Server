@@ -7,8 +7,8 @@
 				@mouseover="show"
 				@mouseleave="hover = false"
 	>
-		<span class="absolute left-1/4 md:left-2/4" :class="[hover === false ? 'hidden' : '']">
-			<img :src="imageSrc" alt="" :class="[hover === false ? 'visible top-0 z-10' : '']" style="height: 25vh">
+		<span class="absolute left-1/4 md:left-2/4 z-10" :class="[hover === false ? 'hidden' : '']">
+			<img :src="imageSrc" alt="" :class="[hover === false ? 'visible' : '']" style="height: 25vh; top: -50px;">
 		</span>
 
 		<input type="checkbox" class="w-1/6 form-checkbox h-6 w-6 inline-block md:hidden mt-3" v-if="! isBack" v-model="checked">

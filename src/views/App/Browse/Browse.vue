@@ -1,39 +1,43 @@
 <template>
 	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64" v-if="upload === false">
 		<Menu
-			key="Menu"
 			:renameDisabled="renameDisabled"
 			:downloadDisabled="downloadDisabled"
 			:deleteDisabled="deleteDisabled"
 			:copyDisabled="copyDisabled"
-			:moveDisabled="moveDisabled"
+			:cutDisabled="cutDisabled"
+			:showPaste="bufferedItems.length !== 0"
 			@upload-click="showUpload"
 			@refresh-click="browse( currentDirectory )"
 			@delete-click="deleteCheckedItems"
 			@new-folder-click="createNewFolder"
 			@rename-click="onRenameClick"
+			@copy-click="onCopyClick"
+			@cut-click="onCutClick"
+			@paste-click="onPasteClick"
 		/>
 		<div class="my-2 mx-auto justify-center text-center text-xl font-medium tracking-wide">{{decodedCurrentDir}}</div>
-		<BrowseItem key="BrowseBack" initialName="BrowseBack" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
+		<BrowseItem initialName="BrowseBack" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
 
 		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
 
-		<div v-for="item in items">
-			<BrowseItem
-				:key="item.name"
-				:initialName="item.name"
-				:isFolder="item.isDir"
-				:fileType="item.fileType"
-				:initialEncodedURI="item.encodedURI"
-				:previewAvailable="item.previewAvailable"
-				:size="item.size"
-				@on-click="onItemClick( item )"
-				@on-checked="onItemChecked"
-			/>
-		</div>
+		<BrowseItem
+			v-for="item in items"
+
+			:key="item.name"
+			:initialName="item.name"
+			:isFolder="item.isDir"
+			:fileType="item.fileType"
+			:initialEncodedURI="item.encodedURI"
+			:previewAvailable="item.previewAvailable"
+			:size="item.size"
+			@on-click="onItemClick( item )"
+			@on-checked="onItemChecked"
+		/>
+
 	</div>
-	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5 mb-64" v-else>
-		<BrowseItem key="BackUpload" initialName="BackUpload" :isFolder="true" @click="upload = ! canBrowse; uploadErrorMessage = ''" :isBack="true" class="mb-5"/>
+	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5" v-else>
+		<BrowseItem initialName="BackUpload" :isFolder="true" @click="upload = ! canBrowse; uploadErrorMessage = ''" :isBack="true" class="mb-5"/>
 		<Error :errorMessage="uploadErrorMessage" class="mx-auto w-4/5 mb-5"/>
 
 		<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
@@ -78,7 +82,9 @@ export default {
 			downloadDisabled	: false,
 			deleteDisabled		: false,
 			copyDisabled		: false,
-			moveDisabled		: false,
+			cutDisabled			: false,
+			bufferedItems		: [],
+			bufferedAction		: ''
 		};
 	},
 
@@ -91,7 +97,7 @@ export default {
 	async mounted()
 	{
 		// Load the page
-		await this.browse( this.$route.query.directory || '' );
+		await this.browse( this.$route.query.directory || null );
 
 		window.onscroll			= this.tryToLoad
 		Dropzone.autoDiscover	= false;
@@ -133,6 +139,72 @@ export default {
 		},
 
 		/**
+		 * @brief	Pastes the buffered items in the current directory
+		 *
+		 * @return	void
+		 */
+		async onPasteClick()
+		{
+			const items		= [...this.bufferedItems];
+			const action	= this.bufferedAction;
+
+			for ( const item of items )
+			{
+				switch ( action )
+				{
+					case 'cut':
+						const moveResponse	= await communicator.cutItem( item, this.currentDirectory ).catch( ( error ) => {
+							return error;
+						});
+
+						if ( moveResponse.error )
+							return this.browseErrorMessage	= this.formatErrorMessage( moveResponse.error );
+
+						await this.browse();
+						break;
+
+					case 'copy':
+						const copyResponse	= await communicator.copyItem( item, this.currentDirectory ).catch( ( error ) => {
+							return error;
+						});
+
+						if ( copyResponse.error )
+							return this.browseErrorMessage	= this.formatErrorMessage( copyResponse.error );
+
+						await this.browse();
+						break;
+
+					default:
+						this.browseErrorMessage	= `No such action ${action}`;
+						break;
+				}
+			}
+
+			this.bufferedAction	= '';
+			this.bufferedItems	= [];
+		},
+
+		/**
+		 * @brief	Sets the checked items in the buffer with the action copy
+		 *
+		 * @return	void
+		 */
+		onCopyClick()
+		{
+			this._setBufferedItemsWithAction( 'copy' );
+		},
+
+		/**
+		 * @brief	Sets the checked items in the buffer with the action cut
+		 *
+		 * @return	void
+		 */
+		onCutClick()
+		{
+			this._setBufferedItemsWithAction( 'cut' );
+		},
+
+		/**
 		 * @brief	Creates a new folder and adds it to the view
 		 *
 		 * @todo	Make a better way to create folders than a prompt!
@@ -153,12 +225,22 @@ export default {
 				if ( createFolderResponse.error )
 					return this.browseErrorMessage	= this.formatErrorMessage( createFolderResponse.error );
 
-				this.browse( this.currentDirectory );
+				const item	= await communicator.getFileData( newPath ).catch( ( error ) => {
+					return error;
+				});
+
+				if ( item.error )
+					return this.uploadErrorMessage	= this.formatErrorMessage( item.error );
+
+
+				this.items	= [item, ...this.items];
 			}
 		},
 
 		/**
 		 * @brief	Rename the item and set reset the checked items
+		 *
+		 * @details	This will modify the item and set a new encodedURI
 		 *
 		 * @return	void
 		 */
@@ -178,14 +260,7 @@ export default {
 			if ( response.error )
 				return this.browseErrorMessage	= this.formatErrorMessage( response.error );
 
-			// @TODO RESET THE PREVIEW
-			// Change item data
-			item.name			= newItemName;
-			item.encodedURI		= encodedNewName;
-			item.checked		= false;
-
-			this.checkedItems	= [];
-			this.setMenu();
+			this.browse();
 		},
 
 		/**
@@ -203,9 +278,7 @@ export default {
 			if ( isChecked )
 				this.checkedItems	= this.checkedItems.concat( item );
 			else
-				this.checkedItems.splice( this.checkedItems.indexOf( checkedItem ), 1 );
-
-			this.setMenu();
+				this.checkedItems	= this.checkedItems.filter( checkedItem => checkedItem.name !== item.name )
 		},
 
 		/**
@@ -223,34 +296,58 @@ export default {
 
 			switch ( true )
 			{
+				// nothing selected
+				case ! foldersCount && ! filesCount:
+					this.renameDisabled		= true;
+					this.downloadDisabled	= true;
+					this.deleteDisabled		= true;
+					this.copyDisabled		= true;
+					this.cutDisabled		= true;
+
+					break;
 				// Either one folder or one file
 				case ! foldersCount && filesCount === 1:
 				case foldersCount === 1 && ! filesCount:
 					this.renameDisabled		= false;
 					this.downloadDisabled	= false;
+					this.deleteDisabled		= false;
+					this.copyDisabled		= false;
+					this.cutDisabled		= false;
 					break;
 
 				// Only folders ( more than one )
 				case foldersCount !== 0 && ! filesCount:
 					this.renameDisabled		= true;
 					this.downloadDisabled	= false;
+					this.deleteDisabled		= false;
+					this.copyDisabled		= false;
+					this.cutDisabled		= false;
 					break;
 
 				// Only files ( more than one )
 				case ! foldersCount && filesCount !== 0:
 					this.renameDisabled		= true;
 					this.downloadDisabled	= false;
+					this.deleteDisabled		= false;
+					this.copyDisabled		= false;
+					this.cutDisabled		= false;
 					break;
 
 				// Folders and files
 				case foldersCount !== 0 && filesCount !== 0:
 					this.renameDisabled		= true;
 					this.downloadDisabled	= true;
+					this.deleteDisabled		= false;
+					this.copyDisabled		= false;
+					this.cutDisabled		= false;
 					break;
 
 				default:
 					this.renameDisabled		= false;
 					this.downloadDisabled	= false;
+					this.deleteDisabled		= false;
+					this.copyDisabled		= false;
+					this.cutDisabled		= false;
 					break;
 			}
 		},
@@ -285,8 +382,9 @@ export default {
 		 *
 		 * @return	Promise{<void>}
 		 */
-		browse	: async function( directory = '', token = '' )
+		browse	: async function( directory = this.currentDirectory, token = '' )
 		{
+			directory	= directory === null ? '' : directory;
 			if ( this.loading )
 				return;
 
@@ -308,10 +406,7 @@ export default {
 			this.hasMore			= browseResponse.hasMore;
 
 			if ( isNewDir )
-			{
 				this.checkedItems	= [];
-				this.setMenu();
-			}
 
 			this.setUrlToCurrentDirectory();
 
@@ -363,7 +458,6 @@ export default {
 						if ( item.error )
 							return this.uploadErrorMessage	= this.formatErrorMessage( item.error );
 
-						item.key	= item.name;
 						this.items	= this.items.concat( [item] );
 
 						setTimeout(() => {
@@ -398,13 +492,33 @@ export default {
 			}
 
 			Promise.all( deletePromises ).then(( promises ) => {
+				const itemsNotDeleted	= [];
+				const errors			= [];
 				for ( const promise of promises )
-					if ( typeof promise.error !== 'undefined' )
-						this.browseErrorMessage	=  this.formatErrorMessage( promise.error ) + '. Other errors may have occurred if multiple items were being deleted.';
+					if ( typeof promise.data.error !== 'undefined' && typeof promise.data.error.message !== 'undefined' )
+					{
+						itemsNotDeleted.push( promise.data.error.message.itemName );
+						errors.push( `ITEM: ${promise.data.error.message.itemName}: ${promise.data.error.message.error}` );
+					}
 
-				this.browse( this.currentDirectory );
-			}).catch(( errors ) => {
-				this.browseErrorMessage	= `An error has occurred ${errors[0]}`;
+				const deletedItems	= this.checkedItems.filter( checkedItem => ! itemsNotDeleted.includes( checkedItem.name ) );
+				this.checkedItems	= this.checkedItems.filter( checkedItem => itemsNotDeleted.includes( checkedItem.name ) );
+
+				this.items	= this.items.filter(( item ) => {
+					for ( const deletedItem of deletedItems )
+						if ( item.name === deletedItem.name )
+							return false;
+
+					return true;
+				});
+
+				if ( errors.length )
+					this.browseErrorMessage	= `Error deleting: ${this.checkedItems.map( item => item.name ).join( ', ' )}. Errors: ${errors.join( ', ' )}`;
+				else
+					this.browseErrorMessage	= '';
+
+			}).catch(( error ) => {
+				this.browseErrorMessage	= `An error has occurred ${error}`;
 			})
 		},
 
@@ -418,6 +532,34 @@ export default {
 		formatErrorMessage( error )
 		{
 			return `An error has occurred: Code: ${error.code}${error.message ? `, message: ${error.message}` : ''}`
+		},
+
+		/**
+		 * @brief	Sets the checked items as buffered items with the given action
+		 *
+		 * @return	void
+		 */
+		_setBufferedItemsWithAction( action )
+		{
+			this.bufferedItems	= [...this.checkedItems];
+			this.bufferedAction	= action;
+
+			for ( const item of this.checkedItems )
+				item.checked	= false;
+
+			this.checkedItems	= [];
+		},
+	},
+
+	watch: {
+		/**
+		 * @brief	Sets the menu on every checked items change
+		 *
+		 * @return	void
+		 */
+		checkedItems: function ()
+		{
+			this.setMenu();
 		}
 	}
 }
