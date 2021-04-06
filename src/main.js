@@ -4,7 +4,6 @@ import router			from './router';
 import mitt				from 'mitt';
 
 import './style/index.css';
-import './style/dropzone.css';
 
 const emitter	= mitt();
 const app		= createApp( App );

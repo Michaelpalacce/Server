@@ -41,7 +41,7 @@ class DeleteModel
 		const resolvedDir	= path.resolve( directory );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( ! resolvedDir.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedDir ) )
+		if ( resolvedDir.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedDir ) )
 			throw { code: 'app.browse.delete.projectRoot', message : { error: `Cannot delete project ROOT or items in project ROOT`, itemName } };
 
 		if ( ! resolvedDir.includes( resolvedRoute ) || directory === '/' )

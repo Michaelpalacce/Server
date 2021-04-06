@@ -42,7 +42,6 @@
 <script>
 import communicator	from "@/app/main/api/communicator";
 
-
 export default {
 	name: "BrowseItem",
 	data	: function ()

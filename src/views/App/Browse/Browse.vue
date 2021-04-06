@@ -15,6 +15,7 @@
 			@copy-click="onCopyClick"
 			@cut-click="onCutClick"
 			@paste-click="onPasteClick"
+			@download-click="onDownloadClick"
 		/>
 		<div class="my-2 mx-auto justify-center text-center text-xl font-medium tracking-wide">{{decodedCurrentDir}}</div>
 		<BrowseItem initialName="BrowseBack" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
@@ -136,6 +137,24 @@ export default {
 						}
 					}
 				);
+		},
+
+		/**
+		 * @brief	Downloads one or many items
+		 *
+		 * @return	void
+		 */
+		onDownloadClick()
+		{
+			const checkedItems		= [...this.checkedItems];
+			const itemsToDownload	= [];
+
+			for ( const checkedItem of checkedItems )
+				itemsToDownload.push( decode( checkedItem.encodedURI ) );
+
+			window.location.href	= `${communicator.getApiUrl()}/items?items=${encode( JSON.stringify( itemsToDownload ) )}&token=${localStorage.token}`;
+
+			this.uncheckItems();
 		},
 
 		/**
@@ -336,7 +355,7 @@ export default {
 				// Folders and files
 				case foldersCount !== 0 && filesCount !== 0:
 					this.renameDisabled		= true;
-					this.downloadDisabled	= true;
+					this.downloadDisabled	= false;
 					this.deleteDisabled		= false;
 					this.copyDisabled		= false;
 					this.cutDisabled		= false;
@@ -406,7 +425,7 @@ export default {
 			this.hasMore			= browseResponse.hasMore;
 
 			if ( isNewDir )
-				this.checkedItems	= [];
+				this.uncheckItems();
 
 			this.setUrlToCurrentDirectory();
 
@@ -544,11 +563,21 @@ export default {
 			this.bufferedItems	= [...this.checkedItems];
 			this.bufferedAction	= action;
 
+			this.uncheckItems();
+		},
+
+		/**
+		 * @brief	Uncheck all the items set in the checked items array
+		 *
+		 * @return	void
+		 */
+		uncheckItems()
+		{
 			for ( const item of this.checkedItems )
 				item.checked	= false;
 
-			this.checkedItems	= [];
-		},
+			this.checkedItems		= [];
+		}
 	},
 
 	watch: {
@@ -566,4 +595,5 @@ export default {
 </script>
 
 <style scoped>
+@import './../../../style/dropzone.css';
 </style>

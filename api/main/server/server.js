@@ -2,12 +2,13 @@
 
 // Dependencies
 const app		= require( 'event_request' )();
-const socketIO	= require( 'socket.io' );
+// const socketIO	= require( 'socket.io' );
 const fs		= require( 'fs' );
 
 let server;
+const hasSSL	= process.env.SSL_KEY_PATH && process.env.SSL_CERT_PATH;
 
-if ( process.env.SSL_KEY_PATH && process.env.SSL_CERT_PATH )
+if ( hasSSL )
 {
 	const https	= require( 'https' );
 	server		= https.createServer(
@@ -24,8 +25,14 @@ else
 	server		= http.createServer( app.attach() );
 }
 
-const io	= socketIO( server );
+// const io	= socketIO( server, {
+// 	cors: {
+// 		origin: `*`,
+// 		methods: ['GET', 'POST'],
+// 		allowedHeaders: ['token'],
+// 	}
+// } );
 
 require( './kernel' );
 
-module.exports	= { server, io };
+module.exports	= { server };

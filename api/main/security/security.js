@@ -3,6 +3,7 @@
 // Dependencies
 const app			= require( 'event_request' )();
 const UserManager	= require( './user/user_manager' );
+const Session		= require( 'event_request/server/components/session/session' );
 const User			= require( './user/user' );
 
 // Creates root user if not exists
@@ -30,11 +31,21 @@ if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
 /**
  * @brief	Init middleware for the security
  *
+ * @TODO	IMPROVE THIS HORRIBLENESS ( I was lazy )
+ *
  * @details	Starts the session
  * 			Sets the UserManager in the eventRequest
  */
 app.add( async ( event ) => {
-	await event.initSession();
+	if ( event.method.toLowerCase() === 'get' && typeof event.query.token === 'string' )
+	{
+		const sessionId					= event.query.token;
+		event.session.session.sessionId	= sessionId;
+		event.session.session			= event.dataServer.get( Session.SESSION_PREFIX + sessionId )
+	}
+	else
+		await event.initSession();
+
 	event.$userManager	= UserManager;
 
 	event.session.add( 'username', 'root' );
