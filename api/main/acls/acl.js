@@ -1,6 +1,6 @@
 'use strict';
 
-const User	= require( '../security/user/user' );
+const User	= require( '../user/user' );
 
 /**
  * @brief	Used to prefix ACL keys in the cache

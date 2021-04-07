@@ -7,7 +7,7 @@ const { decode }	= require( '../../../../main/utils/base_64_encoder' );
 /**
  * @brief	Validates that the provided request contains the correct data
  */
-class ItemsInput extends Input
+class DownloadInput extends Input
 {
 	/**
 	 * @brief	Returns all the items
@@ -16,7 +16,7 @@ class ItemsInput extends Input
 	 */
 	getItems()
 	{
-		return this.get( ItemsInput.ITEMS_KEY );
+		return this.get( DownloadInput.ITEMS_KEY );
 	}
 
 	/**
@@ -30,12 +30,12 @@ class ItemsInput extends Input
 			return false;
 
 		const { items }						= this.reason.getValidationResult();
-		this.model[ItemsInput.ITEMS_KEY]	= JSON.parse( decode( items ) );
+		this.model[DownloadInput.ITEMS_KEY]	= JSON.parse( decode( items ) );
 
 		return true;
 	}
 }
 
-ItemsInput.ITEMS_KEY	= 'items';
+DownloadInput.ITEMS_KEY	= 'items';
 
-module.exports		= ItemsInput;
+module.exports	= DownloadInput;

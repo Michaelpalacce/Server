@@ -26,28 +26,10 @@ serve edit app---> edit environment variables for the APP
 serve stop ---> stop the server
 ~~~
 
-# Terminal troubleshooting
-
-### Windows 
-- To work the terminal needs to have windows-build-tools installed globally:
-~~~
-npm install --global windows-build-tools
-~~~
-
-### Ubuntu/Linux
-- To work the terminal needs to have python and build-essentials installed
-~~~
-sudo apt install -y make python build-essential 
-~~~
-
-# Terminal Dependencies
-- If you have any issues with the terminal LOOK HERE: https://www.npmjs.com/package/node-pty?activeTab=readme
-
 # API Environment variables
 - API_PORT - Which port the api will be running on
 - API_ADDRESS - Which IP address to bind to
 - ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
-- TERMINAL_TO_SPAWN - the name of the terminal process to spawn ( for example: In windows if you have git bash you can spawn bash.exe )
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
 - USER_PERSIST_INTERVAL - How often in milliseconds the users will be persisted to storage, Defaults to 10000
@@ -66,7 +48,7 @@ sudo apt install -y make python build-essential
 - When adding a user the user will persist after 5 seconds so don't stop the server
 
 # Permissions:
-- Only superusers can use the terminal, add/ view/ modify other users ( and self ). Only superusers can access the project folder and the OS tmp directory.
+- Only superusers can add/ view/ modify other users ( and self ). Only superusers can access the project folder and the OS tmp directory.
 - Nobody can delete or change the permissions of the root user.
 - Nobody can do any operations on the PROJECT_ROOT as well as many operations including the folder structure where the project is
 - When adding a user a set of permissions will be asked for. Those permissions are forbidding. Whatever you type in there, the users WON'T be able to access.

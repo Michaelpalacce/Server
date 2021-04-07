@@ -20,7 +20,7 @@ class UserManager
 			ttl				: -1,
 			persist			: true,
 			persistPath		: path.join( persistPath, 'server_emulator_users.json' ),
-			persistInterval	: 30,	// Every 30 seconds
+			persistInterval	: 5,	// Every 30 seconds
 			gcInterval		: 86400	// One day
 		});
 		this.users				= null;
@@ -129,7 +129,7 @@ class UserManager
 	 *
 	 * @param	{Object} userData
 	 *
-	 * @return	void
+	 * @return	{User}
 	 */
 	set( userData )
 	{
@@ -138,7 +138,7 @@ class UserManager
 			throw new Error( `User: ${userData.username} already exist` );
 		}
 
-		this.users[userData.username]	= new User( userData );
+		return this.users[userData.username]	= new User( userData );
 	}
 
 	/**
@@ -156,6 +156,16 @@ class UserManager
 		}
 
 		delete this.users[username];
+	}
+
+	/**
+	 * @brief	Returns all users set in the user manager
+	 *
+	 * @return {Object}
+	 */
+	getAll()
+	{
+		return this.users;
 	}
 }
 

@@ -1,7 +1,8 @@
 <template>
 	<div class="text-left
 				text-white bg-gray-700
-				md:w-full text-sm md:text-base sticky top-0">
+				md:w-full text-sm md:text-base
+				sticky top-0">
 		<MenuElement text="Refresh" @on-click="$emit( 'refresh-click' )"/>
 		<MenuElement text="Upload" @on-click="$emit( 'upload-click' )"/>
 		<MenuElement text="New Folder" @on-click="$emit( 'new-folder-click' )"/>

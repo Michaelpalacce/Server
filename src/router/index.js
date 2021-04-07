@@ -3,6 +3,8 @@ import Login								from '@/views/App/Login/Login'
 import Browse								from '@/views/App/Browse/Browse'
 import Preview								from '@/views/App/Browse/Preview'
 import Dashboard							from '@/views/App/Dashboard/Dashboard'
+import Users								from '@/views/App/Users/Users'
+import User									from '@/views/App/Users/User'
 
 const routes	= [
 	{
@@ -24,6 +26,16 @@ const routes	= [
 		path: '/preview',
 		name: 'Preview',
 		component: Preview
+	},
+	{
+		path: '/users',
+		name: 'Users',
+		component: Users
+	},
+	{
+		path: '/user',
+		name: 'User',
+		component: User
 	}
 ]
 

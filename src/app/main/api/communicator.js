@@ -91,15 +91,12 @@ class ApiCommunicator
 	 */
 	async browse( directory = '', token = '' )
 	{
-		const response	= await axios.get(
+		return axios.get(
 			this._formatUrlWithQueryParams( `${this.url}/browse`, { directory, token } ),
-			{},
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error.response;
 		});
-
-		return response.data;
 	}
 
 	/**
@@ -111,7 +108,6 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			this._formatUrlWithQueryParams( `${this.url}/file/getFileData`, { file } ),
-			{},
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error.response;
@@ -136,7 +132,6 @@ class ApiCommunicator
 
 		const response	= await axios.delete(
 			this._formatUrlWithQueryParams( url, { item: item.encodedURI } ),
-			{},
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error.response;
@@ -226,6 +221,40 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/folder`,
 			{ directory },
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Gets all the users and their data
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async getUsers()
+	{
+		const response	= await axios.get(
+			`${this.url}/users`,
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Gets all the users and their data
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async getUserRoute()
+	{
+		const response	= await axios.get(
+			`${this.url}/browse/user/route`,
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error.response;

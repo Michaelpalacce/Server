@@ -18,7 +18,7 @@
 			@download-click="onDownloadClick"
 		/>
 		<div class="my-2 mx-auto justify-center text-center text-xl font-medium tracking-wide">{{decodedCurrentDir}}</div>
-		<BrowseItem initialName="BrowseBack" :isFolder="true" @click="browse( previousDirectory )" :isBack="true"/>
+		<Back @click="browse( previousDirectory )"/>
 
 		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
 
@@ -38,7 +38,7 @@
 
 	</div>
 	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5" v-else>
-		<BrowseItem initialName="BackUpload" :isFolder="true" @click="upload = ! canBrowse; uploadErrorMessage = ''" :isBack="true" class="mb-5"/>
+		<Back @click="upload = ! canBrowse; uploadErrorMessage = ''" class="mb-5"/>
 		<Error :errorMessage="uploadErrorMessage" class="mx-auto w-4/5 mb-5"/>
 
 		<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
@@ -54,11 +54,13 @@ import communicator			from "@/app/main/api/communicator";
 import { encode, decode }	from '@/../api/main/utils/base_64_encoder';
 import Dropzone				from '@/app/lib/dropzone';
 import Menu					from "@/views/App/Browse/Components/Menu";
-import Error				from "@/views/App/Browse/Components/Error";
+import Error				from "@/views/App/Components/Error";
+import Back					from "@/views/App/Components/Back";
+import formatErrorMessage	from "@/app/main/utils/error_message_format";
 
 export default {
 	name: 'Browse',
-	components: { Error, Menu, BrowseItem, MenuElement },
+	components: { Error, Menu, BrowseItem, MenuElement, Back },
 
 	data: () => {
 		return {
@@ -79,11 +81,11 @@ export default {
 
 			checkedItems		: [],
 
-			renameDisabled		: false,
-			downloadDisabled	: false,
-			deleteDisabled		: false,
-			copyDisabled		: false,
-			cutDisabled			: false,
+			renameDisabled		: true,
+			downloadDisabled	: true,
+			deleteDisabled		: true,
+			copyDisabled		: true,
+			cutDisabled			: true,
 			bufferedItems		: [],
 			bufferedAction		: ''
 		};
@@ -97,8 +99,10 @@ export default {
 	 */
 	async mounted()
 	{
+		this.currentDirectory	= this.$route.query.directory || ( await communicator.getUserRoute() ).route || null;
+
 		// Load the page
-		await this.browse( this.$route.query.directory || null );
+		await this.browse();
 
 		window.onscroll			= this.tryToLoad
 		Dropzone.autoDiscover	= false;
@@ -177,7 +181,7 @@ export default {
 						});
 
 						if ( moveResponse.error )
-							return this.browseErrorMessage	= this.formatErrorMessage( moveResponse.error );
+							return this.browseErrorMessage	= formatErrorMessage( moveResponse.error );
 
 						await this.browse();
 						break;
@@ -188,7 +192,7 @@ export default {
 						});
 
 						if ( copyResponse.error )
-							return this.browseErrorMessage	= this.formatErrorMessage( copyResponse.error );
+							return this.browseErrorMessage	= formatErrorMessage( copyResponse.error );
 
 						await this.browse();
 						break;
@@ -242,14 +246,14 @@ export default {
 				});
 
 				if ( createFolderResponse.error )
-					return this.browseErrorMessage	= this.formatErrorMessage( createFolderResponse.error );
+					return this.browseErrorMessage	= formatErrorMessage( createFolderResponse.error );
 
 				const item	= await communicator.getFileData( newPath ).catch( ( error ) => {
 					return error;
 				});
 
 				if ( item.error )
-					return this.uploadErrorMessage	= this.formatErrorMessage( item.error );
+					return this.uploadErrorMessage	= formatErrorMessage( item.error );
 
 
 				this.items	= [item, ...this.items];
@@ -277,7 +281,7 @@ export default {
 			});
 
 			if ( response.error )
-				return this.browseErrorMessage	= this.formatErrorMessage( response.error );
+				return this.browseErrorMessage	= formatErrorMessage( response.error );
 
 			this.browse();
 		},
@@ -413,16 +417,21 @@ export default {
 				return error;
 			});
 
-			if ( browseResponse.error )
-				return this.browseErrorMessage	= this.formatErrorMessage( browseResponse.error );
+			const response	= browseResponse.data;
+
+			if ( response.error )
+				if ( browseResponse.status === 403 )
+					return;
+				else
+					return this.browseErrorMessage	= formatErrorMessage( response.error );
 
 			const isNewDir			= token === '';
-			this.items				= isNewDir ? browseResponse.items : this.items.concat( browseResponse.items );
-			this.previousDirectory	= browseResponse.previousDirectory;
-			this.currentDirectory	= browseResponse.currentDirectory;
-			this.decodedCurrentDir	= decode( browseResponse.currentDirectory );
-			this.nextToken			= browseResponse.nextToken;
-			this.hasMore			= browseResponse.hasMore;
+			this.items				= isNewDir ? response.items : this.items.concat( response.items );
+			this.previousDirectory	= response.previousDirectory;
+			this.currentDirectory	= response.currentDirectory;
+			this.decodedCurrentDir	= decode( response.currentDirectory );
+			this.nextToken			= response.nextToken;
+			this.hasMore			= response.hasMore;
 
 			if ( isNewDir )
 				this.uncheckItems();
@@ -475,7 +484,7 @@ export default {
 						});
 
 						if ( item.error )
-							return this.uploadErrorMessage	= this.formatErrorMessage( item.error );
+							return this.uploadErrorMessage	= formatErrorMessage( item.error );
 
 						this.items	= this.items.concat( [item] );
 
@@ -486,7 +495,7 @@ export default {
 
 					this.dropzone.on( 'error', ( file, error ) => {
 						error	= JSON.parse( error );
-						this.uploadErrorMessage	= this.formatErrorMessage( error.error )
+						this.uploadErrorMessage	= formatErrorMessage( error.error )
 					});
 				}
 			});
@@ -539,18 +548,6 @@ export default {
 			}).catch(( error ) => {
 				this.browseErrorMessage	= `An error has occurred ${error}`;
 			})
-		},
-
-		/**
-		 * @brief	Formats and returns an error message given an error
-		 *
-		 * @param	{Object} error
-		 *
-		 * @return	{String}
-		 */
-		formatErrorMessage( error )
-		{
-			return `An error has occurred: Code: ${error.code}${error.message ? `, message: ${error.message}` : ''}`
 		},
 
 		/**

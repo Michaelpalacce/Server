@@ -2,9 +2,9 @@
 
 // Dependencies
 const app			= require( 'event_request' )();
-const UserManager	= require( './user/user_manager' );
+const UserManager	= require( '../user/user_manager' );
 const Session		= require( 'event_request/server/components/session/session' );
-const User			= require( './user/user' );
+const User			= require( '../user/user' );
 
 // Creates root user if not exists
 if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
@@ -23,9 +23,26 @@ if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
 	UserManager.set({
 		username	: process.env.ADMIN_USERNAME,
 		password	: process.env.ADMIN_PASSWORD,
-		permissions	: JSON.stringify( defaultPermissions ),
+		permissions	: defaultPermissions,
 		roles		: defaultRoles
 	});
+
+	const user	= UserManager.set({
+		username	: 'test',
+		password	: 'test',
+		permissions	: {
+			route: [
+				{
+					type: 'DENY',
+					route: new RegExp( /^\/users?(.+)/ ),
+					method: ''
+				}
+			]
+		},
+		roles		: [User.ROLES.user]
+	});
+
+	user.getBrowseMetadata().setRoute( '/Test' );
 }
 
 /**
@@ -47,8 +64,6 @@ app.add( async ( event ) => {
 		await event.initSession();
 
 	event.$userManager	= UserManager;
-
-	event.session.add( 'username', 'root' );
 
 	event.next();
 });

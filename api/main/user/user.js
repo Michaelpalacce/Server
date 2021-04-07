@@ -39,8 +39,8 @@ class User
 	_parsePermissions( permissions )
 	{
 		return typeof permissions !== 'string' ? permissions : JSON.parse( permissions, ( key, value ) => {
-			if ( typeof value === 'string' && value.includes( REGEX_PATTERN ) )
-				value	= new RegExp( value.substring( REGEX_PATTERN.length ) );
+			if ( typeof value !== 'undefined' && typeof value.regexp !== 'undefined' )
+				value	= new RegExp( value.regexp.source, value.regexp.flags );
 
 			return value;
 		});
@@ -57,7 +57,7 @@ class User
 	{
 		return JSON.stringify( permissions, ( key, value ) => {
 			if( value instanceof RegExp )
-				return `${REGEX_PATTERN}value.source`;
+				return { regexp: { source: value.source, flags: value.flags } };
 			else
 				return value;
 		});
@@ -204,7 +204,8 @@ class User
 }
 
 User.ROLES	= {
-	root: 'root'
+	root: 'root',
+	user: 'user'
 }
 
 module.exports	= User;

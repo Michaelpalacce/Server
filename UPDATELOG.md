@@ -3,6 +3,7 @@
 - Moved a lot of files around
 - Moved towards using pm2 to manage the process instead of own logic
 - Removed a lot of commands that were not necessary and a lot of variables
+- Terminal removed
 
 16.3.2
 - Style changes
