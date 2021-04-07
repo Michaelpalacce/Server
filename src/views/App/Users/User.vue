@@ -1,5 +1,5 @@
 <template>
-	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5">
+	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64">
 		<Back @click="$router.go( -1 )" class="mb-5"/>
 
 		<div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
@@ -39,6 +39,22 @@
 				>Update</button>
 			</div>
 		</div>
+
+		<div class="container  mx-auto flex-1 flex flex-col items-center justify-center px-2 mt-10">
+			<div class="bg-gray-800 px-6 py-8 rounded shadow-md text-black w-full text-white">
+				<h1 class="text-center text-2xl mb-2">Permissions</h1>
+
+				<textarea
+					class="block border border-white w-full p-3 rounded mb-4 bg-gray-600"
+					name="password"
+					placeholder="Password" />
+				<button
+					type="submit"
+					class="w-full text-center py-3 rounded bg-gray-600 hover:bg-gray-300 hover:text-black focus:outline-none my-1"
+				>Update</button>
+			</div>
+		</div>
+
 	</div>
 </template>
 
