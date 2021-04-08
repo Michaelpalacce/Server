@@ -264,6 +264,25 @@ class ApiCommunicator
 	}
 
 	/**
+	 * @brief	Gets all the users and their data
+	 *
+	 * @param	{String} username
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async getUserData( username )
+	{
+		const response	= await axios.get(
+			`${this.url}/users/${username}`,
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
 	 * @brief	Gets the authentication headers
 	 *
 	 * @return	Object

@@ -1,11 +1,11 @@
 <template>
 	<div class="bg-gray-800">
-		<div class="hidden sm:block max-w-7xl mx-auto text-lg relative flex items-center justify-between sm:items-stretch sm:justify-start p-3 ">
+		<div class="hidden sm:block max-w-7xl mx-auto text-white text-lg relative flex items-center justify-between sm:items-stretch sm:justify-start p-3 ">
 			<div class="flex">
-				<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 mx-2 rounded-md" to="/dashboard">Dashboard</router-link>
-				<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 mx-2 rounded-md" to="/browse">Browse</router-link>
-				<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 mx-2 rounded-md" to="/users">Users</router-link>
-				<div class="bg-red-500 hover:bg-red-600 hover:text-white px-3 py-2 rounded-md absolute right-5 text-center cursor-pointer" @click="logout">
+				<router-link class="hover:bg-gray-700 px-3 py-2 mx-2 rounded-md" to="/dashboard">Dashboard</router-link>
+				<router-link class="hover:bg-gray-700 px-3 py-2 mx-2 rounded-md" to="/browse">Browse</router-link>
+				<router-link class="hover:bg-gray-700 px-3 py-2 mx-2 rounded-md" to="/users">Users</router-link>
+				<div class="bg-red-500 hover:bg-red-600 px-3 py-2 rounded-md absolute right-5 text-center cursor-pointer" @click="logout">
 					Logout
 				</div>
 			</div>
@@ -20,10 +20,10 @@
 			</button>
 
 			<div class="px-2 pt-2 pb-3 text-lg" :class="{ hidden: mobileCollapsed }">
-				<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 my-2 rounded-md" to="/dashboard">Dashboard</router-link>
-				<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 my-2 rounded-md" to="/browse">Browse</router-link>
-				<router-link class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 my-2 rounded-md" to="/users">Users</router-link>
-				<div class="bg-red-500 hover:bg-red-600 hover:text-white block px-3 py-2 text-center cursor-pointer rounded-md mx-auto mt-5 w-1/3 "  @click="logout">
+				<router-link class="hover:bg-gray-700 block px-3 py-2 my-2 rounded-md" to="/dashboard">Dashboard</router-link>
+				<router-link class="hover:bg-gray-700 block px-3 py-2 my-2 rounded-md" to="/browse">Browse</router-link>
+				<router-link class="hover:bg-gray-700 block px-3 py-2 my-2 rounded-md" to="/users">Users</router-link>
+				<div class="bg-red-500 hover:bg-red-600 block px-3 py-2 text-center cursor-pointer rounded-md mx-auto mt-5 w-1/3 " @click="logout">
 					Logout
 				</div>
 			</div>

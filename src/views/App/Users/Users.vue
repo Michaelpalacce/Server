@@ -36,18 +36,37 @@ export default {
 
 	async mounted()
 	{
-		const usersResponse	= await communicator.getUsers();
-
-		if ( usersResponse.error )
-			return this.errorMessage	= formatErrorMessage( usersResponse.error );
-
-		this.users	= await communicator.getUsers();
+		await this.loadUsers();
 	},
 
 	methods: {
-		userClicked( user )
+		/**
+		 * @brief	Loads and displays all the users
+		 *
+		 * @return	void
+		 */
+		async loadUsers()
 		{
-			this.$router.push( { path: 'user', query: { user } } );
+			const usersResponse	= await communicator.getUsers().catch(( error ) => {
+				return error;
+			});
+
+			if ( usersResponse.error )
+				return this.errorMessage	= formatErrorMessage( usersResponse.error );
+
+			this.users	= usersResponse;
+		},
+
+		/**
+		 * @brief	Redirects to the user route with the selected username
+		 *
+		 * @param	{String} username
+		 *
+		 * @return	void
+		 */
+		userClicked( username )
+		{
+			this.$router.push( { path: 'user', query: { username } } );
 		}
 	}
 }
