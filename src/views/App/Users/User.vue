@@ -10,11 +10,11 @@
 			<div class="flex w-full">
 				<div class="w-10/12 flex flex-col">
 					<span class="w-full">Username</span>
-					<span class="w-full text-base">{{username}}</span>
+					<span class="w-full text-base">{{ user ? user.getUsername() : '' }}</span>
 				</div>
 
 				<div class="w-2/12">
-					<Button text="Change"/>
+					<Button text="Change" @click="changeUsername"/>
 				</div>
 			</div>
 			<Divider />
@@ -26,7 +26,7 @@
 				</div>
 
 				<div class="w-2/12">
-					<Button text="Change"/>
+					<Button text="Change" @click="changePassword"/>
 				</div>
 			</div>
 			<Divider />
@@ -35,19 +35,20 @@
 			<div class="flex w-full">
 				<div class="w-10/12 flex flex-col">
 					<span class="w-full">Roles</span>
-					<span class="w-full text-base">{{ user !== null ? user.roles.join( ',' ) : '' }}</span>
+					<span class="w-full text-base">{{ user ? user.roles.join( ',' ) : '' }}</span>
 				</div>
-
 				<div class="w-2/12">
 					<Button text="Change"/>
 				</div>
 			</div>
 			<Divider />
 			<div class="flex w-full">
-				<div class="w-10/12 flex flex-col">
+				<div class="w-9/12 flex flex-col">
 					<span class="w-full">Permissions</span>
 					<span class="w-full text-base max-h-64 overflow-y-auto" v-html="permissions"></span>
 				</div>
+
+				<div class="w-1/12 invisible"></div>
 
 				<div class="w-2/12">
 					<Button text="Change"/>
@@ -60,7 +61,7 @@
 			<div class="flex w-full">
 				<div class="w-10/12 flex flex-col">
 					<span class="w-full">Route</span>
-					<span class="w-full text-base">{{ user !== null ? user.getBrowseMetadata().getRoute() : '' }}</span>
+					<span class="w-full text-base">{{ user ? user.getBrowseMetadata().getRoute() : '' }}</span>
 				</div>
 
 				<div class="w-2/12">
@@ -127,7 +128,86 @@ export default {
 				return this.errorMessage	= formatErrorMessage( userDataResponse.error );
 
 			this.user			= new User( userDataResponse );
-			this.permissions	= `<pre>${JSON.stringify( this.user.getPermissions(), undefined, 2 )}</pre>`
+			this.permissions	= `<pre>${JSON.stringify( JSON.parse( this.user.getFormattedPermissions() ), undefined, 2 )}</pre>`
+		},
+
+		/**
+		 * @brief	Updates the username of the user
+		 *
+		 * @return {Promise<void>}
+		 */
+		async changeUsername()
+		{
+			const username	= prompt( 'New username:', this.user.getUsername() );
+
+			if ( ! username )
+				return;
+
+			const newUser	= new User( this.user.getUserData() );
+			const oldUser	= new User( this.user.getUserData() );
+			if ( ! newUser.setUsername( username ) )
+				return;
+
+			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
+				return error;
+			});
+
+			await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
+		},
+
+		/**
+		 * @brief	Changes a user's password
+		 *
+		 * @return	{Promise<void>}
+		 */
+		async changePassword()
+		{
+			const password	= prompt( 'New password:' );
+
+			if ( ! password )
+				return;
+
+			const newUser	= new User( this.user.getUserData() );
+			const oldUser	= new User( this.user.getUserData() );
+			if ( ! newUser.setPassword( password ) )
+				return;
+
+			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
+				return error;
+			});
+
+			await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
+		},
+
+		/**
+		 * @brief	Accepts the updateUserResponse as well as the newUser and oldUser objects and updates the view
+		 *
+		 * @param	{Object} updateUserResponse
+		 * @param	{Object} newUser
+		 * @param	{Object} oldUser
+		 *
+		 * @return	{Promise<void>}
+		 */
+		async _updateUserFromResponse( updateUserResponse, newUser, oldUser )
+		{
+			if ( updateUserResponse.error )
+				return this.errorMessage	= formatErrorMessage( updateUserResponse.error );
+
+			if ( localStorage.name !== newUser.getUsername() && localStorage.name === oldUser.getUsername() )
+			{
+				await communicator.logout().catch(()=>{});
+				this.emitter.emit( 'user.credentials' );
+				this.$router.push( '/' );
+			}
+			else
+				this.user	= new User( updateUserResponse );
+		}
+	},
+
+	watch: {
+		user: function ()
+		{
+			console.log( this.user );
 		}
 	}
 }

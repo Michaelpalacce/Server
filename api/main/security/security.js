@@ -36,7 +36,12 @@ if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
 					type: 'DENY',
 					route: new RegExp( /^\/users?(.+)/ ),
 					method: ''
-				}
+				},
+				{
+					type: 'ALLOW',
+					route:'',
+					method: ''
+				},
 			]
 		},
 		roles		: [User.ROLES.user]

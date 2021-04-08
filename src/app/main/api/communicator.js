@@ -57,6 +57,7 @@ class ApiCommunicator
 			throw response;
 
 		localStorage.token	= response.headers.token;
+		localStorage.name	= username;
 
 		return response;
 	}
@@ -75,6 +76,7 @@ class ApiCommunicator
 		).catch(() => {});
 
 		localStorage.removeItem( 'token' );
+		localStorage.removeItem( 'name' );
 
 		return response;
 	}
@@ -274,6 +276,29 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			`${this.url}/users/${username}`,
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Updates the user, the oldUser must be passed to detect changes in the username
+	 *
+	 * @details	Expects User.getUserData() as a parameter for both
+	 *
+	 * @param	{Object} oldUser
+	 * @param	{Object} newUser
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async updateUser( oldUser, newUser )
+	{
+		const response	= await axios.patch(
+			`${this.url}/users/${oldUser.username}`,
+			{ oldUser, newUser },
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error.response;

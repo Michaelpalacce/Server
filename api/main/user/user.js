@@ -20,9 +20,9 @@ class User
 {
 	constructor( userData = {} )
 	{
-		this.username		= userData.username || '';
-		this.password		= userData.password || '';
-		this.roles			= userData.roles || [];
+		this.username		= typeof userData.username === 'string' ? userData.username : '';
+		this.password		= typeof userData.password === 'string' ? userData.password : '';
+		this.roles			= Array.isArray( userData.roles ) ? userData.roles : [];
 		this.metadata		= this._parseMetadata( userData.metadata || '{}' );
 		this.permissions	= this._parsePermissions( userData.permissions || '{}' );
 	}
@@ -104,12 +104,11 @@ class User
 	 */
 	getUserData()
 	{
-		const metadata	= this._formatMetadata( this.metadata );
 		return {
 			username	: this.username,
 			password	: this.password,
-			metadata	: metadata,
-			permissions	: this._formatPermissions( this.permissions ),
+			metadata	: this._formatMetadata( this.metadata ),
+			permissions	: this.getFormattedPermissions(),
 			roles		: this.roles
 		};
 	}
@@ -140,6 +139,20 @@ class User
 	}
 
 	/**
+	 * @param	{String} username
+	 *
+	 * @return	{Boolean}
+	 */
+	setUsername( username )
+	{
+		if ( typeof username !== 'string' )
+			return false;
+
+		this.username	= username;
+		return true;
+	}
+
+	/**
 	 * @brief	Returns the user's permissions
 	 *
 	 * @return	{Array}
@@ -147,6 +160,31 @@ class User
 	getPermissions()
 	{
 		return this.permissions;
+	}
+
+	/**
+	 * @brief	Returns the user's permissions formatted ( for saving and displaying )
+	 *
+	 * @return	{String}
+	 */
+	getFormattedPermissions()
+	{
+		return this._formatPermissions( this.permissions );
+	}
+
+	/**
+	 * @param	{String} permissions
+	 *
+	 * @return	{Boolean}
+	 */
+	setPermissions( permissions )
+	{
+		if ( typeof permissions !== 'string' )
+			return false;
+
+		this.permissions	= this._parsePermissions( permissions );
+
+		return true;
 	}
 
 	/**
@@ -160,6 +198,35 @@ class User
 	}
 
 	/**
+	 * @param	{Array} roles
+	 *
+	 * @return	{Boolean}
+	 */
+	setRoles( roles )
+	{
+		if ( ! Array.isArray( roles ) )
+			return false;
+
+		this.roles	= roles;
+		return true;
+	}
+
+	/**
+	 * @param	{String} role
+	 *
+	 * @return	{Boolean}
+	 */
+	addRole( role )
+	{
+		if ( typeof role !== 'string' )
+			return false;
+
+		this.roles.push( role );
+
+		return true;
+	}
+
+	/**
 	 * @brief	Returns the password
 	 *
 	 * @return	{String}
@@ -167,6 +234,20 @@ class User
 	getPassword()
 	{
 		return this.password;
+	}
+
+	/**
+	 * @param	{String} password
+	 *
+	 * @return	{Boolean}
+	 */
+	setPassword( password )
+	{
+		if ( typeof password !== 'string' )
+			return false;
+
+		this.password	= password;
+		return true;
 	}
 
 	/**

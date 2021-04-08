@@ -48,11 +48,53 @@ serve stop ---> stop the server
 - When adding a user the user will persist after 5 seconds so don't stop the server
 
 # Permissions:
-- Only superusers can add/ view/ modify other users ( and self ). Only superusers can access the project folder and the OS tmp directory.
-- Nobody can delete or change the permissions of the root user.
+- Only root and admin users can add/ view/ modify other users ( and self ). 
+- Nobody can access the project folder .
+[comment]: <> (- Nobody can delete or change the permissions of the root user.)
 - Nobody can do any operations on the PROJECT_ROOT as well as many operations including the folder structure where the project is
-- When adding a user a set of permissions will be asked for. Those permissions are forbidding. Whatever you type in there, the users WON'T be able to access.
-- You may leave the method empty which will mean ANY method or pass in an Array
+- When editing the permissions and you want to set a regexp as a route follow the structure given below. It is important
+  to escape any characters that would normally be escaped in JSON ( in this case a backward slash ) since this structure will be 
+  JSON stringified and sent to the API.
+~~~json
+{
+  "route": [
+    {
+      "type": "DENY",
+      "route": {
+        "regexp": {
+          "source": "^\\/users?(.+)",
+          "flags": ""
+        }
+      },
+      "method": ""
+    }
+  ]
+}
+~~~
+- The first rule that matches the route will be used. If ALLOW is set, then the user is allowed through and no more rules are parsed. 
+  If DENY is set, then an Error is thrown
+- Examples Permissions that deny access to any route starting with /users with any method and allowing everything else:
+~~~json
+{
+  "route": [
+    {
+      "type": "DENY",
+      "route": {
+        "regexp": {
+          "source": "^\\/users?(.+)",
+          "flags": ""
+        }
+      },
+      "method": ""
+    },
+    {
+      "type": "ALLOW",
+      "route": "",
+      "method": ""
+    }
+  ]
+}
+~~~
 
 # Notes
 - If a state arises where there is no root user, one will be created automatically ( with the username and password in the env.js file )

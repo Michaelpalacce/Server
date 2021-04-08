@@ -1,7 +1,7 @@
 <template>
 	<button type="submit" :class="`w-auto py-2 px-7 rounded-3xl ${hasBorder ? 'border' : ''}
 									border-${borderColor} bg-${bgColor} hover:bg-${hoverBgColor} hover:text-${hoverTextColor} text-${textColor}
-									focus:outline-none`">{{ text }}</button>
+									focus:outline-none text-${textSize}`">{{ text }}</button>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
 		},
 		borderColor: {
 			type: String,
-			default: 'gray-600'
+			default: 'gray-500'
 		},
 		bgColor: {
 			type: String,
@@ -22,7 +22,7 @@ export default {
 		},
 		hoverBgColor: {
 			type: String,
-			default: 'gray-300'
+			default: 'gray-400'
 		},
 		hoverTextColor: {
 			type: String,
@@ -30,7 +30,11 @@ export default {
 		},
 		textColor: {
 			type: String,
-			default: 'gray-200'
+			default: 'white'
+		},
+		textSize: {
+			type: String,
+			default: 'base'
 		},
 		text: String
 	}

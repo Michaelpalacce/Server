@@ -55,7 +55,7 @@ export default {
 		{
 			await communicator.logout().catch(()=>{});
 
-			localStorage.name	= '';
+			localStorage.removeItem( 'name' );
 			this.emitter.emit( 'user.credentials' );
 			this.$router.push( '/' );
 		}

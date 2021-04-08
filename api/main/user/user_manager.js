@@ -134,9 +134,22 @@ class UserManager
 	set( userData )
 	{
 		if ( typeof userData.username !== 'string' || this.has( userData.username ) )
-		{
-			throw new Error( `User: ${userData.username} already exist` );
-		}
+			throw { code: 'app.main.user.exists', message: `User: ${userData.username} already exist` };
+
+		return this.users[userData.username]	= new User( userData );
+	}
+
+	/**
+	 * @brief	Updates a user that already exists
+	 *
+	 * @param	{Object} userData
+	 *
+	 * @return	{User}
+	 */
+	update( userData )
+	{
+		if ( typeof userData.username !== 'string' || ! this.has( userData.username ) )
+			throw { code: 'app.main.user.notFound', message: `User: ${userData.username} does not exist` };
 
 		return this.users[userData.username]	= new User( userData );
 	}
@@ -151,9 +164,7 @@ class UserManager
 	delete( username )
 	{
 		if ( ! this.has( username ) )
-		{
 			throw new Error( `User: ${username} does not exist` );
-		}
 
 		delete this.users[username];
 	}

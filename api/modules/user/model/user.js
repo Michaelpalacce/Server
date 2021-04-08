@@ -1,5 +1,7 @@
 'use strict';
 
+const User	= require( '../../../main/user/user' );
+
 /**
  * @brief	User list model responsible for listing all the users
  */
@@ -43,6 +45,34 @@ class UserModel
 			throw { code: 'app.user.userNotFound', message : `User: ${username} does not exists` };
 
 		return this.userManager.get( username );
+	}
+
+	updateUser( updateUserInput )
+	{
+		if ( ! updateUserInput.isValid() )
+			throw { code: 'app.input.invalidGetUserInput', message : updateUserInput.getReasonToString() };
+
+		const newUserData	= updateUserInput.getNewUserData();
+		const oldUserData	= updateUserInput.getOldUserData();
+
+		const newUser		= new User( newUserData );
+		const oldUser		= new User( oldUserData );
+
+		if ( newUser.getUsername() !== oldUser.getUsername() )
+		{
+			this.userManager.delete( oldUser.getUsername() );
+			this.userManager.set( newUserData );
+
+			if ( oldUser.getUsername() === this.user.getUsername() )
+				this.event.session.add( 'username', newUser.getUsername() );
+		}
+		else
+			if ( ! this.userManager.has( newUser.getUsername() ) )
+				throw { code: 'app.user.userNotFound', message : `User: ${newUser.getUsername()} does not exists` };
+			else
+				this.userManager.update( newUserData );
+
+		return this.userManager.get( newUser.getUsername() );
 	}
 }
 

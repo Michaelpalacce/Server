@@ -59,8 +59,6 @@ export default {
 			this.setError();
 
 			communicator.login( this.username, this.password ).then(( response )=>{
-				localStorage.name	= this.username;
-
 				this.$router.push( 'dashboard' );
 				this.emitter.emit( 'user.credentials' );
 			}).catch(( error ) => {
