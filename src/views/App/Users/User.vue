@@ -82,7 +82,6 @@ import communicator			from "@/app/main/api/communicator";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Error				from "@/views/App/Components/Error";
 import User					from "@/../api/main/user/user"
-import { parsePermissions }	from "@/../api/main/acls/permissions_helper"
 
 export default {
 	name: 'User',
@@ -116,10 +115,10 @@ export default {
 		 */
 		async loadData()
 		{
-			this.username	= this.$route.query.username || null;
+			this.username	= this.$route.params.username || null;
 
 			if ( this.username === null )
-				return this.$router.push( 'users' );
+				return this.$router.push( { name: 'users' } );
 
 			const userDataResponse	= await communicator.getUserData( this.username ).catch(( error ) => {
 				return error;
@@ -187,22 +186,23 @@ export default {
 		 */
 		async changeRoles()
 		{
-			// console.log( parsePermissions( JSON.stringify( await communicator.getRoles() ) ) );
-			const roles	= prompt( 'New roles:', this.user.getRoles().join( ',' ) );
+			this.$router.push( { name: 'user-roles', params: { username: this.username } } );
 
-			if ( ! roles )
-				return;
-
-			const newUser	= new User( this.user.getUserData() );
-			const oldUser	= new User( this.user.getUserData() );
-			if ( ! newUser.setRoles( roles.split( ',' ) ) )
-				return;
-
-			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
-				return error;
-			});
-
-			await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
+			// const roles	= prompt( 'New roles:', this.user.getRoles().join( ',' ) );
+			//
+			// if ( ! roles )
+			// 	return;
+			//
+			// const newUser	= new User( this.user.getUserData() );
+			// const oldUser	= new User( this.user.getUserData() );
+			// if ( ! newUser.setRoles( roles.split( ',' ) ) )
+			// 	return;
+			//
+			// const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
+			// 	return error;
+			// });
+			//
+			// await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
 		},
 
 		/**

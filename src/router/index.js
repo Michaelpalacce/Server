@@ -5,38 +5,44 @@ import Preview								from '@/views/App/Browse/Preview'
 import Dashboard							from '@/views/App/Dashboard/Dashboard'
 import Users								from '@/views/App/Users/Users'
 import User									from '@/views/App/Users/User'
+import Roles								from '@/views/App/Users/Roles'
 
 const routes	= [
 	{
 		path: '/',
-		name: 'Login',
+		name: 'login',
 		component: Login
 	},
 	{
 		path: '/dashboard',
-		name: 'Dashboard',
+		name: 'dashboard',
 		component: Dashboard
 	},
 	{
 		path: '/browse',
-		name: 'Browse',
+		name: 'browse',
 		component: Browse
 	},
 	{
 		path: '/preview',
-		name: 'Preview',
+		name: 'preview',
 		component: Preview
 	},
 	{
 		path: '/users',
-		name: 'Users',
+		name: 'users',
 		component: Users
 	},
 	{
-		path: '/user',
-		name: 'User',
+		path: '/user/:username',
+		name: 'user',
 		component: User
-	}
+	},
+	{
+		path: '/user/:username/roles',
+		name: 'user-roles',
+		component: Roles
+	},
 ]
 
 export default createRouter({

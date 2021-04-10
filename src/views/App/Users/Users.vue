@@ -66,7 +66,7 @@ export default {
 		 */
 		userClicked( username )
 		{
-			this.$router.push( { path: 'user', query: { username } } );
+			this.$router.push( { name: 'user', params: { username } } );
 		}
 	}
 }

@@ -38,7 +38,7 @@ setTimeout(()=>{
  *
  * @details	Starts the session
  * 			Sets the UserManager in the eventRequest
- * 			Works with gets that have a query token set
+ * 			Works with gets that have a query token set ( for download )
  */
 app.add( async ( event ) => {
 	if ( event.method.toLowerCase() === 'get' && typeof event.query.token === 'string' )
