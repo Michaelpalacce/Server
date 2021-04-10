@@ -29,30 +29,23 @@ class UpdateUserInput extends Input
 	 */
 	_validate()
 	{
+		const userValidation	= {
+			username		: 'filled||string||range:3-64',
+			password		: 'filled||string||range:3-64',
+			metadata		: 'filled',
+			permissions		: 'filled',
+			userPermissions	: 'filled',
+			roles			: 'filled||array'
+		};
+
 		this.reason	= this.validationHandler.validate(
-			this.event.body,
-			{
-				newUser: {
-					username	: 'filled||string||range:3-64',
-					password	: 'filled||string||range:3-64',
-					metadata	: 'filled',
-					permissions	: 'filled',
-					roles		: 'filled||array'
-				},
-				oldUser: {
-					username	: 'filled||string||range:3-64',
-					password	: 'filled||string||range:3-64',
-					metadata	: 'filled',
-					permissions	: 'filled',
-					roles		: 'filled||array'
-				}
-			}
+			this.event.body, { newUser: userValidation, oldUser: userValidation }
 		);
 
 		if ( this.reason.hasValidationFailed() )
 			return false;
 
-		const { newUser, oldUser }					= this.reason.getValidationResult();
+		const { newUser, oldUser }						= this.reason.getValidationResult();
 		this.model[UpdateUserInput.NEW_USER_DATA_KEY]	= newUser;
 		this.model[UpdateUserInput.OLD_USER_DATA_KEY]	= oldUser;
 

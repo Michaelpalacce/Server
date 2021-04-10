@@ -1,14 +1,14 @@
 <template>
 	<Back @click="$router.go( -1 )" class="mb-10"/>
 
-	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 text-2xl">
-		<div class="px-2 max-w-5xl mx-auto">
+	<div class="rounded-t-lg mx-auto text-gray-200 text-2xl p-5">
+		<div class="mx-auto">
 			<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mb-5"/>
 
 			<TitleSection title="User settings" />
 
 			<div class="flex w-full">
-				<div class="w-10/12 flex flex-col">
+				<div class="w-8/12 sm:w-10/12 flex flex-col">
 					<span class="w-full">Username</span>
 					<span class="w-full text-base">{{ user ? user.getUsername() : '' }}</span>
 				</div>
@@ -20,9 +20,9 @@
 			<Divider />
 
 			<div class="flex w-full">
-				<div class="w-10/12 flex flex-col">
+				<div class="w-8/12 sm:w-10/12 flex flex-col">
 					<span class="w-full">Change Password</span>
-					<span class="w-full text-base">Password must be more than 6 characters</span>
+					<span class="w-full text-base">Password must be more than 3 characters</span>
 				</div>
 
 				<div class="w-2/12">
@@ -33,12 +33,10 @@
 
 			<TitleSection title="Permissions" class="mt-32"/>
 			<div class="flex w-full">
-				<div class="w-8/12 flex flex-col">
+				<div class="w-8/12 sm:w-10/12 flex flex-col">
 					<span class="w-full">Roles</span>
 					<span class="w-full text-base">{{ user ? user.roles.join( ',' ) : '' }}</span>
-				</div>
-				<div class="w-2/12">
-					<Button text="Edit Order" @click="editOrder"/>
+					<span class="w-full text-sm">Role order matters!</span>
 				</div>
 				<div class="w-2/12">
 					<Button text="Change" @click="changeRoles"/>
@@ -46,15 +44,17 @@
 			</div>
 			<Divider />
 			<div class="flex w-full">
-				<div class="w-9/12 flex flex-col">
-					<span class="w-full">Permissions</span>
-					<span class="w-full text-base max-h-64 overflow-y-auto" v-html="permissions"></span>
+				<div class="w-8/12 sm:w-9/12 flex flex-col">
+					<span class="w-full">User Permissions</span>
+					<span class="w-full text-sm">User Permissions are taken with priority over role permissions.</span>
+					<span class="w-full text-sm">Below are displayed only user permissions</span>
+					<pre class="w-full text-base max-h-64 overflow-y-auto">{{permissions}}</pre>
 				</div>
 
-				<div class="w-1/12 invisible"></div>
+				<div class="w-0 sm:w-1/12 invisible"></div>
 
 				<div class="w-2/12">
-					<Button text="Change"/>
+					<Button text="Change" @click="changePermissions"/>
 				</div>
 			</div>
 			<Divider />
@@ -62,13 +62,13 @@
 			<TitleSection title="Browse Module" class="mt-32"/>
 
 			<div class="flex w-full">
-				<div class="w-10/12 flex flex-col">
+				<div class="w-8/12 sm:w-10/12 flex flex-col">
 					<span class="w-full">Route</span>
 					<span class="w-full text-base">{{ user ? user.getBrowseMetadata().getRoute() : '' }}</span>
 				</div>
 
 				<div class="w-2/12">
-					<Button text="Change"/>
+					<Button text="Change" @click="changeRoute"/>
 				</div>
 			</div>
 			<Divider />
@@ -131,7 +131,7 @@ export default {
 				return this.errorMessage	= formatErrorMessage( userDataResponse.error );
 
 			this.user			= new User( userDataResponse );
-			this.permissions	= `<pre>${JSON.stringify( JSON.parse( this.user.getFormattedUserPermissions() ), undefined, 2 )}</pre>`
+			this.permissions	= JSON.stringify( JSON.parse( this.user.getFormattedUserPermissions() ), undefined, 2 );
 		},
 
 		/**
@@ -150,6 +150,29 @@ export default {
 			const oldUser	= new User( this.user.getUserData() );
 			if ( ! newUser.setUsername( username ) )
 				return;
+
+			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
+				return error;
+			});
+
+			await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
+		},
+
+		/**
+		 * @brief	Updates the user's route
+		 *
+		 * @return {Promise<void>}
+		 */
+		async changeRoute()
+		{
+			const route	= prompt( 'New route:', this.user.getBrowseMetadata().getRoute() );
+
+			if ( ! route )
+				return;
+
+			const newUser	= new User( this.user.getUserData() );
+			const oldUser	= new User( this.user.getUserData() );
+			newUser.getBrowseMetadata().setRoute( route )
 
 			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
 				return error;
@@ -183,7 +206,7 @@ export default {
 		},
 
 		/**
-		 * @brief	Changes a user's password
+		 * @brief	Navigates to the user's roles page
 		 *
 		 * @return	{Promise<void>}
 		 */
@@ -193,25 +216,13 @@ export default {
 		},
 
 		/**
-		 * @brief	Edit the order of the roles
+		 * @brief	Navigates to the user's permissions page
+		 *
+		 * @return	{Promise<void>}
 		 */
-		async editOrder()
+		changePermissions()
 		{
-			const roles	= prompt( 'New roles:', this.user.getRoles().join( ',' ) );
-
-			if ( ! roles )
-				return;
-
-			const newUser	= new User( this.user.getUserData() );
-			const oldUser	= new User( this.user.getUserData() );
-			if ( ! newUser.setRoles( roles.split( ',' ) ) )
-				return;
-
-			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
-				return error;
-			});
-
-			await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
+			this.$router.push( { name: 'user-permissions', params: { username: this.username } } );
 		},
 
 		/**

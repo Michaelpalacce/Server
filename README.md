@@ -50,28 +50,12 @@ serve stop ---> stop the server
 # Permissions:
 - Only root and admin users can add/ view/ modify other users ( and self ). 
 - Nobody can access the project folder .
-[comment]: <> (- Nobody can delete or change the permissions of the root user.)
 - Nobody can do any operations on the PROJECT_ROOT as well as many operations including the folder structure where the project is
-- When editing the permissions and you want to set a regexp as a route follow the structure given below. It is important
-  to escape any characters that would normally be escaped in JSON ( in this case a backward slash ) since this structure will be 
-  JSON stringified and sent to the API.
-~~~json
-{
-  "route": [
-    {
-      "type": "DENY",
-      "route": {
-        "regexp": {
-          "source": "^\\/users?(.+)",
-          "flags": ""
-        }
-      },
-      "method": ""
-    }
-  ]
-}
-~~~
-- The first rule that matches the route will be used. If ALLOW is set, then the user is allowed through and no more rules are parsed. 
+
+# User Permissions
+
+### Route
+- The first rule that matches the route will be used. If ALLOW is set, then the user is allowed through and no more rules are parsed.
   If DENY is set, then an Error is thrown
 - Examples Permissions that deny access to any route starting with /users with any method and allowing everything else:
 ~~~json
@@ -95,6 +79,26 @@ serve stop ---> stop the server
   ]
 }
 ~~~
+- When editing the permissions and you want to set a regexp as a route follow the structure given below. It is important
+  to escape any characters that would normally be escaped in JSON ( in this case a backward slash ) since this structure will be 
+  JSON stringified and sent to the API.
+~~~json
+{
+  "route": [
+    {
+      "type": "DENY",
+      "route": {
+        "regexp": {
+          "source": "^\\/users?(.+)",
+          "flags": ""
+        }
+      },
+      "method": ""
+    }
+  ]
+}
+~~~
+
 
 # Notes
 - If a state arises where there is no root user, one will be created automatically ( with the username and password in the env.js file )

@@ -43,7 +43,7 @@
 		<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5">
 			<Error :errorMessage="uploadErrorMessage" @clear-click="uploadErrorMessage = ''" class="mx-auto w-4/5 mb-5"/>
 
-			<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
+			<form :action="apiUrl + '/file'" class="dropzone mb-5 w-full sm:w-2/3" method="POST" >
 				<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
 			</form>
 		</div>
@@ -423,10 +423,7 @@ export default {
 			const response	= browseResponse.data;
 
 			if ( response.error )
-				if ( browseResponse.status === 403 )
-					return;
-				else
-					return this.browseErrorMessage	= formatErrorMessage( response.error );
+				return this.browseErrorMessage	= formatErrorMessage( response.error );
 
 			const isNewDir			= token === '';
 			this.items				= isNewDir ? response.items : this.items.concat( response.items );

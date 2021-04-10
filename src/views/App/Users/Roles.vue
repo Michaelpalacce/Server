@@ -2,23 +2,28 @@
 	<Back @click="$router.go( -1 )" class="mb-10"/>
 	<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mb-5"/>
 
-	<div class="m-10" @drop="onDrop" @dragover.prevent @dragenter.prevent>
-		<div v-for="roleName in rolesOrder" class="mb-24 text-white">
-			<div draggable="true" @dragstart="startDrag( $event, roleName )" class="flex w-full draggable">
-				<span class="text-xl w-1/2">
+	<div class="m-5" @drop="onDrop" @dragover.prevent @dragenter.prevent >
+		<Message
+				message="You can drag and drop to move the order of the roles (not working on mobile, you have to manually edit them)."
+				class="mb-5"/>
+
+		<div v-for="roleName in rolesOrder" class="my-16 text-white">
+			<div draggable="true" @dragstart="startDrag( $event, roleName )" class="flex">
+				<p class="text-xl w-1/2">
 					<input type="checkbox" :value="roleName" :checked="checkedRoles.includes( roleName )" v-model="checkedRoles" :ref="roleName">
 					<span class="mx-5">{{roleName}}</span>
-				</span>
+				</p>
 
-				<Button @click="roles[roleName].opened = ! roles[roleName].opened" text="Toggle Permissions" />
+				<Button @click="roles[roleName].opened = ! roles[roleName].opened" text="Permissions" />
+			</div>
 
-				<pre class="overflow-y-auto block" v-if="roles[roleName].opened">
+			<pre v-if="roles[roleName].opened" class="text-base">
 				{{ JSON.stringify( roles[roleName].permissions, undefined, 2 ) }}
 			</pre>
-			</div>
 		</div>
 
-		<Button @click="changeRoles" text="Change" class="w-2/12"/>
+		<Button @click="changeRoles" text="Change"/>
+		<Button @click="editOrder" text="Edit Order" class="sm:hidden"/>
 	</div>
 </template>
 
@@ -29,10 +34,11 @@ import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Button				from "@/views/App/Components/Button";
 import Error				from "@/views/App/Components/Error";
 import Back					from "@/views/App/Components/Back";
+import Message				from "@/views/App/Components/Message";
 
 export default {
 	name: 'Roles',
-	components: { Back, Error, Button },
+	components: { Message, Back, Error, Button },
 	data: () => {
 		return {
 			roles			: {},
@@ -44,8 +50,9 @@ export default {
 	},
 
 	/**
-	 * @brief	Loads user data on created
-	 * @return {Promise<void>}
+	 * @brief	Loads user data
+	 *
+	 * @return	{Promise<void>}
 	 */
 	async created()
 	{
@@ -65,7 +72,6 @@ export default {
 
 		this.roles			= rolesResponse;
 		this.user			= new User( userDataResponse );
-
 		this.checkedRoles	= this.user.getRoles();
 
 		// First convert the object to an array
@@ -112,6 +118,9 @@ export default {
 		 */
 		changeRoles: async function ()
 		{
+			if ( this.user === null )
+				return;
+
 			const roles		= this.sortArrayByOtherArray( this.checkedRoles, this.rolesOrder );
 
 			const newUser	= new User( this.user.getUserData() );
@@ -127,6 +136,24 @@ export default {
 				return this.errorMessage	= formatErrorMessage( updateUserResponse.error );
 			else
 				this.$router.go( -1 );
+		},
+
+		/**
+		 * @brief	Edits the roles order. Used for mobile since drag and drop does not work there
+		 *
+		 * @details	It prompts the user for a new order. It will check if there are any new entries and filter them if so.
+		 * 			In case the user clicks back, nothing will be changed
+		 *
+		 * @return	void
+		 */
+		editOrder()
+		{
+			const newOrder	= prompt( 'Order:', this.rolesOrder.join( ',' ) );
+
+			if ( ! newOrder )
+				return;
+
+			this.rolesOrder	= newOrder.split( ',' ).filter( role => this.rolesOrder.includes( role ) );
 		},
 
 		/**
@@ -146,5 +173,4 @@ export default {
 </script>
 
 <style scoped>
-.draggable:d
 </style>

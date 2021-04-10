@@ -47,6 +47,17 @@ class UserModel
 		return this.userManager.get( username );
 	}
 
+	/**
+	 * @brief	Updates the given user
+	 *
+	 * @details	Checks if there is a username change
+	 * 			Will not update a user that does not exist
+	 * 			Returns the new user on success
+	 *
+	 * @param	{UpdateUserInput} updateUserInput
+	 *
+	 * @return	{User}
+	 */
 	updateUser( updateUserInput )
 	{
 		if ( ! updateUserInput.isValid() )

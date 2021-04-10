@@ -78,7 +78,7 @@ class User
 			username		: this.username,
 			password		: this.password,
 			metadata		: this._formatMetadata( this.metadata ),
-			userPermissions	: this.getFormattedPermissions(),
+			userPermissions	: this.getFormattedUserPermissions(),
 			permissions		: this.getFormattedPermissions(),
 			roles			: this.roles
 		};

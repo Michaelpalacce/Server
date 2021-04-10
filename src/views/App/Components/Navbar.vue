@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-gray-800">
+	<div class="bg-gray-800 text-white">
 		<div class="hidden sm:block max-w-7xl mx-auto text-white text-lg relative flex items-center justify-between sm:items-stretch sm:justify-start p-3 ">
 			<div class="flex">
 				<router-link class="hover:bg-gray-700 px-3 py-2 mx-2 rounded-md" to="/dashboard">Dashboard</router-link>
@@ -68,11 +68,9 @@ export default {
 
 .router-link-active{
 	background-color: #111827;
-	color: white;
 }
 .router-link-active:hover{
 	background-color: #111827;
-	color: white;
 }
 
 .hamburger.is-active .hamburger-inner,

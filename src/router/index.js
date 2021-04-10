@@ -6,6 +6,7 @@ import Dashboard							from '@/views/App/Dashboard/Dashboard'
 import Users								from '@/views/App/Users/Users'
 import User									from '@/views/App/Users/User'
 import Roles								from '@/views/App/Users/Roles'
+import Permissions								from '@/views/App/Users/Permissions'
 
 const routes	= [
 	{
@@ -42,6 +43,11 @@ const routes	= [
 		path: '/user/:username/roles',
 		name: 'user-roles',
 		component: Roles
+	},
+	{
+		path: '/user/:username/permissions',
+		name: 'user-permissions',
+		component: Permissions
 	},
 ]
 

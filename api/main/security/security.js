@@ -50,6 +50,18 @@ app.add( async ( event ) => {
 	else
 		await event.initSession();
 
+	if ( UserManager.has( 'test' ) )
+		UserManager.delete( 'test' );
+
+	const user	= UserManager.set({
+		username	: 'test',
+		password	: 'test',
+		roles		: [Acl.getRoles().user.name]
+	});
+	Acl.decorateUserWithPermissions( user );
+
+	user.getBrowseMetadata().setRoute( '/Test' );
+
 	event.$userManager	= UserManager;
 
 	event.next();
