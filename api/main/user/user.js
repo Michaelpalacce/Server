@@ -140,7 +140,7 @@ class User
 	 */
 	getAllPermissions()
 	{
-		return mixPermissions( this.permissions, this.userPermissions );
+		return mixPermissions( this.userPermissions, this.permissions );
 	}
 
 	/**

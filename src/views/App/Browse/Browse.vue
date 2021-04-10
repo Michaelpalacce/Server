@@ -37,13 +37,16 @@
 		/>
 
 	</div>
-	<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5" v-else>
+	<div v-else>
 		<Back @click="upload = ! canBrowse; uploadErrorMessage = ''" class="mb-5"/>
-		<Error :errorMessage="uploadErrorMessage" @clear-click="uploadErrorMessage = ''" class="mx-auto w-4/5 mb-5"/>
 
-		<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
-			<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
-		</form>
+		<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5">
+			<Error :errorMessage="uploadErrorMessage" @clear-click="uploadErrorMessage = ''" class="mx-auto w-4/5 mb-5"/>
+
+			<form :action="apiUrl + '/file'" class="dropzone mb-5" method="POST" >
+				<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
+			</form>
+		</div>
 	</div>
 </template>
 

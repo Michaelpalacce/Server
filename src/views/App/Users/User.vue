@@ -1,7 +1,7 @@
 <template>
-	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 text-2xl">
-		<Back @click="$router.go( -1 )" class="mb-10"/>
+	<Back @click="$router.go( -1 )" class="mb-10"/>
 
+	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 text-2xl">
 		<div class="px-2 max-w-5xl mx-auto">
 			<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mb-5"/>
 
@@ -33,9 +33,12 @@
 
 			<TitleSection title="Permissions" class="mt-32"/>
 			<div class="flex w-full">
-				<div class="w-10/12 flex flex-col">
+				<div class="w-8/12 flex flex-col">
 					<span class="w-full">Roles</span>
 					<span class="w-full text-base">{{ user ? user.roles.join( ',' ) : '' }}</span>
+				</div>
+				<div class="w-2/12">
+					<Button text="Edit Order" @click="editOrder"/>
 				</div>
 				<div class="w-2/12">
 					<Button text="Change" @click="changeRoles"/>
@@ -184,25 +187,31 @@ export default {
 		 *
 		 * @return	{Promise<void>}
 		 */
-		async changeRoles()
+		changeRoles()
 		{
 			this.$router.push( { name: 'user-roles', params: { username: this.username } } );
+		},
 
-			// const roles	= prompt( 'New roles:', this.user.getRoles().join( ',' ) );
-			//
-			// if ( ! roles )
-			// 	return;
-			//
-			// const newUser	= new User( this.user.getUserData() );
-			// const oldUser	= new User( this.user.getUserData() );
-			// if ( ! newUser.setRoles( roles.split( ',' ) ) )
-			// 	return;
-			//
-			// const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
-			// 	return error;
-			// });
-			//
-			// await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
+		/**
+		 * @brief	Edit the order of the roles
+		 */
+		async editOrder()
+		{
+			const roles	= prompt( 'New roles:', this.user.getRoles().join( ',' ) );
+
+			if ( ! roles )
+				return;
+
+			const newUser	= new User( this.user.getUserData() );
+			const oldUser	= new User( this.user.getUserData() );
+			if ( ! newUser.setRoles( roles.split( ',' ) ) )
+				return;
+
+			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
+				return error;
+			});
+
+			await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
 		},
 
 		/**

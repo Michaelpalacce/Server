@@ -45,6 +45,8 @@ module.exports	= {
 	/**
 	 * @brief	Mixes 2 permissions and returns a new array
 	 *
+	 * @details	The values from the second permissions set will be after the ones in the first
+	 *
 	 * @param	{Object} first
 	 * @param	{Object} second
 	 *
@@ -52,9 +54,9 @@ module.exports	= {
 	 */
 	mixPermissions: function ( first, second )
 	{
-		const result	= { ...second };
+		const result	= { ...first };
 
-		for ( const [key, value] of Object.entries( first ) )
+		for ( const [key, value] of Object.entries( second ) )
 		{
 			if ( ! Array.isArray( result[key] ) )
 				result[key]	= [];

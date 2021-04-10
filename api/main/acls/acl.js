@@ -38,7 +38,41 @@ const DEFAULT_ROLES	= {
 				}
 			]
 		}
-	}
+	},
+	user2: {
+		name		: 'user2',
+		permissions	: {
+			route: [
+				{
+					type: 'DENY',
+					route: new RegExp( /^\/users?(.+)/ ),
+					method: ''
+				},
+				{
+					type: 'ALLOW',
+					route: '',
+					method: ''
+				}
+			]
+		}
+	},
+	user3: {
+		name		: 'user3',
+		permissions	: {
+			route: [
+				{
+					type: 'DENY',
+					route: new RegExp( /^\/users?(.+)/ ),
+					method: ''
+				},
+				{
+					type: 'ALLOW',
+					route: '',
+					method: ''
+				}
+			]
+		}
+	},
 };
 
 /**
