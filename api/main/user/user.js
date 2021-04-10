@@ -1,8 +1,7 @@
 'use strict';
 
-const BrowseMetadata	= require( './metadata/browse' );
-
-const REGEX_PATTERN		= '${RE}:'
+const BrowseMetadata											= require( './metadata/browse' );
+const { formatPermissions, parsePermissions, mixPermissions }	= require( '../acls/permissions_helper' );
 
 /**
  * @brief	Used to dynamically get the revivers
@@ -18,49 +17,20 @@ const metadataPool		= {
  */
 class User
 {
+	/**
+	 * @details	permissions hold permissions set by the rules
+	 * 			userPermissions hold permissions set specifically for the user
+	 *
+	 * @param	{Object} userData
+	 */
 	constructor( userData = {} )
 	{
-		this.username		= typeof userData.username === 'string' ? userData.username : '';
-		this.password		= typeof userData.password === 'string' ? userData.password : '';
-		this.roles			= Array.isArray( userData.roles ) ? userData.roles : [];
-		this.metadata		= this._parseMetadata( userData.metadata || '{}' );
-		this.permissions	= this._parsePermissions( userData.permissions || '{}' );
-	}
-
-	/**
-	 * @brief	Parses the permissions by decoding the JSON
-	 *
-	 * @details	Further creates regex patterns if any were defined
-	 *
-	 * @param	{Object} permissions
-	 *
-	 * @return	Object
-	 */
-	_parsePermissions( permissions )
-	{
-		return typeof permissions !== 'string' ? permissions : JSON.parse( permissions, ( key, value ) => {
-			if ( typeof value !== 'undefined' && typeof value.regexp !== 'undefined' )
-				value	= new RegExp( value.regexp.source, value.regexp.flags );
-
-			return value;
-		});
-	}
-
-	/**
-	 * @brief	Formats the permissions
-	 *
-	 * @param	{Object} permissions
-	 *
-	 * @return	Object
-	 */
-	_formatPermissions( permissions )
-	{
-		return JSON.stringify( permissions, ( key, value ) => {
-			if( value instanceof RegExp )
-				return { regexp: { source: value.source, flags: value.flags } };
-			else
-				return value;
-		});
+		this.username			= typeof userData.username === 'string' ? userData.username : '';
+		this.password			= typeof userData.password === 'string' ? userData.password : '';
+		this.roles				= Array.isArray( userData.roles ) ? userData.roles : [];
+		this.metadata			= this._parseMetadata( userData.metadata || '{}' );
+		this.permissions		= parsePermissions( userData.permissions || '{}' );
+		this.userPermissions	= parsePermissions( userData.userPermissions || '{}' );
 	}
 
 	/**
@@ -105,11 +75,12 @@ class User
 	getUserData()
 	{
 		return {
-			username	: this.username,
-			password	: this.password,
-			metadata	: this._formatMetadata( this.metadata ),
-			permissions	: this.getFormattedPermissions(),
-			roles		: this.roles
+			username		: this.username,
+			password		: this.password,
+			metadata		: this._formatMetadata( this.metadata ),
+			userPermissions	: this.getFormattedPermissions(),
+			permissions		: this.getFormattedPermissions(),
+			roles			: this.roles
 		};
 	}
 
@@ -153,9 +124,9 @@ class User
 	}
 
 	/**
-	 * @brief	Returns the user's permissions
+	 * @brief	Returns the role's permissions
 	 *
-	 * @return	{Array}
+	 * @return	{Object}
 	 */
 	getPermissions()
 	{
@@ -163,26 +134,65 @@ class User
 	}
 
 	/**
-	 * @brief	Returns the user's permissions formatted ( for saving and displaying )
+	 * @brief	Returns the role's and the user's permissions mixed
+	 *
+	 * @return	{Object}
+	 */
+	getAllPermissions()
+	{
+		return mixPermissions( this.permissions, this.userPermissions );
+	}
+
+	/**
+	 * @brief	Returns the user's permissions
+	 *
+	 * @return	{Object}
+	 */
+	getUserPermissions()
+	{
+		return this.userPermissions;
+	}
+
+	/**
+	 * @brief	Returns the role's permissions formatted ( for saving and displaying )
 	 *
 	 * @return	{String}
 	 */
 	getFormattedPermissions()
 	{
-		return this._formatPermissions( this.permissions );
+		return formatPermissions( this.permissions );
 	}
 
 	/**
-	 * @param	{String} permissions
+	 * @brief	Returns the user's permissions formatted ( for saving and displaying )
+	 *
+	 * @return	{String}
+	 */
+	getFormattedUserPermissions()
+	{
+		return formatPermissions( this.userPermissions );
+	}
+
+	/**
+	 * @param	{String|Object} permissions
 	 *
 	 * @return	{Boolean}
 	 */
 	setPermissions( permissions )
 	{
-		if ( typeof permissions !== 'string' )
-			return false;
+		this.permissions	= typeof permissions !== 'string' ? parsePermissions( permissions ) : permissions;
 
-		this.permissions	= this._parsePermissions( permissions );
+		return true;
+	}
+
+	/**
+	 * @param	{String|Object} userPermissions
+	 *
+	 * @return	{Boolean}
+	 */
+	setUserPermissions( userPermissions )
+	{
+		this.userPermissions	= typeof userPermissions !== 'string' ? parsePermissions( userPermissions ) : userPermissions;
 
 		return true;
 	}
@@ -282,11 +292,6 @@ class User
 
 		return metadata;
 	}
-}
-
-User.ROLES	= {
-	root: 'root',
-	user: 'user'
 }
 
 module.exports	= User;

@@ -275,7 +275,7 @@ class ApiCommunicator
 	async getUserData( username )
 	{
 		const response	= await axios.get(
-			`${this.url}/users/${username}`,
+			`${this.url}/users/${username}/data`,
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error.response;
@@ -297,8 +297,25 @@ class ApiCommunicator
 	async updateUser( oldUser, newUser )
 	{
 		const response	= await axios.patch(
-			`${this.url}/users/${oldUser.username}`,
+			`${this.url}/users/${oldUser.username}/update`,
 			{ oldUser, newUser },
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Gets all the roles and their permissions
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async getRoles()
+	{
+		const response	= await axios.get(
+			`${this.url}/users/roles`,
 			{ headers: this.getAuthHeaders() }
 		).catch( ( error ) => {
 			return error.response;

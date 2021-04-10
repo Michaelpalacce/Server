@@ -38,7 +38,7 @@
 					<span class="w-full text-base">{{ user ? user.roles.join( ',' ) : '' }}</span>
 				</div>
 				<div class="w-2/12">
-					<Button text="Change"/>
+					<Button text="Change" @click="changeRoles"/>
 				</div>
 			</div>
 			<Divider />
@@ -82,6 +82,7 @@ import communicator			from "@/app/main/api/communicator";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Error				from "@/views/App/Components/Error";
 import User					from "@/../api/main/user/user"
+import { parsePermissions }	from "@/../api/main/acls/permissions_helper"
 
 export default {
 	name: 'User',
@@ -128,7 +129,7 @@ export default {
 				return this.errorMessage	= formatErrorMessage( userDataResponse.error );
 
 			this.user			= new User( userDataResponse );
-			this.permissions	= `<pre>${JSON.stringify( JSON.parse( this.user.getFormattedPermissions() ), undefined, 2 )}</pre>`
+			this.permissions	= `<pre>${JSON.stringify( JSON.parse( this.user.getFormattedUserPermissions() ), undefined, 2 )}</pre>`
 		},
 
 		/**
@@ -180,6 +181,31 @@ export default {
 		},
 
 		/**
+		 * @brief	Changes a user's password
+		 *
+		 * @return	{Promise<void>}
+		 */
+		async changeRoles()
+		{
+			// console.log( parsePermissions( JSON.stringify( await communicator.getRoles() ) ) );
+			const roles	= prompt( 'New roles:', this.user.getRoles().join( ',' ) );
+
+			if ( ! roles )
+				return;
+
+			const newUser	= new User( this.user.getUserData() );
+			const oldUser	= new User( this.user.getUserData() );
+			if ( ! newUser.setRoles( roles.split( ',' ) ) )
+				return;
+
+			const updateUserResponse	= await communicator.updateUser( oldUser.getUserData(), newUser.getUserData() ).catch(( error )=> {
+				return error;
+			});
+
+			await this._updateUserFromResponse( updateUserResponse, newUser, oldUser );
+		},
+
+		/**
 		 * @brief	Accepts the updateUserResponse as well as the newUser and oldUser objects and updates the view
 		 *
 		 * @param	{Object} updateUserResponse
@@ -201,13 +227,6 @@ export default {
 			}
 			else
 				this.user	= new User( updateUserResponse );
-		}
-	},
-
-	watch: {
-		user: function ()
-		{
-			console.log( this.user );
 		}
 	}
 }

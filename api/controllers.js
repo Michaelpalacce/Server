@@ -21,6 +21,7 @@ require( './modules/browse/folder/controller/move' );
 
 require( './modules/user/controller/list' );
 require( './modules/user/controller/user' );
+require( './modules/user/controller/roles' );
 // require( './user/controller/add' );
 // require( './user/controller/get' );
 // require( './user/controller/delete' );

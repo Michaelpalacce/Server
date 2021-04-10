@@ -4,51 +4,32 @@
 const app			= require( 'event_request' )();
 const UserManager	= require( '../user/user_manager' );
 const Session		= require( 'event_request/server/components/session/session' );
-const User			= require( '../user/user' );
+const Acl			= require( '../acls/acl' );
 
-// Creates root user if not exists
-if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
-{
-	const defaultRoles			= [User.ROLES.root];
-	const defaultPermissions	= {
-		route: [
-			{
-				type: 'ALLOW',
-				route: '',
-				method: ''
-			}
-		]
-	};
+/**
+ * @brief	Wait a bit so ACL can fetch roles
+ */
+setTimeout(()=>{
+	// Creates root user if not exists
+	if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
+	{
+		const root	= UserManager.set({
+			username	: process.env.ADMIN_USERNAME,
+			password	: process.env.ADMIN_PASSWORD,
+			roles		: [Acl.getRoles().root.name]
+		});
+		Acl.decorateUserWithPermissions( root );
 
-	UserManager.set({
-		username	: process.env.ADMIN_USERNAME,
-		password	: process.env.ADMIN_PASSWORD,
-		permissions	: defaultPermissions,
-		roles		: defaultRoles
-	});
+		const user	= UserManager.set({
+			username	: 'test',
+			password	: 'test',
+			roles		: [Acl.getRoles().user.name]
+		});
+		Acl.decorateUserWithPermissions( user );
 
-	const user	= UserManager.set({
-		username	: 'test',
-		password	: 'test',
-		permissions	: {
-			route: [
-				{
-					type: 'DENY',
-					route: new RegExp( /^\/users?(.+)/ ),
-					method: ''
-				},
-				{
-					type: 'ALLOW',
-					route:'',
-					method: ''
-				},
-			]
-		},
-		roles		: [User.ROLES.user]
-	});
-
-	user.getBrowseMetadata().setRoute( '/Test' );
-}
+		user.getBrowseMetadata().setRoute( '/Test' );
+	}
+}, 200 );
 
 /**
  * @brief	Init middleware for the security
@@ -57,6 +38,7 @@ if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
  *
  * @details	Starts the session
  * 			Sets the UserManager in the eventRequest
+ * 			Works with gets that have a query token set
  */
 app.add( async ( event ) => {
 	if ( event.method.toLowerCase() === 'get' && typeof event.query.token === 'string' )
@@ -99,6 +81,7 @@ app.post( '/login', async ( event ) => {
 		throw { code: 'app.security.unauthorized.userNotFound' };
 
 	const user	= event.$userManager.get( username );
+	Acl.decorateUserWithPermissions( user );
 
 	if ( user.getPassword() === password )
 	{
@@ -111,7 +94,7 @@ app.post( '/login', async ( event ) => {
 });
 
 /**
- * @brief	Middleware for all requests, redirects to login page if not authenticated
+ * @brief	Middleware for all requests, throws app.security.unauthenticated in case of an error
  *
  * @details	This will also set the user in the eventRequest as event.$user
  */
@@ -119,9 +102,14 @@ app.add({
 	route	: new RegExp( /^((?!\/login).)*$/ ),
 	handler	: ( event ) => {
 		if ( ! event.session.has( 'username' ) )
-			throw { code: 'app.security.unauthorized' };
+			throw { code: 'app.security.unauthenticated' };
 
-		event.$user	= event.$userManager.get( event.session.get( 'username' ) );
+		const username	= event.session.get( 'username' );
+
+		if ( ! event.$userManager.has( username ) )
+			throw { code: 'app.security.unauthenticated' };
+
+		event.$user	= event.$userManager.get( username );
 
 		event.next();
 	}
@@ -131,7 +119,7 @@ app.add({
  * @brief	Matches ALLOW and DENY permissions
  */
 app.add(( event ) => {
-	const permissions	= event.$user.getPermissions();
+	const permissions	= event.$user.getAllPermissions();
 
 	if ( typeof permissions !== 'object' || ! Array.isArray( permissions.route ) )
 		throw { code: 'app.security.forbidden', message: `You don\'t have permission to ${event.method} ${event.path}` }
