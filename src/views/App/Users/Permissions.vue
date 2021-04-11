@@ -1,5 +1,5 @@
 <template>
-	<Back @click="$router.go( -1 )" class="mb-10"/>
+	<Back @click="$router.push( { name: 'user', params: { username: $route.params.username } } )" class="mb-10"/>
 	<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mb-5"/>
 
 	<div class="text-center text-white">
@@ -75,7 +75,7 @@ export default {
 			if ( updateUserResponse.error )
 				return this.errorMessage	= formatErrorMessage( updateUserResponse.error );
 			else
-				this.$router.go( -1 );
+				await this.$router.push( { name: 'user', params: { username: this.$route.params.username } } );
 		}
 	}
 }

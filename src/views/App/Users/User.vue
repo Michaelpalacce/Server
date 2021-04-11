@@ -1,5 +1,5 @@
 <template>
-	<Back @click="$router.go( -1 )" class="mb-10"/>
+	<Back @click="$router.push( { name: 'users' } )" class="mb-10"/>
 
 	<div class="rounded-t-lg mx-auto text-gray-200 text-2xl p-5">
 		<div class="mx-auto">
@@ -27,6 +27,17 @@
 
 				<div class="w-2/12">
 					<Button text="Change" @click="changePassword"/>
+				</div>
+			</div>
+			<Divider />
+
+			<div class="flex w-full">
+				<div class="w-8/12 sm:w-10/12 flex flex-col">
+					<span class="w-full">Delete User</span>
+				</div>
+
+				<div class="w-2/12">
+					<Button bg-color="red-500" hover-bg-color="red-400" text="Delete" @click="deleteUser"/>
 				</div>
 			</div>
 			<Divider />
@@ -72,6 +83,9 @@
 				</div>
 			</div>
 			<Divider />
+
+			<TitleSection title="Browse Module" class="mt-32"/>
+
 		</div>
 	</div>
 </template>
@@ -132,6 +146,16 @@ export default {
 
 			this.user			= new User( userDataResponse );
 			this.permissions	= JSON.stringify( JSON.parse( this.user.getFormattedUserPermissions() ), undefined, 2 );
+		},
+
+		/**
+		 * @brief	Deletes the user and redirects the client back to the users section
+		 *
+		 * @return	void
+		 */
+		async deleteUser()
+		{
+			console.log( 'Delete user!' );
 		},
 
 		/**
@@ -243,10 +267,18 @@ export default {
 			{
 				await communicator.logout().catch(()=>{});
 				this.emitter.emit( 'user.credentials' );
-				this.$router.push( '/' );
+				await this.$router.push( '/' );
 			}
 			else
-				this.user	= new User( updateUserResponse );
+			{
+				this.user			= new User( updateUserResponse );
+				this.permissions	= JSON.stringify( JSON.parse( this.user.getFormattedUserPermissions() ), undefined, 2 );
+
+				if ( this.username !== this.user.getUsername() )
+					await this.$router.replace( { name: 'user', params: { username: this.user.getUsername() } } )
+
+				this.username	= this.user.getUsername();
+			}
 		}
 	}
 }
