@@ -46,6 +46,14 @@
 			<form :action="apiUrl + '/file'" class="dropzone mb-5 w-full sm:w-2/3" method="POST" >
 				<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
 			</form>
+
+			<form :action="apiUrl + '/file'" method="POST" enctype="multipart/form-data" onchange="this.submit();" >
+				<input type="file" name="file" id="file" class="hidden" webkitdirectory mozdirectory />
+				<div class="text-center justify-center mx-auto">
+					<label for="file" class="bg-gray-800 p-3 rounded-2xl border border-gray-400 text-gray-200 cursor-pointer hover:text-black hover:bg-gray-300">Upload Folder ( WIP )</label>
+				</div>
+				<input type="hidden" name="directory" :value="currentDirectory" >
+			</form>
 		</div>
 	</div>
 </template>
@@ -469,7 +477,7 @@ export default {
 						parallelUploads: 5,
 						maxFilesize: 40000,
 						timeout:0,
-						headers: communicator.getAuthHeaders()
+						withCredentials: true
 					}
 				);
 

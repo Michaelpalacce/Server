@@ -5,6 +5,7 @@ const UserModel			= require( '../model/user' );
 const GetUserInput		= require( '../input/get_user_input' );
 const UpdateUserInput	= require( '../input/update_user_input' );
 const DeleteUserInput	= require( '../input/delete_user_input' );
+const CreateUserInput	= require( '../input/create_user_input' );
 
 /**
  * @brief	Adds a new route `/users/:username:/data` with method GET
@@ -39,17 +40,31 @@ app.patch( '/users/:username:/update', ( event ) => {
 });
 
 /**
- * @brief	Adds a new route `/users/:username:` with method DELETE
+ * @brief	Adds a new route `/users/:username:/delete` with method DELETE
  *
  * @details	No Optional or required params
  * 			The username parameter will be set to whatever was passed
  *
  * @return	void
  */
-app.delete( '/users/:username:', ( event ) => {
+app.delete( '/users/:username:/delete', ( event ) => {
 	const input	= new DeleteUserInput( event );
 	const model	= new UserModel( event );
 	model.deleteUser( input );
 
 	event.send();
+});
+
+/**
+ * @brief	Adds a new route `/users/create` with method POST
+ *
+ * @details	Required Body Params: username, password
+ *
+ * @return	void
+ */
+app.post( '/users/create', ( event ) => {
+	const input	= new CreateUserInput( event );
+	const model	= new UserModel( event );
+
+	event.send( model.createUser( input ).getUserData() );
 });

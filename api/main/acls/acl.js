@@ -145,7 +145,7 @@ class Acl
 
 		for ( const role of userRoles )
 			if ( typeof this.roles[role] !== 'undefined' )
-				permissions	= mixPermissions( this.roles[role].permissions, permissions );
+				permissions	= mixPermissions( permissions, this.roles[role].permissions );
 
 		user.setPermissions( permissions );
 	}

@@ -83,9 +83,6 @@
 				</div>
 			</div>
 			<Divider />
-
-			<TitleSection title="Browse Module" class="mt-32"/>
-
 		</div>
 	</div>
 </template>
@@ -162,7 +159,14 @@ export default {
 			if ( deleteUserResponse.error )
 				return this.errorMessage	= formatErrorMessage( deleteUserResponse.error );
 
-			await this.$router.push( { name: 'users' } );
+			if ( this.username === localStorage.name )
+			{
+				await communicator.logout().catch(()=>{});
+				this.emitter.emit( 'user.credentials' );
+				await this.$router.push( '/' );
+			}
+			else
+				await this.$router.push( { name: 'users' } );
 		},
 
 		/**

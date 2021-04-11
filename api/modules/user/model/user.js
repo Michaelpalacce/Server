@@ -1,6 +1,7 @@
 'use strict';
 
 const User	= require( '../../../main/user/user' );
+const Acl	= require( '../../../main/acls/acl' );
 
 /**
  * @brief	User list model responsible for listing all the users
@@ -69,6 +70,9 @@ class UserModel
 		const newUser		= new User( newUserData );
 		const oldUser		= new User( oldUserData );
 
+		if ( oldUser.getUsername() === process.env.ADMIN_USERNAME )
+			throw { code: 'app.user.delete.root', message : 'Cannot update root user!' };
+
 		if ( newUser.getUsername() !== oldUser.getUsername() )
 		{
 			this.userManager.delete( oldUser.getUsername() );
@@ -81,7 +85,7 @@ class UserModel
 			if ( ! this.userManager.has( newUser.getUsername() ) )
 				throw { code: 'app.user.userNotFound', message : `User: ${newUser.getUsername()} does not exists` };
 			else
-				this.userManager.update( newUserData );
+				Acl.decorateUserWithPermissions( this.userManager.update( newUserData ) );
 
 		return this.userManager.get( newUser.getUsername() );
 	}
@@ -103,9 +107,39 @@ class UserModel
 		const username	= deleteUserInput.getUsername();
 
 		if ( ! this.userManager.has( username ) )
-			throw { code: 'app.user.userNotFound', message : `User: ${username} does not exists` };
+			throw { code: 'app.user.userNotFound', message : `User: ${username} does not exists!` };
+
+		if ( username === process.env.ADMIN_USERNAME )
+			throw { code: 'app.user.delete.root', message : 'Cannot delete root user!' };
 
 		this.userManager.delete( username );
+	}
+
+	/**
+	 * @brief	Creates a user
+	 *
+	 * @details	Will check if the user already exists
+	 *
+	 * @param	{CreateUserInput} createUserInput
+	 *
+	 * @return	void
+	 */
+	createUser( createUserInput )
+	{
+		if ( ! createUserInput.isValid() )
+			throw { code: 'app.input.invalidCreateUserInput', message : createUserInput.getReasonToString() };
+
+		const username	= createUserInput.getUsername();
+		const password	= createUserInput.getPassword();
+
+		if ( this.userManager.has( username ) )
+			throw { code: 'app.user.userExists', message : `User: ${username} already exists` };
+
+		const user	= this.userManager.set( { username, password, roles: [Acl.getRoles().user.name] } );
+
+		user.getBrowseMetadata().setRoute( `/users/${user.getUsername()}` );
+
+		return user;
 	}
 }
 

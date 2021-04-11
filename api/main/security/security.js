@@ -1,34 +1,34 @@
 'use strict';
 
 // Dependencies
-const app			= require( 'event_request' )();
-const UserManager	= require( '../user/user_manager' );
-const Session		= require( 'event_request/server/components/session/session' );
-const Acl			= require( '../acls/acl' );
+const app														= require( 'event_request' )();
+const UserManager												= require( '../user/user_manager' );
+const Session													= require( 'event_request/server/components/session/session' );
+const Acl														= require( '../acls/acl' );
+const { API_PORT, API_ADDRESS, SSL_KEY_PATH, SSL_CERT_PATH }	= require( '../../../env' );
+
+const protocol		= SSL_KEY_PATH && SSL_CERT_PATH ? 'https' : 'http';
+const domain		= `${protocol}://${API_ADDRESS}:${API_PORT}`;
 
 /**
  * @brief	Wait a bit so ACL can fetch roles
+ *
+ * @details	Sets the root user or updates him back to default settings
  */
 setTimeout(()=>{
-	// Creates root user if not exists
+	const userData	= {
+		username	: process.env.ADMIN_USERNAME,
+		password	: process.env.ADMIN_PASSWORD,
+		roles		: [Acl.getRoles().root.name],
+		permissions	: {},
+		metadata	: {}
+	};
+
+	// Recreate the Root user
 	if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
-	{
-		const root	= UserManager.set({
-			username	: process.env.ADMIN_USERNAME,
-			password	: process.env.ADMIN_PASSWORD,
-			roles		: [Acl.getRoles().root.name]
-		});
-		Acl.decorateUserWithPermissions( root );
-
-		const user	= UserManager.set({
-			username	: 'test',
-			password	: 'test',
-			roles		: [Acl.getRoles().user.name]
-		});
-		Acl.decorateUserWithPermissions( user );
-
-		user.getBrowseMetadata().setRoute( '/Test' );
-	}
+		Acl.decorateUserWithPermissions( UserManager.set( userData ) );
+	else
+		Acl.decorateUserWithPermissions( UserManager.update( userData ) );
 }, 200 );
 
 /**
@@ -49,18 +49,6 @@ app.add( async ( event ) => {
 	}
 	else
 		await event.initSession();
-
-	if ( UserManager.has( 'test' ) )
-		UserManager.delete( 'test' );
-
-	const user	= UserManager.set({
-		username	: 'test',
-		password	: 'test',
-		roles		: [Acl.getRoles().user.name]
-	});
-	Acl.decorateUserWithPermissions( user );
-
-	user.getBrowseMetadata().setRoute( '/Test' );
 
 	event.$userManager	= UserManager;
 

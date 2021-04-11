@@ -26,7 +26,8 @@ app.apply( app.er_cors, {
 		'sec-ch-ua',
 		'sec-ch-ua-mobile'
 	],
-	exposedHeaders: ['token']
+	exposedHeaders: ['token'],
+	credentials: true
 });
 
 // Add Error Handler
@@ -67,7 +68,7 @@ app.apply( app.er_logger,					{ logger } );
 app.apply( app.er_file_stream );
 
 // Add a user cookie session
-app.apply( app.er_session, { isCookieSession: false, sessionKey: 'token' } );
+app.apply( app.er_session, { isCookieSession: true, isSecureCookie: true, sessionKey: 'token' } );
 
 // Attach the caching server to the process
 process.cachingServer	= app.getPlugin( app.er_data_server ).getServer();

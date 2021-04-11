@@ -50,7 +50,7 @@ export default {
 				this.audioSrc	= url;
 				break;
 			case 'text':
-				const response	= await axios.get( url, {}, { headers: communicator.getAuthHeaders() } ).catch( console.log )
+				const response	= await axios.get( url,{ withCredentials: true } ).catch( console.log )
 
 				let result		= response.data;
 				result			= result.replace( / /g, '&nbsp;' );

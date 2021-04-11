@@ -49,13 +49,14 @@ class ApiCommunicator
 	 */
 	async login( username, password )
 	{
-		const response	= await axios.post( `${this.url}/login`, { username, password } ).catch( ( error ) => {
+		const response	= await axios.post( `${this.url}/login`, { username, password }, { withCredentials:true} ).catch( ( error ) => {
 			return error;
 		});
 
 		if ( response.message )
 			throw response;
 
+		console.log( response.headers.token );
 		localStorage.token	= response.headers.token;
 		localStorage.name	= username;
 
@@ -72,7 +73,7 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/logout`,
 			{},
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch(() => {});
 
 		localStorage.removeItem( 'token' );
@@ -95,7 +96,7 @@ class ApiCommunicator
 	{
 		return axios.get(
 			this._formatUrlWithQueryParams( `${this.url}/browse`, { directory, token } ),
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -110,7 +111,7 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			this._formatUrlWithQueryParams( `${this.url}/file/getFileData`, { file } ),
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -134,7 +135,7 @@ class ApiCommunicator
 
 		const response	= await axios.delete(
 			this._formatUrlWithQueryParams( url, { item: item.encodedURI } ),
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -157,7 +158,7 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/${item.isFolder ? 'folder' : 'file'}/rename`,
 			{ oldPath: item.encodedURI, newPath },
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -180,7 +181,7 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/${item.isFolder ? 'folder' : 'file'}/copy`,
 			{ oldPath: item.encodedURI, newPath },
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -203,7 +204,7 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/${item.isFolder ? 'folder' : 'file'}/cut`,
 			{ oldPath: item.encodedURI, newPath },
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -223,7 +224,7 @@ class ApiCommunicator
 		const response	= await axios.post(
 			`${this.url}/folder`,
 			{ directory },
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -240,7 +241,7 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			`${this.url}/users`,
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -257,7 +258,7 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			`${this.url}/browse/user/route`,
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -276,7 +277,7 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			`${this.url}/users/${username}/data`,
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -294,8 +295,29 @@ class ApiCommunicator
 	async deleteUser( username )
 	{
 		const response	= await axios.delete(
-			`${this.url}/users/${username}`,
-			{ headers: this.getAuthHeaders() }
+			`${this.url}/users/${username}/delete`,
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Creates a new user with the given username and password
+	 *
+	 * @param	{String} username
+	 * @param	{String} password
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async createUser( username, password )
+	{
+		const response	= await axios.post(
+			`${this.url}/users/create`,
+			{ username, password },
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -318,7 +340,7 @@ class ApiCommunicator
 		const response	= await axios.patch(
 			`${this.url}/users/${oldUser.username}/update`,
 			{ oldUser, newUser },
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
@@ -335,22 +357,12 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			`${this.url}/users/roles`,
-			{ headers: this.getAuthHeaders() }
+			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
 
 		return response.data;
-	}
-
-	/**
-	 * @brief	Gets the authentication headers
-	 *
-	 * @return	Object
-	 */
-	getAuthHeaders()
-	{
-		return { token: localStorage.token };
 	}
 
 	/**

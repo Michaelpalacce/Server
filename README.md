@@ -102,7 +102,7 @@ serve stop ---> stop the server
 
 # Notes
 - If a state arises where there is no root user, one will be created automatically ( with the username and password in the env.js file )
-- It is a good idea to change the password ( via the gui and in the env.js ) after you've started the server
+- It is a good idea to change the root password ( via the env.js )
 
 # Known Bugs:
 - Some functionality is broken on virtual machines...

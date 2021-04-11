@@ -8,7 +8,6 @@ const fs				= require( 'fs' );
 
 const args				= process.argv.slice( 2 );
 
-const NODE_ENV			= process.env.NODE_ENV;
 const projectDir		= path.join( __dirname, '.' );
 const ENV_FILE			= path.join( projectDir, 'env.js' );
 

@@ -1,7 +1,7 @@
 <template>
-	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5">
-		<Error :errorMessage="errorMessage" class="mx-auto w-4/5 my-5"/>
+	<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mx-auto w-4/5 my-5"/>
 
+	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5" v-if="users.length !== 0">
 		<UserItem
 			v-for="user in users"
 
@@ -9,8 +9,9 @@
 			:initialName="user"
 			@on-click="userClicked( user )"
 		/>
-	</div>
 
+		<Button text="Add new User" @click="addNewUser" class="mt-5"/>
+	</div>
 </template>
 
 <script>
@@ -18,6 +19,7 @@ import communicator			from "@/app/main/api/communicator";
 import UserItem				from "./Components/UserItem"
 import Error				from "@/views/App/Components/Error";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
+import Button				from "@/views/App/Components/Button";
 
 
 export default {
@@ -30,6 +32,7 @@ export default {
 	},
 
 	components: {
+		Button,
 		Error,
 		UserItem
 	},
@@ -67,6 +70,29 @@ export default {
 		userClicked( username )
 		{
 			this.$router.push( { name: 'user', params: { username } } );
+		},
+
+		/**
+		 * @brief	Adds a new user to the system with the given username and password and a role of user
+		 *
+		 * @return	void
+		 */
+		async addNewUser()
+		{
+			const username	= prompt( 'Choose Username:' );
+			const password	= prompt( 'Choose Password:' );
+
+			if ( ! username && ! password )
+				return;
+
+			const createUserResponse	= await communicator.createUser( username, password ).catch(( error ) => {
+				return error;
+			});
+
+			if ( createUserResponse.error )
+				return this.errorMessage	= formatErrorMessage( createUserResponse.error );
+
+			this.users.push( username );
 		}
 	}
 }
