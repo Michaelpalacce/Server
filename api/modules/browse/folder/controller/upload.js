@@ -6,7 +6,7 @@ const UploadInput	= require( '../input/upload_input' );
 const UploadModel	= require( '../model/upload' );
 
 /**
- * @brief	Adds a '/folder' route with method PUT
+ * @brief	Adds a '/api/folder' route with method PUT
  *
  * @details	Creates a new folder
  *
@@ -15,7 +15,7 @@ const UploadModel	= require( '../model/upload' );
  *
  * @return	void
  */
-app.post( '/folder', async ( event ) => {
+app.post( '/api/folder', async ( event ) => {
 	const input	= new UploadInput( event );
 	const model	= new UploadModel( event );
 

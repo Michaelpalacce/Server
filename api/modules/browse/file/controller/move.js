@@ -7,7 +7,7 @@ const MoveModel	= require( '../model/move' );
 const MoveInput	= require( '../input/move_input' );
 
 /**
- * @brief	Adds a '/file/copy' route with method POST
+ * @brief	Adds a '/api/file/copy' route with method POST
  *
  * @param	{EventRequest} event
  *
@@ -16,7 +16,7 @@ const MoveInput	= require( '../input/move_input' );
  *
  * @return	void
  */
-app.post( '/file/copy',  async ( event ) => {
+app.post( '/api/file/copy',  async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 
@@ -26,7 +26,7 @@ app.post( '/file/copy',  async ( event ) => {
 });
 
 /**
- * @brief	Adds a '/file/cut' route with method POST
+ * @brief	Adds a '/api/file/cut' route with method POST
  *
  * @param	{EventRequest} event
  *
@@ -35,7 +35,7 @@ app.post( '/file/copy',  async ( event ) => {
  *
  * @return	void
  */
-app.post( '/file/cut', async ( event ) => {
+app.post( '/api/file/cut', async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 
@@ -45,7 +45,7 @@ app.post( '/file/cut', async ( event ) => {
 });
 
 /**
- * @brief	Adds a '/file/rename' route with method POST
+ * @brief	Adds a '/api/file/rename' route with method POST
  *
  * @param	{EventRequest} event
  *
@@ -54,7 +54,7 @@ app.post( '/file/cut', async ( event ) => {
  *
  * @return	void
  */
-app.post( '/file/rename', async ( event ) => {
+app.post( '/api/file/rename', async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 

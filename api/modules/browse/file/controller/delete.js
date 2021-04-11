@@ -6,14 +6,14 @@ const DeleteInput	= require( '../input/delete_input' );
 const DeleteModel	= require( '../model/delete' );
 
 /**
- * @brief	Adds a '/file' route with method DELETE
+ * @brief	Adds a '/api/file' route with method DELETE
  *
  * @details	Required Parameters: item
  * 			Optional Parameters: NONE
  *
  * @return	void
  */
-app.delete( '/file', async ( event ) => {
+app.delete( '/api/file', async ( event ) => {
 	const input	= new DeleteInput( event );
 	const model	= new DeleteModel( event );
 

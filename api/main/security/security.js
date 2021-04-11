@@ -34,22 +34,11 @@ setTimeout(()=>{
 /**
  * @brief	Init middleware for the security
  *
- * @TODO	IMPROVE THIS HORRIBLENESS ( I was lazy )
- *
  * @details	Starts the session
  * 			Sets the UserManager in the eventRequest
- * 			Works with gets that have a query token set ( for download )
  */
 app.add( async ( event ) => {
-	if ( event.method.toLowerCase() === 'get' && typeof event.query.token === 'string' )
-	{
-		const sessionId					= event.query.token;
-		event.session.session.sessionId	= sessionId;
-		event.session.session			= event.dataServer.get( Session.SESSION_PREFIX + sessionId )
-	}
-	else
-		await event.initSession();
-
+	await event.initSession();
 	event.$userManager	= UserManager;
 
 	event.next();
@@ -60,7 +49,7 @@ app.add( async ( event ) => {
  *
  * @details	Removes the session to logout hte user
  */
-app.post( '/logout', async ( event ) => {
+app.post( '/api/logout', async ( event ) => {
 	await event.session.removeSession();
 
 	event.send();
@@ -69,7 +58,7 @@ app.post( '/logout', async ( event ) => {
 /**
  * @brief	Performs a login
  */
-app.post( '/login', async ( event ) => {
+app.post( '/api/login', async ( event ) => {
 	let result	= event.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
 
 	if ( result.hasValidationFailed() )
@@ -99,7 +88,7 @@ app.post( '/login', async ( event ) => {
  * @details	This will also set the user in the eventRequest as event.$user
  */
 app.add({
-	route	: new RegExp( /^((?!\/login).)*$/ ),
+	route	: new RegExp( /^((?!\/api\/login).)*$/ ),
 	handler	: ( event ) => {
 		if ( ! event.session.has( 'username' ) )
 			throw { code: 'app.security.unauthenticated' };

@@ -3,8 +3,6 @@
 // Dependencies
 require( './main/security/security' );
 
-// require( './ip/controller/view' );
-
 require( './modules/browse/user/controller/route' );
 
 require( './modules/browse/file/controller/move' );
@@ -22,7 +20,3 @@ require( './modules/browse/folder/controller/move' );
 require( './modules/user/controller/list' );
 require( './modules/user/controller/user' );
 require( './modules/user/controller/roles' );
-// require( './user/controller/add' );
-// require( './user/controller/get' );
-// require( './user/controller/delete' );
-// require( './user/controller/update' );

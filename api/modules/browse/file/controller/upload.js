@@ -5,7 +5,7 @@ const app				= require( 'event_request' )();
 const UploadInput		= require( '../input/upload_input' );
 const UploadModel		= require( '../model/upload' );
 /**
- * @brief	Adds a '/file' route with method POST
+ * @brief	Adds a '/api/file' route with method POST
  *
  * @details	Saves the file async
  *
@@ -14,11 +14,14 @@ const UploadModel		= require( '../model/upload' );
  *
  * @return	void
  */
-app.post( '/file', ( event ) => {
+app.post( '/api/file', ( event ) => {
 	const input	= new UploadInput( event );
 	const model	= new UploadModel( event );
 
 	model.upload( input ).then(() => {
-		event.send( '', 201 );
+		if ( event.getRequestHeader( 'x-requested-with' ) === 'XMLHttpRequest' )
+			event.send( '', 201 );
+		else
+			event.send( '<script>window.history.back();</script>')
 	}).catch( event.next );
 });

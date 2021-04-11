@@ -7,7 +7,7 @@ const FileInput	= require( '../input/file_input' );
 const FileModel	= require( '../model/file' );
 
 /**
- * @brief	Adds a '/file/getFileData' route with method GET
+ * @brief	Adds a '/api/file/getFileData' route with method GET
  *
  * @param	{EventRequest} event
  *
@@ -16,7 +16,7 @@ const FileModel	= require( '../model/file' );
  *
  * @return	void
  */
-app.get( '/file/getFileData', async ( event ) => {
+app.get( '/api/file/getFileData', async ( event ) => {
 	const input		= new FileInput( event );
 	const model		= new FileModel( event );
 	const result	= await model.getFile( input ).catch( event.next );

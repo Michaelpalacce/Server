@@ -41,16 +41,17 @@
 		<Back @click="upload = ! canBrowse; uploadErrorMessage = ''" class="mb-5"/>
 
 		<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5">
-			<Error :errorMessage="uploadErrorMessage" @clear-click="uploadErrorMessage = ''" class="mx-auto w-4/5 mb-5"/>
+			<Error :errorMessage="uploadErrorMessage" @clear-click="uploadErrorMessage = ''" class="mx-auto w-4/5"/>
+			<Message message="You may need to refresh the folder after uploading a Folder. This is not needed when uploading files." class="my-5"/>
 
-			<form :action="apiUrl + '/file'" class="dropzone mb-5 w-full sm:w-2/3" method="POST" >
+			<form class="dropzone w-full sm:w-2/3" method="POST" >
 				<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
 			</form>
 
-			<form :action="apiUrl + '/file'" method="POST" enctype="multipart/form-data" onchange="this.submit();" >
+			<form :action="apiUrl + '/api/file'" method="POST" enctype="multipart/form-data" onchange="this.submit();" class="mt-5">
 				<input type="file" name="file" id="file" class="hidden" webkitdirectory mozdirectory />
 				<div class="text-center justify-center mx-auto">
-					<label for="file" class="bg-gray-800 p-3 rounded-2xl border border-gray-400 text-gray-200 cursor-pointer hover:text-black hover:bg-gray-300">Upload Folder ( WIP )</label>
+					<label for="file" class="bg-gray-800 p-3 rounded-2xl border border-gray-400 text-gray-200 cursor-pointer hover:text-black hover:bg-gray-300">Upload Folder</label>
 				</div>
 				<input type="hidden" name="directory" :value="currentDirectory" >
 			</form>
@@ -68,10 +69,11 @@ import Menu					from "@/views/App/Browse/Components/Menu";
 import Error				from "@/views/App/Components/Error";
 import Back					from "@/views/App/Components/Back";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
+import Message from "@/views/App/Components/Message";
 
 export default {
 	name: 'Browse',
-	components: { Error, Menu, BrowseItem, MenuElement, Back },
+	components: {Message, Error, Menu, BrowseItem, MenuElement, Back },
 
 	data: () => {
 		return {
@@ -167,7 +169,7 @@ export default {
 			for ( const checkedItem of checkedItems )
 				itemsToDownload.push( decode( checkedItem.encodedURI ) );
 
-			window.location.href	= `${communicator.getApiUrl()}/items?items=${encode( JSON.stringify( itemsToDownload ) )}&token=${localStorage.token}`;
+			window.location.href	= `${this.apiUrl}/api/items?items=${encode( JSON.stringify( itemsToDownload ) )}`;
 
 			this.uncheckItems();
 		},
@@ -472,7 +474,7 @@ export default {
 				this.dropzone	= new Dropzone(
 					'.dropzone',
 					{
-						url: `${this.apiUrl}/file`,
+						url: `${this.apiUrl}/api/file`,
 						method: 'post',
 						parallelUploads: 5,
 						maxFilesize: 40000,

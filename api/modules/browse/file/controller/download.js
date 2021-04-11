@@ -6,7 +6,7 @@ const DownloadInput	= require( '../input/download_input' );
 const DownloadModel	= require( '../model/download' );
 
 /**
- * @brief	Adds a '/items' route with method GET
+ * @brief	Adds a '/api/items' route with method GET
  *
  * @details	items is an array of decoded items that have been JSON stringified and then base64 encoded using the encode tool
  *
@@ -15,7 +15,7 @@ const DownloadModel	= require( '../model/download' );
  *
  * @return	void
  */
-app.get( '/items', ( event ) => {
+app.get( '/api/items', ( event ) => {
 	const input	= new DownloadInput( event );
 	const model	= new DownloadModel( event );
 

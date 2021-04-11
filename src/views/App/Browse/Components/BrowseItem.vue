@@ -11,14 +11,14 @@
 			<img :src="imageSrc" alt="" :class="[hover === false ? 'visible' : '']" style="height: 25vh; top: -50px;">
 		</span>
 
-		<input type="checkbox" class="w-1/6 form-checkbox h-6 w-6 inline-block md:hidden mt-3" v-if="! isBack" v-model="checked">
+		<input type="checkbox" class="flex-none form-checkbox h-6 w-10 inline-block md:hidden mt-3" v-if="! isBack" v-model="checked">
 
 		<span class="fa fa-angle-double-left md:hidden fa-3x w-1/6" v-if="isBack"></span>
 		<span class="fa fa-folder-open md:hidden fa-3x w-1/6" v-if="isFolder && ! isBack"></span>
 		<span class="fa fa-file md:hidden fa-3x w-1/6" v-if="! isFolder && ! isBack"></span>
 
 		<div class="flex flex-wrap md:block md:w-full w-5/6 text-xs md:text-base px-5 md:px-0">
-			<div class="w-full md:w-10 hidden md:inline-block" v-if="! isBack">
+			<div class="md:w-10 hidden md:inline-block" v-if="! isBack">
 				<input type="checkbox" class="form-checkbox h-5 w-5 mt-3 mx-auto" v-model="checked">
 			</div>
 
@@ -83,7 +83,7 @@ export default {
 				switch ( this.fileType )
 				{
 					case 'image':
-						this.imageSrc	= `${communicator.getApiUrl()}/file/data?file=${this.encodedURI}`;
+						this.imageSrc	= `${communicator.getApiUrl()}/api/file/data?file=${this.encodedURI}`;
 						break;
 				}
 			}, 250 );

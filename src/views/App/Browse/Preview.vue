@@ -39,7 +39,7 @@ export default {
 		this.itemName	= decodeURIComponent( this.$route.query.name );
 		const item		= this.$route.query.item;
 		const type		= this.$route.query.type;
-		const url		= `${communicator.getApiUrl()}/file/data?file=${item}`;
+		const url		= `${communicator.getApiUrl()}/api/file/data?file=${item}`;
 
 		switch ( type )
 		{

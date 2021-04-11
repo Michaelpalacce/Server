@@ -68,7 +68,7 @@ app.apply( app.er_logger,					{ logger } );
 app.apply( app.er_file_stream );
 
 // Add a user cookie session
-app.apply( app.er_session, { isCookieSession: true, isSecureCookie: true, sessionKey: 'token' } );
+app.apply( app.er_session, { isCookieSession: true, isSecureCookie:true, sessionKey: 'token' } );
 
 // Attach the caching server to the process
 process.cachingServer	= app.getPlugin( app.er_data_server ).getServer();
