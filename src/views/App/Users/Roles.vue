@@ -1,6 +1,6 @@
 <template>
-	<Back @click="$router.push( { name: 'user', params: { username: $route.params.username } } )" class="mb-10"/>
-	<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mb-5"/>
+	<Back @click="$router.push( { name: 'users-user', params: { username: $route.params.username } } )" class="mb-10"/>
+	<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mb-5"/>
 
 	<div class="m-5" @drop="onDrop" @dragover.prevent @dragenter.prevent >
 		<Message
@@ -22,8 +22,10 @@
 			</pre>
 		</div>
 
-		<Button @click="changeRoles" text="Change"/>
-		<Button @click="editOrder" text="Edit Order" class="sm:hidden"/>
+		<div class="flex justify-center">
+			<Button @click="changeRoles" text="Change"/>
+			<Button @click="editOrder" text="Edit Order" class="sm:hidden"/>
+		</div>
 	</div>
 </template>
 
@@ -135,7 +137,7 @@ export default {
 			if ( updateUserResponse.error )
 				return this.errorMessage	= formatErrorMessage( updateUserResponse.error );
 			else
-				await this.$router.push( { name: 'user', params: { username: this.$route.params.username } } );
+				await this.$router.push( { name: 'users-user', params: { username: this.$route.params.username } } );
 		},
 
 		/**

@@ -1,7 +1,7 @@
 <template>
-	<button type="submit" :class="`w-auto py-2 px-7 rounded-3xl ${hasBorder ? 'border' : ''}
+	<div :class="`inline-block cursor-pointer py-2 px-7 rounded-3xl ${hasBorder ? 'border' : ''}
 									border-${borderColor} bg-${bgColor} hover:bg-${hoverBgColor} hover:text-${hoverTextColor} text-${textColor}
-									focus:outline-none text-${textSize}`">{{ text }}</button>
+									focus:outline-none text-${textSize}`">{{ text }}</div>
 </template>
 
 <script>

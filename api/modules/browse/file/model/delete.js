@@ -42,7 +42,7 @@ class DeleteModel
 			throw { code: 'app.browse.delete.unauthorized', message : { error: `Cannot delete items in project ROOT`, itemName }, status: 403 };
 
 		if ( ! fs.existsSync( item ) )
-			throw { code: 'app.browse.delete.fileMissing', message : { error: `File does not exist`, itemName } };
+			return ;
 
 		if ( fs.statSync( item ).isDirectory() )
 			throw { code: 'app.browse.delete.wrongCall', message : { error: `Trying to delete a directory`, itemName } };

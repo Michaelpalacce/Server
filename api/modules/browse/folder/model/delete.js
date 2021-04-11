@@ -24,7 +24,6 @@ class DeleteModel
 	 *
 	 * @details	This function will check if the current user has permissions to delete the folder
 	 * 			This function will check what you are trying to delete (cannot delete project root or root dir)
-	 * 			This function will check if the directory exists or not and return an error if it does not exist
 	 *
 	 * @param	{DeleteInput} deleteInput
 	 *
@@ -48,7 +47,7 @@ class DeleteModel
 			throw { code: 'app.browse.delete.unauthorized', message : { error: `No permissions to delete item`, itemName } };
 
 		if ( ! fs.existsSync( directory ) )
-			throw { code: 'app.browse.delete.directoryMissing', message : { error: `Directory does not exist`, itemName } };
+			return;
 
 		if ( ! fs.statSync( directory ).isDirectory() )
 			throw { code: 'app.browse.delete.wrongCall', message : { error: `Trying to delete a file`, itemName } };

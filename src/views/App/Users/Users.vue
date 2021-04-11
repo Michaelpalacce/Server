@@ -1,5 +1,5 @@
 <template>
-	<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mx-auto w-4/5 my-5"/>
+	<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mx-auto w-4/5 my-5"/>
 
 	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5" v-if="users.length !== 0">
 		<UserItem
@@ -69,7 +69,7 @@ export default {
 		 */
 		userClicked( username )
 		{
-			this.$router.push( { name: 'user', params: { username } } );
+			this.$router.push( { name: 'users-user', params: { username } } );
 		},
 
 		/**

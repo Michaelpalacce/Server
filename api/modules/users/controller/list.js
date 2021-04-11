@@ -1,7 +1,7 @@
 'use strict';
 
 const app		= require( 'event_request' )();
-const UserModel	= require( '../model/user' );
+const UsersModel	= require( '../model/users' );
 
 /**
  * @brief	Adds a new route `/api/users`
@@ -11,7 +11,7 @@ const UserModel	= require( '../model/user' );
  * @return	void
  */
 app.get( '/api/users', ( event ) => {
-	const model	= new UserModel( event );
+	const model	= new UsersModel( event );
 
 	event.send( model.getAllUsers() );
 });

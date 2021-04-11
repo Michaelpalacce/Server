@@ -4,9 +4,10 @@ import Browse								from '@/views/App/Browse/Browse'
 import Preview								from '@/views/App/Browse/Preview'
 import Dashboard							from '@/views/App/Dashboard/Dashboard'
 import Users								from '@/views/App/Users/Users'
-import User									from '@/views/App/Users/User'
+import UsersUser							from '@/views/App/Users/User'
+import User									from '@/views/App/User/User'
 import Roles								from '@/views/App/Users/Roles'
-import Permissions								from '@/views/App/Users/Permissions'
+import Permissions							from '@/views/App/Users/Permissions'
 
 const routes	= [
 	{
@@ -36,8 +37,8 @@ const routes	= [
 	},
 	{
 		path: '/user/:username',
-		name: 'user',
-		component: User
+		name: 'users-user',
+		component: UsersUser
 	},
 	{
 		path: '/user/:username/roles',
@@ -48,6 +49,11 @@ const routes	= [
 		path: '/user/:username/permissions',
 		name: 'user-permissions',
 		component: Permissions
+	},
+	{
+		path: '/user',
+		name: 'user',
+		component: User
 	},
 ]
 

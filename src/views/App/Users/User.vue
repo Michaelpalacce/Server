@@ -3,14 +3,14 @@
 
 	<div class="rounded-t-lg mx-auto text-gray-200 text-2xl p-5">
 		<div class="mx-auto">
-			<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mb-5"/>
+			<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mb-5"/>
 
 			<TitleSection title="User settings" />
 
 			<div class="flex w-full">
 				<div class="w-8/12 sm:w-10/12 flex flex-col">
 					<span class="w-full">Username</span>
-					<span class="w-full text-base">{{ user ? user.getUsername() : '' }}</span>
+					<span class="w-full text-base text-blue-300">{{ user ? user.getUsername() : '' }}</span>
 				</div>
 
 				<div class="w-2/12">
@@ -46,8 +46,8 @@
 			<div class="flex w-full">
 				<div class="w-8/12 sm:w-10/12 flex flex-col">
 					<span class="w-full">Roles</span>
-					<span class="w-full text-base">{{ user ? user.roles.join( ',' ) : '' }}</span>
 					<span class="w-full text-sm">Role order matters!</span>
+					<span class="w-full text-base text-blue-300">{{ user ? user.roles.join( ',' ) : '' }}</span>
 				</div>
 				<div class="w-2/12">
 					<Button text="Change" @click="changeRoles"/>
@@ -59,7 +59,7 @@
 					<span class="w-full">User Permissions</span>
 					<span class="w-full text-sm">User Permissions are taken with priority over role permissions.</span>
 					<span class="w-full text-sm">Below are displayed only user permissions</span>
-					<pre class="w-full text-base max-h-64 overflow-y-auto">{{permissions}}</pre>
+					<pre class="w-full text-base text-blue-300 max-h-64 overflow-y-auto">{{permissions}}</pre>
 				</div>
 
 				<div class="w-0 sm:w-1/12 invisible"></div>
@@ -75,7 +75,8 @@
 			<div class="flex w-full">
 				<div class="w-8/12 sm:w-10/12 flex flex-col">
 					<span class="w-full">Route</span>
-					<span class="w-full text-base">{{ user ? user.getBrowseMetadata().getRoute() : '' }}</span>
+					<span class="w-full text-sm">Route that the user can access when browsing.</span>
+					<span class="w-full text-base text-blue-300">{{ user ? user.getBrowseMetadata().getRoute() : '' }}</span>
 				</div>
 
 				<div class="w-2/12">
@@ -98,9 +99,9 @@ import Error				from "@/views/App/Components/Error";
 import User					from "@/../api/main/user/user"
 
 export default {
-	name: 'User',
+	name: 'UsersUser',
 
-	components: {Error, TitleSection, Button, Divider, Back },
+	components: { Error, TitleSection, Button, Divider, Back },
 
 	data: () => {
 		return {

@@ -41,7 +41,7 @@
 		<Back @click="upload = ! canBrowse; uploadErrorMessage = ''" class="mb-5"/>
 
 		<div class="rounded-t-lg m-5 mx-auto btext-gray-200 px-5">
-			<Error :errorMessage="uploadErrorMessage" @clear-click="uploadErrorMessage = ''" class="mx-auto w-4/5"/>
+			<Error :errorMessage="uploadErrorMessage" @clear="uploadErrorMessage = ''" class="mx-auto w-4/5"/>
 			<Message message="You may need to refresh the folder after uploading a Folder. This is not needed when uploading files." class="my-5"/>
 
 			<form class="dropzone w-full sm:w-2/3" method="POST" >
@@ -433,7 +433,10 @@ export default {
 			const response	= browseResponse.data;
 
 			if ( response.error )
+			{
+				this.loading					= false;
 				return this.browseErrorMessage	= formatErrorMessage( response.error );
+			}
 
 			const isNewDir			= token === '';
 			this.items				= isNewDir ? response.items : this.items.concat( response.items );

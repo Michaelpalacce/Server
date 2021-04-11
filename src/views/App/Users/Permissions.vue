@@ -1,14 +1,18 @@
 <template>
-	<Back @click="$router.push( { name: 'user', params: { username: $route.params.username } } )" class="mb-10"/>
-	<Error :errorMessage="errorMessage" @clear-click="errorMessage = ''" class="mb-5"/>
+	<div class="w-full">
+		<Back @click="$router.push( { name: 'users-user', params: { username: $route.params.username } } )" class="mb-10"/>
+		<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mb-5"/>
 
-	<div class="text-center text-white">
-		<p class="text-base mb-5">Feel free to edit the permissions bellow. For more information: <span class="text-sm text-blue-400"><a href="https://github.com/Michaelpalacce/Server/blob/master/README.md">Docs</a></span></p>
-		<p class="text-sm">Note: If you want to use regex, you have to change the value from: <span class="font-bold">`route: /^\/users?(.+)/`</span> to <span class="font-bold">`route: { regexp: { source: "^\\/users?(.+)", flags: "" } }`</span></p>
+		<div class="text-center text-white">
+			<p class="text-base mb-5">Feel free to edit the permissions bellow. For more information: <span class="text-sm text-blue-400"><a href="https://github.com/Michaelpalacce/Server/blob/master/README.md">Docs</a></span></p>
+			<p class="text-sm">Note: If you want to use regex, you have to change the value from: <span class="font-bold">`route: /^\/users?(.+)/`</span> to <span class="font-bold">`route: { regexp: { source: "^\\/users?(.+)", flags: "" } }`</span></p>
+		</div>
+
+		<textarea v-model="permissions" class="w-full h-64 md:w-2/3 md:h-96 mx-auto my-12 block bg-gray-800 p-5 text-white" cols="50" rows="15"></textarea>
+		<div class="flex justify-center">
+			<Button @click="changePermissions" text="Change"/>
+		</div>
 	</div>
-
-	<textarea v-model="permissions" class="w-2/3 h-96 mx-auto my-12 block bg-gray-800 p-5 text-white" cols="50" rows="15"></textarea>
-	<Button @click="changePermissions" text="Change" class="block mx-auto"/>
 </template>
 
 <script>
@@ -58,7 +62,14 @@ export default {
 		 */
 		changePermissions: async function ()
 		{
-			this.permissions	= JSON.parse( this.permissions );
+			try
+			{
+				this.permissions	= JSON.parse( this.permissions );
+			}
+			catch ( e )
+			{
+				return this.errorMessage	= `Error Parsing JSON: ${e}`
+			}
 
 			if ( this.user === null )
 				return;
@@ -75,7 +86,7 @@ export default {
 			if ( updateUserResponse.error )
 				return this.errorMessage	= formatErrorMessage( updateUserResponse.error );
 			else
-				await this.$router.push( { name: 'user', params: { username: this.$route.params.username } } );
+				await this.$router.push( { name: 'users-user', params: { username: this.$route.params.username } } );
 		}
 	}
 }

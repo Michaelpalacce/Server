@@ -1,10 +1,9 @@
 'use strict';
 
-const User	= require( '../../../main/user/user' );
 const Acl	= require( '../../../main/acls/acl' );
 
 /**
- * @brief	User list model responsible for listing all the users
+ * @brief	User model responsible for CRUD operations on the current user
  */
 class UserModel
 {
@@ -19,127 +18,49 @@ class UserModel
 	}
 
 	/**
-	 * @brief	Gets all usernames
-	 *
-	 * @return	{Array}
-	 */
-	getAllUsers()
-	{
-		return Object.keys( this.userManager.getAll() );
-	}
-
-	/**
-	 * @brief	Gets the requested user
-	 *
-	 * @param	{GetUserInput} getUserInput
-	 *
-	 * @return	{User}
-	 */
-	getUser( getUserInput )
-	{
-		if ( ! getUserInput.isValid() )
-			throw { code: 'app.input.invalidGetUserInput', message : getUserInput.getReasonToString() };
-
-		const username	= getUserInput.getUsername();
-
-		if ( ! this.userManager.has( username ) )
-			throw { code: 'app.user.userNotFound', message : `User: ${username} does not exists` };
-
-		return this.userManager.get( username );
-	}
-
-	/**
-	 * @brief	Updates the given user
-	 *
-	 * @details	Checks if there is a username change
-	 * 			Will not update a user that does not exist
-	 * 			Returns the new user on success
-	 *
-	 * @param	{UpdateUserInput} updateUserInput
-	 *
-	 * @return	{User}
-	 */
-	updateUser( updateUserInput )
-	{
-		if ( ! updateUserInput.isValid() )
-			throw { code: 'app.input.invalidGetUserInput', message : updateUserInput.getReasonToString() };
-
-		const newUserData	= updateUserInput.getNewUserData();
-		const oldUserData	= updateUserInput.getOldUserData();
-
-		const newUser		= new User( newUserData );
-		const oldUser		= new User( oldUserData );
-
-		if ( oldUser.getUsername() === process.env.ADMIN_USERNAME )
-			throw { code: 'app.user.delete.root', message : 'Cannot update root user!' };
-
-		if ( newUser.getUsername() !== oldUser.getUsername() )
-		{
-			this.userManager.delete( oldUser.getUsername() );
-			this.userManager.set( newUserData );
-
-			if ( oldUser.getUsername() === this.user.getUsername() )
-				this.event.session.add( 'username', newUser.getUsername() );
-		}
-		else
-			if ( ! this.userManager.has( newUser.getUsername() ) )
-				throw { code: 'app.user.userNotFound', message : `User: ${newUser.getUsername()} does not exists` };
-			else
-				Acl.decorateUserWithPermissions( this.userManager.update( newUserData ) );
-
-		return this.userManager.get( newUser.getUsername() );
-	}
-
-	/**
-	 * @brief	Deletes the given user
+	 * @brief	Deletes the current user
 	 *
 	 * @details	Will throw an error if the user does not exist
 	 *
-	 * @param	{DeleteUserInput} deleteUserInput
-	 *
 	 * @return	void
 	 */
-	deleteUser( deleteUserInput )
+	async deleteUser()
 	{
-		if ( ! deleteUserInput.isValid() )
-			throw { code: 'app.input.invalidDeleteUserInput', message : deleteUserInput.getReasonToString() };
-
-		const username	= deleteUserInput.getUsername();
-
-		if ( ! this.userManager.has( username ) )
-			throw { code: 'app.user.userNotFound', message : `User: ${username} does not exists!` };
+		const username	= this._getUsername();
 
 		if ( username === process.env.ADMIN_USERNAME )
 			throw { code: 'app.user.delete.root', message : 'Cannot delete root user!' };
 
 		this.userManager.delete( username );
+		await this.event.session.removeSession();
 	}
 
 	/**
-	 * @brief	Creates a user
+	 * @brief	Changes the current user password
 	 *
-	 * @details	Will check if the user already exists
-	 *
-	 * @param	{CreateUserInput} createUserInput
-	 *
-	 * @return	void
+	 * @param	{ChangePasswordInput} changePasswordInput
 	 */
-	createUser( createUserInput )
+	changePassword( changePasswordInput )
 	{
-		if ( ! createUserInput.isValid() )
-			throw { code: 'app.input.invalidCreateUserInput', message : createUserInput.getReasonToString() };
+		if ( ! changePasswordInput.isValid() )
+			throw { code: 'app.input.invalidChangePasswordInput', message : changePasswordInput.getReasonToString() };
 
-		const username	= createUserInput.getUsername();
-		const password	= createUserInput.getPassword();
+		const user	= this.userManager.get( this._getUsername() );
 
-		if ( this.userManager.has( username ) )
-			throw { code: 'app.user.userExists', message : `User: ${username} already exists` };
+		if ( user.getUsername() === process.env.ADMIN_USERNAME )
+			throw { code: 'app.user.edit.root', message : 'Cannot edit root user!' };
 
-		const user	= this.userManager.set( { username, password, roles: [Acl.getRoles().user.name] } );
+		user.setPassword( changePasswordInput.getPassword() );
+	}
 
-		user.getBrowseMetadata().setRoute( `/users/${user.getUsername()}` );
-
-		return user;
+	/**
+	 * @brief	Gets the username from the session
+	 *
+	 * @return	{String}
+	 */
+	_getUsername()
+	{
+		return this.event.session.get( 'username' );
 	}
 }
 

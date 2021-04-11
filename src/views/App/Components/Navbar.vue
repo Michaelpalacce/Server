@@ -5,14 +5,12 @@
 				<router-link class="hover:bg-gray-700 px-3 py-2 mx-2 rounded-md" to="/dashboard">Dashboard</router-link>
 				<router-link class="hover:bg-gray-700 px-3 py-2 mx-2 rounded-md" to="/browse">Browse</router-link>
 				<router-link class="hover:bg-gray-700 px-3 py-2 mx-2 rounded-md" to="/users">Users</router-link>
-				<div class="bg-red-500 hover:bg-red-600 px-3 py-2 rounded-md absolute right-5 text-center cursor-pointer" @click="logout">
-					Logout
-				</div>
+				<Button class="absolute right-5" @click="$router.push( { name: 'user' } )" text="Profile"/>
 			</div>
 		</div>
 
 		<!-- Mobile menu, show/hide based on menu state. -->
-		<div class="sm:hidden">
+		<div class="sm:hidden text-center">
 			<button class="hamburger hamburger--elastic w-full text-right" type="button" @click="mobileCollapsed = ! mobileCollapsed">
 				<span class="hamburger-box" >
 					<span class="hamburger-inner" ></span>
@@ -23,19 +21,20 @@
 				<router-link class="hover:bg-gray-700 block px-3 py-2 my-2 rounded-md" to="/dashboard">Dashboard</router-link>
 				<router-link class="hover:bg-gray-700 block px-3 py-2 my-2 rounded-md" to="/browse">Browse</router-link>
 				<router-link class="hover:bg-gray-700 block px-3 py-2 my-2 rounded-md" to="/users">Users</router-link>
-				<div class="bg-red-500 hover:bg-red-600 block px-3 py-2 text-center cursor-pointer rounded-md mx-auto mt-5 w-1/3 " @click="logout">
-					Logout
-				</div>
+				<Button @click="$router.push( { name: 'user' } )" text="Profile" class="text-center mx-auto"/>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import communicator from "@/app/main/api/communicator";
+import communicator	from "@/app/main/api/communicator";
+import Button		from "@/views/App/Components/Button";
+
 
 export default {
-	name: "Navbar",
+	name: 'Navbar',
+	components: { Button },
 	data: () => {
 		return {
 			mobileCollapsed: true
@@ -54,8 +53,6 @@ export default {
 		async logout()
 		{
 			await communicator.logout().catch(()=>{});
-
-			localStorage.removeItem( 'name' );
 			this.emitter.emit( 'user.credentials' );
 			this.$router.push( '/' );
 		}

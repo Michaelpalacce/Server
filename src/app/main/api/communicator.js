@@ -304,6 +304,43 @@ class ApiCommunicator
 	}
 
 	/**
+	 * @brief	Deletes the current user
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async deleteCurrentUser()
+	{
+		const response	= await axios.delete(
+			`${this.url}/api/user`,
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Deletes the current user
+	 *
+	 * @param	{String} password
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async changeCurrentUserPassword( password )
+	{
+		const response	= await axios.put(
+			`${this.url}/api/user/password`,
+			{ password },
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
 	 * @brief	Creates a new user with the given username and password
 	 *
 	 * @param	{String} username
