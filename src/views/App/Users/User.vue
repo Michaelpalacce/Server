@@ -155,7 +155,14 @@ export default {
 		 */
 		async deleteUser()
 		{
-			console.log( 'Delete user!' );
+			const deleteUserResponse	= await communicator.deleteUser( this.username ).catch(( error )=> {
+				return error;
+			});
+
+			if ( deleteUserResponse.error )
+				return this.errorMessage	= formatErrorMessage( deleteUserResponse.error );
+
+			await this.$router.push( { name: 'users' } );
 		},
 
 		/**

@@ -139,7 +139,7 @@ export default {
 		},
 
 		/**
-		 * @brief	Edits the roles osrder. Used for mobile since drag and drop does not work there
+		 * @brief	Edits the roles order. Used for mobile since drag and drop does not work there
 		 *
 		 * @details	It prompts the user for a new order. It will check if there are any new entries and filter them if so.
 		 * 			In case the user clicks back, nothing will be changed

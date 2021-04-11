@@ -85,6 +85,28 @@ class UserModel
 
 		return this.userManager.get( newUser.getUsername() );
 	}
+
+	/**
+	 * @brief	Deletes the given user
+	 *
+	 * @details	Will throw an error if the user does not exist
+	 *
+	 * @param	{DeleteUserInput} deleteUserInput
+	 *
+	 * @return	void
+	 */
+	deleteUser( deleteUserInput )
+	{
+		if ( ! deleteUserInput.isValid() )
+			throw { code: 'app.input.invalidDeleteUserInput', message : deleteUserInput.getReasonToString() };
+
+		const username	= deleteUserInput.getUsername();
+
+		if ( ! this.userManager.has( username ) )
+			throw { code: 'app.user.userNotFound', message : `User: ${username} does not exists` };
+
+		this.userManager.delete( username );
+	}
 }
 
 module.exports	= UserModel;

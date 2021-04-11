@@ -285,6 +285,25 @@ class ApiCommunicator
 	}
 
 	/**
+	 * @brief	Deletes the given user
+	 *
+	 * @param	{String} username
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async deleteUser( username )
+	{
+		const response	= await axios.delete(
+			`${this.url}/users/${username}`,
+			{ headers: this.getAuthHeaders() }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
 	 * @brief	Updates the user, the oldUser must be passed to detect changes in the username
 	 *
 	 * @details	Expects User.getUserData() as a parameter for both
