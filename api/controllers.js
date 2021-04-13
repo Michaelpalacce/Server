@@ -38,3 +38,16 @@ require( './modules/users/controller/roles' );
 
 // User User Management section
 require( './modules/user/controller/user' );
+
+
+
+// Frontend
+const app			= require( 'event_request' )();
+const path			= require( 'path' );
+const fs			= require( 'fs' );
+
+const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+
+app.add(( event )=>{
+	event.send( fs.createReadStream( `${PROJECT_ROOT}/dist/index.html` ) );
+});
