@@ -1,7 +1,7 @@
 <template>
 	<div :class="`inline-block cursor-pointer py-2 px-7 rounded-3xl ${hasBorder ? 'border' : ''}
-									border-${borderColor} bg-${bgColor} hover:bg-${hoverBgColor} hover:text-${hoverTextColor} text-${textColor}
-									focus:outline-none text-${textSize}`">{{ text }}</div>
+									${borderColor} ${bgColor} ${hoverBgColor} ${hoverTextColor} ${textColor}
+									focus:outline-none ${textSize}`">{{ text }}</div>
 </template>
 
 <script>
@@ -14,27 +14,27 @@ export default {
 		},
 		borderColor: {
 			type: String,
-			default: 'gray-500'
+			default: 'border-gray-500'
 		},
 		bgColor: {
 			type: String,
-			default: 'gray-800'
+			default: 'bg-gray-800'
 		},
 		hoverBgColor: {
 			type: String,
-			default: 'gray-400'
+			default: 'hover:bg-gray-400'
 		},
 		hoverTextColor: {
 			type: String,
-			default: 'black'
+			default: 'hover:text-black'
 		},
 		textColor: {
 			type: String,
-			default: 'white'
+			default: 'text-white'
 		},
 		textSize: {
 			type: String,
-			default: 'base'
+			default: 'text-base'
 		},
 		text: String
 	}

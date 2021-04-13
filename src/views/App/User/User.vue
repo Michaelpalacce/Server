@@ -34,7 +34,7 @@
 				</div>
 
 				<div class="w-2/12">
-					<Button bg-color="red-500" hover-bg-color="red-400" text="Delete" @click="deleteUser"/>
+					<Button bg-color="bg-red-500" hover-bg-color="hover:bg-red-400" text="Delete" @click="deleteUser"/>
 				</div>
 			</div>
 			<Divider />
@@ -45,7 +45,7 @@
 				</div>
 
 				<div class="w-2/12">
-					<Button bg-color="red-500" hover-bg-color="red-400" text="Logout" @click="logout"/>
+					<Button bg-color="bg-red-500" hover-bg-color="hover:bg-red-400" text="Logout" @click="logout"/>
 				</div>
 			</div>
 			<Divider />

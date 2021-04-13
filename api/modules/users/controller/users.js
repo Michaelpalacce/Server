@@ -6,6 +6,7 @@ const GetUserInput		= require( '../input/get_user_input' );
 const UpdateUserInput	= require( '../input/update_user_input' );
 const DeleteUserInput	= require( '../input/delete_user_input' );
 const CreateUserInput	= require( '../input/create_user_input' );
+const router			= app.Router();
 
 /**
  * @brief	Adds a new route `/api/users/:username:/data` with method GET
@@ -15,7 +16,7 @@ const CreateUserInput	= require( '../input/create_user_input' );
  *
  * @return	void
  */
-app.get( '/api/users/:username:/data', ( event ) => {
+router.get( '/users/:username:/data', ( event ) => {
 	const input	= new GetUserInput( event );
 	const model	= new UsersModel( event );
 	const user	= model.getUser( input );
@@ -31,7 +32,7 @@ app.get( '/api/users/:username:/data', ( event ) => {
  *
  * @return	void
  */
-app.patch( '/api/users/:username:/update', ( event ) => {
+router.patch( '/users/:username:/update', ( event ) => {
 	const input	= new UpdateUserInput( event );
 	const model	= new UsersModel( event );
 	const user	= model.updateUser( input );
@@ -47,7 +48,7 @@ app.patch( '/api/users/:username:/update', ( event ) => {
  *
  * @return	void
  */
-app.delete( '/api/users/:username:/delete', ( event ) => {
+router.delete( '/users/:username:/delete', ( event ) => {
 	const input	= new DeleteUserInput( event );
 	const model	= new UsersModel( event );
 	model.deleteUser( input );
@@ -62,9 +63,11 @@ app.delete( '/api/users/:username:/delete', ( event ) => {
  *
  * @return	void
  */
-app.post( '/api/users/create', ( event ) => {
+router.post( '/users/create', ( event ) => {
 	const input	= new CreateUserInput( event );
 	const model	= new UsersModel( event );
 
 	event.send( model.createUser( input ).getUserData() );
 });
+
+module.exports	= router;

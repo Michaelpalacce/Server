@@ -7,7 +7,7 @@ const path			= require( 'path' );
 
 const USER_KEY		= 'USERS_DATA';
 const persistPath	= path.parse( require.main.filename ).dir;
-const PERSIST_TIME	= process.env.USER_PERSIST_INTERVAL;
+const PERSIST_TIME	= 15000;
 
 /**
  * @brief	Class responsible for user CRUD operations
@@ -20,7 +20,7 @@ class UserManager
 			ttl				: -1,
 			persist			: true,
 			persistPath		: path.join( persistPath, 'server_emulator_users.json' ),
-			persistInterval	: 5,	// Every 30 seconds
+			persistInterval	: 30,	// Every 30 seconds
 			gcInterval		: 86400	// One day
 		});
 		this.users				= null;

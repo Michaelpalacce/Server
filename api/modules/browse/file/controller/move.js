@@ -6,6 +6,8 @@ const app		= require( 'event_request' )();
 const MoveModel	= require( '../model/move' );
 const MoveInput	= require( '../input/move_input' );
 
+const router	= app.Router();
+
 /**
  * @brief	Adds a '/api/file/copy' route with method POST
  *
@@ -16,7 +18,7 @@ const MoveInput	= require( '../input/move_input' );
  *
  * @return	void
  */
-app.post( '/api/file/copy',  async ( event ) => {
+router.post( '/file/copy',  async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 
@@ -35,7 +37,7 @@ app.post( '/api/file/copy',  async ( event ) => {
  *
  * @return	void
  */
-app.post( '/api/file/cut', async ( event ) => {
+router.post( '/file/cut', async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 
@@ -54,7 +56,7 @@ app.post( '/api/file/cut', async ( event ) => {
  *
  * @return	void
  */
-app.post( '/api/file/rename', async ( event ) => {
+router.post( '/file/rename', async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 
@@ -62,3 +64,6 @@ app.post( '/api/file/rename', async ( event ) => {
 
 	event.send();
 });
+
+
+module.exports	= router;

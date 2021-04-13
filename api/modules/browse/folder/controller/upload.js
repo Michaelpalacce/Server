@@ -4,6 +4,7 @@
 const app			= require( 'event_request' )();
 const UploadInput	= require( '../input/upload_input' );
 const UploadModel	= require( '../model/upload' );
+const router		= app.Router();
 
 /**
  * @brief	Adds a '/api/folder' route with method PUT
@@ -15,7 +16,7 @@ const UploadModel	= require( '../model/upload' );
  *
  * @return	void
  */
-app.post( '/api/folder', async ( event ) => {
+router.post( '/folder', async ( event ) => {
 	const input	= new UploadInput( event );
 	const model	= new UploadModel( event );
 
@@ -23,3 +24,5 @@ app.post( '/api/folder', async ( event ) => {
 
 	event.send( '', 201 );
 });
+
+module.exports	= router;

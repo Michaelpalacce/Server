@@ -21,9 +21,8 @@ function getCommandLine()
 	{
 		case 'darwin':
 			return 'open';
-		case 'win32':
-			return 'start';
 		case 'win64':
+		case 'win32':
 			return 'start';
 		default:
 			return 'xdg-open';
@@ -47,7 +46,15 @@ pm2.connect(( err ) => {
 			});
 			break;
 
-		case args.length === 2 && args[0] === 'edit' && args[1] === 'api':
+		case args.length === 1 && args[0] === 'status':
+			pm2.list(( err, processDescriptionList ) => {
+				pm2.disconnect();
+				if ( err ) throw err;
+				else console.log( `Server is: ${processDescriptionList[0].pm2_env.status} on port: ${processDescriptionList[0].pm2_env.APP_PORT}` );
+			});
+			break;
+
+		case args.length === 1 && args[0] === 'edit':
 			exec( `${getCommandLine()} ${projectDir}/env.js`, ( err ) => {
 				if ( err ) throw err;
 
@@ -55,12 +62,10 @@ pm2.connect(( err ) => {
 			});
 			break;
 
-		case args.length === 2 && args[0] === 'edit' && args[1] === 'app':
-			exec( `${getCommandLine()} ${projectDir}/.env`, ( err ) => {
-				if ( err ) throw err;
-
-				pm2.disconnect();
-			});
+		case args.length === 2 && args[0] === 'start' && args[1] === '-s':
+		case args.length === 2 && args[0] === 'start' && args[1] === '--standalone':
+			pm2.disconnect();
+			spawn( 'pm2-runtime', ['ecosystem.config.js'], { stdio: 'inherit' } );
 			break;
 
 		case args.length === 1 && args[0] === 'stop':
@@ -75,6 +80,8 @@ pm2.connect(( err ) => {
 			console.log( 'Available commands:' );
 			console.log( 'serve ---> starts the server' );
 			console.log( 'serve start ---> starts the server' );
+			console.log( 'serve start --standalone[-s] ---> starts the server without the pm2 daemon ( useful for testing errors )' );
+			console.log( 'serve status ---> gets the status of the server' );
 			console.log( 'serve edit ---> edits the server\'s env variables' );
 			console.log( 'serve stop ---> stop the server' );
 			pm2.disconnect();

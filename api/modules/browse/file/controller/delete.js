@@ -4,6 +4,7 @@
 const app			= require( 'event_request' )();
 const DeleteInput	= require( '../input/delete_input' );
 const DeleteModel	= require( '../model/delete' );
+const router		= app.Router();
 
 /**
  * @brief	Adds a '/api/file' route with method DELETE
@@ -13,7 +14,7 @@ const DeleteModel	= require( '../model/delete' );
  *
  * @return	void
  */
-app.delete( '/api/file', async ( event ) => {
+router.delete( '/file', async ( event ) => {
 	const input	= new DeleteInput( event );
 	const model	= new DeleteModel( event );
 
@@ -21,3 +22,5 @@ app.delete( '/api/file', async ( event ) => {
 		event.send();
 	}).catch( event.next )
 });
+
+module.exports	= router;

@@ -3,6 +3,7 @@
 const app					= require( 'event_request' )();
 const Acl					= require( '../../../main/acls/acl' );
 const { formatPermissions }	= require( '../../../main/acls/permissions_helper' );
+const router				= app.Router();
 
 /**
  * @brief	Adds a new route `/api/users/roles` with method GET which returns all the roles and their permissions
@@ -11,6 +12,8 @@ const { formatPermissions }	= require( '../../../main/acls/permissions_helper' )
  *
  * @return	void
  */
-app.get( '/api/users/roles', ( event ) => {
+router.get( '/users/roles', ( event ) => {
 	event.send( formatPermissions( Acl.getRoles() ) );
 });
+
+module.exports	= router;

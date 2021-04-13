@@ -1,14 +1,11 @@
 'use strict';
 
 // Dependencies
-const app														= require( 'event_request' )();
-const UserManager												= require( '../user/user_manager' );
-const Session													= require( 'event_request/server/components/session/session' );
-const Acl														= require( '../acls/acl' );
-const { API_PORT, API_ADDRESS, SSL_KEY_PATH, SSL_CERT_PATH }	= require( '../../../env' );
+const er			= require( 'event_request' )();
+const UserManager	= require( '../user/user_manager' );
+const Acl			= require( '../acls/acl' );
+const app			= er.Router();
 
-const protocol		= SSL_KEY_PATH && SSL_CERT_PATH ? 'https' : 'http';
-const domain		= `${protocol}://${API_ADDRESS}:${API_PORT}`;
 
 /**
  * @brief	Wait a bit so ACL can fetch roles
@@ -49,7 +46,7 @@ app.add( async ( event ) => {
  *
  * @details	Removes the session to logout hte user
  */
-app.post( '/api/logout', async ( event ) => {
+app.post( '/logout', async ( event ) => {
 	await event.session.removeSession();
 
 	event.send();
@@ -58,7 +55,7 @@ app.post( '/api/logout', async ( event ) => {
 /**
  * @brief	Performs a login
  */
-app.post( '/api/login', async ( event ) => {
+app.post( '/login', async ( event ) => {
 	let result	= event.validate( event.body, { username : 'filled||string', password : 'filled||string' } );
 
 	if ( result.hasValidationFailed() )
@@ -88,7 +85,7 @@ app.post( '/api/login', async ( event ) => {
  * @details	This will also set the user in the eventRequest as event.$user
  */
 app.add({
-	route	: new RegExp( /^((?!\/api\/login).)*$/ ),
+	route	: /^\/api(?!\/login)(.*)/,
 	handler	: ( event ) => {
 		if ( ! event.session.has( 'username' ) )
 			throw { code: 'app.security.unauthenticated' };
@@ -117,11 +114,13 @@ app.add(( event ) => {
 	{
 		const type	= rule.type || 'DENY';
 
-		if ( type === 'DENY' && app.router.matchRoute( event.path, rule.route ) && app.router.matchMethod( event.method, rule.methods || '' ) )
+		if ( type === 'DENY' && er.router.matchRoute( event.path, rule.route ) && er.router.matchMethod( event.method, rule.methods || '' ) )
 			throw { code: 'app.security.forbidden', message: `You don\'t have permission to ${event.method} ${event.path}` }
-		else if ( type === 'ALLOW' && app.router.matchRoute( event.path, rule.route ) && app.router.matchMethod( event.method, rule.methods || '' ) )
+		else if ( type === 'ALLOW' && er.router.matchRoute( event.path, rule.route ) && er.router.matchMethod( event.method, rule.methods || '' ) )
 			break;
 	}
 
 	event.next();
 });
+
+module.exports	= app;

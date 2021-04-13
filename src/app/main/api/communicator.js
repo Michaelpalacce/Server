@@ -1,6 +1,6 @@
 'use strict';
 
-import { API_PORT, API_ADDRESS, SSL_KEY_PATH, SSL_CERT_PATH }	from '../../../../env';
+import { APP_PORT, APP_ADDRESS, SSL_KEY_PATH, SSL_CERT_PATH }	from '../../../../env';
 import axios													from 'axios';
 
 /**
@@ -9,12 +9,12 @@ import axios													from 'axios';
 class ApiCommunicator
 {
 	/**
-	 * @details	The API_ADDRESS is very important for the CORS headers, so this must be set correctly or it will fail
+	 * @details	The APP_ADDRESS is very important for the CORS headers, so this must be set correctly or it will fail
 	 */
 	constructor()
 	{
-		this.port		= API_PORT;
-		this.address	= API_ADDRESS;
+		this.port		= APP_PORT;
+		this.address	= APP_ADDRESS;
 		this.protocol	= SSL_KEY_PATH && SSL_CERT_PATH ? 'https' : 'http';
 		this.url		= `${this.protocol}://${this.address}:${this.port}`;
 	}

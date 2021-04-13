@@ -1,4 +1,6 @@
-### A simple storage app that emulates the file system
+### A simple storage app that emulates the file system with Users 
+
+#### More features and modules will be added overtime.
 
 # Supported NodeJS
 - \>= 12.x 
@@ -21,31 +23,36 @@ serve start # also starts the server
 Commands:
 serve ---> starts the server
 serve start ---> starts the server
-serve edit api---> edit environment variables for the API
-serve edit app---> edit environment variables for the APP
+serve start --standalone[-s] ---> starts the server without the pm2 daemon ( useful for testing errors )
+serve status ---> gets the status of the server
+serve edit---> edit environment variables 
 serve stop ---> stop the server
 ~~~
+- Additionally this module uses pm2 to handle the daemonizing of the process you can checkout: https://www.npmjs.com/package/pm2 for more info
 
 # API Environment variables
-- API_PORT - Which port the api will be running on
-- API_ADDRESS - Which IP address to bind to
-- ADMIN_USERNAME and ADMIN_PASSWORD - in case of enabled security what are the password and the username
+- APP_PORT - Which port the server will be running on
+- APP_ADDRESS - Which IP address to bind to
+- ADMIN_USERNAME and ADMIN_PASSWORD - The root username and password 
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
-- USER_PERSIST_INTERVAL - How often in milliseconds the users will be persisted to storage, Defaults to 10000
-- DEBUG - Whether to display console logs or not
-
-# APP Environment variables
-- PORT - which port the front end app should listen on
+- DEBUG - Whether to display console logs or not ( for Dev )
 
 # Enabling SSL
 - Generate a certificate and point the SSL_KEY_PATH and SSL_CERT_PATH to their locations
 
 # Adding users
-- If you want to add users go to the users page from the sidebar and click on the Add Users button
+- If you want to add users go to the users page from the navbar and click on the Add New Users button
 - You will be asked to fill in the new user's data
-- Route will be the path from which the user can access the FS
-- When adding a user the user will persist after 5 seconds so don't stop the server
+- After which feel free to click on the newly created user and edit it's data
+- Browse Module Route is the route under which the user will be able to access the FS and edit delete,download,copy, etc
+- The user can have user permissions set which have priority over role permissions
+
+# Roles
+- WIP 
+- Currently ony has root and user
+- Roles order matters as the first rule to be matched will be the one that will be used
+- WIP You can add your own roles with permissions
 
 # Permissions:
 - Only root and admin users can add/ view/ modify other users ( and self ). 
@@ -102,6 +109,7 @@ serve stop ---> stop the server
 
 # Notes
 - If a state arises where there is no root user, one will be created automatically ( with the username and password in the env.js file )
+- No operations can be done on the root user ( root role does not prevent anything )
 - It is a good idea to change the root password ( via the env.js )
 
 # Known Bugs:
@@ -112,4 +120,4 @@ serve stop ---> stop the server
             /folder
             /folder2
             
-    - copy /folder into /folder2 since I cannot distinguish whether you are trying to copy a folder into itself which will brick your disk if it happens
+    - copy /folder into /folder2 since I cannot distinguish whether you are trying to copy a folder into itself which will brick your disk if it happens ( or maybe I can but whatever didn't work the one time I tried to solve this )

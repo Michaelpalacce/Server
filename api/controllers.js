@@ -1,53 +1,57 @@
 'use strict';
 
+const app		= require( 'event_request' )();
+const apiRouter	= app.Router();
+
 // Main
-require( './main/security/security' );
+apiRouter.add( require( './main/security/security' ) );
 
 // BROWSE MODULE
 // Browse user section
-require( './modules/browse/user/controller/route' );
+apiRouter.add( require( './modules/browse/user/controller/route' ) );
+
 
 // Browse file section
-require( './modules/browse/file/controller/move' );
-require( './modules/browse/file/controller/file_data' );
-require( './modules/browse/file/controller/download' );
-require( './modules/browse/file/controller/upload' );
-require( './modules/browse/file/controller/delete' );
-require( './modules/browse/file/controller/preview' );
+apiRouter.add( require( './modules/browse/file/controller/move' ) );
+apiRouter.add( require( './modules/browse/file/controller/file_data' ) );
+apiRouter.add( require( './modules/browse/file/controller/download' ) );
+apiRouter.add( require( './modules/browse/file/controller/upload' ) );
+apiRouter.add( require( './modules/browse/file/controller/delete' ) );
+apiRouter.add( require( './modules/browse/file/controller/preview' ) );
+
 
 // Browse folder section
-require( './modules/browse/folder/controller/view' );
-require( './modules/browse/folder/controller/delete' );
-require( './modules/browse/folder/controller/upload' );
-require( './modules/browse/folder/controller/move' );
-
-
+apiRouter.add( require( './modules/browse/folder/controller/view' ) );
+apiRouter.add( require( './modules/browse/folder/controller/delete' ) );
+apiRouter.add( require( './modules/browse/folder/controller/upload' ) );
+apiRouter.add( require( './modules/browse/folder/controller/move' ) );
 
 // USERS MODULE
 
 // Users Users CRUD section
-require( './modules/users/controller/list' );
-require( './modules/users/controller/users' );
+apiRouter.add( require( './modules/users/controller/list' ) );
+apiRouter.add( require( './modules/users/controller/users' ) );
 
 // Users Users Roles section
-require( './modules/users/controller/roles' );
-
+apiRouter.add( require( './modules/users/controller/roles' ) );
 
 
 // USER MODULE
 
 // User User Management section
-require( './modules/user/controller/user' );
+apiRouter.add( require( './modules/user/controller/user' ) );
 
 
 
-// Frontend
-const app			= require( 'event_request' )();
+
 const path			= require( 'path' );
 const fs			= require( 'fs' );
-
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
-app.add(( event )=>{
-	event.send( fs.createReadStream( `${PROJECT_ROOT}/dist/index.html` ) );
+// Backend
+app.add( '/api', apiRouter );
+app.apply( app.er_static, { paths	: ['dist', 'css', 'js'], cache: { static : false }, useEtag: true } );
+// Frontend
+app.get(( event )=>{
+	fs.createReadStream( `${PROJECT_ROOT}/dist/index.html` ).pipe( event.response );
 });
