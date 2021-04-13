@@ -2,6 +2,9 @@
 
 #### More features and modules will be added overtime.
 
+# v17.0.0 is a breaking version, with complete redesign and terminal support removed ( may come back in the future )
+
+
 # Supported NodeJS
 - \>= 12.x 
 
