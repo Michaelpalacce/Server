@@ -42,8 +42,6 @@ apiRouter.add( require( './modules/users/controller/roles' ) );
 apiRouter.add( require( './modules/user/controller/user' ) );
 
 
-
-
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;

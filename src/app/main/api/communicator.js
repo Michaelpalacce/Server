@@ -1,7 +1,6 @@
 'use strict';
 
-import { APP_PORT, APP_ADDRESS, SSL_KEY_PATH, SSL_CERT_PATH }	from '../../../../env';
-import axios													from 'axios';
+import axios	from 'axios';
 
 /**
  * @brief	ApiCommunicator used to make request to the API of the ServerEmulator
@@ -13,20 +12,6 @@ class ApiCommunicator
 	 */
 	constructor()
 	{
-		this.port		= APP_PORT;
-		this.address	= APP_ADDRESS;
-		this.protocol	= SSL_KEY_PATH && SSL_CERT_PATH ? 'https' : 'http';
-		this.url		= `${this.protocol}://${this.address}:${this.port}`;
-	}
-
-	/**
-	 * @brief	Returns the API url
-	 *
-	 * @return	{String}
-	 */
-	getApiUrl()
-	{
-		return this.url;
 	}
 
 	/**
@@ -49,7 +34,7 @@ class ApiCommunicator
 	 */
 	async login( username, password )
 	{
-		const response	= await axios.post( `${this.url}/api/login`, { username, password }, { withCredentials: true } ).catch( ( error ) => {
+		const response	= await axios.post( `/api/login`, { username, password }, { withCredentials: true } ).catch( ( error ) => {
 			return error;
 		});
 
@@ -70,7 +55,7 @@ class ApiCommunicator
 	async logout()
 	{
 		const response	= await axios.post(
-			`${this.url}/api/logout`,
+			'/api/logout',
 			{},
 			{ withCredentials: true }
 		).catch(() => {});
@@ -94,7 +79,7 @@ class ApiCommunicator
 	async browse( directory = '', token = '' )
 	{
 		return axios.get(
-			this._formatUrlWithQueryParams( `${this.url}/api/browse`, { directory, token } ),
+			this._formatUrlWithQueryParams( '/api/browse', { directory, token } ),
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -109,7 +94,7 @@ class ApiCommunicator
 	async getFileData( file )
 	{
 		const response	= await axios.get(
-			this._formatUrlWithQueryParams( `${this.url}/api/file/getFileData`, { file } ),
+			this._formatUrlWithQueryParams( '/api/file/getFileData', { file } ),
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -130,7 +115,7 @@ class ApiCommunicator
 	 */
 	async deleteItem( item )
 	{
-		const url	= `${this.url}/api/${item.isFolder ? 'folder' : 'file'}`
+		const url	= `/api/${item.isFolder ? 'folder' : 'file'}`
 
 		const response	= await axios.delete(
 			this._formatUrlWithQueryParams( url, { item: item.encodedURI } ),
@@ -221,7 +206,7 @@ class ApiCommunicator
 	async createFolder( directory )
 	{
 		const response	= await axios.post(
-			`${this.url}/api/folder`,
+			'/api/folder',
 			{ directory },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -239,7 +224,7 @@ class ApiCommunicator
 	async getUsers()
 	{
 		const response	= await axios.get(
-			`${this.url}/api/users`,
+			'/api/users',
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -256,7 +241,7 @@ class ApiCommunicator
 	async getUserRoute()
 	{
 		const response	= await axios.get(
-			`${this.url}/api/browse/user/route`,
+			'/api/browse/user/route',
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -275,7 +260,7 @@ class ApiCommunicator
 	async getUserData( username )
 	{
 		const response	= await axios.get(
-			`${this.url}/api/users/${username}/data`,
+			`/api/users/${username}/data`,
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -294,7 +279,7 @@ class ApiCommunicator
 	async deleteUser( username )
 	{
 		const response	= await axios.delete(
-			`${this.url}/api/users/${username}/delete`,
+			`/api/users/${username}/delete`,
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -311,7 +296,7 @@ class ApiCommunicator
 	async deleteCurrentUser()
 	{
 		const response	= await axios.delete(
-			`${this.url}/api/user`,
+			`/api/user`,
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -330,7 +315,7 @@ class ApiCommunicator
 	async changeCurrentUserPassword( password )
 	{
 		const response	= await axios.put(
-			`${this.url}/api/user/password`,
+			`/api/user/password`,
 			{ password },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -351,7 +336,7 @@ class ApiCommunicator
 	async createUser( username, password )
 	{
 		const response	= await axios.post(
-			`${this.url}/api/users/create`,
+			`/api/users/create`,
 			{ username, password },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -374,7 +359,7 @@ class ApiCommunicator
 	async updateUser( oldUser, newUser )
 	{
 		const response	= await axios.patch(
-			`${this.url}/api/users/${oldUser.username}/update`,
+			`/api/users/${oldUser.username}/update`,
 			{ oldUser, newUser },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -392,7 +377,7 @@ class ApiCommunicator
 	async getRoles()
 	{
 		const response	= await axios.get(
-			`${this.url}/api/users/roles`,
+			`/api/users/roles`,
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;

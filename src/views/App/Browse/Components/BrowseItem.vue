@@ -83,7 +83,7 @@ export default {
 				switch ( this.fileType )
 				{
 					case 'image':
-						this.imageSrc	= `${communicator.getApiUrl()}/api/file/data?file=${this.encodedURI}`;
+						this.imageSrc	= `/api/file/data?file=${this.encodedURI}`;
 						break;
 				}
 			}, 250 );

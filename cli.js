@@ -8,7 +8,7 @@ const fs				= require( 'fs' );
 
 const args				= process.argv.slice( 2 );
 
-const projectDir		= path.join( __dirname, '.' );
+const projectDir		= path.parse( require.main.filename ).dir;
 const ENV_FILE			= path.join( projectDir, 'env.js' );
 
 // Create a env file if one does not exist
@@ -40,7 +40,7 @@ pm2.connect(( err ) => {
 	{
 		case args.length === 0:
 		case args.length === 1 && args[0] === 'start':
-			pm2.start( 'ecosystem.config.js', ( err, apps ) => {
+			pm2.start( `${projectDir}/ecosystem.config.js`, ( err, apps ) => {
 				pm2.disconnect();
 				if ( err ) throw err;
 			});
@@ -50,7 +50,8 @@ pm2.connect(( err ) => {
 			pm2.list(( err, processDescriptionList ) => {
 				pm2.disconnect();
 				if ( err ) throw err;
-				else console.log( `Server is: ${processDescriptionList[0].pm2_env.status} on port: ${processDescriptionList[0].pm2_env.APP_PORT}` );
+				else if ( typeof processDescriptionList[0] !== 'undefined' ) console.log( `Server is: ${processDescriptionList[0].pm2_env.status} on port: ${processDescriptionList[0].pm2_env.APP_PORT}` );
+				else console.log( 'Server not started.' );
 			});
 			break;
 
@@ -62,10 +63,12 @@ pm2.connect(( err ) => {
 			});
 			break;
 
+		case args.length === 1 && args[1] === '-s':
+		case args.length === 1 && args[1] === '--standalone':
 		case args.length === 2 && args[0] === 'start' && args[1] === '-s':
 		case args.length === 2 && args[0] === 'start' && args[1] === '--standalone':
 			pm2.disconnect();
-			spawn( 'pm2-runtime', ['ecosystem.config.js'], { stdio: 'inherit' } );
+			spawn( 'pm2-runtime', [`${projectDir}/ecosystem.config.js`], { stdio: 'inherit' } );
 			break;
 
 		case args.length === 1 && args[0] === 'stop':

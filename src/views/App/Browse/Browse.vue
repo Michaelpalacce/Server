@@ -88,7 +88,6 @@ export default {
 			loading				: false,
 			upload				: false,
 			uploadErrorMessage	: '',
-			apiUrl				: communicator.getApiUrl(),
 			dropzone			: null,
 			canBrowse			: true,
 

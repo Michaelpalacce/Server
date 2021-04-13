@@ -1,4 +1,4 @@
-module.exports	= {
+const config	= {
 	configureWebpack: {
 		devServer: {
 			stats: {
@@ -19,5 +19,13 @@ module.exports	= {
 			}
 		}
 	},
-	assetsDir: '..'
-}
+	productionSourceMap: false,
+	devServer: {
+		proxy: 'http://localhost:8888'
+	}
+};
+
+if ( process.env.NODE_ENV !== 'development' )
+	config.assetsDir	= '..';
+
+module.exports	= config;
