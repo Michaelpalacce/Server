@@ -1,6 +1,6 @@
 {
 	"name": "server-emulator",
-	"version": "17.0.4",
+	"version": "17.1.0",
 	"private": false,
 	"description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
 	"author": {
@@ -9,7 +9,11 @@
 	"scripts": {
 		"build": "vue-cli-service build",
 		"serve": "node cli.js",
-		"serve-dev": "pm2-runtime dev.ecosystem.config.js"
+		"serve-dev": "pm2-runtime dev.ecosystem.config.js",
+
+		"prepublishOnly": "npm run build",
+		"preinstall": "node hooks.js preinstall",
+		"postinstall": "node hooks.js postinstall"
 	},
 	"main": "index.js",
 	"dependencies": {
@@ -37,6 +41,7 @@
 	"_id": "server-emulator@16.3.2",
 	"bin": {
 		"serve": "cli.js",
+		"serve-hooks": "hooks.js",
 		"server-emulator": "cli.js"
 	},
 	"bugs": {

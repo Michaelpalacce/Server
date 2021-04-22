@@ -1,3 +1,9 @@
+17.1.0
+- Polished update strategy,
+- Added new commands to backup user data on update
+- Fixed so password is hashed from now on
+- Fixed some bugs with permissions
+
 17.0.0
 - Major refactoring done, a lot of functionality has been refactored and reworked
 - Moved a lot of files around

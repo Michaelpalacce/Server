@@ -41,6 +41,12 @@ serve stop ---> stop the server
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
 - DEBUG - Whether to display console logs or not ( for Dev )
 
+# UPDATING:
+- Since npm cleans up the directory on update, you can run the following command: `serve-hooks preinstall`.
+This will move your files to os.tmpDir.
+- Run: `npm update -g server-emulator`
+- Run: `serve-hooks postinstall` and this will move the config files from the os.tmpDir back to the project.
+
 # Enabling SSL
 - Generate a certificate and point the SSL_KEY_PATH and SSL_CERT_PATH to their locations
 

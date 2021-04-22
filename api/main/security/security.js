@@ -5,7 +5,7 @@ const er			= require( 'event_request' )();
 const UserManager	= require( '../user/user_manager' );
 const Acl			= require( '../acls/acl' );
 const app			= er.Router();
-
+const crypto		= require( 'crypto' );
 
 /**
  * @brief	Wait a bit so ACL can fetch roles
@@ -15,7 +15,7 @@ const app			= er.Router();
 setTimeout(()=>{
 	const userData	= {
 		username	: process.env.ADMIN_USERNAME,
-		password	: process.env.ADMIN_PASSWORD,
+		password	: crypto.createHash( 'sha256' ).update( process.env.ADMIN_PASSWORD ).digest( 'hex' ),
 		roles		: [Acl.getRoles().root.name],
 		permissions	: {},
 		metadata	: {}
@@ -69,7 +69,7 @@ app.post( '/login', async ( event ) => {
 	const user	= event.$userManager.get( username );
 	Acl.decorateUserWithPermissions( user );
 
-	if ( user.getPassword() === password )
+	if ( user.getPassword() === crypto.createHash( 'sha256' ).update( password ).digest( 'hex' ) )
 	{
 		event.session.add( 'username', user.getUsername() );
 

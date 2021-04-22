@@ -1,7 +1,8 @@
 'use strict';
 
-const Users	= require( '../../../main/user/user' );
-const Acl	= require( '../../../main/acls/acl' );
+const Users		= require( '../../../main/user/user' );
+const Acl		= require( '../../../main/acls/acl' );
+const crypto	= require( 'crypto' );
 
 /**
  * @brief	Users model responsible for CRUD operations on users
@@ -71,7 +72,7 @@ class UsersModel
 		const oldUser		= new Users( oldUserData );
 
 		if ( oldUser.getUsername() === process.env.ADMIN_USERNAME )
-			throw { code: 'app.user.delete.root', message : 'Cannot update root user!' };
+			throw { code: 'app.user.update.root', message : 'Cannot update root user!' };
 
 		if ( newUser.getUsername() !== oldUser.getUsername() )
 		{
@@ -88,7 +89,12 @@ class UsersModel
 			if ( ! this.userManager.has( newUser.getUsername() ) )
 				throw { code: 'app.user.userNotFound', message : `User: ${newUser.getUsername()} does not exists` };
 			else
+			{
+				if ( newUser.getPassword() !== oldUser.getPassword() )
+					newUserData.password	= crypto.createHash( 'sha256' ).update( newUser.getPassword() ).digest( 'hex' );
+
 				Acl.decorateUserWithPermissions( this.userManager.update( newUserData ) );
+			}
 
 		return this.userManager.get( newUser.getUsername() );
 	}
@@ -125,7 +131,7 @@ class UsersModel
 	 *
 	 * @param	{CreateUserInput} createUserInput
 	 *
-	 * @return	void
+	 * @return	{User}
 	 */
 	createUser( createUserInput )
 	{
@@ -133,7 +139,7 @@ class UsersModel
 			throw { code: 'app.input.invalidCreateUserInput', message : createUserInput.getReasonToString() };
 
 		const username	= createUserInput.getUsername();
-		const password	= createUserInput.getPassword();
+		const password	= crypto.createHash( 'sha256' ).update( createUserInput.getPassword() ).digest( 'hex' );
 
 		if ( this.userManager.has( username ) )
 			throw { code: 'app.user.userExists', message : `User: ${username} already exists` };

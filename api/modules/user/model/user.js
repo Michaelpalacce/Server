@@ -1,6 +1,6 @@
 'use strict';
 
-const Acl	= require( '../../../main/acls/acl' );
+const crypto	= require( 'crypto' );
 
 /**
  * @brief	User model responsible for CRUD operations on the current user
@@ -50,7 +50,7 @@ class UserModel
 		if ( user.getUsername() === process.env.ADMIN_USERNAME )
 			throw { code: 'app.user.edit.root', message : 'Cannot edit root user!' };
 
-		user.setPassword( changePasswordInput.getPassword() );
+		user.setPassword( crypto.createHash( 'sha256' ).update( changePasswordInput.getPassword() ).digest( 'hex' ) );
 	}
 
 	/**

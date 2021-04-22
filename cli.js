@@ -63,8 +63,8 @@ pm2.connect(( err ) => {
 			});
 			break;
 
-		case args.length === 1 && args[1] === '-s':
-		case args.length === 1 && args[1] === '--standalone':
+		case args.length === 1 && args[0] === '-s':
+		case args.length === 1 && args[0] === '--standalone':
 		case args.length === 2 && args[0] === 'start' && args[1] === '-s':
 		case args.length === 2 && args[0] === 'start' && args[1] === '--standalone':
 			pm2.disconnect();

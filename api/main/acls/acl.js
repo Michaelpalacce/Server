@@ -28,7 +28,7 @@ const DEFAULT_ROLES	= {
 			route: [
 				{
 					type: 'DENY',
-					route: new RegExp( /^\/users?(.+)/ ),
+					route: new RegExp( /^\/api\/users?(.+)/ ),
 					method: ''
 				},
 				{
