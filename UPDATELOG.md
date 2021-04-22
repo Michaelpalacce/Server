@@ -1,3 +1,6 @@
+17.1.1
+- Small fix
+
 17.1.0
 - Polished update strategy,
 - Added new commands to backup user data on update

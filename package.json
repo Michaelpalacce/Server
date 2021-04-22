@@ -1,6 +1,6 @@
 {
 	"name": "server-emulator",
-	"version": "17.1.0",
+	"version": "17.1.1",
 	"private": false,
 	"description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
 	"author": {
@@ -11,9 +11,7 @@
 		"serve": "node cli.js",
 		"serve-dev": "pm2-runtime dev.ecosystem.config.js",
 
-		"prepublishOnly": "npm run build",
-		"preinstall": "node hooks.js preinstall",
-		"postinstall": "node hooks.js postinstall"
+		"prepublishOnly": "npm run build"
 	},
 	"main": "index.js",
 	"dependencies": {

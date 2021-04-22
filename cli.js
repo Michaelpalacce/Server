@@ -57,7 +57,16 @@ pm2.connect(( err ) => {
 
 		case args.length === 1 && args[0] === 'edit':
 			exec( `${getCommandLine()} ${projectDir}/env.js`, ( err ) => {
-				if ( err ) throw err;
+				if ( err )
+				{
+					console.log( 'An error has occurred while trying to edit env file.' );
+					console.log( 'Error: ' );
+					console.log( e );
+					console.log( 'You have to manually edit the file below:' );
+					console.log( `${projectDir}/env.js` );
+
+					process.exit( 1 );
+				}
 
 				pm2.disconnect();
 			});
