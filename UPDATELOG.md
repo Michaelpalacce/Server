@@ -1,3 +1,7 @@
+17.1.3
+- Dependency moved to newer version
+- Fix a small bug with clicking too fast through browse
+
 17.1.2
 - Fixed some issues
 - Improvements to the browse section, now on-click is handled better

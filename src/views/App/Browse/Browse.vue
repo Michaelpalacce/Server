@@ -429,6 +429,9 @@ export default {
 				return error;
 			});
 
+			if ( this.$route.name !== 'browse' )
+				return ;
+
 			const response	= browseResponse.data;
 
 			if ( response.error )
