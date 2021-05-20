@@ -6,6 +6,7 @@
 				cursor-pointer"
 				@mouseover="show"
 				@mouseleave="hover = false"
+				@click="click"
 	>
 		<span class="absolute left-1/4 md:left-2/4 z-10" :class="[hover === false ? 'hidden' : '']">
 			<img :src="imageSrc" alt="" :class="[hover === false ? 'visible' : '']" style="height: 25vh; top: -50px;">
@@ -22,7 +23,7 @@
 				<input type="checkbox" class="form-checkbox h-5 w-5 mt-3 mx-auto" v-model="checked">
 			</div>
 
-			<div class="w-full md:w-10/12 inline-block" @click="$emit( 'on-click' )">
+			<div class="w-full md:w-10/12 inline-block">
 				<p class="truncate">
 					<i class="fa fa-angle-double-left mr-2 hidden md:inline-block" v-if="isBack"></i>
 					<i class="fa fa-folder-open mr-2 hidden md:inline-block" v-if="isFolder && ! isBack"></i>
@@ -30,7 +31,7 @@
 					<span v-if="! isBack" :class="{ 'text-blue-200': previewAvailable && ! isFolder }" class="font-medium text-base">{{name}}</span>
 				</p>
 			</div>
-			<div class="w-full md:w-1/12 inline-block" @click="$emit( 'on-click' )">
+			<div class="w-full md:w-1/12 inline-block">
 				<p class="truncate" v-if="! isFolder">
 					<span class="md:hidden mr-2">Size:</span> {{ bytesToSize( size ) }}
 				</p>
@@ -40,8 +41,6 @@
 </template>
 
 <script>
-import communicator	from "@/app/main/api/communicator";
-
 export default {
 	name: "BrowseItem",
 	data	: function ()
@@ -120,6 +119,19 @@ export default {
 		{
 			if ( typeof name === 'string' )
 				this.name	= name;
+		},
+
+		/**
+		 * @brief	On click event that emits `on-click` only when not clicking on a checkbox
+		 *
+		 * @param	{Event} event
+		 *
+		 * @return	void
+		 */
+		click( event )
+		{
+			if ( event.target.type !== 'checkbox' )
+				this.$emit( 'on-click' );
 		}
 	},
 

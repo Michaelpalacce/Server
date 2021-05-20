@@ -24,7 +24,7 @@ router.post( '/file', ( event ) => {
 		if ( event.getRequestHeader( 'x-requested-with' ) === 'XMLHttpRequest' )
 			event.send( '', 201 );
 		else
-			event.send( '<script>window.history.back();</script>')
+			event.send( '<script>window.history.back();</script>' );
 	}).catch( event.next );
 });
 

@@ -2,9 +2,6 @@
 
 #### More features and modules will be added overtime.
 
-# v17.0.0 is a breaking version, with complete redesign and terminal support removed ( may come back in the future )
-
-
 # Supported NodeJS
 - \>= 12.x 
 
@@ -40,6 +37,7 @@ serve stop ---> stop the server
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
 - DEBUG - Whether to display console logs or not ( for Dev )
+- NODE_ENV - Keep it to production. If you are working on the plugin, change to development
 
 # UPDATING:
 - Since npm cleans up the directory on update, you can run the following command: `serve-hooks preinstall`.
@@ -130,3 +128,29 @@ This will move your files to os.tmpDir.
             /folder2
             
     - copy /folder into /folder2 since I cannot distinguish whether you are trying to copy a folder into itself which will brick your disk if it happens ( or maybe I can but whatever didn't work the one time I tried to solve this )
+
+
+# Development
+
+To run the project in development, make sure to have an env.js file. The APP_PORT variable must be set to 8888 ( or edit the variable in 
+vue.config.js and change it to whatever you like ) and the NODE_ENV must be set to development. After which you can run 
+
+~~~bash
+npm run serve-dev
+# or
+pm2-runtime dev.ecosystem.config.js
+~~~
+
+
+To test in production run: 
+
+~~~bash
+npm run build
+npm run serve
+~~~
+
+You can stop a production app by running 
+
+~~~bash
+pm2 stop all
+~~~

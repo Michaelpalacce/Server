@@ -1,3 +1,8 @@
+17.1.2
+- Fixed some issues
+- Improvements to the browse section, now on-click is handled better
+- Added instructions for Development
+
 17.1.1
 - Small fix
 
