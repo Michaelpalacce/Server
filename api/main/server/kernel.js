@@ -67,8 +67,10 @@ app.apply( app.er_logger,					{ logger } );
 // Attach the file streamers
 app.apply( app.er_file_stream );
 
+const hasSSL	= process.env.SSL_KEY_PATH && process.env.SSL_CERT_PATHl;
+
 // Add a user cookie session
-app.apply( app.er_session, { isCookieSession: true, isSecureCookie:true, sessionKey: 'token' } );
+app.apply( app.er_session, { isCookieSession: true, isSecureCookie: hasSSL, sessionKey: 'token' } );
 
 // Attach the caching server to the process
 process.cachingServer	= app.getPlugin( app.er_data_server ).getServer();

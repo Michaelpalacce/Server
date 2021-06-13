@@ -1,3 +1,6 @@
+17.1.4
+- Small bugfix
+
 17.1.3
 - Dependency moved to newer version
 - Fix a small bug with clicking too fast through browse
