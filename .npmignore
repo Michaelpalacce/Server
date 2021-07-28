@@ -16,3 +16,5 @@ postcss.config.js
 server_emulator_users.json
 tailwind.config.js
 vue.config.js
+README.md
+UPDATELOG.md
