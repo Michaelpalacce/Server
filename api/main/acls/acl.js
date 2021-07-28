@@ -27,12 +27,22 @@ const DEFAULT_ROLES	= {
 		permissions	: {
 			route: [
 				{
-					type: 'DENY',
-					route: new RegExp( /^\/api\/users?(.+)/ ),
+					type: 'ALLOW',
+					route: new RegExp( /^\/api\/browse?(.+)/ ),
 					method: ''
 				},
 				{
 					type: 'ALLOW',
+					route: '/api/user',
+					method: 'DELETE'
+				},
+				{
+					type: 'ALLOW',
+					route: '/api/user/password',
+					method: 'PUT'
+				},
+				{
+					type: 'DENY',
 					route: '',
 					method: ''
 				}

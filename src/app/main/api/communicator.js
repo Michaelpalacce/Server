@@ -94,7 +94,7 @@ class ApiCommunicator
 	async getFileData( file )
 	{
 		const response	= await axios.get(
-			this._formatUrlWithQueryParams( '/api/file/getFileData', { file } ),
+			this._formatUrlWithQueryParams( '/api/browse/file/getFileData', { file } ),
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
@@ -115,7 +115,7 @@ class ApiCommunicator
 	 */
 	async deleteItem( item )
 	{
-		const url	= `/api/${item.isFolder ? 'folder' : 'file'}`
+		const url	= `/api/browse/${item.isFolder ? 'folder' : 'file'}`
 
 		const response	= await axios.delete(
 			this._formatUrlWithQueryParams( url, { item: item.encodedURI } ),
@@ -140,7 +140,7 @@ class ApiCommunicator
 	async renameItem( item, newPath )
 	{
 		const response	= await axios.post(
-			`/api/${item.isFolder ? 'folder' : 'file'}/rename`,
+			`/api/browse/${item.isFolder ? 'folder' : 'file'}/rename`,
 			{ oldPath: item.encodedURI, newPath },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -163,7 +163,7 @@ class ApiCommunicator
 	async copyItem( item, newPath )
 	{
 		const response	= await axios.post(
-			`/api/${item.isFolder ? 'folder' : 'file'}/copy`,
+			`/api/browse/${item.isFolder ? 'folder' : 'file'}/copy`,
 			{ oldPath: item.encodedURI, newPath },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -189,7 +189,7 @@ class ApiCommunicator
 		console.log( item.encodedURI );
 		console.log( newPath );
 		const response	= await axios.post(
-			`/api/${item.isFolder ? 'folder' : 'file'}/cut`,
+			`/api/browse/${item.isFolder ? 'folder' : 'file'}/cut`,
 			{ oldPath: item.encodedURI, newPath },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -209,7 +209,7 @@ class ApiCommunicator
 	async createFolder( directory )
 	{
 		const response	= await axios.post(
-			'/api/folder',
+			'/api/browse/folder',
 			{ directory },
 			{ withCredentials: true }
 		).catch( ( error ) => {

@@ -48,7 +48,7 @@
 				<input type="hidden" name="directory" id="upload-file" :value="currentDirectory">
 			</form>
 
-			<form action="/api/file" method="POST" enctype="multipart/form-data" onchange="this.submit();" class="mt-5">
+			<form action="/api/browse/file" method="POST" enctype="multipart/form-data" onchange="this.submit();" class="mt-5">
 				<input type="file" name="file" id="file" class="hidden" webkitdirectory mozdirectory />
 				<div class="text-center justify-center mx-auto">
 					<label for="file" class="bg-gray-800 p-3 rounded-2xl border border-gray-400 text-gray-200 cursor-pointer hover:text-black hover:bg-gray-300">Upload Folder</label>
@@ -480,7 +480,7 @@ export default {
 				this.dropzone	= new Dropzone(
 					'.dropzone',
 					{
-						url: `/api/file`,
+						url: `/api/browse/file`,
 						method: 'post',
 						parallelUploads: 5,
 						maxFilesize: 40000,

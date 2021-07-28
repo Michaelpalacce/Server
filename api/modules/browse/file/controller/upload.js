@@ -7,7 +7,7 @@ const UploadModel	= require( '../model/upload' );
 const router		= app.Router();
 
 /**
- * @brief	Adds a '/api/file' route with method POST
+ * @brief	Adds a '/api/browse/file' route with method POST
  *
  * @details	Saves the file async
  *
@@ -16,7 +16,7 @@ const router		= app.Router();
  *
  * @return	void
  */
-router.post( '/file', ( event ) => {
+router.post( '/browse/file', ( event ) => {
 	const input	= new UploadInput( event );
 	const model	= new UploadModel( event );
 

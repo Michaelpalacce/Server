@@ -8,7 +8,7 @@ const MoveInput	= require( '../input/move_input' );
 const router	= app.Router();
 
 /**
- * @brief	Adds a '/api/folder/copy' route with method POST
+ * @brief	Adds a '/api/browse/folder/copy' route with method POST
  *
  * @param	{EventRequest} event
  *
@@ -17,7 +17,7 @@ const router	= app.Router();
  *
  * @return	void
  */
-router.post( '/folder/copy',  async ( event ) => {
+router.post( '/browse/folder/copy',  async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 
@@ -27,7 +27,7 @@ router.post( '/folder/copy',  async ( event ) => {
 });
 
 /**
- * @brief	Adds a '/api/folder/cut' route with method POST
+ * @brief	Adds a '/api/browse/folder/cut' route with method POST
  *
  * @param	{EventRequest} event
  *
@@ -36,7 +36,7 @@ router.post( '/folder/copy',  async ( event ) => {
  *
  * @return	void
  */
-router.post( '/folder/cut', async ( event ) => {
+router.post( '/browse/folder/cut', async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 
@@ -45,8 +45,9 @@ router.post( '/folder/cut', async ( event ) => {
 	event.send();
 });
 
+
 /**
- * @brief	Adds a '/api/folder/rename' route with method POST
+ * @brief	Adds a '/api/browse/folder/rename' route with method POST
  *
  * @param	{EventRequest} event
  *
@@ -55,7 +56,7 @@ router.post( '/folder/cut', async ( event ) => {
  *
  * @return	void
  */
-router.post( '/folder/rename', async ( event ) => {
+router.post( '/browse/folder/rename', async ( event ) => {
 	const input	= new MoveInput( event );
 	const model	= new MoveModel( event );
 

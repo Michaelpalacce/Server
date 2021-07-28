@@ -5,7 +5,7 @@ const { encode }	= require( '../../../../main/utils/base_64_encoder' );
 const router		= app.Router();
 
 /**
- * @brief	Adds a new route `/api/user/route`
+ * @brief	Adds a new route `/api/browse/user/route`
  *
  * @details	No Optional or required params
  * 			Returns the user browse route

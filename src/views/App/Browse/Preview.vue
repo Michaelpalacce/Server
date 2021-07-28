@@ -39,7 +39,7 @@ export default {
 		this.itemName	= decodeURIComponent( this.$route.query.name );
 		const item		= this.$route.query.item;
 		const type		= this.$route.query.type;
-		const url		= `/api/file/data?file=${item}`;
+		const url		= `/api/browse/file/data?file=${item}`;
 
 		switch ( type )
 		{
