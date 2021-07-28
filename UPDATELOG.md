@@ -1,3 +1,6 @@
+17.2.0
+- Some frontend fixes, auth fixes and acl fixes
+
 17.1.5
 - Fix to deployment
 

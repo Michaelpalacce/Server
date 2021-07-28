@@ -1,6 +1,6 @@
 {
 	"name": "server-emulator",
-	"version": "17.1.5",
+	"version": "17.2.0",
 	"private": false,
 	"description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
 	"author": {
