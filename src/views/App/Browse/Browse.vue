@@ -217,6 +217,7 @@ export default {
 
 			this.bufferedAction	= '';
 			this.bufferedItems	= [];
+			this.checkedItems	= [];
 		},
 
 		/**
@@ -295,7 +296,7 @@ export default {
 			if ( response.error )
 				return this.browseErrorMessage	= formatErrorMessage( response.error );
 
-			this.browse();
+			await this.browse();
 		},
 
 		/**
@@ -313,7 +314,7 @@ export default {
 			if ( isChecked )
 				this.checkedItems	= this.checkedItems.concat( item );
 			else
-				this.checkedItems	= this.checkedItems.filter( checkedItem => checkedItem.name !== item.name )
+				this.checkedItems	= this.checkedItems.filter( checkedItem => checkedItem.name !== item.name );
 		},
 
 		/**

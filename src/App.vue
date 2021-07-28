@@ -12,7 +12,7 @@ export default {
 	data()
 	{
 		return {
-			loggedIn: !! localStorage.token
+			loggedIn: !! localStorage.loggedIn
 		}
 	},
 	components: {
@@ -26,7 +26,7 @@ export default {
 			this.$router.push( '/' );
 
 		// Handle user credentials change
-		this.emitter.on( 'user.credentials', () => { this.loggedIn	= !! localStorage.token; });
+		this.emitter.on( 'user.credentials', () => { this.loggedIn	= !! localStorage.loggedIn; });
 	}
 }
 </script>

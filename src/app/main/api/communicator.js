@@ -21,7 +21,7 @@ class ApiCommunicator
 	 */
 	hasCredentials()
 	{
-		return !! localStorage.token;
+		return !! localStorage.loggedIn;
 	}
 
 	/**
@@ -41,8 +41,8 @@ class ApiCommunicator
 		if ( response.message )
 			throw response;
 
-		localStorage.token	= response.headers.token;
-		localStorage.name	= username;
+		localStorage.loggedIn	= response.status === 200;
+		localStorage.name		= username;
 
 		return response;
 	}
@@ -60,7 +60,7 @@ class ApiCommunicator
 			{ withCredentials: true }
 		).catch(() => {});
 
-		localStorage.removeItem( 'token' );
+		localStorage.removeItem( 'loggedIn' );
 		localStorage.removeItem( 'name' );
 
 		return response;
@@ -140,7 +140,7 @@ class ApiCommunicator
 	async renameItem( item, newPath )
 	{
 		const response	= await axios.post(
-			`${this.url}/api/${item.isFolder ? 'folder' : 'file'}/rename`,
+			`/api/${item.isFolder ? 'folder' : 'file'}/rename`,
 			{ oldPath: item.encodedURI, newPath },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -163,7 +163,7 @@ class ApiCommunicator
 	async copyItem( item, newPath )
 	{
 		const response	= await axios.post(
-			`${this.url}/api/${item.isFolder ? 'folder' : 'file'}/copy`,
+			`/api/${item.isFolder ? 'folder' : 'file'}/copy`,
 			{ oldPath: item.encodedURI, newPath },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -185,8 +185,11 @@ class ApiCommunicator
 	 */
 	async cutItem( item, newPath )
 	{
+		console.log( item );
+		console.log( item.encodedURI );
+		console.log( newPath );
 		const response	= await axios.post(
-			`${this.url}/api/${item.isFolder ? 'folder' : 'file'}/cut`,
+			`/api/${item.isFolder ? 'folder' : 'file'}/cut`,
 			{ oldPath: item.encodedURI, newPath },
 			{ withCredentials: true }
 		).catch( ( error ) => {
@@ -384,16 +387,6 @@ class ApiCommunicator
 		});
 
 		return response.data;
-	}
-
-	/**
-	 * @brief	Gets the authentication headers
-	 *
-	 * @return	Object
-	 */
-	getAuthHeaders()
-	{
-		return { token: localStorage.token };
 	}
 
 	/**
