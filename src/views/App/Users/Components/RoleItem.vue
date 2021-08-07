@@ -1,0 +1,39 @@
+<template>
+	<div class="flex
+				px-4 py-6 md:py-4
+				md:block w-full
+				border-b border-gray-600 hover:bg-gray-600 text-white
+				cursor-pointer"
+				@click="$emit( 'on-click' )"
+	>
+		<span class="fa fa-tag md:hidden fa-3x w-1/6" ></span>
+
+		<div class="flex flex-wrap md:block md:w-full w-5/6 text-xs md:text-base px-5 md:px-0">
+			<div class="w-full md:w-full inline-block">
+				<p class="truncate">
+					<i class="fa fa-tag mr-2 hidden md:inline-block" ></i>
+					<span class="font-medium text-base">{{name}}</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+export default {
+	name:	'RoleItem',
+	data	: function ()
+	{
+		return {
+			name	: this.initialName,
+		};
+	},
+	props:	{
+		initialName: String
+	}
+}
+</script>
+
+<style scoped>
+
+</style>
