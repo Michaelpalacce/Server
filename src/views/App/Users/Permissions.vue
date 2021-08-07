@@ -40,7 +40,9 @@ export default {
 												"type": "ALLOW"
 											}
 										]
-									}
+									},
+									undefined,
+									4
 								),
 			permissions			: ''
 		};

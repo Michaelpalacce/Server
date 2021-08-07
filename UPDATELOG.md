@@ -1,4 +1,7 @@
 17.3.0
+- Added visualization for roles
+
+17.3.0
 - Added some fixes for permissions, where method was verified last and it should be done first
 - Added some fixes in the user permissions to set a default example how permissions should look like
 - Started working on Roles and adding roles ( currently only listing is completed and adding is WIP )
