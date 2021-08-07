@@ -22,20 +22,23 @@
 
 		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
 
-		<BrowseItem
-			v-for="item in items"
+		<transition name="browse">
+			<div v-if="items !== null">
+				<BrowseItem
+					v-for="item in items"
 
-			:key="item.name"
-			:initialName="item.name"
-			:isFolder="item.isDir"
-			:fileType="item.fileType"
-			:initialEncodedURI="item.encodedURI"
-			:previewAvailable="item.previewAvailable"
-			:size="item.size"
-			@on-click="onItemClick( item )"
-			@on-checked="onItemChecked"
-		/>
-
+					:key="item.name"
+					:initialName="item.name"
+					:isFolder="item.isDir"
+					:fileType="item.fileType"
+					:initialEncodedURI="item.encodedURI"
+					:previewAvailable="item.previewAvailable"
+					:size="item.size"
+					@on-click="onItemClick( item )"
+					@on-checked="onItemChecked"
+				/>
+			</div>
+		</transition>
 	</div>
 	<div v-else>
 		<Back @click="upload = ! canBrowse; uploadErrorMessage = ''" class="mb-5"/>
@@ -77,7 +80,7 @@ export default {
 
 	data: () => {
 		return {
-			items				: [],
+			items				: null,
 			nextToken			: '',
 			hasMore				: true,
 			currentDirectory	: '',
@@ -541,6 +544,16 @@ export default {
 				for ( const promise of promises )
 					if ( typeof promise.data.error !== 'undefined' && typeof promise.data.error.message !== 'undefined' )
 					{
+						if ( typeof promise.data.error.message.itemName === 'undefined' )
+						{
+							this.browseErrorMessage	= `Unknown error ( ${promise.data.error.code} ), refresh in 2 seconds!`;
+
+							setTimeout(() => {
+								this.$router.go();
+							}, 2000 );
+							return;
+						}
+
 						itemsNotDeleted.push( promise.data.error.message.itemName );
 						errors.push( `ITEM: ${promise.data.error.message.itemName}: ${promise.data.error.message.error}` );
 					}
@@ -609,4 +622,14 @@ export default {
 
 <style scoped>
 @import './../../../style/dropzone.css';
+
+.browse-enter-active,
+.browse-leave-active {
+	transition: opacity .25s ease;
+}
+
+.browse-enter-from,
+.browse-leave-to {
+	opacity: 0;
+}
 </style>

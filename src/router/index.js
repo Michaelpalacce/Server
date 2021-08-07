@@ -5,6 +5,7 @@ import Preview								from '@/views/App/Browse/Preview'
 import Dashboard							from '@/views/App/Dashboard/Dashboard'
 import Users								from '@/views/App/Users/Users'
 import UsersUser							from '@/views/App/Users/User'
+import UsersRole							from '@/views/App/Users/Role'
 import User									from '@/views/App/User/User'
 import Roles								from '@/views/App/Users/Roles'
 import Permissions							from '@/views/App/Users/Permissions'
@@ -39,6 +40,11 @@ const routes	= [
 		path: '/user/:username',
 		name: 'users-user',
 		component: UsersUser
+	},
+	{
+		path: '/user/roles/:role',
+		name: 'users-role',
+		component: UsersRole
 	},
 	{
 		path: '/user/:username/roles',

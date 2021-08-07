@@ -114,9 +114,9 @@ app.add(( event ) => {
 	{
 		const type	= rule.type || 'DENY';
 
-		if ( type === 'DENY' && er.router.matchRoute( event.path, rule.route ) && er.router.matchMethod( event.method, rule.methods || '' ) )
+		if ( type === 'DENY' && er.router.matchMethod( event.method, rule.method || '' ) && er.router.matchRoute( event.path, rule.route ) )
 			throw { code: 'app.security.forbidden', message: `You don\'t have permission to ${event.method} ${event.path}` }
-		else if ( type === 'ALLOW' && er.router.matchRoute( event.path, rule.route ) && er.router.matchMethod( event.method, rule.methods || '' ) )
+		else if ( type === 'ALLOW' && er.router.matchMethod( event.method, rule.method || '' ) && er.router.matchRoute( event.path, rule.route ) )
 			break;
 	}
 

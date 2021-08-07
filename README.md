@@ -74,23 +74,33 @@ This will move your files to os.tmpDir.
 - Examples Permissions that deny access to any route starting with /users with any method and allowing everything else:
 ~~~json
 {
-  "route": [
-    {
-      "type": "DENY",
-      "route": {
-        "regexp": {
-          "source": "^\\/users?(.+)",
-          "flags": ""
-        }
+	"route": [
+		{
+			"type": "ALLOW",
+			"route": {
+          "regexp": {
+              "source": "^\/api\/browse?(.+)",
+              "flags": ""
+          }
       },
-      "method": ""
-    },
-    {
-      "type": "ALLOW",
-      "route": "",
-      "method": ""
-    }
-  ]
+			"method": ""
+		},
+		{
+			"type": "ALLOW",
+			"route": "/api/user",
+			"method": "DELETE"
+		},
+		{
+			"type": "ALLOW",
+			"route": "/api/user/password",
+			"method": "PUT"
+		},
+		{
+			"type": "DENY",
+			"route": "",
+			"method": ""
+		}
+	]
 }
 ~~~
 - When editing the permissions and you want to set a regexp as a route follow the structure given below. It is important

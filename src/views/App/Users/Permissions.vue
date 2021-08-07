@@ -11,6 +11,7 @@
 		<textarea v-model="permissions" class="w-full h-64 md:w-2/3 md:h-96 mx-auto my-12 block bg-gray-800 p-5 text-white" cols="50" rows="15"></textarea>
 		<div class="flex justify-center">
 			<Button @click="changePermissions" text="Change"/>
+			<Button @click="permissions = examplePermissions" text="Set example" class="ml-5"/>
 		</div>
 	</div>
 </template>
@@ -28,9 +29,20 @@ export default {
 	components: { Back, Error, Button },
 	data: () => {
 		return {
-			errorMessage	: '',
-			user			: null,
-			permissions		: ''
+			errorMessage		: '',
+			user				: null,
+			examplePermissions:	JSON.stringify(
+									{
+										"route": [
+											{
+												"route": "/api/test",
+												"method": "GET",
+												"type": "ALLOW"
+											}
+										]
+									}
+								),
+			permissions			: ''
 		};
 	},
 

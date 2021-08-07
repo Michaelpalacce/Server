@@ -61,7 +61,6 @@ import TitleSection			from "@/views/App/Users/Components/TitleSection";
 import communicator			from "@/app/main/api/communicator";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Error				from "@/views/App/Components/Error";
-import User					from "@/../api/main/user/user"
 import Message from "@/views/App/Components/Message";
 
 export default {

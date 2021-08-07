@@ -390,6 +390,26 @@ class ApiCommunicator
 	}
 
 	/**
+	 * @brief	Creates a new role
+	 *
+	 * @todo	FINISH!
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async addRole()
+	{
+		const response	= await axios.post(
+			`/api/users/role`,
+			{  },
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
 	 * @brief	Returns either an error response or the actual response if it was 2xx
 	 *
 	 * @param	{Object} response

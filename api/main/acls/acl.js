@@ -76,7 +76,7 @@ class Acl
 		if ( roles === null )
 		{
 			roles	= this.roles;
-			await this.dataStore.set( ROLES_KEY, formatPermissions( roles ) );
+			await this.flushRoles();
 		}
 
 		this.roles	= roles;
@@ -105,6 +105,37 @@ class Acl
 	getRoles()
 	{
 		return this.roles;
+	}
+
+	/**
+	 * @brief	Adds a new role
+	 *
+	 * @throws	If the role name already exists
+	 *
+	 * @param	{Array} role - The role to be added
+	 */
+	async addRole( role )
+	{
+		const roleName	= role.name;
+
+		if ( typeof this.roles[roleName] !== 'undefined' )
+		{
+			this.roles[roleName]	= role;
+			await this.flushRoles();
+		}
+		else
+			throw { code: 'app.acl.roleExists', status: 400 };
+
+	}
+
+	/**
+	 * @brief	Flushes the roles to the cache
+	 *
+	 * @return	void
+	 */
+	async flushRoles()
+	{
+		await this.dataStore.set( ROLES_KEY, formatPermissions( this.roles ) );
 	}
 
 	/**

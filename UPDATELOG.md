@@ -1,3 +1,9 @@
+17.3.0
+- Added some fixes for permissions, where method was verified last and it should be done first
+- Added some fixes in the user permissions to set a default example how permissions should look like
+- Started working on Roles and adding roles ( currently only listing is completed and adding is WIP )
+- Small changes ( added some animations )
+
 17.2.0
 - Some frontend fixes, auth fixes and acl fixes
 
@@ -197,7 +203,7 @@
 - Updated readme a bit
 - Updated the rate limits
 - Users will NOT expire anymore
-- Users are now stored separately 
+- Users are now stored separately
 
 11.1.0
 - Improved loading to have directories loaded first and then files
@@ -226,7 +232,7 @@
 - Can now use the terminal and add users even if the security is disabled
 
 9.1.1
-- Implemented new EventRequest version with the improved Data Server 
+- Implemented new EventRequest version with the improved Data Server
 
 9.1.0
 - Implemented new EventRequest version to fix some issues with the data server
@@ -235,7 +241,7 @@
 - Users are now flushed more often
 - Added TERMINAL_TO_SPAWN option
 - The Server on error is now handled gracefully
-- Fixed uploading of duplicates 
+- Fixed uploading of duplicates
 
 9.0.1
 - Font size is smaller
@@ -266,7 +272,7 @@
 - Forgot to update event_request
 
 8.9.0
-- Implemented the newest version of event_request to add audio streams 
+- Implemented the newest version of event_request to add audio streams
 
 8.8.1
 - Implemented the newest version of event_request to add more stream types
@@ -275,10 +281,10 @@
 - Added a logout functionality
 - Implemented the newest version of event_request to fix the session ttl and the set cookie in general
 - Added a User section that for now only lists the users
-- You can now see the IP section from anywhere and use it from anywhere 
+- You can now see the IP section from anywhere and use it from anywhere
 - The login page is now also black
-- Updated README 
-- Started working on the users functionality and added a UserManager in the backend 
+- Updated README
+- Started working on the users functionality and added a UserManager in the backend
 
 8.7.1
 - Updated README
@@ -314,7 +320,7 @@
 - Preview of files is now shown correctly
 - Removed the unused logo
 - Moved the add folder button to the side
-- Modal elements will now focus when displayed 
+- Modal elements will now focus when displayed
 - Improved design and removed unused styles
 
 8.3.0
@@ -345,7 +351,7 @@
 - Reworked the routes
 
 8.2.0
-- Updates to the front end JS to be in classes and better structured 
+- Updates to the front end JS to be in classes and better structured
 
 8.1.1
 - Download for files containing a comma fix
@@ -371,7 +377,7 @@
 - Changed the name of the project to server-emulator
 - Fixed the ip's not showing the port
 - Added ability to disable the security
-- 
+-
 
 7.2.0
 - Works with the newest version of the EventRequest

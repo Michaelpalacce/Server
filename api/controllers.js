@@ -1,5 +1,7 @@
 'use strict';
 
+const path		= require( 'path' );
+const fs		= require( 'fs' );
 const app		= require( 'event_request' )();
 const apiRouter	= app.Router();
 
@@ -35,15 +37,11 @@ apiRouter.add( require( './modules/users/controller/users' ) );
 // Users Users Roles section
 apiRouter.add( require( './modules/users/controller/roles' ) );
 
-
 // USER MODULE
 
 // User User Management section
 apiRouter.add( require( './modules/user/controller/user' ) );
 
-
-const path			= require( 'path' );
-const fs			= require( 'fs' );
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 // Backend
