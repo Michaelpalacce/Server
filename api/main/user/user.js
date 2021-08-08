@@ -237,6 +237,16 @@ class User
 	}
 
 	/**
+	 * @brief	Checks if a user is of a specific role
+	 *
+	 * @param	{String} roleName
+	 */
+	is( roleName )
+	{
+		return this.roles.indexOf( roleName ) !== -1;
+	}
+
+	/**
 	 * @brief	Returns the password
 	 *
 	 * @return	{String}

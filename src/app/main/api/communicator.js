@@ -392,15 +392,54 @@ class ApiCommunicator
 	/**
 	 * @brief	Creates a new role
 	 *
-	 * @todo	FINISH!
+	 * @param	{String} name
+	 * @param	{Array} permissions
 	 *
 	 * @return	{Promise<Object>}
 	 */
-	async addRole()
+	async addRole( name, permissions )
 	{
 		const response	= await axios.post(
-			`/api/users/role`,
-			{  },
+			`/api/users/role`, { role: { name, permissions } },
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Creates a new role
+	 *
+	 * @param	{String} name
+	 * @param	{Array} permissions
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async updateRole( name, permissions )
+	{
+		const response	= await axios.put(
+			`/api/users/role/${name}`, { permissions },
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Deletes a role
+	 *
+	 * @param	{String} name
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async deleteRole( name )
+	{
+		const response	= await axios.delete(
+			`/api/users/role/${name}`, {},
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;

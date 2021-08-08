@@ -1,3 +1,12 @@
+17.5.0
+- Fixed a lot of permissions and role based bugs, all should work smoothly now.
+- Added adding new roles
+- Added deletion of roles not in use ( besides root )
+- Added role changing ( besides root )
+- Newest event_request update
+- Improved the initial bootstrap process.
+- Added a Refresh button on the Users page for users and roles
+
 17.3.0
 - Added visualization for roles
 

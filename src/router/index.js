@@ -37,22 +37,27 @@ const routes	= [
 		component: Users
 	},
 	{
-		path: '/user/:username',
+		path: '/users/:username',
 		name: 'users-user',
 		component: UsersUser
 	},
 	{
-		path: '/user/roles/:role',
+		path: '/users/roles/addNewRole',
+		name: 'users-new-role',
+		component: UsersRole
+	},
+	{
+		path: '/users/roles/:role',
 		name: 'users-role',
 		component: UsersRole
 	},
 	{
-		path: '/user/:username/roles',
+		path: '/users/:username/roles',
 		name: 'user-roles',
 		component: Roles
 	},
 	{
-		path: '/user/:username/permissions',
+		path: '/users/:username/permissions',
 		name: 'user-permissions',
 		component: Permissions
 	},

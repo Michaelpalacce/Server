@@ -26,13 +26,15 @@ class NewRoleInput extends Input
 			{
 				role: {
 					name		: 'filled||string',
-					permissions	: [
-						{
-							type: 'filled||string',
-							method: 'filled||string',
-							route: 'filled||string',
-						}
-					],
+					permissions	: {
+						route: [
+							{
+								type: 'filled||string',
+								method: 'optional||string',
+								route: 'optional'
+							}
+						]
+					}
 				}
 			}
 		);
@@ -47,6 +49,6 @@ class NewRoleInput extends Input
 	}
 }
 
-NewRoleInput.ROLE_KEY	= 'username';
+NewRoleInput.ROLE_KEY	= 'role';
 
 module.exports			= NewRoleInput;

@@ -1,34 +1,38 @@
 <template>
-	<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mx-auto w-4/5 my-5"/>
+	<div class="m-5">
+		<Menu @refresh-click="loadData"/>
 
-	<transition name="view">
-		<div class="flex" v-if="users.length > 0 && roles.length > 0">
-			<div class="rounded-t-lg p-5 w-1/2" v-if="users.length !== 0">
-				<p class="mx-auto text-center text-3xl font-bold text-white mb-5"> Users </p>
-				<UserItem
-					v-for="user in users"
+		<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mx-auto w-4/5 my-5"/>
 
-					:key="user"
-					:initialName="user"
-					@on-click="userClicked( user )"
-				/>
+		<transition name="view">
+			<div class="flex" v-if="users.length > 0 && roles.length > 0">
+				<div class="rounded-t-lg p-5 w-1/2" v-if="users.length !== 0">
+					<p class="mx-auto text-center text-3xl font-bold text-white mb-5"> Users </p>
+					<UserItem
+						v-for="user in users"
 
-				<Button text="Add new User" @click="addNewUser" class="mt-5"/>
+						:key="user"
+						:initialName="user"
+						@on-click="userClicked( user )"
+					/>
+
+					<Button text="Add new User" @click="addNewUser" class="mt-5"/>
+				</div>
+				<div class="rounded-t-lg p-5 w-1/2">
+					<p class="mx-auto text-center text-3xl font-bold text-white mb-5"> Roles </p>
+					<RoleItem
+						v-for="role in roles"
+
+						:key="role"
+						:initialName="role"
+						@on-click="roleClicked( role )"
+					/>
+
+					<Button text="Add new Role" @click="addNewRole" class="mt-5"/>
+				</div>
 			</div>
-			<div class="rounded-t-lg p-5 w-1/2">
-				<p class="mx-auto text-center text-3xl font-bold text-white mb-5"> Roles </p>
-				<RoleItem
-					v-for="role in roles"
-
-					:key="role"
-					:initialName="role"
-					@on-click="roleClicked( role )"
-				/>
-
-				<Button text="Add new Role" @click="addNewRole" class="mt-5"/>
-			</div>
-		</div>
-	</transition>
+		</transition>
+	</div>
 </template>
 
 <script>
@@ -38,7 +42,7 @@ import RoleItem				from "./Components/RoleItem"
 import Error				from "@/views/App/Components/Error";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Button				from "@/views/App/Components/Button";
-
+import Menu					from "./Components/Menu.vue";
 
 export default {
 	name: 'Users',
@@ -54,16 +58,30 @@ export default {
 		Button,
 		Error,
 		UserItem,
-		RoleItem
+		RoleItem,
+		Menu
 	},
 
 	mounted()
 	{
-		this.loadUsers();
-		this.loadRoles();
+		this.loadData();
 	},
 
 	methods: {
+		/**
+		 * @brief	Loads the users and roles
+		 *
+		 * @return	void
+		 */
+		loadData()
+		{
+			this.users	= [];
+			this.roles	= [];
+
+			this.loadUsers();
+			this.loadRoles();
+		},
+
 		/**
 		 * @brief	Loads and displays all the users
 		 *
@@ -145,9 +163,14 @@ export default {
 			this.users.push( username );
 		},
 
+		/**
+		 * @brief	Takes the user to the add new role page
+		 *
+		 * @return	void
+		 */
 		async addNewRole()
 		{
-			alert( 'WIP' );
+			this.$router.push( { name: 'users-new-role' } );
 		}
 	}
 }

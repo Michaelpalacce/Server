@@ -1,5 +1,5 @@
 <template>
-	<div :class="`inline-block cursor-pointer py-2 px-7 rounded-3xl ${hasBorder ? 'border' : ''}
+	<div :class="`inline-block cursor-pointer py-2 px-4 rounded-3xl ${hasBorder ? 'border' : ''}
 									${borderColor} ${bgColor} ${hoverBgColor} ${hoverTextColor} ${textColor}
 									focus:outline-none ${textSize}`">{{ text }}</div>
 </template>

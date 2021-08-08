@@ -4,6 +4,7 @@
 const User			= require( './user' );
 const DataServer	= require( 'event_request/server/components/caching/data_server' );
 const path			= require( 'path' );
+const Acl			= require( '../acls/acl' );
 
 const USER_KEY		= 'USERS_DATA';
 const persistPath	= path.parse( require.main.filename ).dir;
@@ -24,8 +25,6 @@ class UserManager
 			gcInterval		: 86400	// One day
 		});
 		this.users				= null;
-
-		this.fetchUsers();
 
 		this.flushUserInterval	= setInterval(() => {
 			this.flushUsers();
@@ -72,6 +71,9 @@ class UserManager
 					clearInterval( this.flushUserInterval );
 					throw new Error( 'Error while fetching users' );
 				}
+
+				const roles	= user.getRoles().filter( role => Acl.roleExists( role ) );
+				user.setRoles( roles );
 
 				this.users[user.getUsername()]	= user;
 			}

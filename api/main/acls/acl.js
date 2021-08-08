@@ -59,7 +59,6 @@ class Acl
 	constructor()
 	{
 		this.dataStore	= process.cachingServer;
-		this.roles		= DEFAULT_ROLES;
 
 		this._fetchRoles();
 	}
@@ -75,7 +74,7 @@ class Acl
 
 		if ( roles === null )
 		{
-			roles	= this.roles;
+			roles	= DEFAULT_ROLES;
 			await this.flushRoles();
 		}
 
@@ -112,20 +111,69 @@ class Acl
 	 *
 	 * @throws	If the role name already exists
 	 *
-	 * @param	{Array} role - The role to be added
+	 * @param	{Object} role - The role to be added
+	 *
+	 * @return	void
 	 */
 	async addRole( role )
 	{
 		const roleName	= role.name;
 
-		if ( typeof this.roles[roleName] !== 'undefined' )
+		if ( ! this.roleExists( roleName ) )
 		{
 			this.roles[roleName]	= role;
+
 			await this.flushRoles();
 		}
 		else
 			throw { code: 'app.acl.roleExists', status: 400 };
+	}
 
+	/**
+	 * @brief	Updates an existing role
+	 *
+	 * @throws	If the role name does not exist
+	 *
+	 * @param	{String} name - The role name
+	 * @param	{Array} permissions - The role permissions
+	 *
+	 * @return	void
+	 */
+	async updateRole( name, permissions )
+	{
+		if ( this.roleExists( name ) )
+		{
+			this.roles[name]	= { name, permissions };
+
+			await this.flushRoles();
+		}
+		else
+			throw { code: 'app.acl.roleDoesNotExist', status: 400 };
+	}
+
+	/**
+	 * @brief	Deletes a given role
+	 *
+	 * @param	{String} roleName
+	 *
+	 * @return	void
+	 */
+	async deleteRole( roleName )
+	{
+		if ( this.roleExists( roleName ) )
+			delete this.roles[roleName];
+	}
+
+	/**
+	 * @brief	Deletes a given role
+	 *
+	 * @param	{String} roleName
+	 *
+	 * @return	{Boolean}
+	 */
+	roleExists( roleName )
+	{
+		return typeof this.roles[roleName] !== 'undefined';
 	}
 
 	/**

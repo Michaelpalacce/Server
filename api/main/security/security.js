@@ -6,13 +6,14 @@ const UserManager	= require( '../user/user_manager' );
 const Acl			= require( '../acls/acl' );
 const app			= er.Router();
 const crypto		= require( 'crypto' );
+let isBootstrapped	= false;
 
-/**
- * @brief	Wait a bit so ACL can fetch roles
- *
- * @details	Sets the root user or updates him back to default settings
- */
-setTimeout(()=>{
+async function bootstrap()
+{
+	if ( isBootstrapped )
+		return;
+
+	isBootstrapped	= true;
 	const userData	= {
 		username	: process.env.ADMIN_USERNAME,
 		password	: crypto.createHash( 'sha256' ).update( process.env.ADMIN_PASSWORD ).digest( 'hex' ),
@@ -21,12 +22,14 @@ setTimeout(()=>{
 		metadata	: {}
 	};
 
+	await UserManager.fetchUsers();
+
 	// Recreate the Root user
 	if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
 		Acl.decorateUserWithPermissions( UserManager.set( userData ) );
 	else
 		Acl.decorateUserWithPermissions( UserManager.update( userData ) );
-}, 200 );
+}
 
 /**
  * @brief	Init middleware for the security
@@ -35,6 +38,7 @@ setTimeout(()=>{
  * 			Sets the UserManager in the eventRequest
  */
 app.add( async ( event ) => {
+	await bootstrap();
 	await event.initSession();
 	event.$userManager	= UserManager;
 
@@ -112,11 +116,13 @@ app.add(( event ) => {
 
 	for ( const rule of permissions.route )
 	{
-		const type	= rule.type || 'DENY';
+		const type		= rule.type || 'DENY';
+		const method	= rule.method || '';
+		const route		= rule.route || '';
 
-		if ( type === 'DENY' && er.router.matchMethod( event.method, rule.method || '' ) && er.router.matchRoute( event.path, rule.route ) )
+		if ( type === 'DENY' && er.router.matchMethod( event.method, method ) && er.router.matchRoute( event.path, route ) )
 			throw { code: 'app.security.forbidden', message: `You don\'t have permission to ${event.method} ${event.path}` }
-		else if ( type === 'ALLOW' && er.router.matchMethod( event.method, rule.method || '' ) && er.router.matchRoute( event.path, rule.route ) )
+		else if ( type === 'ALLOW' && er.router.matchMethod( event.method, method ) && er.router.matchRoute( event.path, route ) )
 			break;
 	}
 
