@@ -287,7 +287,7 @@ export default {
 				this.permissions	= JSON.stringify( JSON.parse( this.user.getFormattedUserPermissions() ), undefined, 2 );
 
 				if ( this.username !== this.user.getUsername() )
-					await this.$router.replace( { name: 'user', params: { username: this.user.getUsername() } } )
+					await this.$router.replace( { name: 'users-user', params: { username: this.user.getUsername() } } )
 
 				this.username	= this.user.getUsername();
 			}

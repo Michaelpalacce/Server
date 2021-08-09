@@ -1,3 +1,6 @@
+17.6.0
+- Fixed a bug when changing a user's username
+
 17.5.0
 - Fixed a lot of permissions and role based bugs, all should work smoothly now.
 - Added adding new roles
