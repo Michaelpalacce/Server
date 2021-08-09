@@ -1,6 +1,7 @@
 'use strict';
 
 const BrowseMetadata											= require( './metadata/browse' );
+const DashboardMetadata											= require( './metadata/dashboard' );
 const { formatPermissions, parsePermissions, mixPermissions }	= require( '../acls/permissions_helper' );
 
 /**
@@ -8,9 +9,7 @@ const { formatPermissions, parsePermissions, mixPermissions }	= require( '../acl
  *
  * @var		{Object}
  */
-const metadataPool		= {
-	'BrowseMetadata'	: BrowseMetadata
-}
+const metadataPool		= { BrowseMetadata,	DashboardMetadata };
 
 /**
  * @brief	Holds user information
@@ -299,6 +298,18 @@ class User
 
 		if ( ! metadata.hasRoute() )
 			metadata.setDefaultRoute();
+
+		return metadata;
+	}
+
+	/**
+	 * @brief	Returns the DashboardMetadata and sets it up if it is not already setUp
+	 *
+	 * @returns	{DashboardMetadata}
+	 */
+	getDashboardMetadata()
+	{
+		const metadata	= this.getMetadata( 'DashboardMetadata' );
 
 		return metadata;
 	}

@@ -42,6 +42,12 @@ apiRouter.add( require( './modules/users/controller/roles' ) );
 // User User Management section
 apiRouter.add( require( './modules/user/controller/user' ) );
 
+// DASHBOARD MODULE
+
+// Dashboard fetch section
+apiRouter.add( require( './modules/dashboard/controllers/view' ) );
+
+
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 // Backend

@@ -16,7 +16,6 @@
 
 <script>
 import BrowseItem	from "@/views/App/Browse/Components/BrowseItem";
-import communicator	from "@/app/main/api/communicator";
 import axios		from "axios";
 
 export default {

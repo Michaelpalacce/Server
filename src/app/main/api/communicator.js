@@ -449,6 +449,23 @@ class ApiCommunicator
 	}
 
 	/**
+	 * @brief	Gets all the dashboard information for the user
+	 *
+	 * @returns	{Promise<Object>}
+	 */
+	async getDashboard()
+	{
+		const response	= await axios.get(
+			`/api/dashboard`,
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
 	 * @brief	Returns either an error response or the actual response if it was 2xx
 	 *
 	 * @param	{Object} response
