@@ -97,7 +97,7 @@ export default {
 			this.username	= localStorage.name || null;
 
 			if ( this.username === null )
-				return this.$router.push( { name: 'users' } );
+				this.logout();
 		},
 
 		/**
