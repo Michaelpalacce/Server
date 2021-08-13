@@ -1,3 +1,10 @@
+18.0.0
+- Reworked how the menus are displayed
+- Dashboard browse favorites are fully functional now
+- Fixed metadata being deleted cause of incorrect user handling
+- Users are saved more often and with bigger precision
+- Components are now fetched async on startup correctly
+
 17.6.0
 - Fixed a bug when changing a user's username
 

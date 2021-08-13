@@ -4,14 +4,26 @@
 const er			= require( 'event_request' )();
 const UserManager	= require( '../user/user_manager' );
 const Acl			= require( '../acls/acl' );
-const app			= er.Router();
 const crypto		= require( 'crypto' );
+const app			= er.Router();
 let isBootstrapped	= false;
 
+/**
+ * @brief	Bootstrap the project
+ *
+ * @details	First wait for the ACL roles to be fetched, then wait for the UserManager to fetch the users,
+ * 			validate the root user and reset username, password, roles and permissions if needed
+ * 			root metadata is kept
+ *
+ * @return	{Promise<void>}
+ */
 async function bootstrap()
 {
 	if ( isBootstrapped )
 		return;
+
+	await Acl.fetchRoles();
+	await UserManager.fetchUsers();
 
 	isBootstrapped	= true;
 	const userData	= {
@@ -22,14 +34,18 @@ async function bootstrap()
 		metadata	: {}
 	};
 
-	await UserManager.fetchUsers();
-
 	// Recreate the Root user
 	if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
 		Acl.decorateUserWithPermissions( UserManager.set( userData ) );
 	else
+	{
+		const rootUser		= UserManager.get( process.env.ADMIN_USERNAME )
+		userData.metadata	= rootUser.getUserData().metadata;
 		Acl.decorateUserWithPermissions( UserManager.update( userData ) );
+	}
 }
+
+bootstrap();
 
 /**
  * @brief	Init middleware for the security
@@ -38,7 +54,6 @@ async function bootstrap()
  * 			Sets the UserManager in the eventRequest
  */
 app.add( async ( event ) => {
-	await bootstrap();
 	await event.initSession();
 	event.$userManager	= UserManager;
 

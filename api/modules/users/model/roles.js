@@ -29,7 +29,6 @@ class Roles
 	{
 		const roleName	= input.getRoleName();
 
-		console.log(roleName);
 		if ( roleName === 'root' )
 			throw { code: 'app.users.role.cannotUpdateRoot' };
 

@@ -185,9 +185,6 @@ class ApiCommunicator
 	 */
 	async cutItem( item, newPath )
 	{
-		console.log( item );
-		console.log( item.encodedURI );
-		console.log( newPath );
 		const response	= await axios.post(
 			`/api/browse/${item.isFolder ? 'folder' : 'file'}/cut`,
 			{ oldPath: item.encodedURI, newPath },
@@ -457,6 +454,45 @@ class ApiCommunicator
 	{
 		const response	= await axios.get(
 			`/api/dashboard`,
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Adds a new favorite browse item to the dashboard
+	 *
+	 * @param	{Object} item
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async addFavoriteBrowseItem( item )
+	{
+		const response	= await axios.post(
+			`/api/browse/file/favorite`,
+			{ item },
+			{ withCredentials: true }
+		).catch( ( error ) => {
+			return error.response;
+		});
+
+		return response.data;
+	}
+
+	/**
+	 * @brief	Deletes a favorite browse item from the dashboard
+	 *
+	 * @param	{String} id
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async deleteFavoriteBrowseItem( id )
+	{
+		const response	= await axios.delete(
+			`/api/browse/file/favorite/${id}`,
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;

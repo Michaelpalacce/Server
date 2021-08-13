@@ -1,6 +1,6 @@
 <template>
 	<div class="m-5">
-		<Menu @refresh-click="loadData"/>
+		<GeneralMenu :elements="menu" @refresh-click="loadData"/>
 
 		<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mx-auto w-4/5 my-5"/>
 
@@ -42,7 +42,7 @@ import RoleItem				from "./Components/RoleItem"
 import Error				from "@/views/App/Components/Error";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Button				from "@/views/App/Components/Button";
-import Menu					from "./Components/Menu.vue";
+import GeneralMenu			from "@/views/App/Components/GeneralMenu";
 
 export default {
 	name: 'Users',
@@ -50,16 +50,24 @@ export default {
 		return {
 			users			: [],
 			roles			: [],
-			errorMessage	: ''
+			errorMessage	: '',
+			menu			: [
+				{
+					text		: 'Refresh',
+					eventName	: 'refresh-click',
+					shown		: true,
+					isDisabled	: false
+				}
+			]
 		};
 	},
 
 	components: {
+		GeneralMenu,
 		Button,
 		Error,
 		UserItem,
-		RoleItem,
-		Menu
+		RoleItem
 	},
 
 	mounted()

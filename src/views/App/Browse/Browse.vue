@@ -1,12 +1,7 @@
 <template>
 	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64" v-if="upload === false">
-		<Menu
-			:renameDisabled="renameDisabled"
-			:downloadDisabled="downloadDisabled"
-			:deleteDisabled="deleteDisabled"
-			:copyDisabled="copyDisabled"
-			:cutDisabled="cutDisabled"
-			:showPaste="bufferedItems.length !== 0"
+		<GeneralMenu
+			:elements="menu"
 			@upload-click="showUpload"
 			@refresh-click="browse( currentDirectory )"
 			@delete-click="deleteCheckedItems"
@@ -16,6 +11,7 @@
 			@cut-click="onCutClick"
 			@paste-click="onPasteClick"
 			@download-click="onDownloadClick"
+			@favorite-click="onFavoriteClick"
 		/>
 		<div class="my-2 mx-auto justify-center text-center text-xl font-medium tracking-wide">{{decodedCurrentDir}}</div>
 		<Back @click="browse( previousDirectory )"/>
@@ -64,21 +60,82 @@
 
 <script>
 import BrowseItem			from "@/views/App/Browse/Components/BrowseItem";
-import MenuElement			from "@/views/App/Browse/Components/MenuComponents/MenuElement";
+import MenuElement			from "@/views/App/Components/SubComponent/MenuElement";
 import communicator			from "@/app/main/api/communicator";
 import { encode, decode }	from '@/../api/main/utils/base_64_encoder';
 import Dropzone				from '@/app/lib/dropzone';
-import Menu					from "@/views/App/Browse/Components/Menu";
 import Error				from "@/views/App/Components/Error";
 import Back					from "@/views/App/Components/Back";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Message				from "@/views/App/Components/Message";
+import GeneralMenu			from "@/views/App/Components/GeneralMenu";
 
 export default {
 	name: 'Browse',
-	components: {Message, Error, Menu, BrowseItem, MenuElement, Back },
+	components: { GeneralMenu, Message, Error, BrowseItem, MenuElement, Back },
 
 	data: () => {
+		const refreshMenuEl		= {
+			text		: 'Refresh',
+			eventName	: 'refresh-click',
+			shown		: true,
+			isDisabled	: false
+		};
+		const uploadMenuEl		= {
+			text		: 'Upload',
+			eventName	: 'upload-click',
+			shown		: true,
+			isDisabled	: false
+		};
+		const newFolderMenuEl	= {
+			text		: 'New Folder',
+			eventName	: 'new-folder-click',
+			shown		: true,
+			isDisabled	: false
+		};
+		const renameMenuEl		= {
+			text		: 'Rename',
+			eventName	: 'rename-click',
+			shown		: true,
+			isDisabled	: true
+		};
+		const downloadMenuEl	= {
+			text		: 'Download',
+			eventName	: 'download-click',
+			shown		: true,
+			isDisabled	: true
+		};
+		const deleteMenuEl		= {
+			text		: 'Delete',
+			eventName	: 'delete-click',
+			shown		: true,
+			isDisabled	: true
+		};
+		const copyMenuEl		= {
+			text		: 'Copy',
+			eventName	: 'copy-click',
+			shown		: true,
+			isDisabled	: true
+		};
+		const cutMenuEl			= {
+			text		: 'Cut',
+			eventName	: 'cut-click',
+			shown		: true,
+			isDisabled	: true
+		};
+		const favoriteMenuEl	= {
+			text		: 'Favorite',
+			eventName	: 'favorite-click',
+			shown		: true,
+			isDisabled	: true
+		};
+		const pasteMenuEl	= {
+			text		: 'Paste',
+			eventName	: 'paste-click',
+			shown		: false,
+			isDisabled	: false
+		};
+
 		return {
 			items				: null,
 			nextToken			: '',
@@ -96,11 +153,21 @@ export default {
 
 			checkedItems		: [],
 
-			renameDisabled		: true,
-			downloadDisabled	: true,
-			deleteDisabled		: true,
-			copyDisabled		: true,
-			cutDisabled			: true,
+			menu				: [
+				refreshMenuEl, uploadMenuEl, newFolderMenuEl, deleteMenuEl, copyMenuEl, cutMenuEl, renameMenuEl, downloadMenuEl, favoriteMenuEl, pasteMenuEl
+			],
+
+			refreshMenuEl,
+			newFolderMenuEl,
+			copyMenuEl,
+			cutMenuEl,
+			renameMenuEl,
+			downloadMenuEl,
+			favoriteMenuEl,
+			pasteMenuEl,
+			uploadMenuEl,
+			deleteMenuEl,
+
 			bufferedItems		: [],
 			bufferedAction		: ''
 		};
@@ -172,6 +239,34 @@ export default {
 				itemsToDownload.push( decode( checkedItem.encodedURI ) );
 
 			window.location.href	= `/api/items?items=${encode( JSON.stringify( itemsToDownload ) )}`;
+
+			this.uncheckItems();
+		},
+
+		/**
+		 * @brief	Adds a new browse favorite to the dashboard
+		 *
+		 * @return	void
+		 */
+		async onFavoriteClick()
+		{
+			const item		= this.checkedItems[0];
+
+			const itemToAdd	= {
+				name: item.initialName,
+				isFolder: item.isFolder,
+				fileType: item.fileType || '',
+				previewAvailable: item.previewAvailable,
+				encodedURI: item.initialEncodedURI,
+				size: item.size
+			}
+
+			const response	= await communicator.addFavoriteBrowseItem( itemToAdd ).catch(( error ) => {
+				return error;
+			});
+
+			if ( response.error )
+				return this.browseErrorMessage	= formatErrorMessage( response.error );
 
 			this.uncheckItems();
 		},
@@ -337,56 +432,62 @@ export default {
 			{
 				// nothing selected
 				case ! foldersCount && ! filesCount:
-					this.renameDisabled		= true;
-					this.downloadDisabled	= true;
-					this.deleteDisabled		= true;
-					this.copyDisabled		= true;
-					this.cutDisabled		= true;
+					this.renameMenuEl.isDisabled	= true;
+					this.downloadMenuEl.isDisabled	= true;
+					this.deleteMenuEl.isDisabled	= true;
+					this.copyMenuEl.isDisabled		= true;
+					this.cutMenuEl.isDisabled		= true;
+					this.favoriteMenuEl.isDisabled	= true;
 
 					break;
 				// Either one folder or one file
 				case ! foldersCount && filesCount === 1:
 				case foldersCount === 1 && ! filesCount:
-					this.renameDisabled		= false;
-					this.downloadDisabled	= false;
-					this.deleteDisabled		= false;
-					this.copyDisabled		= false;
-					this.cutDisabled		= false;
+					this.renameMenuEl.isDisabled	= false;
+					this.downloadMenuEl.isDisabled	= false;
+					this.deleteMenuEl.isDisabled	= false;
+					this.copyMenuEl.isDisabled		= false;
+					this.cutMenuEl.isDisabled		= false;
+					this.favoriteMenuEl.isDisabled	= false;
 					break;
 
 				// Only folders ( more than one )
 				case foldersCount !== 0 && ! filesCount:
-					this.renameDisabled		= true;
-					this.downloadDisabled	= false;
-					this.deleteDisabled		= false;
-					this.copyDisabled		= false;
-					this.cutDisabled		= false;
+					this.renameMenuEl.isDisabled	= true;
+					this.downloadMenuEl.isDisabled	= false;
+					this.deleteMenuEl.isDisabled	= false;
+					this.copyMenuEl.isDisabled		= false;
+					this.cutMenuEl.isDisabled		= false;
+					this.favoriteMenuEl.isDisabled	= true;
 					break;
 
 				// Only files ( more than one )
 				case ! foldersCount && filesCount !== 0:
-					this.renameDisabled		= true;
-					this.downloadDisabled	= false;
-					this.deleteDisabled		= false;
-					this.copyDisabled		= false;
-					this.cutDisabled		= false;
+					this.renameMenuEl.isDisabled	= true;
+					this.downloadMenuEl.isDisabled	= false;
+					this.deleteMenuEl.isDisabled	= false;
+					this.copyMenuEl.isDisabled		= false;
+					this.cutMenuEl.isDisabled		= false;
+					this.favoriteMenuEl.isDisabled	= true;
 					break;
 
 				// Folders and files
 				case foldersCount !== 0 && filesCount !== 0:
-					this.renameDisabled		= true;
-					this.downloadDisabled	= false;
-					this.deleteDisabled		= false;
-					this.copyDisabled		= false;
-					this.cutDisabled		= false;
+					this.renameMenuEl.isDisabled	= true;
+					this.downloadMenuEl.isDisabled	= false;
+					this.deleteMenuEl.isDisabled	= false;
+					this.copyMenuEl.isDisabled		= false;
+					this.cutMenuEl.isDisabled		= false;
+					this.favoriteMenuEl.isDisabled	= true;
 					break;
 
 				default:
-					this.renameDisabled		= false;
-					this.downloadDisabled	= false;
-					this.deleteDisabled		= false;
-					this.copyDisabled		= false;
-					this.cutDisabled		= false;
+					this.renameMenuEl.isDisabled	= false;
+					this.downloadMenuEl.isDisabled	= false;
+					this.deleteMenuEl.isDisabled	= false;
+					this.copyMenuEl.isDisabled		= false;
+					this.cutMenuEl.isDisabled		= false;
+					this.favoriteMenuEl.isDisabled	= false;
 					break;
 			}
 		},
@@ -615,6 +716,16 @@ export default {
 		checkedItems: function ()
 		{
 			this.setMenu();
+		},
+
+		/**
+		 * @brief	Show paste element if there are any buffered items
+		 *
+		 * @return	void
+		 */
+		bufferedItems: function ()
+		{
+			this.pasteMenuEl.shown	= this.bufferedItems.length !== 0;
 		}
 	}
 }

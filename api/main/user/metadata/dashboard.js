@@ -1,5 +1,7 @@
 'use strict';
 
+const crypto	= require( 'crypto' );
+
 /**
  * @brief	Class responsible for handling the Dashboard Module Metadata
  */
@@ -7,13 +9,7 @@ class DashboardMetadata
 {
 	constructor( data )
 	{
-		this.browseFavorites	= data['browseFavorites'] || [
-			{ name: 'Adobe Scan Jul 19, 2021_1.jpg', isDir: false, fileType: 'image', previewAvailable: true, encodedURI: 'L1Rlc3QvQWRvYmUgU2NhbiBKdWwgMTksIDIwMjFfMS5qcGc%3D', size: 200 },
-			{ name: 'Adobe Scan Jul 19, 2021_1.jpg', isDir: false, fileType: 'image', previewAvailable: true, encodedURI: 'L1Rlc3QvQWRvYmUgU2NhbiBKdWwgMTksIDIwMjFfMS5qcGc%3D', size: 200 },
-			{ name: 'Adobe Scan Jul 19, 2021_1.jpg', isDir: false, fileType: 'image', previewAvailable: true, encodedURI: 'L1Rlc3QvQWRvYmUgU2NhbiBKdWwgMTksIDIwMjFfMS5qcGc%3D', size: 200 },
-			{ name: 'Adobe Scan Jul 19, 2021_1.jpg', isDir: false, fileType: 'image', previewAvailable: true, encodedURI: 'L1Rlc3QvQWRvYmUgU2NhbiBKdWwgMTksIDIwMjFfMS5qcGc%3D', size: 200 },
-			{ name: 'Adobe Scan Jul 19, 2021_1.jpg', isDir: false, fileType: 'image', previewAvailable: true, encodedURI: 'L1Rlc3QvQWRvYmUgU2NhbiBKdWwgMTksIDIwMjFfMS5qcGc%3D', size: 200 },
-		];
+		this.browseFavorites	= data['browseFavorites'] || [];
 	}
 
 	/**

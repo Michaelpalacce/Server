@@ -8,7 +8,7 @@ const Acl			= require( '../acls/acl' );
 
 const USER_KEY		= 'USERS_DATA';
 const persistPath	= path.parse( require.main.filename ).dir;
-const PERSIST_TIME	= 15000;
+const PERSIST_TIME	= 1000;
 
 /**
  * @brief	Class responsible for user CRUD operations
@@ -21,7 +21,7 @@ class UserManager
 			ttl				: -1,
 			persist			: true,
 			persistPath		: path.join( persistPath, 'server_emulator_users.json' ),
-			persistInterval	: 30,	// Every 30 seconds
+			persistInterval	: 10,	// Every 10 seconds
 			gcInterval		: 86400	// One day
 		});
 		this.users				= null;
@@ -83,10 +83,15 @@ class UserManager
 	/**
 	 * @brief	Commits any changes to the users to the data store
 	 *
+	 * @details	Will not flush users if they have not yet been fetched or if there are no users
+	 *
 	 * @return	void
 	 */
 	flushUsers()
 	{
+		if ( this.users === null || this.users.length === 0 )
+			return;
+
 		const users	= [];
 
 		for ( const userName in this.users )

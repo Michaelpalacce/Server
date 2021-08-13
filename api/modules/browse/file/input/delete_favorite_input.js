@@ -1,8 +1,7 @@
 'use strict';
 
 // Dependencies
-const Input			= require( '../../../../main/validation/input' );
-const { decode }	= require( '../../../../main/utils/base_64_encoder' );
+const Input	= require( '../../../../main/validation/input' );
 
 /**
  * @brief	Validates that the provided request contains the correct data

@@ -33,6 +33,11 @@ const DEFAULT_ROLES	= {
 				},
 				{
 					type: 'ALLOW',
+					route: new RegExp( /^\/api\/dashboard?(.+)/ ),
+					method: ''
+				},
+				{
+					type: 'ALLOW',
 					route: '/api/user',
 					method: 'DELETE'
 				},
@@ -59,8 +64,6 @@ class Acl
 	constructor()
 	{
 		this.dataStore	= process.cachingServer;
-
-		this._fetchRoles();
 	}
 
 	/**
@@ -68,7 +71,7 @@ class Acl
 	 *
 	 * @return	{Promise<void>}
 	 */
-	async _fetchRoles()
+	async fetchRoles()
 	{
 		let roles	= parsePermissions( await this.dataStore.get( ROLES_KEY ) );
 

@@ -20,6 +20,7 @@ apiRouter.add( require( './modules/browse/file/controller/download' ) );
 apiRouter.add( require( './modules/browse/file/controller/upload' ) );
 apiRouter.add( require( './modules/browse/file/controller/delete' ) );
 apiRouter.add( require( './modules/browse/file/controller/preview' ) );
+apiRouter.add( require( './modules/browse/file/controller/favorites' ) );
 
 
 // Browse folder section

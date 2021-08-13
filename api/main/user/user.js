@@ -309,9 +309,7 @@ class User
 	 */
 	getDashboardMetadata()
 	{
-		const metadata	= this.getMetadata( 'DashboardMetadata' );
-
-		return metadata;
+		return this.getMetadata( 'DashboardMetadata' );
 	}
 }
 

@@ -55,6 +55,7 @@ export default {
 		};
 	},
 	props: {
+		id					: String,
 		initialName			: String,
 		initialEncodedURI	: String,
 		fileType			: String,
