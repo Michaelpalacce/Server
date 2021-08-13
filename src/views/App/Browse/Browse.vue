@@ -238,7 +238,7 @@ export default {
 			for ( const checkedItem of checkedItems )
 				itemsToDownload.push( decode( checkedItem.encodedURI ) );
 
-			window.location.href	= `/api/items?items=${encode( JSON.stringify( itemsToDownload ) )}`;
+			window.location.href	= `/api/browse/items?items=${encode( JSON.stringify( itemsToDownload ) )}`;
 
 			this.uncheckItems();
 		},

@@ -1,3 +1,6 @@
+18.0.1
+- Fixed a bug with downloading
+
 18.0.0
 - Reworked how the menus are displayed
 - Dashboard browse favorites are fully functional now
