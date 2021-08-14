@@ -1,3 +1,6 @@
+18.1.0
+- Login position adjustment
+
 18.0.1
 - Fixed a bug with downloading
 
