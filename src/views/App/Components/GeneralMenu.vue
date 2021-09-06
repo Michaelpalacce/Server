@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="text-left text-white text-sm md:text-base bg-gray-700"
+		class="text-white text-sm lg:text-base bg-gray-700 inline-block"
 		:class="`${isSticky ? 'sticky top-0' : ''}`"
 	>
 

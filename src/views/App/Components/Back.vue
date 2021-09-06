@@ -12,6 +12,7 @@
 			<div class="w-full md:w-full inline-block">
 				<p class="truncate">
 					<i class="fa fa-angle-double-left mr-2 hidden md:inline-block"></i>
+					<span class="font-medium text-base ml-10">{{ backValue }}</span>
 				</p>
 			</div>
 		</div>
@@ -21,5 +22,11 @@
 <script>
 export default {
 	name	: 'Back',
+	props	: {
+		backValue: {
+			type: String,
+			default: ''
+		}
+	}
 }
 </script>

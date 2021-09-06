@@ -1,3 +1,12 @@
+19.0.0
+- Creating folders now will navigate you inside the folder
+- Added styling for texts thanks to highlight.js
+- Moved the current directory in the Back Button section
+- Compacted User design and Profile design
+- Selecting multiple items now highlights them better
+- The Browse menu is now seperated a bit to better reflect different actions
+- The Browse Items now will show -- for folder size and will show the time modified
+
 18.1.0
 - Login position adjustment
 

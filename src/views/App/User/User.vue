@@ -1,7 +1,7 @@
 <template>
 	<Back @click="$router.go( -1 )" class="mb-10"/>
 
-	<div class="rounded-t-lg mx-auto text-gray-200 text-2xl p-5">
+	<div class="rounded-t-lg mx-auto text-gray-200 text-2xl p-5 w-full lg:w-6/12">
 		<div class="mx-auto">
 			<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mb-5"/>
 			<Message :message="infoMessage" @clear="infoMessage = ''" :closable="true" class="mb-5"/>
@@ -61,12 +61,12 @@ import TitleSection			from "@/views/App/Users/Components/TitleSection";
 import communicator			from "@/app/main/api/communicator";
 import formatErrorMessage	from "@/app/main/utils/error_message_format";
 import Error				from "@/views/App/Components/Error";
-import Message from "@/views/App/Components/Message";
+import Message				from "@/views/App/Components/Message";
 
 export default {
 	name: 'User',
 
-	components: {Message, Error, TitleSection, Button, Divider, Back },
+	components: { Message, Error, TitleSection, Button, Divider, Back },
 
 	data: () => {
 		return {

@@ -1,9 +1,14 @@
 <template>
 	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64" v-if="upload === false">
 		<GeneralMenu
-			:elements="menu"
+			:elements="leftMenu"
 			@upload-click="showUpload"
 			@refresh-click="browse( currentDirectory )"
+		/>
+
+		<GeneralMenu
+			class="lg:float-right float-none"
+			:elements="rightMenu"
 			@delete-click="deleteCheckedItems"
 			@new-folder-click="createNewFolder"
 			@rename-click="onRenameClick"
@@ -13,8 +18,7 @@
 			@download-click="onDownloadClick"
 			@favorite-click="onFavoriteClick"
 		/>
-		<div class="my-2 mx-auto justify-center text-center text-xl font-medium tracking-wide">{{decodedCurrentDir}}</div>
-		<Back @click="browse( previousDirectory )"/>
+		<Back @click="browse( previousDirectory )" :backValue="decodedCurrentDir" class="mt-10"/>
 
 		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
 
@@ -30,6 +34,7 @@
 					:initialEncodedURI="item.encodedURI"
 					:previewAvailable="item.previewAvailable"
 					:size="item.size"
+					:mTime="item.mTime"
 					@on-click="onItemClick( item )"
 					@on-checked="onItemChecked"
 				/>
@@ -153,8 +158,11 @@ export default {
 
 			checkedItems		: [],
 
-			menu				: [
-				refreshMenuEl, uploadMenuEl, newFolderMenuEl, deleteMenuEl, copyMenuEl, cutMenuEl, renameMenuEl, downloadMenuEl, favoriteMenuEl, pasteMenuEl
+			leftMenu				: [
+				refreshMenuEl, uploadMenuEl
+			],
+			rightMenu				: [
+				newFolderMenuEl, deleteMenuEl, copyMenuEl, cutMenuEl, renameMenuEl, downloadMenuEl, favoriteMenuEl, pasteMenuEl
 			],
 
 			refreshMenuEl,
@@ -366,8 +374,7 @@ export default {
 				if ( item.error )
 					return this.uploadErrorMessage	= formatErrorMessage( item.error );
 
-
-				this.items	= [item, ...this.items];
+				await this.browse( newPath );
 			}
 		},
 

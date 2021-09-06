@@ -1,6 +1,6 @@
 <template>
 	<div class="rounded-t-lg mx-5 mt-2 bg-gray-700 text-gray-200 px-5">
-		<BrowseItem initialName="PreviewBack" :isFolder="true" @click="$router.go( -1 )" :isBack="true" class="mb-1"/>
+		<Back @click="$router.go( -1 )" class="mb-1"/>
 
 		<span class="flex justify-center items-center mx-auto mb-10 text-md md:text-xl" >Name: {{itemName}}</span>
 
@@ -8,20 +8,23 @@
 
 		<video controls class="flex justify-center items-center mx-auto" :class="{ hidden: audioSrc === '' }" :src="audioSrc"></video>
 
-		<span :class="{ hidden: textSrc === '' }" v-html="textSrc"></span>
+		<div :class="{ hidden: textSrc === '' }">
+			<pre><code>{{ textSrc }}</code></pre>
+		</div>
 
 		<img :class="{ hidden: imageSrc === '' }" class="flex justify-center items-center mx-auto h-auto w-auto" style="max-height: 75vh" :src="imageSrc" alt="">
 	</div>
 </template>
 
 <script>
-import BrowseItem	from "@/views/App/Browse/Components/BrowseItem";
-import axios		from "axios";
+import axios	from "axios";
+import hljs		from 'highlight.js';
+import Back		from "@/views/App/Components/Back";
 
 export default {
 	name: "Preview",
 	components: {
-		BrowseItem
+		Back
 	},
 	data: () => {
 		return {
@@ -52,9 +55,8 @@ export default {
 				const response	= await axios.get( url,{ withCredentials: true } ).catch( console.log )
 
 				let result		= response.data;
-				result			= result.replace( / /g, '&nbsp;' );
-				result			= result.replace( /\t/g, '&emsp;' );
-				result			= result.replace( /\n/g, '<br>' );
+				if ( typeof result !== 'string' )
+					result	= JSON.stringify( result, null, 4 );
 
 				this.textSrc	= result;
 				break;
@@ -62,7 +64,14 @@ export default {
 				this.videoSrc	= url;
 				break;
 		}
+	},
 
+	watch: {
+		textSrc : function () {
+			setTimeout(() => {
+				hljs.highlightAll();
+			}, 0 );
+		}
 	}
 }
 </script>

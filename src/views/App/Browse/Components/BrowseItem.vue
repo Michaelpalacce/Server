@@ -7,33 +7,37 @@
 				@mouseover="show"
 				@mouseleave="hover = false"
 				@click="click"
+		:class="{ 'bg-gray-600': checked }"
 	>
 		<span class="absolute left-1/4 md:left-2/4 z-10" :class="[hover === false ? 'hidden' : '']">
 			<img :src="imageSrc" alt="" :class="[hover === false ? 'visible' : '']" style="height: 25vh; top: -50px;">
 		</span>
 
-		<input type="checkbox" class="flex-none form-checkbox h-6 w-10 inline-block md:hidden mt-3" v-if="checkboxVisible && ! isBack" v-model="checked">
+		<input type="checkbox" class="flex-none form-checkbox h-6 w-10 inline-block md:hidden mt-3" v-if="checkboxVisible" v-model="checked">
 
-		<span class="fa fa-angle-double-left md:hidden fa-3x w-1/6" v-if="isBack"></span>
-		<span class="fa fa-folder-open md:hidden fa-3x w-1/6" v-if="isFolder && ! isBack"></span>
-		<span class="fa fa-file md:hidden fa-3x w-1/6" v-if="! isFolder && ! isBack"></span>
+		<span class="fa fa-folder-open md:hidden fa-3x w-1/6" v-if="isFolder"></span>
+		<span class="fa fa-file md:hidden fa-3x w-1/6" v-if="! isFolder"></span>
 
 		<div class="flex flex-wrap md:block md:w-full w-5/6 text-xs md:text-base px-5 md:px-0">
-			<div class="md:w-10 hidden md:inline-block" v-if="checkboxVisible && ! isBack">
+			<div class="md:w-10 hidden md:inline-block" v-if="checkboxVisible">
 				<input type="checkbox" class="form-checkbox h-5 w-5 mt-3 mx-auto" v-model="checked">
 			</div>
 
-			<div class="w-full md:w-10/12 inline-block">
+			<div class="w-full md:w-7/12 inline-block">
 				<p class="truncate">
-					<i class="fa fa-angle-double-left mr-2 hidden md:inline-block" v-if="isBack"></i>
-					<i class="fa fa-folder-open mr-2 hidden md:inline-block" v-if="isFolder && ! isBack"></i>
-					<i class="fa fa-file mr-2 hidden md:inline-block" v-if="! isFolder && ! isBack"></i>
-					<span v-if="! isBack" :class="{ 'text-blue-200': previewAvailable && ! isFolder }" class="font-medium text-base">{{name}}</span>
+					<i class="fa fa-folder-open mr-2 hidden md:inline-block" v-if="isFolder"></i>
+					<i class="fa fa-file mr-2 hidden md:inline-block" v-if="! isFolder"></i>
+					<span :class="{ 'text-blue-200': previewAvailable && ! isFolder }" class="font-medium text-base">{{initialName}}</span>
+				</p>
+			</div>
+			<div class="w-full md:w-3/12 inline-block">
+				<p class="truncate">
+					<span class="md:hidden mr-2">Modified:</span> {{ mTime.replace( 'T', ' ' ).substr( 0, 19 ) }}
 				</p>
 			</div>
 			<div class="w-full md:w-1/12 inline-block">
-				<p class="truncate" v-if="! isFolder">
-					<span class="md:hidden mr-2">Size:</span> {{ bytesToSize( size ) }}
+				<p class="truncate">
+					<span class="md:hidden mr-2">Size:</span> {{ isFolder ? '--' : bytesToSize( size ) }}
 				</p>
 			</div>
 		</div>
@@ -61,6 +65,7 @@ export default {
 		fileType			: String,
 		previewAvailable	: Boolean,
 		size				: { type : Number,	default : 0		},
+		mTime				: { type : String,	default : ''	},
 		isFolder			: { type : Boolean,	default : true	},
 		isBack				: { type : Boolean,	default : false	},
 		checkboxVisible		: { type : Boolean,	default : true	}
@@ -143,8 +148,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		checked: function ()
-		{
+		checked: function ( value ) {
 			this.$emit( 'on-checked', { checked: this.checked, item: this } );
 		}
 	}

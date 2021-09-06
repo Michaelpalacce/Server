@@ -3,7 +3,8 @@ import App				from './App.vue';
 import router			from './router';
 import mitt				from 'mitt';
 
-import './style/index.css';
+import	'./style/index.css';
+import	"highlight.js/styles/dracula.css"
 
 const emitter	= mitt();
 const app		= createApp( App );

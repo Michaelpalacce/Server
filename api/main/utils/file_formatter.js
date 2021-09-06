@@ -34,6 +34,7 @@ module.exports	= function formatItem( itemName, event )
 		isDir,
 		encodedURI,
 		size,
-		previewAvailable
+		previewAvailable,
+		mTime: stats.mtime
 	};
 };

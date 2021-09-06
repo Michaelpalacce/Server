@@ -1,7 +1,7 @@
 <template>
 	<Back @click="$router.push( { name: 'users' } )" class="mb-10"/>
 
-	<div class="rounded-t-lg mx-auto text-gray-200 text-2xl p-5">
+	<div class="rounded-t-lg mx-auto text-gray-200 text-2xl p-5 w-full lg:w-6/12">
 		<div class="mx-auto">
 			<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mb-5"/>
 

@@ -17,9 +17,7 @@
 				<Button @click="roles[roleName].opened = ! roles[roleName].opened" text="Permissions" />
 			</div>
 
-			<pre v-if="roles[roleName].opened" class="text-base">
-				{{ JSON.stringify( roles[roleName].permissions, undefined, 2 ) }}
-			</pre>
+			<pre v-if="roles[roleName].opened" class="text-base">{{ JSON.stringify( roles[roleName].permissions, undefined, 2 ) }}</pre>
 		</div>
 
 		<div class="flex justify-center">
