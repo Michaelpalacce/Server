@@ -6,6 +6,8 @@
 				cursor-pointer"
 				@mouseover="show"
 				@mouseleave="hover = false"
+				@click.shift="shiftClick"
+				@click.ctrl="check"
 				@click="click"
 		:class="{ 'bg-gray-600': checked }"
 	>
@@ -73,6 +75,27 @@ export default {
 
 	methods: {
 		/**
+		 * Toggles the item checked state
+		 *
+		 * @return	void
+		 */
+		check: function ( event ) {
+			event.stopImmediatePropagation();
+
+			this.checked = ! this.checked;
+			this.$emit( 'on-ctrl-click' );
+		},
+
+		/**
+		 * Sets the item as checked or not
+		 *
+		 * @return	void
+		 */
+		setChecked: function ( checked = true ) {
+			this.checked = checked;
+		},
+
+		/**
 		 * @brief	Shows the image after 250 milliseconds
 		 *
 		 * @details	Will only show the thumbnail if the user is still hovering after 250 milliseconds
@@ -137,8 +160,23 @@ export default {
 		 */
 		click( event )
 		{
+			event.stopImmediatePropagation();
+
 			if ( event.target.type !== 'checkbox' )
 				this.$emit( 'on-click' );
+		},
+
+		/**
+		 * @brief	On shift click event that emits `on-shift-click`
+		 *
+		 * @param	{Event} event
+		 *
+		 * @return	void
+		 */
+		shiftClick( event ) {
+			event.stopImmediatePropagation();
+
+			this.$emit( 'on-shift-click' );
 		}
 	},
 

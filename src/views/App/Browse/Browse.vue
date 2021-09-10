@@ -25,9 +25,9 @@
 		<transition name="browse">
 			<div v-if="items !== null">
 				<BrowseItem
-					v-for="item in items"
+					v-for="(item, index) in items"
 
-					:key="item.name"
+					:key="item.encodedURI"
 					:initialName="item.name"
 					:isFolder="item.isDir"
 					:fileType="item.fileType"
@@ -35,8 +35,12 @@
 					:previewAvailable="item.previewAvailable"
 					:size="item.size"
 					:mTime="item.mTime"
-					@on-click="onItemClick( item )"
+					@on-shift-click="shiftClick( index )"
+					@on-ctrl-click="ctrlClick( index )"
+					@on-click="onItemClick( index, item )"
 					@on-checked="onItemChecked"
+
+					:ref="item.encodedURI"
 				/>
 			</div>
 		</transition>
@@ -177,7 +181,9 @@ export default {
 			deleteMenuEl,
 
 			bufferedItems		: [],
-			bufferedAction		: ''
+			bufferedAction		: '',
+
+			lastShiftIndex		: 0,
 		};
 	},
 
@@ -210,14 +216,42 @@ export default {
 
 	methods	: {
 		/**
+		 * Shift click event will select all items between the two indexes
+		 *
+		 * @return	void
+		 */
+		shiftClick( index ) {
+			const startIndex	= this.lastShiftIndex >= index ? index : this.lastShiftIndex;
+			const endIndex		= this.lastShiftIndex >= index ? this.lastShiftIndex : index;
+
+			this.items.forEach(
+				( item, itemIndex ) => this.$refs[item.encodedURI].setChecked( itemIndex >= startIndex && itemIndex <= endIndex )
+			);
+
+			this.lastShiftIndex	= index;
+			document.getSelection().removeAllRanges();
+		},
+
+		/**
+		 * Ctrl click event will reset the lastShiftIndex
+		 *
+		 * @return	void
+		 */
+		ctrlClick( index ) {
+			this.lastShiftIndex	= index;
+		},
+
+		/**
 		 * @brief	Triggered when an item is clicked
 		 *
 		 * @details	This will only trigger the browse function if the item is a folder, otherwise the item will be previewed
 		 *
+		 * @param	{Number} index
+		 * @param	{Object} item
+		 *
 		 * @return	void
 		 */
-		onItemClick( item )
-		{
+		onItemClick( index, item ) {
 			if ( item.isDir )
 				this.browse( item.encodedURI );
 			else if ( item.previewAvailable )
@@ -231,6 +265,8 @@ export default {
 						}
 					}
 				);
+
+			this.lastShiftIndex	= index;
 		},
 
 		/**
@@ -238,8 +274,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		onDownloadClick()
-		{
+		onDownloadClick() {
 			const checkedItems		= [...this.checkedItems];
 			const itemsToDownload	= [];
 
@@ -256,8 +291,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		async onFavoriteClick()
-		{
+		async onFavoriteClick() {
 			const item		= this.checkedItems[0];
 
 			const itemToAdd	= {
@@ -284,8 +318,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		async onPasteClick()
-		{
+		async onPasteClick() {
 			const items		= [...this.bufferedItems];
 			const action	= this.bufferedAction;
 
@@ -331,8 +364,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		onCopyClick()
-		{
+		onCopyClick() {
 			this._setBufferedItemsWithAction( 'copy' );
 		},
 
@@ -341,8 +373,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		onCutClick()
-		{
+		onCutClick() {
 			this._setBufferedItemsWithAction( 'cut' );
 		},
 
@@ -353,8 +384,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		async createNewFolder()
-		{
+		async createNewFolder() {
 			const folderName	= prompt( 'What should the folder be called?' );
 
 			if ( typeof folderName === 'string' && folderName.length > 0 )
@@ -385,8 +415,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		async onRenameClick()
-		{
+		async onRenameClick() {
 			const item			= this.checkedItems[0];
 			const newItemName	= prompt( 'New item name:', item.name );
 
@@ -411,8 +440,7 @@ export default {
 		 *
 		 * @return	void
 		 */
-		onItemChecked( checkedItem )
-		{
+		onItemChecked( checkedItem ) {
 			const item		= checkedItem.item;
 			const isChecked	= checkedItem.checked;
 
@@ -546,8 +574,7 @@ export default {
 
 			const response	= browseResponse.data;
 
-			if ( response.error )
-			{
+			if ( response.error ) {
 				this.loading					= false;
 				return this.browseErrorMessage	= formatErrorMessage( response.error );
 			}
@@ -559,6 +586,7 @@ export default {
 			this.decodedCurrentDir	= decode( response.currentDirectory );
 			this.nextToken			= response.nextToken;
 			this.hasMore			= response.hasMore;
+			this.lastShiftIndex		= 0;
 
 			if ( isNewDir )
 				this.uncheckItems();

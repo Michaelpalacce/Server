@@ -1,3 +1,6 @@
+19.1.0
+- Added control and shift clicking
+
 19.0.0
 - Creating folders now will navigate you inside the folder
 - Added styling for texts thanks to highlight.js
