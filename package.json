@@ -1,63 +1,65 @@
 {
-	"name": "server-emulator",
-	"version": "20.0.0",
-	"private": false,
-	"description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
-	"author": {
-		"name": "Stefan Genov"
-	},
-	"scripts": {
-		"build": "rm -rf css && rm -rf js && vue-cli-service build",
-		"serve": "node cli.js",
-		"serve-dev": "pm2-runtime dev.ecosystem.config.js",
-		"prepublishOnly": "npm run build"
-	},
-	"main": "index.js",
-	"dependencies": {
-		"archiver": "^3.1.1",
-		"axios": "^0.21.1",
-		"event_request": "^31.1.0",
-		"fs-browser": "^1.0.0",
-		"highlight.js": "^10.7.2",
-		"mv": "^2.1.1",
-		"pm2": "^4.5.6"
-	},
-	"devDependencies": {
-		"@vue/cli-plugin-router": "~4.5.0",
-		"@vue/cli-service": "~4.5.0",
-		"@vue/compiler-sfc": "^3.0.0",
-		"autoprefixer": "^9.8.6",
-		"mitt": "^2.1.0",
-		"postcss": "^7.0.35",
-		"sass": "^1.26.5",
-		"sass-loader": "^8.0.2",
-		"tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
-		"vue": "^3.0.0",
-		"vue-router": "^4.0.0-0"
-	},
-	"_id": "server-emulator@16.3.2",
-	"bin": {
-		"serve": "cli.js",
-		"server-emulator": "cli.js"
-	},
-	"bugs": {
-		"url": "https://github.com/Michaelpalacce/storage/issues"
-	},
-	"homepage": "https://github.com/Michaelpalacce/storage#readme",
-	"keywords": [
-		"storage",
-		"fs",
-		"server",
-		"file system",
-		"linux",
-		"windows",
-		"event_request",
-		"emulator"
-	],
-	"license": "GPL-3.0",
-	"readme": "ERROR: No README data found!",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Michaelpalacce/Server.git"
-	}
+  "name": "server-emulator",
+  "version": "21.0.0",
+  "private": false,
+  "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
+  "author": {
+    "name": "Stefan Genov"
+  },
+  "scripts": {
+    "serve": "node cli.js",
+    "build": "rm -rf css && rm -rf js && vue-cli-service build",
+    "prepublishOnly": "npm run build",
+    "serve-dev": "pm2-runtime dev.ecosystem.config.js"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "archiver": "^3.1.1",
+    "axios": "^0.21.1",
+    "event_request": "^31.1.0",
+    "fs-browser": "^1.0.0",
+    "highlight.js": "^10.7.2",
+    "mv": "^2.1.1",
+    "pm2": "^4.5.6",
+    "register-service-worker": "^1.7.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-pwa": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "autoprefixer": "^9.8.6",
+    "mitt": "^2.1.0",
+    "postcss": "^7.0.35",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0"
+  },
+  "_id": "server-emulator@16.3.2",
+  "bin": {
+    "serve": "cli.js",
+    "server-emulator": "cli.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Michaelpalacce/storage/issues"
+  },
+  "homepage": "https://github.com/Michaelpalacce/storage#readme",
+  "keywords": [
+    "storage",
+    "fs",
+    "server",
+    "file system",
+    "linux",
+    "windows",
+    "event_request",
+    "emulator"
+  ],
+  "license": "GPL-3.0",
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Michaelpalacce/Server.git"
+  }
 }

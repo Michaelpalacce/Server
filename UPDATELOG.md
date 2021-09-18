@@ -1,3 +1,6 @@
+21.0.0
+- Added a PWA
+
 20.0.0
 - Changed the way data is persisted
 - Made a docker image and published it to dockerhub

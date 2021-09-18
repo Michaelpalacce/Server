@@ -53,7 +53,10 @@ const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 // Backend
 app.add( '/api', apiRouter );
-app.apply( app.er_static, { paths	: ['dist', 'css', 'js'], cache: { static : false }, useEtag: true } );
+// Serve dist
+app.get( ( event ) => {
+	require( './static_middleware' )( event, 'dist' )
+} );
 // Frontend
 app.get(( event )=>{
 	fs.createReadStream( `${PROJECT_ROOT}/dist/index.html` ).pipe( event.response );

@@ -22,10 +22,16 @@ const config	= {
 	productionSourceMap: false,
 	devServer: {
 		proxy: 'http://localhost:8888'
+	},
+	pwa: {
+		pwaIcons: {
+			favicon32: 'img/icons/favicon-32x32.png',
+			favicon16: 'img/icons/favicon-16x16.png',
+			appleTouchIcon: null,
+			maskIcon: null,
+			msTileImage: 'img/icons/favicon-32x32.png'
+		}
 	}
 };
-
-if ( process.env.NODE_ENV !== 'development' )
-	config.assetsDir	= '..';
 
 module.exports	= config;

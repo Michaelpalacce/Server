@@ -5,6 +5,7 @@ import mitt				from 'mitt';
 
 import	'./style/index.css';
 import	"highlight.js/styles/dracula.css"
+import './registerServiceWorker'
 
 const emitter	= mitt();
 const app		= createApp( App );
