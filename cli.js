@@ -55,7 +55,7 @@ pm2.connect(( err ) => {
 				{
 					console.log( 'An error has occurred while trying to edit env file.' );
 					console.log( 'Error: ' );
-					console.log( e );
+					console.log( err );
 					console.log( 'You have to manually edit the file below:' );
 					console.log( `${projectDir}/env.js` );
 

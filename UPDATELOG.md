@@ -1,3 +1,6 @@
+21.0.1
+- Fix for icons
+
 21.0.0
 - Added a PWA
 
