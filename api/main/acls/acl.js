@@ -194,7 +194,7 @@ class Acl
 	 *
 	 * @param	{User} user
 	 *
-	 * @return	{void}
+	 * @return	{User}
 	 */
 	decorateUserWithPermissions( user )
 	{
@@ -206,6 +206,8 @@ class Acl
 				permissions	= mixPermissions( permissions, this.roles[role].permissions );
 
 		user.setPermissions( permissions );
+
+		return user;
 	}
 
 	canAccess( permissions )

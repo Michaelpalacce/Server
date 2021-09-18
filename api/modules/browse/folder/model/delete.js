@@ -2,8 +2,7 @@
 
 const path			= require( 'path' );
 const fs			= require( 'fs' );
-
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const forbiddenDirs	= require( '../../utils/forbidden_folders' );
 
 /**
  * @brief	Class responsible for deletion of folders
@@ -40,8 +39,9 @@ class DeleteModel
 		const resolvedDir	= path.resolve( directory );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( resolvedDir.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedDir ) )
-			throw { code: 'app.browse.delete.projectRoot', message : { error: `Cannot delete project ROOT or items in project ROOT`, itemName } };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( resolvedDir.includes( path.resolve( forbiddenDir ) ) || path.resolve( forbiddenDir ).includes( resolvedDir ) )
+				throw { code: 'app.browse.delete.projectRoot', message : { error: `Cannot perform delete on ${resolvedDir}`, itemName } };
 
 		if ( ! resolvedDir.includes( resolvedRoute ) || directory === '/' )
 			throw { code: 'app.browse.delete.unauthorized', message : { error: `No permissions to delete item`, itemName } };

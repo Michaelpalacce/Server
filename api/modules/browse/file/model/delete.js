@@ -2,6 +2,7 @@
 
 const fs			= require( 'fs' );
 const { unlink }	= fs.promises;
+const forbiddenDirs	= require( '../../utils/forbidden_folders' );
 const path			= require( 'path' );
 
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
@@ -38,8 +39,9 @@ class DeleteModel
 		const resolvedItem	= path.resolve( item );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( ! resolvedItem.includes( resolvedRoute ) || resolvedItem.includes( PROJECT_ROOT ) )
-			throw { code: 'app.browse.delete.unauthorized', message : { error: `Cannot delete items in project ROOT`, itemName }, status: 403 };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( ! resolvedItem.includes( resolvedRoute ) || resolvedItem.includes( path.resolve( forbiddenDir ) ) )
+				throw { code: 'app.browse.delete.unauthorized', message : { error: `Cannot delete items in forbidden folder: ${forbiddenDir}`, itemName }, status: 403 };
 
 		if ( ! fs.existsSync( item ) )
 			return ;

@@ -28,5 +28,5 @@ pnpm-debug.log*
 
 # Custom
 cache
-/server_emulator_users.json
+/se_users.json
 Uploads

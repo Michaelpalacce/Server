@@ -61,6 +61,7 @@ class ApiCommunicator
 		).catch(() => {});
 
 		localStorage.removeItem( 'loggedIn' );
+		localStorage.removeItem( 'route' );
 		localStorage.removeItem( 'name' );
 
 		return response;
@@ -246,6 +247,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		localStorage.route	= response.data.route;
 
 		return response.data;
 	}

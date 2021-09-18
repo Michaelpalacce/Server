@@ -1,3 +1,5 @@
+const envFile	= require( './ensure_env_file' );
+
 module.exports	=
 {
 	apps :
@@ -6,7 +8,7 @@ module.exports	=
 			name: 'server-emulator',
 			script: `${__dirname}/index.js`,
 			watch: false,
-			env: require( './env' )
+			env: require( envFile )
 		}
 	]
 };

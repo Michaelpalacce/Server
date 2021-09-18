@@ -3,8 +3,7 @@
 const path					= require( 'path' );
 const fs					= require( 'fs' );
 const { mkdir }				= fs.promises;
-
-const PROJECT_ROOT			= path.parse( require.main.filename ).dir;
+const forbiddenDirs			= require( '../../utils/forbidden_folders' );
 const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
 
 /**
@@ -39,8 +38,9 @@ class UploadModel
 		const resolvedDirectory	= path.resolve( directory );
 		const resolvedRoute		= path.resolve( route );
 
-		if ( resolvedDirectory.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedDirectory ) )
-			throw { code: 'app.browse.upload.unauthorized', message: `Cannot create folder in project ROOT ${resolvedDirectory}`, status: 403 };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( resolvedDirectory.includes( path.resolve( forbiddenDir ) ) || path.resolve( forbiddenDir ).includes( resolvedDirectory ) )
+				throw { code: 'app.browse.upload.unauthorized', message: `Cannot create folder in ${resolvedDirectory}`, status: 403 };
 
 		if ( ! resolvedDirectory.includes( resolvedRoute ) )
 			throw { code: 'app.browse.upload.unauthorized', message: `No permissions to create ${resolvedDirectory}`, status: 403 };

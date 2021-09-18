@@ -3,6 +3,7 @@
 // Dependencies
 const app			= require( 'event_request' )();
 const path			= require( 'path' );
+const configPath	= require( '../utils/config_path' );
 
 const ErrorHandler	= require( '../error/error_handler' );
 const logger		= require( '../logging/logger' );
@@ -47,7 +48,7 @@ app.er_validation.setOptions({
 });
 
 // Attach the cache server
-app.apply( app.er_data_server, { dataServerOptions: { persist: true } } );
+app.apply( app.er_data_server, { dataServerOptions: { persist: true, persistPath: path.join( configPath, 'cache' ) } } );
 
 // Rate Limit the request
 app.apply( app.er_rate_limits, { useFile: true } );

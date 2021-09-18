@@ -1,3 +1,8 @@
+20.0.0
+- Changed the way data is persisted
+- Made a docker image and published it to dockerhub
+- Now the default route of the user is cached in localStorage
+
 19.1.0
 - Added control and shift clicking
 

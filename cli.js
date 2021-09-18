@@ -4,16 +4,10 @@
 const pm2				= require( 'pm2' );
 const { exec, spawn }	= require( 'child_process' );
 const path				= require( 'path' );
-const fs				= require( 'fs' );
-
 const args				= process.argv.slice( 2 );
-
 const projectDir		= path.parse( require.main.filename ).dir;
-const ENV_FILE			= path.join( projectDir, 'env.js' );
 
-// Create a env file if one does not exist
-if ( ! fs.existsSync( ENV_FILE ) )
-	fs.copyFileSync( `${ENV_FILE}.template`, ENV_FILE );
+require( './ensure_env_file' );
 
 function getCommandLine()
 {

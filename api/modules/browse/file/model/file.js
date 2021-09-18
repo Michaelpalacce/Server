@@ -4,7 +4,7 @@ const { stat }		= require( 'fs' ).promises;
 const path			= require( 'path' );
 
 const formatItem	= require( '../../../../main/utils/file_formatter' );
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const forbiddenDirs	= require( '../../utils/forbidden_folders' );
 
 class FileModel
 {
@@ -39,8 +39,9 @@ class FileModel
 		const resolvedFile	= path.resolve( itemName );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( ! resolvedFile.includes( resolvedRoute ) || resolvedFile.includes( PROJECT_ROOT ) )
-			throw { code: 'app.browse.fileData.unauthorized', message : `No permissions to access ${resolvedFile}`, status: 403 };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( ! resolvedFile.includes( resolvedRoute ) || resolvedFile.includes( path.resolve( forbiddenDir ) ) )
+				throw { code: 'app.browse.fileData.unauthorized', message : `No permissions to access ${resolvedFile}`, status: 403 };
 
 		return formatItem( itemName, this.event );
 	}

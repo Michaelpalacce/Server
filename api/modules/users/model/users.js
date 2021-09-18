@@ -146,7 +146,7 @@ class UsersModel
 
 		const user	= this.userManager.set( { username, password, roles: [Acl.getRoles().user.name] } );
 
-		user.getBrowseMetadata().setRoute( `/users/${user.getUsername()}` );
+		user.getBrowseMetadata().setRoute( `${process.env.USER_DATA_PATH}/${user.getUsername()}` );
 
 		return user;
 	}

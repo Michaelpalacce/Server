@@ -3,8 +3,7 @@
 const path			= require( 'path' );
 const fs			= require( 'fs' );
 const archiver		= require( 'archiver' );
-
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const forbiddenDirs	= require( '../../utils/forbidden_folders' );
 
 /**
  * @brief	Model responsible for downloading one or more items if the user has permission to access them
@@ -148,8 +147,9 @@ class DownloadModel
 		const resolvedItem	= path.resolve( itemName );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( ! resolvedItem.includes( resolvedRoute ) || resolvedItem.includes( PROJECT_ROOT ) )
-			throw { code: 'app.browse.download.unauthorized', message : `No permissions to access ${resolvedItem}`, status: 403 };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( ! resolvedItem.includes( resolvedRoute ) || resolvedItem.includes( path.resolve( forbiddenDir ) ) )
+				throw { code: 'app.browse.download.unauthorized', message : `No permissions to access ${resolvedItem}`, status: 403 };
 	}
 }
 

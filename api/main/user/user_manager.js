@@ -2,12 +2,12 @@
 
 // Dependencies
 const User			= require( './user' );
-const DataServer	= require( 'event_request/server/components/caching/data_server' );
 const path			= require( 'path' );
+const DataServer	= require( 'event_request/server/components/caching/data_server' );
 const Acl			= require( '../acls/acl' );
 
 const USER_KEY		= 'USERS_DATA';
-const persistPath	= path.parse( require.main.filename ).dir;
+const persistPath	= require( '../utils/config_path' );
 const PERSIST_TIME	= 1000;
 
 /**
@@ -20,9 +20,9 @@ class UserManager
 		this.dataStore			= new DataServer({
 			ttl				: -1,
 			persist			: true,
-			persistPath		: path.join( persistPath, 'server_emulator_users.json' ),
 			persistInterval	: 10,	// Every 10 seconds
-			gcInterval		: 86400	// One day
+			gcInterval		: 3600,	// One hour
+			persistPath		: path.join( persistPath, 'se_users.json' )
 		});
 		this.users				= null;
 

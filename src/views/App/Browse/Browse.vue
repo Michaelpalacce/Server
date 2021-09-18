@@ -195,7 +195,7 @@ export default {
 	 */
 	async mounted()
 	{
-		this.currentDirectory	= this.$route.query.directory || ( await communicator.getUserRoute() ).route || null;
+		this.currentDirectory	= this.$route.query.directory || localStorage.route || ( await communicator.getUserRoute() ).route || null;
 
 		// Load the page
 		await this.browse();

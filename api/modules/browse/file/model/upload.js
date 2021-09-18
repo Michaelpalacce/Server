@@ -5,8 +5,7 @@ const fs			= require( 'fs' );
 const { promisify }	= require( 'util' );
 const mv			= require( 'mv' );
 const rename		= promisify( mv );
-
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const forbiddenDirs	= require( '../../utils/forbidden_folders' );
 
 /**
  * @brief	Upload model responsible for uploading files if the user has permissions to
@@ -38,8 +37,9 @@ class UploadModel
 		const resolvedDir	= path.resolve( uploadInput.getDirectory() );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( ! resolvedDir.includes( resolvedRoute ) || resolvedDir.includes( PROJECT_ROOT ) )
-			throw { code: 'app.browse.upload.unauthorized', message : `No permissions to upload to ${resolvedDir}`, status: 403 };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( ! resolvedDir.includes( resolvedRoute ) || resolvedDir.includes( path.resolve( forbiddenDir ) ) )
+				throw { code: 'app.browse.upload.unauthorized', message : `No permissions to upload to ${resolvedDir}`, status: 403 };
 
 		this.event.clearTimeout();
 

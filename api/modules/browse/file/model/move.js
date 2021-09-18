@@ -3,8 +3,7 @@
 const { rename, copyFile }	= require( 'fs' ).promises;
 const fs					= require( 'fs' );
 const path					= require( 'path' );
-
-const PROJECT_ROOT			= path.parse( require.main.filename ).dir;
+const forbiddenDirs			= require( '../../utils/forbidden_folders' );
 
 /**
  * @brief	Model responsible for cutting, copying or renaming a File
@@ -105,13 +104,17 @@ class MoveModel
 
 		const route				= this.user.getBrowseMetadata().getRoute();
 		const oldPath			= moveInput.getOldPath();
-		const newPath			= moveInput.getOldPath();
+		const newPath			= moveInput.getNewPath();
 		const resolvedNewPath	= path.resolve( newPath );
 		const resolvedOldPath	= path.resolve( oldPath );
 		const resolvedRoute		= path.resolve( route );
 
-		if ( resolvedNewPath.includes( PROJECT_ROOT ) || resolvedOldPath.includes( PROJECT_ROOT ) || PROJECT_ROOT.includes( resolvedOldPath ))
-			throw { code: 'app.browse.move.unauthorized', message : `Cannot do operations to project ROOT ${PROJECT_ROOT}` };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( resolvedNewPath.includes( path.resolve( forbiddenDir ) )
+				|| resolvedOldPath.includes( path.resolve( forbiddenDir ) )
+				|| path.resolve( forbiddenDir ).includes( resolvedOldPath )
+			)
+				throw { code: 'app.browse.move.unauthorized', message : `No permissions to access ${forbiddenDir}`, status: 403 };
 
 		if ( ! resolvedOldPath.includes( resolvedRoute ) || ! resolvedNewPath.includes( resolvedRoute ) )
 			throw { code: 'app.browse.move.unauthorized', message : `No permissions to do operations on ${resolvedOldPath}` };

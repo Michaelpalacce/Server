@@ -13,7 +13,7 @@ Dockerfile
 env.js
 package-lock.json
 postcss.config.js
-server_emulator_users.json
+se_users.json
 tailwind.config.js
 vue.config.js
 README.md

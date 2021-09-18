@@ -34,15 +34,22 @@ async function bootstrap()
 		metadata	: {}
 	};
 
+	let user	= null;
+
 	// Recreate the Root user
 	if ( ! UserManager.has( process.env.ADMIN_USERNAME ) )
-		Acl.decorateUserWithPermissions( UserManager.set( userData ) );
+		user	= Acl.decorateUserWithPermissions( UserManager.set( userData ) );
 	else
 	{
 		const rootUser		= UserManager.get( process.env.ADMIN_USERNAME )
 		userData.metadata	= rootUser.getUserData().metadata;
-		Acl.decorateUserWithPermissions( UserManager.update( userData ) );
+		user				= Acl.decorateUserWithPermissions( UserManager.update( userData ) );
 	}
+
+	if ( process.env.SUDO === "1" )
+		user.getBrowseMetadata().setRoute( '/' );
+	else
+		user.getBrowseMetadata().setRoute( process.env.USER_DATA_PATH );
 }
 
 bootstrap();

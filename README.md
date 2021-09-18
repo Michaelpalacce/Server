@@ -30,20 +30,25 @@ serve stop ---> stop the server
 ~~~
 - Additionally this module uses pm2 to handle the daemonizing of the process you can checkout: https://www.npmjs.com/package/pm2 for more info
 
-# API Environment variables
+# Installing and configuring persistence. Setting SERVER_CONFIG_PATH
+- All the data of the server is stored in 3 files:
+1. env.js -> stores environment data ( BESIDES SERVER_CONFIG_PATH )
+2. cache -> stores user sessions
+3. se_users.json -> stores user data
+- All of these files will be created in the SERVER_CONFIG_PATH environment variable. Note: If this is not set then all of them
+will be created in the os.tmpdir(). This env variable will not be in the env.js file and will be used to create an initial env.js at the given location.
+
+# API Environment variables ( editable via serve edit )
 - APP_PORT - Which port the server will be running on
 - APP_ADDRESS - Which IP address to bind to
 - ADMIN_USERNAME and ADMIN_PASSWORD - The root username and password 
+- SUDO - If you want the root user to have access to /. Note: you can always make an admin that has access to it, since you can change other users but not the root one. 
+Keep this to "0" if you worry about security. Defalts to "0"
+- USER_DATA_PATH - The default location that new users's data will be placed on the filesystem. Defaults to /data 
 - SSL_KEY_PATH - The ABSOLUTE path to the SSL key
 - SSL_CERT_PATH - The ABSOLUTE path to the SSL certificate
 - DEBUG - Whether to display console logs or not ( for Dev )
 - NODE_ENV - Keep it to production. If you are working on the plugin, change to development
-
-# UPDATING:
-- Since npm cleans up the directory on update, you can run the following command: `serve-hooks preinstall`.
-This will move your files to os.tmpDir.
-- Run: `npm update -g server-emulator`
-- Run: `serve-hooks postinstall` and this will move the config files from the os.tmpDir back to the project.
 
 # Enabling SSL
 - Generate a certificate and point the SSL_KEY_PATH and SSL_CERT_PATH to their locations
@@ -52,19 +57,20 @@ This will move your files to os.tmpDir.
 - If you want to add users go to the users page from the navbar and click on the Add New Users button
 - You will be asked to fill in the new user's data
 - After which feel free to click on the newly created user and edit it's data
-- Browse Module Route is the route under which the user will be able to access the FS and edit delete,download,copy, etc
+- Browse Module Route is the route under which the user will be able to access the FS and edit delete,download,copy, etc.
+This will be: `process.envUSER_DATA_PATH/{{ USERNAME }}`
 - The user can have user permissions set which have priority over role permissions
 
 # Roles
-- WIP 
-- Currently ony has root and user
 - Roles order matters as the first rule to be matched will be the one that will be used
-- WIP You can add your own roles with permissions
+- You can add your own roles with permissions
 
 # Permissions:
 - Only root and admin users can add/ view/ modify other users ( and self ). 
-- Nobody can access the project folder .
+- Nobody can access the project folder.
+- Nobody can access the config Folder.
 - Nobody can do any operations on the PROJECT_ROOT as well as many operations including the folder structure where the project is
+- Nobody can do any operations on the config Folder
 
 # User Permissions
 
@@ -130,7 +136,6 @@ This will move your files to os.tmpDir.
 - It is a good idea to change the root password ( via the env.js )
 
 # Known Bugs:
-- Some functionality is broken on virtual machines...
 - Cannot detect if you are moving a folder inside itself, so you can't do this: 
        
         /
@@ -164,3 +169,30 @@ You can stop a production app by running
 ~~~bash
 pm2 stop all
 ~~~
+
+A sample env.js for development can be:
+
+~~~javascript
+const path		= require( 'path' );
+
+module.exports	= {
+	APP_PORT: process.env.APP_PORT || "8888",
+	APP_ADDRESS: process.env.APP_ADDRESS || "0.0.0.0",
+	ADMIN_USERNAME: process.env.ADMIN_USERNAME || "root",
+	ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || "toor",
+	DEBUG: process.env.DEBUG || "1",
+	SSL_KEY_PATH: process.env.SSL_KEY_PATH || "",
+	SSL_CERT_PATH: process.env.SSL_CERT_PATH || "",
+	NODE_ENV: process.env.NODE_ENV || "development",
+	USER_DATA_PATH: process.env.USER_DATA_PATH || "/data",
+	SUDO: process.env.SUDO || "1",
+	SERVER_CONFIG_PATH: path.resolve( './' )
+};
+~~~
+
+# Docker Building
+
+~~~bash
+./BUILD
+~~~
+- This will build the image and publish it to docker hub

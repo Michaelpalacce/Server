@@ -63,6 +63,6 @@ class BrowseMetadata
  *
  * @var		{String}
  */
-BrowseMetadata.DEFAULT_ROUTE	= '/';
+BrowseMetadata.DEFAULT_ROUTE	= process.env.USER_DATA_PATH;
 
 module.exports	= BrowseMetadata;

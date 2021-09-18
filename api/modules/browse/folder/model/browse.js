@@ -8,7 +8,7 @@ const formatItem	= require( '../../../../main/utils/file_formatter' );
 const { encode }	= require( '../../../../main/utils/base_64_encoder' );
 
 const fileSystem	= new FileSystem();
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const forbiddenDirs	= require( '../../utils/forbidden_folders' );
 
 /**
  * @brief	Handles navigation within the Browse Model
@@ -44,8 +44,9 @@ class BrowseModel
 		const resolvedDir	= path.resolve( directory );
 		const resolvedRoute	= path.resolve( route );
 
-		if ( resolvedDir.includes( PROJECT_ROOT ) || ! resolvedDir.includes( resolvedRoute ) )
-			throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${resolvedDir}`, status: 403 };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( resolvedDir.includes( path.resolve( forbiddenDir ) ) || ! resolvedDir.includes( resolvedRoute ) )
+				throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${resolvedDir}`, status: 403 };
 
 		const parsedItem	= path.parse( directory );
 		const itemsResult	= await fileSystem.getAllItems( directory, browseInput.getToken() );
