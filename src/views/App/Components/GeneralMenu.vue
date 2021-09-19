@@ -5,7 +5,13 @@
 	>
 
 		<div class="inline-block" v-for="element in elements">
-			<MenuElement  :text="element.text" @on-click="$emit( element.eventName )" :isDisabled="element.isDisabled" v-if="element.shown"/>
+			<MenuElement
+				:text="element.text"
+				@on-click="$emit( element.eventName )"
+				:isIcon="element.isIcon"
+				:isDisabled="element.isDisabled"
+				:iconTitle="element.iconTitle"
+				v-if="element.shown"/>
 		</div>
 	</div>
 </template>

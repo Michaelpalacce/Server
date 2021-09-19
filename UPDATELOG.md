@@ -1,3 +1,6 @@
+22.0.0
+- Small redesign of the menu bars to use icons instead of text, now those icons will be hidden when disabled instead of just changing opacity and disabling them
+
 21.0.1
 - Fix for icons
 

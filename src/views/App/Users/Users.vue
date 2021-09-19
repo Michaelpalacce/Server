@@ -1,6 +1,6 @@
 <template>
 	<div class="m-5">
-		<GeneralMenu :elements="menu" @refresh-click="loadData"/>
+		<GeneralMenu :elements="menu" @refresh-click="loadData" class="w-full"/>
 
 		<Error :errorMessage="errorMessage" @clear="errorMessage = ''" class="mx-auto w-4/5 my-5"/>
 
@@ -53,9 +53,11 @@ export default {
 			errorMessage	: '',
 			menu			: [
 				{
-					text		: 'Refresh',
+					text		: 'fas fa-sync',
 					eventName	: 'refresh-click',
+					iconTitle	: 'Refersh',
 					shown		: true,
+					isIcon		: true,
 					isDisabled	: false
 				}
 			]

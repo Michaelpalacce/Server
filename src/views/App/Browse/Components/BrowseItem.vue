@@ -17,8 +17,8 @@
 
 		<input type="checkbox" class="flex-none form-checkbox h-6 w-10 inline-block md:hidden mt-3" v-if="checkboxVisible" v-model="checked">
 
-		<span class="fa fa-folder-open md:hidden fa-3x w-1/6" v-if="isFolder"></span>
-		<span class="fa fa-file md:hidden fa-3x w-1/6" v-if="! isFolder"></span>
+		<span class="fas fa-folder md:hidden fa-3x w-1/6" v-if="isFolder"></span>
+		<span class="fas fa-file fa-3x w-1/6 md:hidden" v-if="! isFolder"></span>
 
 		<div class="flex flex-wrap md:block md:w-full w-5/6 text-xs md:text-base px-5 md:px-0">
 			<div class="md:w-10 hidden md:inline-block" v-if="checkboxVisible">
@@ -27,8 +27,8 @@
 
 			<div class="w-full md:w-7/12 inline-block">
 				<p class="truncate">
-					<i class="fa fa-folder-open mr-2 hidden md:inline-block" v-if="isFolder"></i>
-					<i class="fa fa-file mr-2 hidden md:inline-block" v-if="! isFolder"></i>
+					<i class="fas fa-folder mr-2 hidden md:inline-block" v-if="isFolder"></i>
+					<i class="fas fa-file mr-2 hidden md:inline-block" v-if="! isFolder"></i>
 					<span :class="{ 'text-blue-200': previewAvailable && ! isFolder }" class="font-medium text-base">{{initialName}}</span>
 				</p>
 			</div>

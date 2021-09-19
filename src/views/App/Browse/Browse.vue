@@ -1,23 +1,25 @@
 <template>
 	<div class="rounded-t-lg m-5 mx-auto text-gray-200 px-5 mb-64" v-if="upload === false">
-		<GeneralMenu
-			:elements="leftMenu"
-			@upload-click="showUpload"
-			@refresh-click="browse( currentDirectory )"
-		/>
+		<div class="sticky top-0 bg-gray-700">
+			<GeneralMenu
+				:elements="leftMenu"
+				@upload-click="showUpload"
+				@refresh-click="browse( currentDirectory )"
+				@new-folder-click="createNewFolder"
+			/>
 
-		<GeneralMenu
-			class="lg:float-right float-none"
-			:elements="rightMenu"
-			@delete-click="deleteCheckedItems"
-			@new-folder-click="createNewFolder"
-			@rename-click="onRenameClick"
-			@copy-click="onCopyClick"
-			@cut-click="onCutClick"
-			@paste-click="onPasteClick"
-			@download-click="onDownloadClick"
-			@favorite-click="onFavoriteClick"
-		/>
+			<GeneralMenu
+				class="md:float-right float-none"
+				:elements="rightMenu"
+				@delete-click="deleteCheckedItems"
+				@rename-click="onRenameClick"
+				@copy-click="onCopyClick"
+				@cut-click="onCutClick"
+				@paste-click="onPasteClick"
+				@download-click="onDownloadClick"
+				@favorite-click="onFavoriteClick"
+			/>
+		</div>
 		<Back @click="browse( previousDirectory )" :backValue="decodedCurrentDir" class="mt-10"/>
 
 		<Error :errorMessage="browseErrorMessage" class="mx-auto w-4/5 my-5"/>
@@ -85,57 +87,75 @@ export default {
 
 	data: () => {
 		const refreshMenuEl		= {
-			text		: 'Refresh',
+			text		: 'fas fa-sync',
 			eventName	: 'refresh-click',
+			iconTitle	: 'Refresh',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: false
 		};
 		const uploadMenuEl		= {
-			text		: 'Upload',
+			text		: 'fas fa-upload',
 			eventName	: 'upload-click',
+			iconTitle	: 'Upload',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: false
 		};
 		const newFolderMenuEl	= {
-			text		: 'New Folder',
+			text		: 'fas fa-folder-plus',
 			eventName	: 'new-folder-click',
+			iconTitle	: 'New Folder',
+			isIcon		: true,
 			shown		: true,
 			isDisabled	: false
 		};
 		const renameMenuEl		= {
-			text		: 'Rename',
+			text		: 'fas fa-pen',
 			eventName	: 'rename-click',
+			iconTitle	: 'Rename',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: true
 		};
 		const downloadMenuEl	= {
-			text		: 'Download',
+			text		: 'fas fa-download',
 			eventName	: 'download-click',
+			iconTitle	: 'Download',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: true
 		};
 		const deleteMenuEl		= {
-			text		: 'Delete',
+			text		: 'fa fa-trash',
 			eventName	: 'delete-click',
+			iconTitle	: 'Delete',
+			isIcon		: true,
 			shown		: true,
 			isDisabled	: true
 		};
 		const copyMenuEl		= {
-			text		: 'Copy',
+			text		: 'fas fa-copy',
 			eventName	: 'copy-click',
+			iconTitle	: 'Copy',
+			isIcon		: true,
 			shown		: true,
 			isDisabled	: true
 		};
 		const cutMenuEl			= {
-			text		: 'Cut',
+			text		: 'fas fa-cut',
 			eventName	: 'cut-click',
+			iconTitle	: 'Move',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: true
 		};
 		const favoriteMenuEl	= {
-			text		: 'Favorite',
+			text		: 'fas fa-star',
 			eventName	: 'favorite-click',
+			iconTitle	: 'Favorite',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: true
 		};
 		const pasteMenuEl	= {
@@ -163,10 +183,10 @@ export default {
 			checkedItems		: [],
 
 			leftMenu				: [
-				refreshMenuEl, uploadMenuEl
+				refreshMenuEl, newFolderMenuEl, uploadMenuEl
 			],
 			rightMenu				: [
-				newFolderMenuEl, deleteMenuEl, copyMenuEl, cutMenuEl, renameMenuEl, downloadMenuEl, favoriteMenuEl, pasteMenuEl
+				deleteMenuEl, copyMenuEl, cutMenuEl, renameMenuEl, downloadMenuEl, favoriteMenuEl, pasteMenuEl
 			],
 
 			refreshMenuEl,

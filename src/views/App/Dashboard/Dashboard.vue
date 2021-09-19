@@ -54,16 +54,20 @@ export default {
 	components	: { GeneralMenu, Divider, BrowseItem, Button, TitleSection },
 	data		: () => {
 		const refreshMenuEl	= {
-			text		: 'Refresh',
+			text		: 'fas fa-sync',
 			eventName	: 'refresh-click',
+			iconTitle	: 'Refresh',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: false
 		};
 
 		const deleteMenuEl	= {
-			text		: 'Remove',
+			text		: 'fas fa-trash',
 			eventName	: 'remove-click',
+			iconTitle	: 'Delete',
 			shown		: true,
+			isIcon		: true,
 			isDisabled	: true
 		};
 
