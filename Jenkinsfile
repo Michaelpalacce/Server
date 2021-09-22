@@ -50,21 +50,13 @@ pipeline {
 	}
 
 	stages {
-		stage('Dependency') {
-			agent { label 'nodejs-16' }
-			steps {
-			  sh """
-				npm ci
-			  """
-			}
-		}
-
 		stage( 'Build and Publish' ) {
 			agent { label 'nodejs-16' }
 			steps {
 				script {
 					withCredentials([string(credentialsId: 'npm-access-token', variable: 'NPMTOKEN')]) {
 						sh """
+							npm ci
 							echo "//registry.npmjs.org/:_authToken=$NPMTOKEN" >> ~/.npmrc
 							npm publish
 						"""
