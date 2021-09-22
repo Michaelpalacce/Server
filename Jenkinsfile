@@ -61,12 +61,6 @@ pipeline {
 
 		stage( 'Build and Publish' ) {
 			agent { label 'nodejs-16' }
-			when {
-				beforeAgent true;
-				expression{
-					return publish.toBoolean()
-				}
-			}
 			steps {
 				script {
 					withCredentials([string(credentialsId: 'npm-access-token', variable: 'NPMTOKEN')]) {
