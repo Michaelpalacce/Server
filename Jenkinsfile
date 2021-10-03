@@ -62,7 +62,7 @@ pipeline {
 			}
 		}
 		stage( 'Docker push' ) {
-			agent { label 'docker-builder' }
+			agent { label 'docker' }
 			when {
 				beforeAgent true;
 				expression{
