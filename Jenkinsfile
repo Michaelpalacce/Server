@@ -75,6 +75,7 @@ pipeline {
 						sh """
 							docker login -u $username -p $password
 							docker buildx install
+							docker buildx create --use
 							./BUILD
 						"""
 					}
