@@ -28,7 +28,6 @@ pipeline {
 	agent none
 	parameters {
 		booleanParam(name: 'publish', defaultValue: false, description: 'Do you want to publish to npm?')
-		booleanParam(name: 'dockerpush', defaultValue: true, description: 'Do you want to build and push to dockerhub')
 	}
 
 	post{
@@ -56,27 +55,6 @@ pipeline {
 							npm ci
 							echo "//registry.npmjs.org/:_authToken=$NPMTOKEN" >> ~/.npmrc
 							npm publish
-						"""
-					}
-				}
-			}
-		}
-		stage( 'Docker push' ) {
-			agent { label 'docker' }
-			when {
-				beforeAgent true;
-				expression{
-					return dockerpush.toBoolean()
-				}
-			}
-			steps {
-				script {
-					withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'password', usernameVariable: 'username')]) {
-						sh """
-							docker login -u $username -p $password
-							docker buildx install
-							docker buildx create --use
-							./BUILD
 						"""
 					}
 				}
