@@ -1,3 +1,6 @@
+22.0.3
+- jenkinsfile added docker build
+
 22.0.2
 - forbidden dirs fix
 - Jenkinsfile fix email
