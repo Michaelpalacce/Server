@@ -43,9 +43,9 @@ class BrowseModel
 		const directory		= browseInput.getDirectory();
 		const route			= this.user.getBrowseMetadata().getRoute();
 
-		// for ( const forbiddenDir of forbiddenDirs )
-		// 	if ( itemInFolder( directory, forbiddenDir, true ) || ! itemInFolder( directory, route ) )
-		// 		throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${directory}`, status: 403 };
+		for ( const forbiddenDir of forbiddenDirs )
+			if ( itemInFolder( directory, forbiddenDir, true ) || ! itemInFolder( directory, route ) )
+				throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${directory}`, status: 403 };
 
 		const parsedItem	= path.parse( directory );
 		const itemsResult	= await fileSystem.getAllItems( directory, browseInput.getToken() );

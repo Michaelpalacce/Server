@@ -1,3 +1,6 @@
+22.0.4
+- Reenabled the browsing protection
+
 22.0.3
 - jenkinsfile added docker build
 
