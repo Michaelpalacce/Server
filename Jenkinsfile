@@ -61,7 +61,7 @@ pipeline {
 				}
 			}
 		}
-		stage( 'Build and Publish' ) {
+		stage( 'Docker push' ) {
 			agent { label 'docker' }
 			when {
 				beforeAgent true;
