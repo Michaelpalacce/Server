@@ -1,5 +1,6 @@
 22.0.4
 - Reenabled the browsing protection
+- Fix to dockerfile to speed up
 
 22.0.3
 - jenkinsfile added docker build
