@@ -1,8 +1,9 @@
 'use strict';
 
-const path			= require( 'path' );
-const fs			= require( 'fs' );
-const forbiddenDirs	= require( '../../utils/forbidden_folders' );
+const path				= require( 'path' );
+const fs				= require( 'fs' );
+const forbiddenDirs		= require( '../../utils/forbidden_folders' );
+const { itemInFolder }	= require( '../../utils/folders' );
 
 /**
  * @brief	Class responsible for deletion of folders
@@ -33,17 +34,15 @@ class DeleteModel
 		if ( ! deleteInput.isValid() )
 			throw { code: 'app.input.invalidDeleteInput', message : deleteInput.getReasonToString() };
 
-		const directory		= deleteInput.getDirectory();
-		const itemName		= path.parse( directory ).base;
-		const route			= this.user.getBrowseMetadata().getRoute();
-		const resolvedDir	= path.resolve( directory );
-		const resolvedRoute	= path.resolve( route );
+		const directory	= deleteInput.getDirectory();
+		const itemName	= path.parse( directory ).base;
+		const route		= this.user.getBrowseMetadata().getRoute();
 
 		for ( const forbiddenDir of forbiddenDirs )
-			if ( resolvedDir.includes( path.resolve( forbiddenDir ) ) || path.resolve( forbiddenDir ).includes( resolvedDir ) )
-				throw { code: 'app.browse.delete.projectRoot', message : { error: `Cannot perform delete on ${resolvedDir}`, itemName } };
+			if ( itemInFolder( directory, forbiddenDir, true ) || itemInFolder( forbiddenDir, directory, true ) )
+				throw { code: 'app.browse.delete.projectRoot', message : { error: `Cannot perform delete on ${directory}`, itemName } };
 
-		if ( ! resolvedDir.includes( resolvedRoute ) || directory === '/' )
+		if ( ! itemInFolder( directory, route, true ) || directory === '/' )
 			throw { code: 'app.browse.delete.unauthorized', message : { error: `No permissions to delete item`, itemName } };
 
 		if ( ! fs.existsSync( directory ) )

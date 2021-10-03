@@ -3,6 +3,7 @@
 // Dependencies
 const app		= require( 'event_request' )();
 const FileInput	= require( '../input/file_input' );
+const FileModel	= require( '../model/file' );
 const router	= app.Router();
 
 /**
@@ -15,8 +16,9 @@ const router	= app.Router();
  */
 router.get( '/browse/file/data', ( event ) => {
 	const input	= new FileInput( event );
+	const model	= new FileModel( event );
 
-	event.getFileStream( input.getFile() ).pipe( event.response );
+	model.streamFile( input );
 });
 
 module.exports	= router;

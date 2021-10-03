@@ -1,11 +1,12 @@
 'use strict';
 
-const path			= require( 'path' );
-const fs			= require( 'fs' );
-const { promisify }	= require( 'util' );
-const mv			= require( 'mv' );
-const rename		= promisify( mv );
-const forbiddenDirs	= require( '../../utils/forbidden_folders' );
+const path				= require( 'path' );
+const fs				= require( 'fs' );
+const { promisify }		= require( 'util' );
+const mv				= require( 'mv' );
+const rename			= promisify( mv );
+const forbiddenDirs		= require( '../../utils/forbidden_folders' );
+const { itemInFolder }	= require( '../../utils/folders' );
 
 /**
  * @brief	Upload model responsible for uploading files if the user has permissions to
@@ -33,17 +34,15 @@ class UploadModel
 		if ( ! uploadInput.isValid() )
 			throw { code: 'app.input.invalidUploadInput', message : uploadInput.getReasonToString() };
 
-		const route			= this.user.getBrowseMetadata().getRoute();
-		const resolvedDir	= path.resolve( uploadInput.getDirectory() );
-		const resolvedRoute	= path.resolve( route );
+		const route		= this.user.getBrowseMetadata().getRoute();
+		const directory	= uploadInput.getDirectory();
 
 		for ( const forbiddenDir of forbiddenDirs )
-			if ( ! resolvedDir.includes( resolvedRoute ) || resolvedDir.includes( path.resolve( forbiddenDir ) ) )
-				throw { code: 'app.browse.upload.unauthorized', message : `No permissions to upload to ${resolvedDir}`, status: 403 };
+			if ( ! itemInFolder( directory, route ) || itemInFolder( directory, forbiddenDir ) )
+				throw { code: 'app.browse.upload.unauthorized', message : `No permissions to upload to ${directory}`, status: 403 };
 
 		this.event.clearTimeout();
 
-		const directory	= uploadInput.getDirectory();
 		const files		= uploadInput.getFiles();
 
 		for ( const file of files )

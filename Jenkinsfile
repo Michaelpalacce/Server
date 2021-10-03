@@ -12,25 +12,12 @@ Check console output at "${env.JENKINS_URL}/job/${env.JOB_NAME}/${env.BUILD_NUMB
 """
     )
 }
-def notifyFailed() {
-  emailext (
-      subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      to: '$DEFAULT_RECIPIENTS',
-      body: """
-FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-
-Check console output at "${env.JENKINS_URL}/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
-"""
-    )
-}
 def notifySuccessful() {
   emailext (
       subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
       to:'$DEFAULT_RECIPIENTS',
       body: """
 SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-
-Open: https://stefangenov.site to check out your new settings!
 
 Check console output at "${env.JENKINS_URL}/job/${env.JOB_NAME}/${env.BUILD_NUMBER}"
 """

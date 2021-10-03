@@ -1,3 +1,7 @@
+22.0.2
+- forbidden dirs fix
+- Jenkinsfile fix email
+
 22.0.1
 - Jenkinsfile
 

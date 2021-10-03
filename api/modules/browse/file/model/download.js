@@ -1,9 +1,10 @@
 'use strict';
 
-const path			= require( 'path' );
-const fs			= require( 'fs' );
-const archiver		= require( 'archiver' );
-const forbiddenDirs	= require( '../../utils/forbidden_folders' );
+const path				= require( 'path' );
+const fs				= require( 'fs' );
+const archiver			= require( 'archiver' );
+const forbiddenDirs		= require( '../../utils/forbidden_folders' );
+const { itemInFolder }	= require( '../../utils/folders' );
 
 /**
  * @brief	Model responsible for downloading one or more items if the user has permission to access them
@@ -143,13 +144,11 @@ class DownloadModel
 			throw { code: 'app.browse.download.itemDoesNotExist', message: `${itemName} does not exist` }
 		}
 
-		const route			= this.user.getBrowseMetadata().getRoute();
-		const resolvedItem	= path.resolve( itemName );
-		const resolvedRoute	= path.resolve( route );
+		const route	= this.user.getBrowseMetadata().getRoute();
 
 		for ( const forbiddenDir of forbiddenDirs )
-			if ( ! resolvedItem.includes( resolvedRoute ) || resolvedItem.includes( path.resolve( forbiddenDir ) ) )
-				throw { code: 'app.browse.download.unauthorized', message : `No permissions to access ${resolvedItem}`, status: 403 };
+			if ( ! itemInFolder( itemName, route ) || itemInFolder( itemName, forbiddenDir ) )
+				throw { code: 'app.browse.download.unauthorized', message : `No permissions to access ${itemName}`, status: 403 };
 	}
 }
 

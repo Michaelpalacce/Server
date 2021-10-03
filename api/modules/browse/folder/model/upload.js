@@ -1,9 +1,9 @@
 'use strict';
 
-const path					= require( 'path' );
 const fs					= require( 'fs' );
 const { mkdir }				= fs.promises;
 const forbiddenDirs			= require( '../../utils/forbidden_folders' );
+const { itemInFolder }		= require( '../../utils/folders' );
 const FORBIDDEN_CHARACTERS	= [ '<', '>', ':', '|', '?', '*' ];
 
 /**
@@ -35,18 +35,15 @@ class UploadModel
 		const directory			= uploadInput.getDirectory();
 		const route				= this.user.getBrowseMetadata().getRoute();
 
-		const resolvedDirectory	= path.resolve( directory );
-		const resolvedRoute		= path.resolve( route );
-
 		for ( const forbiddenDir of forbiddenDirs )
-			if ( resolvedDirectory.includes( path.resolve( forbiddenDir ) ) || path.resolve( forbiddenDir ).includes( resolvedDirectory ) )
-				throw { code: 'app.browse.upload.unauthorized', message: `Cannot create folder in ${resolvedDirectory}`, status: 403 };
+			if ( itemInFolder( directory, forbiddenDir, true ) || itemInFolder( forbiddenDir, directory, true ) )
+				throw { code: 'app.browse.upload.unauthorized', message: `Cannot create folder in ${directory}`, status: 403 };
 
-		if ( ! resolvedDirectory.includes( resolvedRoute ) )
-			throw { code: 'app.browse.upload.unauthorized', message: `No permissions to create ${resolvedDirectory}`, status: 403 };
+		if ( ! itemInFolder( directory, route ) )
+			throw { code: 'app.browse.upload.unauthorized', message: `No permissions to create ${directory}`, status: 403 };
 
 		if ( fs.existsSync( directory ) )
-			throw { code: 'app.browse.upload.directoryExists', message: `Directory already exists: ${resolvedDirectory}`, status: 400 };
+			throw { code: 'app.browse.upload.directoryExists', message: `Directory already exists: ${directory}`, status: 400 };
 
 		if ( directory === '/' )
 			throw { code: 'app.browse.upload.tryingToCreateRoot', message: 'Cannot create root', status: 400 };

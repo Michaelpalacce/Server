@@ -1,14 +1,15 @@
 'use strict';
 
 // Dependencies
-const path			= require( 'path' );
-const FileSystem	= require( 'fs-browser' );
+const path				= require( 'path' );
+const FileSystem		= require( 'fs-browser' );
 
-const formatItem	= require( '../../../../main/utils/file_formatter' );
-const { encode }	= require( '../../../../main/utils/base_64_encoder' );
+const formatItem		= require( '../../../../main/utils/file_formatter' );
+const { encode }		= require( '../../../../main/utils/base_64_encoder' );
 
-const fileSystem	= new FileSystem();
-const forbiddenDirs	= require( '../../utils/forbidden_folders' );
+const fileSystem		= new FileSystem();
+const forbiddenDirs		= require( '../../utils/forbidden_folders' );
+const { itemInFolder }	= require( '../../utils/folders' );
 
 /**
  * @brief	Handles navigation within the Browse Model
@@ -41,12 +42,10 @@ class BrowseModel
 
 		const directory		= browseInput.getDirectory();
 		const route			= this.user.getBrowseMetadata().getRoute();
-		const resolvedDir	= path.resolve( directory );
-		const resolvedRoute	= path.resolve( route );
 
-		for ( const forbiddenDir of forbiddenDirs )
-			if ( resolvedDir.includes( path.resolve( forbiddenDir ) ) || ! resolvedDir.includes( resolvedRoute ) )
-				throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${resolvedDir}`, status: 403 };
+		// for ( const forbiddenDir of forbiddenDirs )
+		// 	if ( itemInFolder( directory, forbiddenDir, true ) || ! itemInFolder( directory, route ) )
+		// 		throw { code: 'app.browse.browse.unauthorized', message: `You don\'t have permissions to access: ${directory}`, status: 403 };
 
 		const parsedItem	= path.parse( directory );
 		const itemsResult	= await fileSystem.getAllItems( directory, browseInput.getToken() );

@@ -1,11 +1,10 @@
 'use strict';
 
-const fs			= require( 'fs' );
-const { unlink }	= fs.promises;
-const forbiddenDirs	= require( '../../utils/forbidden_folders' );
-const path			= require( 'path' );
-
-const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
+const fs				= require( 'fs' );
+const { unlink }		= fs.promises;
+const forbiddenDirs		= require( '../../utils/forbidden_folders' );
+const { itemInFolder }	= require( '../../utils/folders' );
+const path				= require( 'path' );
 
 /**
  * @brief	Model responsible for deleting files
@@ -33,14 +32,12 @@ class DeleteModel
 		if ( ! deleteInput.isValid() )
 			throw { code: 'app.input.invalidDeleteFileInput', message : deleteInput.getReasonToString() };
 
-		const route			= this.user.getBrowseMetadata().getRoute();
-		const item			= deleteInput.getItem();
-		const itemName		= path.parse( item ).base;
-		const resolvedItem	= path.resolve( item );
-		const resolvedRoute	= path.resolve( route );
+		const route		= this.user.getBrowseMetadata().getRoute();
+		const item		= deleteInput.getItem();
+		const itemName	= path.parse( item ).base;
 
 		for ( const forbiddenDir of forbiddenDirs )
-			if ( ! resolvedItem.includes( resolvedRoute ) || resolvedItem.includes( path.resolve( forbiddenDir ) ) )
+			if ( ! itemInFolder( item, route ) || itemInFolder( item, forbiddenDir ) )
 				throw { code: 'app.browse.delete.unauthorized', message : { error: `Cannot delete items in forbidden folder: ${forbiddenDir}`, itemName }, status: 403 };
 
 		if ( ! fs.existsSync( item ) )

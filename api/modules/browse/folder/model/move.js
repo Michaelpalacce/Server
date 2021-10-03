@@ -1,10 +1,11 @@
 'use strict';
 
-const { rename }	= require( 'fs' ).promises;
-const fs			= require( 'fs' );
-const path			= require( 'path' );
-const copyFolder	= require( '../../../../main/utils/copyFolder' );
-const forbiddenDirs = require("../../utils/forbidden_folders");
+const { rename }		= require( 'fs' ).promises;
+const fs				= require( 'fs' );
+const path				= require( 'path' );
+const copyFolder		= require( '../../../../main/utils/copyFolder' );
+const forbiddenDirs		= require( "../../utils/forbidden_folders" );
+const { itemInFolder }	= require( '../../utils/folders' );
 
 /**
  * @brief	Model responsible for cutting, copying or renaming a Folder
@@ -101,22 +102,19 @@ class MoveModel
 		if ( ! moveInput.isValid() )
 			throw { code: 'app.input.invalidMoveInput', message : moveInput.getReasonToString() };
 
-		const route				= this.user.getBrowseMetadata().getRoute();
-		const oldPath			= moveInput.getOldPath();
-		const newPath			= moveInput.getNewPath();
-		const resolvedNewPath	= path.resolve( newPath );
-		const resolvedOldPath	= path.resolve( oldPath );
-		const resolvedRoute		= path.resolve( route );
+		const route		= this.user.getBrowseMetadata().getRoute();
+		const oldPath	= moveInput.getOldPath();
+		const newPath	= moveInput.getNewPath();
 
 		for ( const forbiddenDir of forbiddenDirs )
-			if ( resolvedNewPath.includes( path.resolve( forbiddenDir ) )
-				|| resolvedOldPath.includes( path.resolve( forbiddenDir ) )
-				|| path.resolve( forbiddenDir ).includes( resolvedOldPath )
+			if ( itemInFolder( newPath, forbiddenDir, true )
+				|| itemInFolder( oldPath, forbiddenDir, true )
+				|| itemInFolder( forbiddenDir, oldPath, true )
 			)
 				throw { code: 'app.browse.move.unauthorized', message : `No permissions to access ${forbiddenDir}`, status: 403 };
 
-		if ( ! resolvedOldPath.includes( resolvedRoute ) || ! resolvedNewPath.includes( resolvedRoute ) )
-			throw { code: 'app.browse.move.unauthorized', message : `No permissions to do operations on ${resolvedOldPath}` };
+		if ( ! itemInFolder( oldPath, route, true ) || ! itemInFolder( newPath, route, true ) )
+			throw { code: 'app.browse.move.unauthorized', message : `No permissions to do operations on ${oldPath}` };
 
 		if ( fs.statSync( oldPath ).isFile() )
 			throw { code: 'app.browse.move.wrongCall', message : `Cannot do operations on a file: ${oldPath}` };
