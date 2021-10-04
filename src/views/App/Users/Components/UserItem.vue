@@ -6,7 +6,7 @@
 				cursor-pointer"
 				@click="$emit( 'on-click' )"
 	>
-		<span class="fa fa-user md:hidden fa-3x w-1/6" ></span>
+		<span class="fa fa-user md:hidden fa-2x md:fa-3x w-1/6" ></span>
 
 		<div class="flex flex-wrap md:block md:w-full w-5/6 text-xs md:text-base px-5 md:px-0">
 			<div class="w-full md:w-full inline-block">

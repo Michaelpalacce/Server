@@ -17,17 +17,12 @@ module.exports	= {
 	 * @return	{Boolean}
 	 */
 	itemInFolder( item, folder, isItemAFolder = false ) {
-		console.log( `Item: ${item}` );
-		console.log( `folder: ${folder}` );
 		if ( item === folder ) {
 			return true;
 		}
 
 		const resolvedItem		= isItemAFolder ? formatFolder( item ) : path.resolve( item );
 		const resolvedFolder	= formatFolder( folder );
-
-		console.log( `ResolvedItem: ${resolvedItem}` );
-		console.log( `ResolvedFolder: ${resolvedFolder}` );
 
 		return resolvedItem.startsWith( resolvedFolder );
 	}

@@ -1,3 +1,7 @@
+22.1.0
+- Reduced Dockerfile size
+- Improved the user section on mobile
+
 22.0.4
 - Reenabled the browsing protection
 - Fix to dockerfile to speed up
