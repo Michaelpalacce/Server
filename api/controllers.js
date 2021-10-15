@@ -48,15 +48,12 @@ apiRouter.add( require( './modules/user/controller/user' ) );
 // Dashboard fetch section
 apiRouter.add( require( './modules/dashboard/controllers/view' ) );
 
-
 const PROJECT_ROOT	= path.parse( require.main.filename ).dir;
 
 // Backend
 app.add( '/api', apiRouter );
 // Serve dist
-app.get( ( event ) => {
-	require( './static_middleware' )( event, 'dist' )
-} );
+app.apply( app.er_static, { paths: ['dist'] } );
 // Frontend
 app.get(( event )=>{
 	fs.createReadStream( `${PROJECT_ROOT}/dist/index.html` ).pipe( event.response );

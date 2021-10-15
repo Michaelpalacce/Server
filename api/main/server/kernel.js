@@ -38,9 +38,6 @@ app.add(( event ) => {
 	event.next();
 });
 
-// Serve Static Resources
-app.apply( app.er_static, { paths	: ['public/js', 'public/css', 'public/fonts', 'favicon.ico'], cache: { static : false }, useEtag: true } );
-
 app.er_validation.setOptions({
 	failureCallback: ( event, parameter, result ) => {
 		event.next( `Invalid input: ${JSON.stringify( result.getValidationResult() )}`, 400 );

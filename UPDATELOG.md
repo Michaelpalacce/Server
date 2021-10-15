@@ -1,3 +1,7 @@
+22.2.0
+- Newest version of event_request allowing me to remove static middleware!
+- Removed unnecessary static middleware
+
 22.1.0
 - Reduced Dockerfile size
 - Improved the user section on mobile
