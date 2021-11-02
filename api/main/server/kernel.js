@@ -48,7 +48,7 @@ app.er_validation.setOptions({
 app.apply( app.er_data_server, { dataServerOptions: { persist: true, persistPath: path.join( configPath, 'cache' ) } } );
 
 // Rate Limit the request
-app.apply( app.er_rate_limits, { useFile: true } );
+// app.apply( app.er_rate_limits, {} );
 
 // Parse body
 app.apply( app.er_body_parser_form );

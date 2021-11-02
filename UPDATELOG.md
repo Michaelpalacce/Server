@@ -1,3 +1,6 @@
+22.3.0
+- Newest version of event_request
+
 22.2.0
 - Newest version of event_request allowing me to remove static middleware!
 - Removed unnecessary static middleware

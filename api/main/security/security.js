@@ -17,8 +17,7 @@ let isBootstrapped	= false;
  *
  * @return	{Promise<void>}
  */
-async function bootstrap()
-{
+async function bootstrap() {
 	if ( isBootstrapped )
 		return;
 
@@ -61,7 +60,6 @@ bootstrap();
  * 			Sets the UserManager in the eventRequest
  */
 app.add( async ( event ) => {
-	await event.initSession();
 	event.$userManager	= UserManager;
 
 	event.next();
