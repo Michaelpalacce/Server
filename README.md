@@ -11,6 +11,23 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0b4f4870655d46e59396a530b651d5b9)](https://app.codacy.com/manual/Michaelpalacce/Server?utm_source=github.com&utm_medium=referral&utm_content=Michaelpalacce/Server&utm_campaign=Badge_Grade_Dashboard)
 
+# Docker:
+Images are available for amd64 and arm64 architectures. [Docker Hub](https://hub.docker.com/repository/docker/stefangenov/server)
+
+### Running:
+~~~bash
+docker run  -p 8080:80 -d stefangenov/server 
+~~~
+Access your app on http://localhost:8080
+
+### Setting it up on K8s:
+[Example K8S Setup](https://github.com/Michaelpalacce/HomeLab/tree/master/Helm/apps/storage)
+
+# Installation:
+~~~bash
+npm i -g server-emulator
+~~~
+
 # Use:
 - You can use either `serve` or `server-emulator`
 ~~~
@@ -28,9 +45,9 @@ serve status ---> gets the status of the server
 serve edit---> edit environment variables 
 serve stop ---> stop the server
 ~~~
-- Additionally this module uses pm2 to handle the daemonizing of the process you can checkout: https://www.npmjs.com/package/pm2 for more info
+- Additionally, this module uses pm2 to handle the daemonizing of the process you can check out: https://www.npmjs.com/package/pm2 for more info
 
-# Installing and configuring persistence. Setting SERVER_CONFIG_PATH
+# Installing and configuring persistence. Setting SERVER_CONFIG_PATH env variable
 - All the data of the server is stored in 3 files:
 1. env.js -> stores environment data ( BESIDES SERVER_CONFIG_PATH )
 2. cache -> stores user sessions

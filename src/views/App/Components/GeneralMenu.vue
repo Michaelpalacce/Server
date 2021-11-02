@@ -4,7 +4,10 @@
 		:class="`${isSticky ? 'sticky top-0' : ''}`"
 	>
 
-		<div class="inline-block" v-for="element in elements">
+		<div class="inline-block"
+			v-for="element in elements"
+			:title="element.iconTitle"
+		>
 			<MenuElement
 				:text="element.text"
 				@on-click="$emit( element.eventName )"

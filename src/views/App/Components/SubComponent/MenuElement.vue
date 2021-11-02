@@ -3,7 +3,6 @@
 		:class="[isDisabled ? `cursor-default hover:bg-gray-700 text-gray-400` : 'cursor-pointer hover:bg-gray-600']"
 		@click="isDisabled ? null : $emit( 'on-click' )"
 		v-if="! hideIfDisabled && ! isDisabled"
-		:title="iconTitle"
 	>
 		<span v-if="! isIcon">
 			{{ text }}
@@ -25,10 +24,6 @@ export default {
 		isIcon		: {
 			type: Boolean,
 			default: false
-		},
-		iconTitle	: {
-			type: String,
-			default: ''
 		}
 	}
 }

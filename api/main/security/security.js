@@ -54,10 +54,8 @@ async function bootstrap() {
 bootstrap();
 
 /**
- * @brief	Init middleware for the security
- *
- * @details	Starts the session
- * 			Sets the UserManager in the eventRequest
+ * Init middleware for the security.
+ * Sets the UserManager in the eventRequest.
  */
 app.add( async ( event ) => {
 	event.$userManager	= UserManager;
@@ -110,14 +108,18 @@ app.post( '/login', async ( event ) => {
  */
 app.add({
 	route	: /^\/api(?!\/login)(.*)/,
-	handler	: ( event ) => {
-		if ( ! event.session.has( 'username' ) )
+	handler	: async ( event ) => {
+		if ( ! event.session.has( 'username' ) ) {
+			await event.session.removeSession();
 			throw { code: 'app.security.unauthenticated' };
+		}
 
 		const username	= event.session.get( 'username' );
 
-		if ( ! event.$userManager.has( username ) )
+		if ( ! event.$userManager.has( username ) ){
+			await event.session.removeSession();
 			throw { code: 'app.security.unauthenticated' };
+		}
 
 		event.$user	= event.$userManager.get( username );
 

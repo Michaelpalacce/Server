@@ -159,9 +159,11 @@ export default {
 			isDisabled	: true
 		};
 		const pasteMenuEl	= {
-			text		: 'Paste',
+			text		: 'fas fa-paste',
 			eventName	: 'paste-click',
+			iconTitle	: 'Paste',
 			shown		: false,
+			isIcon		: true,
 			isDisabled	: false
 		};
 

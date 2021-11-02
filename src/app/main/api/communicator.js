@@ -350,6 +350,29 @@ class ApiCommunicator
 	}
 
 	/**
+	 * Gets the latest package version
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async getLatestVersion() {
+		return await axios.get( `/api/latest/version` ).catch( ( error ) => {
+			return error.response;
+		});
+	}
+
+	/**
+	 * Gets the latest package version
+	 *
+	 * @return	{Promise<Object>}
+	 */
+	async getCurrentVersion() {
+
+		return await axios.get( `/api/latest/current` ).catch( ( error ) => {
+			return error.response;
+		});
+	}
+
+	/**
 	 * @brief	Updates the user, the oldUser must be passed to detect changes in the username
 	 *
 	 * @details	Expects User.getUserData() as a parameter for both

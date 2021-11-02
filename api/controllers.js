@@ -5,6 +5,10 @@ const fs		= require( 'fs' );
 const app		= require( 'event_request' )();
 const apiRouter	= app.Router();
 
+// Public
+// Admin MODULE
+apiRouter.add( require( './modules/admin/controllers/versioning' ) );
+
 // Main
 apiRouter.add( require( './main/security/security' ) );
 

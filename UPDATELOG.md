@@ -1,3 +1,7 @@
+22.4.0
+- Fixed the style for the paste button
+- Added a version checker
+
 22.3.0
 - Newest version of event_request
 
