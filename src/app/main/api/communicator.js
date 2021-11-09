@@ -63,6 +63,7 @@ class ApiCommunicator
 		localStorage.removeItem( 'loggedIn' );
 		localStorage.removeItem( 'route' );
 		localStorage.removeItem( 'name' );
+		this.deleteAllCookies();
 
 		return response;
 	}
@@ -79,12 +80,49 @@ class ApiCommunicator
 	 */
 	async browse( directory = '', token = '' )
 	{
-		return axios.get(
+		const response	= await axios.get(
 			this._formatUrlWithQueryParams( '/api/browse', { directory, token } ),
 			{ withCredentials: true }
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
+
+		return response.data;
+	}
+
+	/**
+	 * Checks if the response is unauthenticated
+	 *
+	 * @param	response
+	 *
+	 * @return	{boolean}
+	 */
+	processUnauthenticated( response ) {
+		if ( response.status === 401 ) {
+			localStorage.removeItem( 'loggedIn' );
+			localStorage.removeItem( 'route' );
+			localStorage.removeItem( 'name' );
+
+			this.deleteAllCookies();
+
+			window.location.reload();
+		}
+	}
+
+	/**
+	 * Deletes all cookies
+	 */
+	deleteAllCookies() {
+		const cookies	= document.cookie.split( ";" );
+
+		for ( let i = 0; i < cookies.length; i++ ) {
+			const cookie	= cookies[i];
+			const eqPos		= cookie.indexOf( "=" );
+			const name		= eqPos > -1 ? cookie.substr( 0, eqPos ) : cookie;
+			document.cookie	= name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+		}
 	}
 
 	/**
@@ -100,6 +138,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
 
 		return response.data;
 	}
@@ -125,6 +165,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response;
 	}
 
@@ -147,6 +189,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
 
 		return response.data;
 	}
@@ -171,6 +215,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -194,6 +240,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -214,6 +262,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -231,6 +281,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -247,6 +299,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
 
 		localStorage.route	= response.data.route;
 
@@ -269,6 +323,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -288,6 +344,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -304,6 +362,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
 
 		return response.data;
 	}
@@ -325,6 +385,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -345,6 +407,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
 
 		return response.data;
 	}
@@ -392,6 +456,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -408,6 +474,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
 
 		return response.data;
 	}
@@ -429,6 +497,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -449,6 +519,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -468,6 +540,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -484,6 +558,8 @@ class ApiCommunicator
 		).catch( ( error ) => {
 			return error.response;
 		});
+
+		this.processUnauthenticated( response );
 
 		return response.data;
 	}
@@ -505,6 +581,8 @@ class ApiCommunicator
 			return error.response;
 		});
 
+		this.processUnauthenticated( response );
+
 		return response.data;
 	}
 
@@ -524,22 +602,7 @@ class ApiCommunicator
 			return error.response;
 		});
 
-		return response.data;
-	}
-
-	/**
-	 * @brief	Returns either an error response or the actual response if it was 2xx
-	 *
-	 * @param	{Object} response
-	 *
-	 * @return	{*}
-	 */
-	_handleResponse( response )
-	{
-		const status	= response.status;
-
-		if ( status % 200 >= 100 )
-			throw response.response.data;
+		this.processUnauthenticated( response );
 
 		return response.data;
 	}

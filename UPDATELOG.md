@@ -1,3 +1,6 @@
+22.4.1
+- Fixed logout
+
 22.4.0
 - Fixed the style for the paste button
 - Added a version checker

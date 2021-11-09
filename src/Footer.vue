@@ -25,7 +25,7 @@ const DEFAULT_CHECK_INTERVAL_MS	= 86400000;
 
 export default {
 	name: "Footer",
-	data : function () {
+	data : () => {
 		return {
 			latestVersion: localStorage.latestVersion,
 			currentVersion: localStorage.currentVersion

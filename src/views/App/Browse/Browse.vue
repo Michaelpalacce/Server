@@ -594,20 +594,18 @@ export default {
 			if ( this.$route.name !== 'browse' )
 				return ;
 
-			const response	= browseResponse.data;
-
-			if ( response.error ) {
+			if ( browseResponse.error ) {
 				this.loading					= false;
-				return this.browseErrorMessage	= formatErrorMessage( response.error );
+				return this.browseErrorMessage	= formatErrorMessage( browseResponse.error );
 			}
 
 			const isNewDir			= token === '';
-			this.items				= isNewDir ? response.items : this.items.concat( response.items );
-			this.previousDirectory	= response.previousDirectory;
-			this.currentDirectory	= response.currentDirectory;
-			this.decodedCurrentDir	= decode( response.currentDirectory );
-			this.nextToken			= response.nextToken;
-			this.hasMore			= response.hasMore;
+			this.items				= isNewDir ? browseResponse.items : this.items.concat( browseResponse.items );
+			this.previousDirectory	= browseResponse.previousDirectory;
+			this.currentDirectory	= browseResponse.currentDirectory;
+			this.decodedCurrentDir	= decode( browseResponse.currentDirectory );
+			this.nextToken			= browseResponse.nextToken;
+			this.hasMore			= browseResponse.hasMore;
 			this.lastShiftIndex		= 0;
 
 			if ( isNewDir )
