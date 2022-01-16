@@ -2,7 +2,8 @@ FROM node:14-alpine as builder
 
 WORKDIR /app
 COPY . .
-RUN npm i && npm run build
+RUN npm i
+RUN npm run build
 RUN npm prune --production
 RUN rm -rf src
 
