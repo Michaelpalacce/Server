@@ -27,6 +27,9 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v1.6.0
         with:
