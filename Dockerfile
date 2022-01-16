@@ -3,10 +3,7 @@ FROM node:14-alpine as builder
 WORKDIR /app
 COPY . .
 RUN ls -lah
-RUN npm i
-RUN npm run build
-RUN npm prune --production
-RUN rm -rf src
+RUN npm i && npm run build && npm prune --production && rm -rf src
 
 FROM node:14-alpine as base
 
