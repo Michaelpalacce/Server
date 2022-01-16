@@ -26,4 +26,6 @@ jobs:
           install: true
 
       - name: Run a multi-line script
-        run: ./BUILD
+        run: |
+          chmod +x BUILD
+          ./BUILD
