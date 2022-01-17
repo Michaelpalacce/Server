@@ -27,5 +27,5 @@ jobs:
 
       - name: Run a multi-line script
         run: |
-          chmod +x BUILD
-          ./BUILD
+          chmod +x BUILD.sh
+          ./BUILD.sh
