@@ -1,6 +1,6 @@
 {
   "name": "server-emulator",
-  "version": "23.0.0",
+  "version": "23.1.0",
   "private": false,
   "description": "Server emulator used to easily emulate the FS in a browser and allow streaming,downloading,deletion, etc.",
   "author": {
@@ -12,7 +12,6 @@
     "prepublishOnly": "npm run build",
     "serve-dev": "pm2-runtime dev.ecosystem.config.js"
   },
-  "main": "index.js",
   "dependencies": {
     "archiver": "^3.1.1",
     "axios": "^0.21.1",
