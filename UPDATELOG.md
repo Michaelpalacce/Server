@@ -1,3 +1,6 @@
+23.1.1
+* Fix for pm2
+
 23.1.0
 * Small fixes
 * Fixed the way the env file is created...

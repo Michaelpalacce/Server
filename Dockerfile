@@ -12,5 +12,5 @@ WORKDIR /app
 
 COPY --from=builder /app /app
 
-RUN npm i -g pm2
+RUN npm i pm2
 CMD ["pm2-runtime", "ecosystem.config.js"]
